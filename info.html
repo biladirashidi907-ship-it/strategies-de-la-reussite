@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="CONTENT-TYPE" content="text/html; charset=UTF-8">
+    <title>Info-société</title>
+    <style>
+        /* [Votre CSS complet ici, comme fourni dans votre prompt] */
+        /* J'ai omis le CSS ici pour la clarté, mais utilisez le vôtre tel quel. */
+        /* ... */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* En-tête et navigation */
+        .quiz-header {
+            width: 100%;
+            background-color: #7fffd4; /* aquamarine */
+            padding: 20px 0;
+            text-align: center;
+        }
+
+        .quiz-title {
+            background-color: #f5f5dc; /* beige */
+            padding: 20px 20px;
+            text-align: center;
+        }
+
+        .quiz-intro {
+            padding: 10px 20px;
+            color: #333;
+        }
+
+        /* Contenu principal (questions) */
+        .quiz-container {
+            width: 100%;
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+
+        .question-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .question-item {
+            background-color: #f5f5dc; /* beige */
+            border-radius: 20px;
+            margin-bottom: 20px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .question-item p {
+            font-weight: bold;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .question-number {
+            font-weight: bold;
+            color: #008b8b;
+        }
+
+        .question-option { /* Correction: dans votre HTML c'est 'question-option' (singulier), pas 'question-options' */
+            display: flex;
+            flex-direction: column;
+        }
+
+        .question-option label {
+            margin-bottom: 8px;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        
+        /* Styles pour la correction */
+        .correct-answer {
+            background-color: #d4edda; /* Vert clair */
+            border: 1px solid #c3e6cb;
+            color: #155724;
+            font-weight: bold;
+        }
+
+        .incorrect-answer {
+            background-color: #f8d7da; /* Rouge clair */
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+        
+        .correction-message {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #fff8e1; /* Jaune très clair */
+            border: 1px solid #ffe0b2;
+            border-radius: 5px;
+            font-size: 0.9em;
+            color: #333;
+            /* Le message sera affiché ou masqué par le JS */
+        }
+
+        .question-option input[type="radio"] {
+            margin-right: 10px;
+        }
+
+        /* Bouton de soumission */
+        .submit-button {
+            background-color: #008b8b; /* darkcyan */
+            color: white;
+            border: none;
+            width: 90%;
+            max-width: 300px;
+            margin: 30px auto;
+            height: 50px;
+            border-radius: 40px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s, box-shadow 0.3s;
+            display: block;
+        }
+
+        .submit-button:hover {
+            background-color: #9acd32; /* yellowgreen */
+            color: #161616;
+            box-shadow: 0 0 10px #ffff00; /* yellow */
+        }
+        
+        /* Conteneur des résultats */
+        #result-container {
+            display: none; /* Caché par défaut */
+            max-width: 900px;
+            width: 100%;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+        
+        #score-message {
+            font-size: 1.5rem;
+            color: #008b8b;
+            font-weight: bold;
+        }
+
+        /* Pied de page */
+        .quiz-footer {
+            background-color: #f8f9fa;
+            color: #010302;
+            text-align: center;
+            padding: 15px 0;
+            width: 100%;
+            border-top: 1px solid #ddd;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 800px) {
+            .quiz-container {
+                padding: 0 10px;
+            }
+
+            .question-item {
+                width: auto;
+                margin-left: 0;
+                margin-right: 0;
+            }
+
+            .submit-button {
+                width: 100%;
+                margin: 20px auto;
+            }
+        }
+        a{
+            background-color: #ddd; 		
+            border-radius: 9px; 			
+            text-decoration: none; 			
+            font-size: 20px; 				
+            padding: 5px 10px; 			
+        }
+        a:hover{
+            color: orangered; 			
+        }
+    </style>
+</head>
+<body>
+    <nav class="quiz-header">
+        <h1 class="quiz-title">Info-société</h1>
+        <p class="quiz-intro">Le savoir c'est le pouvoir. Celui qui ose répondre, ose apprendre. À l'université, le champion n'est pas le plus fort, mais le plus curieux.</p>
+        <a href="index.html" style="text-decoration: none; font-size: 20px;">Retour</a> 	
+    </nav>
+    
+    <main class="quiz-container"> <form id="quiz-form">
+            <ol class="question-list">
+                <li class="question-item" data-correct-answer="b">
+                    <p><span class="question-number">1.</span>Que désigne le nom chatGPT ?</p>
+                    <div class="question-option">
+                        <label><input type="radio" name="q1" value="a"> a) Generative transformer</label>
+                        <label><input type="radio" name="q1" value="b"> b) Generative Pre-Trained Transformer</label> <label><input type="radio" name="q1" value="c"> c) Transforme pre-trained generative</label>
+                        <label><input type="radio" name="q1" value="d"> d) Deux de ces reponses sont vraies</label>
+                        <label><input type="radio" name="q1" value="e"> e) Aucune bonne réponse</label>
+                    </div>
+                    <div id="q1-correction" class="correction-message"></div>
+                </li>
+                <li class="question-item" data-correct-answer="d">
+                    <p><span class="question-number">2.</span>L'une de ces réponses n'a aucun rapport avec les limites de E-commerce pour les clients</p>
+                    <div class="question-option">
+                        <label><input type="radio" name="q2" value="a"> a) Absence d'interaction physique'</label>
+                        <label><input type="radio" name="q2" value="b"> b) Frais de livraison</label>
+                        <label><input type="radio" name="q2" value="c"> c) Retour compliqués</label>
+                        <label><input type="radio" name="q2" value="d"> d) Problèmes de sécurité des données</label>
+                        <label><input type="radio" name="q2" value="e"> e) Risque de fraude en ligne</label>
+                        <label><input type="radio" name="q2" value="f"> f)Aucune bonne réponse</label>
+                    </div>
+                    <div id="q2-correction" class="correction-message"></div>
+                </li>
+                <li class="question-item" data-correct-answer="c">
+                    <p><span class="question-number">3.</span>Qu'est-ce qu'un internaute</p>
+                    <div class="question-option">
+                        <label><input type="radio" name="q3" value="a"> a) Un internaute est une personne qui utilise un smartphone</label>
+                        <label><input type="radio" name="q3" value="b"> b) Un internaute est une personne qui utilise la connexion internet</label>
+                        <label><input type="radio" name="q3" value="c"> c) Un internaute est une personne qui utilise internet pour naviguer</label> <label><input type="radio" name="q3" value="d"> d) Deux de ces réponses sont vraies</label>
+                        <label><input type="radio" name="q3" value="e"> e) Aucune bonnes réponses</label>
+                    </div>
+                    <div id="q3-correction" class="correction-message"></div>
+                </li>
+                <li class="question-item" data-correct-answer="d">
+                    <p><span class="question-number">4.</span>L'une de ces réponses n'a aucun rapport avec les limites de E-commerce pour les entreprises</p>
+                    <div class="question-option">
+                        <label><input type="radio" name="q4" value="a"> a) Coûts d'exploitation réduits</label>
+                        <label><input type="radio" name="q4" value="b"> b) Accès à un marché mondial</label>
+                        <label><input type="radio" name="q4" value="c"> c) Meilleure gestion des stocks</label>
+                        <label><input type="radio" name="q4" value="d"> d) Risque des dangers en ligne  </label>
+                        <label><input type="radio" name="q4" value="e"> e) Analyse des données client</label>
+                    </div>
+                    <div id="q4-correction" class="correction-message"></div>
+                </li>
+                <li class="question-item" data-correct-answer="d">
+                    <p><span class="question-number">5.</span>Quel est le pays le plus avancé en robotique au monde ?</p>
+                    <div class="question-option">
+                        <label><input type="radio" name="q5" value="a"> a) R.D.C</label>
+                        <label><input type="radio" name="q5" value="b"> b) Espagne</label>
+                        <label><input type="radio" name="q5" value="c"> c) La chine</label>
+                        <label><input type="radio" name="q5" value="d"> d) Japon</label> <label>
+                          <input type="radio" name="q5" value="e"> e) USA</label>
+                    </div>
+                    <div id="q5-correction" class="correction-message"></div>
+                </li>
+                <li class="question-item" data-correct-answer="c">
+                    <p><span class="question-number">6.</span>Qui a inventé le premier robot au monde ?</p>
+                    <div class="question-option">
+                        <label><input type="radio" name="q6" value="a"> a) George bevol</label>
+                        <label><input type="radio" name="q6" value="b"> b) Emile jordan</label>
+                        <label><input type="radio" name="q6" value="c"> c) George Devol</label> 
+                        <label><input type="radio" name="q6" value="d"> d) Mugisho michel</label>
+                        <label><input type="radio" name="q6" value="e"> e) Devol james</label>
+                    </div>
+                    <div id="q6-correction" class="correction-message"></div>
+                </li>
+                <li class="question-item" data-correct-answer="d">
+                    <p><span class="question-number">7.</span>L'une n'est pas une conséquence de la cyber attaque,il s'agit de:</p>
+                    <div class="question-option">
+                        <label><input type="radio" name="q7" value="a"> a) Perte de données sensibles</label>
+                        <label><input type="radio" name="q7" value="b"> b) Coûts financiers importants</label>
+                        <label><input type="radio" name="q7" value="c"> c) Dommage à la réputation</label>
+                        <label><input type="radio" name="q7" value="d"> d) Coûts financiers  </label> <label><input type="radio" name="q7" value="e"> e) Perturbation des services ,pertes de clients et de confiance</label>
+                    </div>
+                    <div id="q7-correction" class="correction-message"></div>
+                </li>
+                <li class="question-item" data-correct-answer="d">
+                    <p><span class="question-number">8.</span>Qu'est-ce qu'un hacker ?</p>
+                    <div class="question-option">
+                        <label><input type="radio" name="q8" value="a"> a) Un hacker est une personne qui utilise ses données</label>
+                        <label><input type="radio" name="q8" value="b"> b) Un hacker est un informaticien doué</label>
+                        <label><input type="radio" name="q8" value="c"> c) Un hacker est un informaticien qui utilise l'antivirus</label>
+                        <label><input type="radio" name="q8" value="d"> d) Un hacker est une personne qui utilise ses compétences en informatique pour explorer et manipuler les systèmes informatique,souvent à des fins malveillante</label> <label><input type="radio" name="q8" value="e"> e) Un hacker est un informaticien utilisant les logiciels en informatique pour développer les antivirus</label>
+                    </div>
+                    <div id="q8-correction" class="correction-message"></div>
+                </li>
+                <li class="question-item" data-correct-answer="c">
+                    <p><span class="question-number">9.</span>Quelles sont les limites d'un robot ?</p>
+                    <div class="question-option">
+                        <label><input type="radio" name="q9" value="a"> a) Manque de force et d'intelligence</label>
+                        <label><input type="radio" name="q9" value="b"> b) Manque d'émotion et la force</label>
+                        <label><input type="radio" name="q9" value="c"> c) Manque d'interaction ,d'émotion et de créativité humaine</label> <label><input type="radio" name="q9" value="d"> d) Manque d'IA</label>
+                        <label><input type="radio" name="q9" value="e"> e) Deux de ces réponses sont vraies</label>
+                    </div>
+                    <div id="q9-correction" class="correction-message"></div>
+                </li>
+                <li class="question-item" data-correct-answer="c">
+                    <p><span class="question-number">10.</span>Quels sont les 3 grands principes du BIG DATA</p>
+                    <div class="question-option">
+                        <label><input type="radio" name="q10" value="a"> a) Volume-vélotesse-variété</label>
+                        <label><input type="radio" name="q10" value="b"> b) Variété-volume-vraie</label>
+                        <label><input type="radio" name="q10" value="c"> c) Volume-Vélocité-Variété</label> 
+                        <label><input type="radio" name="q10" value="d"> d) Variété-variété-vraie</label>
+                        <label><input type="radio" name="q10" value="e"> e) Aucune bonne réponse</label>
+                    </div>
+                    <div id="q10-correction" class="correction-message"></div>
+                </li>
+                <li class="question-item" data-correct-answer="a">
+                    <p><span class="question-number">11.</span>Qu'est-ce qu'un réseau social ?</p>
+                    <div class="question-option">
+                        <label><input type="radio" name="q11" value="a"> a) Plateforme permettant de créer ,partager et échanger</label> <label><input type="radio" name="q11" value="b"> b) plateforme tiktok</label>
+                        <label><input type="radio" name="q11" value="c"> c) Application facebook</label>
+                        <label><input type="radio" name="q11" value="d"> d) Deux de ces réponses sont vraies</label>
+                        <label><input type="radio" name="q11" value="e"> e) Aucune bonne réponse</label>
+                    </div>
+                    <div id="q11-correction" class="correction-message"></div>
+                </li>
+                <li class="question-item" data-correct-answer="b">
+                    <p><span class="question-number">12.</span>Que signifie VPN ?</p>
+                    <div class="question-option">
+                        <label><input type="radio" name="q12" value="a"> a) Un réseau virtuel qui permet de sécuriser les comptes</label>
+                        <label><input type="radio" name="q12" value="b"> b) Un VPN ou réseau privé virtuel qui permet de sécuriser la connexion internet</label> <label><input type="radio" name="q12" value="c"> c) Un logiciel de réseau</label>
+                        <label><input type="radio" name="q12" value="d"> d) Deux de ces réponses sont vraies</label>
+                        <label><input type="radio" name="q12" value="e"> e) Auncune bonne réponse</label>
+                    </div>
+                    <div id="q12-correction" class="correction-message"></div>
+                </li>
+                <li class="question-item" data-correct-answer="c">
+                    <p><span class="question-number">13.</span>Qu'est-ce que la robotique ?</p>
+                    <div class="question-option">
+                        <label><input type="radio" name="q13" value="a"> a) La robotique est un domaine de l'ingénieurie et de la science qui concerne la machine</label>
+                        <label><input type="radio" name="q13" value="b"> b) C'est l'ensemble des robots</label>
+                        <label><input type="radio" name="q13" value="c"> c) Est un domaine de l'ingénieurie et de la science qui concerne la **conception</label> <label><input type="radio" name="q13" value="d"> d) Deux de ces réponses sont vraies</label>
+                        <label><input type="radio" name="q13" value="e"> e) Aucune bonne réponse</label>
+                    </div>
+                    <div id="q13-correction" class="correction-message"></div>
+                </li>
+                <li class="question-item" data-correct-answer="b">
+                    <p><span class="question-number">14.</span>Que signifie E-commerce ?</p>
+                    <div class="question-option">
+                        <label><input type="radio" name="q14" value="a"> a) E-commerce est un commerce</label>
+                        <label><input type="radio" name="q14" value="b"> b) E-commerce est la contraction de commerce électronique</label> <label><input type="radio" name="q14" value="c"> c) Deux de ces réponses sont vraies</label>
+                        <label><input type="radio" name="q14" value="d"> d) Aucune bonne réponse</label>
+                        <label><input type="radio" name="q14" value="e"> e) Ça depend</label>
+                    </div>
+                    <div id="q14-correction" class="correction-message"></div>
+                </li>
+                <li class="question-item" data-correct-answer="a">
+                    <p><span class="question-number">15.</span>Qu'est-ce qu'un serveur ?</p>
+                    <div class="question-option">
+                        <label><input type="radio" name="q15" value="a"> a) Est un système informatique qui fournit des services ,des réssourcesou des données à d'autres ordinateur</label> <label><input type="radio" name="q15" value="b"> b) Est une machine ayant un système d'exploitation ubuntu et avec un linux à la fois</label>
+                        <label><input type="radio" name="q15" value="c"> c) Est un dispositif capable de télécharger les logiciels de bases</label>
+                        <label><input type="radio" name="q15" value="d"> d) Deux de ces réponses sont vraies</label>
+                        <label><input type="radio" name="q15" value="e"> e) Aucune bonne réponse</label>
+                    </div>
+                    <div id="q15-correction" class="correction-message"></div>
+                </li>
+                <li class="question-item" data-correct-answer="c">
+                    <p><span class="question-number">16.</span>Qu'est-ce que le TIC ?'</p>
+                    <div class="question-option">
+                        <label><input type="radio" name="q16" value="a"> a) Télécharger l'informatique connecté</label>
+                        <label><input type="radio" name="q16" value="b"> b) Technologie d'information communicationnel</label>
+                        <label><input type="radio" name="q16" value="c"> c) Technologie de l'Information et de la Communication</label> 
+                        <label><input type="radio" name="q16" value="d"> d) Deux de ces réponses sont vraies</label>
+                        <label><input type="radio" name="q16" value="e"> e) Aucune bonne réponse</label>
+                    </div>
+                    <div id="q16-correction" class="correction-message"></div>
+                </li>
+                <li class="question-item" data-correct-answer="c">
+                    <p><span class="question-number">17.</span>Que signifie NTIC ?</p>
+                    <div class="question-option">
+                        <label><input type="radio" name="q17" value="a"> a) Notion sur la technologie de l'information et de la communication</label>
+                        <label><input type="radio" name="q17" value="b"> b) Notion sur la NTIC</label>
+                        <label><input type="radio" name="q17" value="c"> c) Nouvelle Technologie de l'Information et de la Communication</label> 
+                        <label><input type="radio" name="q17" value="d"> d) Toutes ses réponses sont vraies</label>
+                        <label><input type="radio" name="q17" value="e"> e) Aucune bonne réponse</label>
+                    </div>
+                    <div id="q17-correction" class="correction-message"></div>
+                </li>
+                <li class="question-item" data-correct-answer="a">
+                    <p><span class="question-number">18.</span>parmi les 5v de Big Data,la veracité signifie:</p>
+                    <div class="question-option">
+                        <label><input type="radio" name="q18" value="a"> a) la fiabilité</label> 
+                        <label><input type="radio" name="q18" value="b"> b) la fiabilité et la quantité des donnés</label>
+                        <label><input type="radio" name="q18" value="c"> c) la quantité et la fiabilité</label>
+                        <label><input type="radio" name="q18" value="d"> d) Deux de ces réponses sont vraies</label>
+                        <label><input type="radio" name="q18" value="e"> e) Aucune bonne réponse</label>
+                    </div>
+                    <div id="q18-correction" class="correction-message"></div>
+                </li>
+                <li class="question-item" data-correct-answer="c">
+                    <p><span class="question-number">19.</span>pourquoi parle-t-on du Big Data aujourd'hui ?</p>
+                    <div class="question-option">
+                        <label><input type="radio" name="q19" value="a"> a) Il permet de faire beaucoup d'insights</label>
+                        <label><input type="radio" name="q19" value="b"> b) Il permet de diagnostiquer</label>
+                        <label><input type="radio" name="q19" value="c"> c) Il permet d'extraire des insights significatifs à partir de grandes quantités de données</label> 
+                        <label><input type="radio" name="q19" value="d"> d) Il permet d'extraire les traitements et de stocker à partir de grandes quantités des données</label>
+                        <label><input type="radio" name="q19" value="e"> e) Aucune bonne réponse</label>
+                    </div>
+                    <div id="q19-correction" class="correction-message"></div>
+                </li>
+                <li class="question-item" data-correct-answer="d">
+                    <p><span class="question-number">20.</span>Toutes ces réponses sont des problématiques de l'informatique,sauf:</p>
+                    <div class="question-option">
+                        <label><input type="radio" name="q20" value="a"> a) Les enjeux de sécurité</label>
+                        <label><input type="radio" name="q20" value="b"> b) La confidenlité des données</label>
+                        <label><input type="radio" name="q20" value="c"> c) La confidenlité et l'accessibilité des technologies</label>
+                        <label><input type="radio" name="q20" value="d"> d) La confidenlité des secret</label> <label><input type="radio" name="q20" value="e"> e) Les enjeux sociaux</label>
+                    </div>
+                    <div id="q20-correction" class="correction-message"></div>
+                </li>
+            </ol>
+            <button type="submit" class="submit-button">Voir les Résultats</button>
+        </form>
+        
+        <div id="result-container">
+            <p id="score-message"></p>
+        </div>
+    </main>
+    <footer class="quiz-footer">
+        <i>&copy; L1 LMD IG</i>
+    </footer>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const form = document.getElementById('quiz-form');
+        const resultContainer = document.getElementById('result-container');
+        const scoreMessage = document.getElementById('score-message');
+        const questionItems = document.querySelectorAll('.question-item');
+        const totalQuestions = questionItems.length;
+
+        // Définition des réponses correctes et des messages de correction/explication
+        const correctAnswers = {
+            'q1': { answer: 'b', message: "Bonne réponse ! ChatGPT signifie 'Generative Pre-trained Transformer'." },
+            'q2': { answer: 'd', message: "Correct ! Le risque lié à la sécurité des données concerne l'entreprise, pas la limite de l'E-commerce pour les clients. " },
+            'q3': { answer: 'c', message: "Exact. Un internaute est une personne qui utilise Internet pour naviguer, interagir et accéder à l'information." },
+            'q4': { answer: 'd', message: "Exact. Le risque des dangers en ligne est une limite, tandis que les autres sont des avantages ou des fonctionnalités. " },
+            'q5': { answer: 'd', message: "Oui, le Japon est souvent considéré comme le pays le plus avancé et le plus dense en matière de robotique." },
+            'q6': { answer: 'c', message: "C'est George Devol qui a inventé l'Unimate, considéré comme le premier robot industriel en 1954." },
+            'q7': { answer: 'd', message: "Bonne réponse. 'Coûts importants' est trop vague et est déjà couvert par 'Coûts financiers importants'." },
+            'q8': { answer: 'd', message: "Bonne réponse. Un hacker utilise ses compétences pour explorer (et potentiellement manipuler) les systèmes, pas uniquement pour développer des antivirus." },
+            'q9': { answer: 'c', message: "Exact. Le manque d'interaction, d'émotion et surtout de créativité humaine reste une limite majeure des robots actuels." },
+            'q10': { answer: 'c', message: "Correct ! Les 3V classiques du Big Data sont Volume, Vélocité et Variété." },
+            'q11': { answer: 'a', message: "Oui, la définition la plus générale est une plateforme permettant de créer, partager et échanger du contenu ou des informations." },
+            'q12': { answer: 'b', message: "Exact. VPN signifie 'Virtual Private Network' (Réseau Privé Virtuel) et est utilisé pour sécuriser la connexion." },
+            'q13': { answer: 'c', message: "Correct. La robotique est le domaine qui concerne la conception, la construction, le fonctionnement et l'utilisation des robots." },
+            'q14': { answer: 'b', message: "Oui, E-commerce est la contraction de 'commerce électronique'." },
+            'q15': { answer: 'a', message: "Exact. Un serveur est un système qui fournit des services ou des ressources à d'autres ordinateurs (clients)." },
+            'q16': { answer: 'c', message: "Oui, TIC signifie 'Technologies de l'Information et de la Communication'." },
+            'q17': { answer: 'c', message: "Exact. NTIC signifie 'Nouvelles Technologies de l'Information et de la Communication'." },
+            'q18': { answer: 'a', message: "Correct. La véracité dans le Big Data fait référence à la fiabilité et à la qualité des données." },
+            'q19': { answer: 'c', message: "Oui, le but principal du Big Data est d'extraire des informations exploitables (insights) à partir de volumes massifs de données." },
+            'q20': { answer: 'd', message: "Exact. Toutes les autres réponses sont des problématiques informatiques, sauf la confidentialité des secrets (trop vague)." }
+        };
+
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            let score = 0;
+            let allAnswered = true;
+            const unansweredQuestions = [];
+
+            questionItems.forEach((questionItem, index) => {
+                const questionName = `q${index + 1}`;
+                const selectedOption = questionItem.querySelector(`input[name="${questionName}"]:checked`);
+                const correctAnswerObj = correctAnswers[questionName];
+
+                // 1. Vérification si la question a été répondue
+                if (!selectedOption) {
+                    allAnswered = false;
+                    unansweredQuestions.push(index + 1);
+                    return; // Passe à la question suivante
+                }
+
+                const userAnswer = selectedOption.value;
+                const correctionMessageElement = document.getElementById(`${questionName}-correction`);
+                const labels = questionItem.querySelectorAll('.question-option label');
+
+                // 2. Réinitialisation des styles de correction
+                labels.forEach(label => {
+                    label.classList.remove('correct-answer', 'incorrect-answer');
+                });
+                // 3. Masquer le message de correction (au cas où l'utilisateur resoumet)
+                if (correctionMessageElement) {
+                     correctionMessageElement.style.display = 'none';
+                }
+                
+
+                // 4. Correction de la réponse
+                if (userAnswer === correctAnswerObj.answer) {
+                    score++;
+                    // Affiche le style correct (vert) sur la bonne réponse
+                    labels.forEach(label => {
+                        const input = label.querySelector('input');
+                        if (input && input.value === correctAnswerObj.answer) {
+                            label.classList.add('correct-answer');
+                        }
+                    });
+                } else {
+                    // Affiche le style incorrect (rouge) sur la réponse de l'utilisateur
+                    selectedOption.closest('label').classList.add('incorrect-answer');
+                    // Affiche le style correct (vert) sur la bonne réponse
+                    labels.forEach(label => {
+                        const input = label.querySelector('input');
+                        if (input && input.value === correctAnswerObj.answer) {
+                            label.classList.add('correct-answer');
+                        }
+                    });
+                }
+                
+                // 5. Affichage du message de correction
+                if (correctionMessageElement) {
+                    correctionMessageElement.innerHTML = `<p>${correctAnswerObj.message}</p>`;
+                    correctionMessageElement.style.display = 'block';
+                }
+
+            }); // Fin du forEach
+
+            // **LOGIQUE DE VÉRIFICATION OBLIGATOIRE**
+            if (!allAnswered) {
+                alert(`Vous devez répondre à toutes les questions pour voir votre score. Il manque les questions : ${unansweredQuestions.join(', ')}.`);
+                resultContainer.style.display = 'none'; // S'assurer que le conteneur de résultats est masqué
+                window.scrollTo({ top: 0, behavior: 'smooth' }); // Remonter en haut pour alerter l'utilisateur
+                return; // Empêche l'affichage du score
+            }
+
+            // 6. Affichage du score final
+            scoreMessage.textContent = `Votre score est de ${score} sur ${totalQuestions}. vous devez 
+      avoir au moins 10/20 pour valider ce quiz.`;
+            resultContainer.style.display = 'block';
+            
+            // Faire défiler l'écran jusqu'aux résultats
+            resultContainer.scrollIntoView({ behavior: 'smooth' });
+        });
+    });
+    </script>
+</body>
+</html>

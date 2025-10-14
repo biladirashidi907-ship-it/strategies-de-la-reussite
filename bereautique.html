@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz du Champion - Bureautique</title>
+    <style>
+        /* Styles de base */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* En-tête et navigation */
+        .quiz-header {
+            width: 100%;
+            background-color: #7fffd4; /* aquamarine */
+            padding: 20px 0;
+            text-align: center;
+        }
+
+        .quiz-title {
+            background-color: #f5f5dc; /* beige */
+            padding: 20px 20px;
+            text-align: center;
+        }
+
+        .quiz-intro {
+            padding: 10px 20px;
+            color: #333;
+        }
+
+        /* Contenu principal (questions) */
+        .quiz-container {
+            width: 100%;
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+
+        .question-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .question-item {
+            background-color: #f5f5dc; /* beige */
+            border-radius: 20px;
+            margin-bottom: 20px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .question-item p {
+            font-weight: bold;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .question-number {
+            font-weight: bold;
+            color: #008b8b;
+        }
+
+        .question-options {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .question-options label {
+            margin-bottom: 8px;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .question-options input[type="radio"] {
+            margin-right: 10px;
+        }
+
+        /* Styles de Correction */
+        .correct-answer {
+            background-color: #d4edda !important; /* Vert clair, !important pour forcer le style */
+            border: 1px solid #c3e6cb;
+            color: #155724; /* Texte vert foncé */
+        }
+
+        .incorrect-answer {
+            background-color: #f8d7da !important; /* Rouge clair, !important pour forcer le style */
+            border: 1px solid #f5c6cb;
+            color: #721c24; /* Texte rouge foncé */
+        }
+        
+        .correction-message {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #e6f7ff; /* Bleu clair pour le message de correction */
+            color: #008b8b; /* Couleur du texte */
+            font-weight: bold;
+            border-left: 5px solid #008b8b;
+        }
+
+        /* Bouton de soumission */
+        .submit-button {
+            background-color: #008b8b; /* darkcyan */
+            color: white;
+            border: none;
+            width: 90%;
+            max-width: 300px;
+            margin: 30px auto;
+            height: 50px;
+            border-radius: 40px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s, box-shadow 0.3s;
+            display: block;
+        }
+
+        .submit-button:hover {
+            background-color: #9acd32; /* yellowgreen */
+            color: #161616;
+            box-shadow: 0 0 10px #ffff00; /* yellow */
+        }
+
+        /* Pied de page */
+        .quiz-footer {
+            background-color: #f8f9fa;
+            color: #010302;
+            text-align: center;
+            padding: 15px 0;
+            width: 100%;
+            border-top: 1px solid #ddd;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 800px) {
+            .quiz-container {
+                padding: 0 10px;
+            }
+
+            .question-item {
+                width: auto;
+                margin-left: 0;
+                margin-right: 0;
+            }
+
+            .submit-button {
+                width: 100%;
+                margin: 20px auto;
+            }
+        }
+        a{
+            background-color: #ddd;         
+            border-radius: 9px;          
+            text-decoration: none;          
+            font-size: 20px;                
+            padding: 5px 10px;          
+        }
+        a:hover{
+            color: orangered;             
+        }
+        
+    </style>
+</head>
+<body>
+
+    <nav class="quiz-header">
+        <h1 class="quiz-title">Bureautique</h1>
+        <p class="quiz-intro">Le savoir c'est le pouvoir. Celui qui ose répondre, ose apprendre. À l'université, le champion n'est pas le plus fort, mais le plus curieux.</p>
+    <a href="index.html" style="text-decoration: none; font-size: 20px;">Retour</a>
+    
+    </nav>
+
+    <main class="quiz-container">
+        <form id="quiz-form">
+            <ol class="question-list">
+                <li class="question-item">
+                    <p><span class="question-number">1.</span> L'apprentissage de l'informatique à l'université renvoie à la combinaison de certaine notion sauf :</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q1" value="0"> a) informatique et société</label>
+                        <label><input type="radio" name="q1" value="1"> b) L'histoire et Epistémologie</label>
+                        <label><input type="radio" name="q1" value="2"> c) La théorie et système d'exploitation</label>
+                        <label><input type="radio" name="q1" value="3"> d) L'histoire et la science sociale</label>
+                        <label><input type="radio" name="q1" value="4"> e) Trois de ces quatre réponses sont correctes</label>
+                    </div>
+                    <div id="q1-correction" class="correction-message" style="display:none;"></div>
+                </li>
+                
+                <li class="question-item">
+                    <p><span class="question-number">2.</span> Sur le plan de l'architecture, la définition de l'informatique se résume en :</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q2" value="0"> a) Traitement, donnée, information</label>
+                        <label><input type="radio" name="q2" value="1"> b) Traitement, information, automatique</label>
+                        <label><input type="radio" name="q2" value="2"> c) Science, Traitement, information automatique</label>
+                        <label><input type="radio" name="q2" value="3"> d) Deux de ces réponses sont bonnes</label>
+                        <label><input type="radio" name="q2" value="4"> e) A et B sont bonnes</label>
+                        <label><input type="radio" name="q2" value="5"> f) Aucune bonne réponse</label>
+                    </div>
+                    <div id="q2-correction" class="correction-message" style="display:none;"></div>
+                </li>
+                
+                <li class="question-item">
+                    <p><span class="question-number">3.</span> On appel MS Windows interface homme-machine parce que :</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q3" value="0"> a) Il utilise la fenêtre</label>
+                        <label><input type="radio" name="q3" value="1"> b) Il utilise la souris</label>
+                        <label><input type="radio" name="q3" value="2"> c) Il utilise le clavier</label>
+                        <label><input type="radio" name="q3" value="3"> d) Il gère l'interface graphique manipulable par tous</label>
+                        <label><input type="radio" name="q3" value="4"> e) Toutes les réponses sont correcte</label>
+                    </div>
+                    <div id="q3-correction" class="correction-message" style="display:none;"></div>
+                </li>
+
+                <li class="question-item">
+                    <p><span class="question-number">4.</span> Dans la gestion de l'ordinateur, une seule réponse est vrai, il s'agit de :</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q4" value="0"> a) Tout les fichiers windows fonctionnent sur la mémoire RAM</label>
+                        <label><input type="radio" name="q4" value="1"> b) Tout les fichiers dans l'ordinateur appartiennent à windows</label>
+                        <label><input type="radio" name="q4" value="2"> c) Parmi les fichiers, il existe des fichiers système</label>
+                        <label><input type="radio" name="q4" value="3"> d) Le répertoire racine est celui qui contient le S.E</label>
+                        <label><input type="radio" name="q4" value="4"> e) Toutes ce réponses sont bonne</label>
+                    </div>
+                    <div id="q4-correction" class="correction-message" style="display:none;"></div>
+                </li>
+                
+                <li class="question-item">
+                    <p><span class="question-number">5.</span> On appelle MS-DOS un système d'exploitation à base de disque parce que :</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q5" value="0"> a) Il a été créé avant windows</label>
+                        <label><input type="radio" name="q5" value="1"> b) Il ne fonctionne que dans le disque dur</label>
+                        <label><input type="radio" name="q5" value="2"> c) Il manipule les commandes interne et externe du disque</label>
+                        <label><input type="radio" name="q5" value="3"> d) Deux de ces réponses sont bonnes</label>
+                        <label><input type="radio" name="q5" value="4"> e) Aucune bonne réponse</label>
+                    </div>
+                    <div id="q5-correction" class="correction-message" style="display:none;"></div>
+                </li>
+                
+                <li class="question-item">
+                    <p><span class="question-number">6.</span> Dans la gestion de l'équipement informatique, certains éléments sont nécessaires, d'autres non, il s'agit de :</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q6" value="0"> a) Clavier</label>
+                        <label><input type="radio" name="q6" value="1"> b) Souris</label>
+                        <label><input type="radio" name="q6" value="2"> c) Écran</label>
+                        <label><input type="radio" name="q6" value="3"> d) Imprimante</label>
+                        <label><input type="radio" name="q6" value="4"> e) Ça dépend</label>
+                        <label><input type="radio" name="q6" value="5"> f) Aucune bonne réponse</label>
+                    </div>
+                    <div id="q6-correction" class="correction-message" style="display:none;"></div>
+                </li>
+
+                <li class="question-item">
+                    <p><span class="question-number">7.</span> Dans son fonctionnement, le système d'exploitation gère les entrées/sorties, gère les applications et l'utilisateur. Cet usage fait de lui : </p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q7" value="0"> a) Élément moteur du système informatique</label>
+                        <label><input type="radio" name="q7" value="1"> b) Le chef d'orchestre</label>
+                        <label><input type="radio" name="q7" value="2"> c) La partie principale du système</label>
+                        <label><input type="radio" name="q7" value="3"> d) L'élément principal du fonctionnement du système</label>
+                        <label><input type="radio" name="q7" value="4"> e) Toutes les réponses sont correctes</label>
+                    </div>
+                    <div id="q7-correction" class="correction-message" style="display:none;"></div>
+                </li>
+
+                <li class="question-item">
+                    <p><span class="question-number">8.</span> L'informatique, comme faisant partie des TIC, constitue un élément critique dans la compréhension de certaine matière, il s'agit de :</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q8" value="0"> a) La TIC</label>
+                        <label><input type="radio" name="q8" value="1"> b) L'informatique et Bureautique</label>
+                        <label><input type="radio" name="q8" value="2"> c) Le système d'exploitation</label>
+                        <label><input type="radio" name="q8" value="3"> d) Le NOS (Network Operating System)</label>
+                        <label><input type="radio" name="q8" value="4"> e) Deux de ces réponses sont bonnes</label>
+                        <label><input type="radio" name="q8" value="5"> f) Aucune bonne réponse</label>
+                    </div>
+                    <div id="q8-correction" class="correction-message" style="display:none;"></div>
+                </li>
+                <li class="question-item">
+                    <p><span class="question-number">9.</span> L'usage de certain équipement facilite la bonne marche de l'ordinateur malgré leur absence, l'ajout se fait par l'entremise de :</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q9" value="0"> a) Chipset</label>
+                        <label><input type="radio" name="q9" value="1"> b) RJ 45</label>
+                        <label><input type="radio" name="q9" value="2"> c) VGA</label>
+                        <label><input type="radio" name="q9" value="3"> d) ROM</label>
+                        <label><input type="radio" name="q9" value="4"> e) Aucune bonne réponse</label>
+                    </div>
+                    <div id="q9-correction" class="correction-message" style="display:none;"></div>
+                </li>
+
+                <li class="question-item">
+                    <p><span class="question-number">10.</span> Dans la gestion des périphériques, les unités d'entrée et de sortie sont gérées par :</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q10" value="0"> a) Le système d'exploitation</label>
+                        <label><input type="radio" name="q10" value="1"> b) Le Basic Input Output System (BIOS)</label>
+                        <label><input type="radio" name="q10" value="2"> c) La RAM</label>
+                        <label><input type="radio" name="q10" value="3"> d) Le processeur</label>
+                        <label><input type="radio" name="q10" value="4"> e) Aucune bonne réponse</label>
+                    </div>
+                    <div id="q10-correction" class="correction-message" style="display:none;"></div>
+                </li>
+
+                <li class="question-item">
+                    <p><span class="question-number">11.</span> Dans la manipulation de logiciel d'application, une assertion est vrai, il s'agit de :</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q11" value="0"> a) MS Word est fait pour la manipulation de calcul</label>
+                        <label><input type="radio" name="q11" value="1"> b) certaine calculs complexes sont possibles dans MS-DOS même avec le texte</label>
+                        <label><input type="radio" name="q11" value="2"> c) MS Word est un éditeur de texte comme Bloc-notes</label>
+                        <label><input type="radio" name="q11" value="3"> d) MS Word est un logiciel de traitement de texte dans la suite MS Office</label>
+                        <label><input type="radio" name="q11" value="4"> e) Aucune bonne réponse</label>
+                    </div>
+                    <div id="q11-correction" class="correction-message" style="display:none;"></div>
+                </li>
+
+                <li class="question-item">
+                    <p><span class="question-number">12.</span> La reconnaissance de l'informatique comme science a résolu le problème ci-après :</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q12" value="0"> a) Dépendance fonctionnelle</label>
+                        <label><input type="radio" name="q12" value="1"> b) Le volet résolution de problème spécifique</label>
+                        <label><input type="radio" name="q12" value="2"> c) Confusion entre scientifique et technique</label>
+                        <label><input type="radio" name="q12" value="3"> d) Toutes les réponses sont bonnes réponses</label>
+                        <label><input type="radio" name="q12" value="4"> e) Science comme tant d'autres</label>
+                    </div>
+                    <div id="q12-correction" class="correction-message" style="display:none;"></div>
+                </li>
+
+                <li class="question-item">
+                    <p><span class="question-number">13.</span> L'importance de l'usage des outils Bureautique est liée à :</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q13" value="0"> a) La facilitation des tâches par la Tech</label>
+                        <label><input type="radio" name="q13" value="1"> b) Le passage du manuel à l'automatique</label>
+                        <label><input type="radio" name="q13" value="2"> c) La révolution de la modernité</label>
+                        <label><input type="radio" name="q13" value="3"> d) La culture de la peine vers la culture de la panne</label>
+                        <label><input type="radio" name="q13" value="4"> e) Aucune bonne réponse</label>
+                    </div>
+                    <div id="q13-correction" class="correction-message" style="display:none;"></div>
+                </li>
+
+                <li class="question-item">
+                    <p><span class="question-number">14.</span> Pour insérer une image en ligne, les avantages sont :</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q14" value="0"> a) Pas besoin de la connexion</label>
+                        <label><input type="radio" name="q14" value="1"> b) La connexion est Obligatoire</label>
+                        <label><input type="radio" name="q14" value="2"> c) Avec ou sans connexion tout va bien</label>
+                        <label><input type="radio" name="q14" value="3"> d) Accéder à l'image dont on a besoin à temps</label>
+                        <label><input type="radio" name="q14" value="4"> e) Aucune bonne réponse</label>
+                    </div>
+                    <div id="q14-correction" class="correction-message" style="display:none;"></div>
+                </li>
+                
+                <li class="question-item">
+                    <p><span class="question-number">15.</span> Est-ce que tous les signaux émis par l'utilisateur ont un résultat perceptible par l'utilisateur ?</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q15" value="0"> a) Tous les signaux envoyés par l'utilisateur produisent un effet invisible</label>
+                        <label><input type="radio" name="q15" value="1"> b) Chaque action de l'utilisateur déclenche toujours un retour visuel ou sonore</label>
+                        <label><input type="radio" name="q15" value="2"> c) Aucun signal de l'utilisateur ne reste sans effet sur le système</label>
+                        <label><input type="radio" name="q15" value="3"> d) Certaines actions se réalisent sans que l'utilisateur ne les lance</label>
+                        <label><input type="radio" name="q15" value="4"> e) Aucune bonne réponse</label>
+                    </div>
+                    <div id="q15-correction" class="correction-message" style="display:none;"></div>
+                </li>
+                <li class="question-item">
+                    <p><span class="question-number">16.</span> C'est quoi un éditeur de texte ?</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q16" value="0"> a) Un éditeur de texte permet de créer des vidéos</label>
+                        <label><input type="radio" name="q16" value="1"> b) Un éditeur de texte est utilisé pour écouter de la musique</label>
+                        <label><input type="radio" name="q16" value="2"> c) Un éditeur de texte sert à écrire et modifier du code source</label>
+                        <label><input type="radio" name="q16" value="3"> d) Un éditeur de texte permet de naviguer sur internet</label>
+                        <label><input type="radio" name="q16" value="4"> e) Deux de ces réponses sont correctes</label>
+                    </div>
+                    <div id="q16-correction" class="correction-message" style="display:none;"></div>
+                </li>
+                <li class="question-item">
+                    <p><span class="question-number">17.</span> Pourquoi appelle-t-on la mémoire RAM la mémoire Vive ?</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q17" value="0"> a) Parce qu'elle conserve les données même après l'arrêt du PC</label>
+                        <label><input type="radio" name="q17" value="1"> b) Car elle est utilisée uniquement pour le stockage permanent</label>
+                        <label><input type="radio" name="q17" value="2"> c) Parce qu'elle fonctionne uniquement quand l'ordinateur est allumé</label>
+                        <label><input type="radio" name="q17" value="3"> d) Parce qu'elle est située à l'extérieur de l'ordinateur</label>
+                        <label><input type="radio" name="q17" value="4"> e) Aucune bonne réponse</label>
+                    </div>
+                    <div id="q17-correction" class="correction-message" style="display:none;"></div>
+                </li>
+                <li class="question-item">
+                    <p><span class="question-number">18.</span> Quel est le rôle de la Phase Fetch ?</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q18" value="0"> a) Permet d'afficher les résultats à l'écran</label>
+                        <label><input type="radio" name="q18" value="1"> b) Permet d'exécuter une instruction dans le processeur</label>
+                        <label><input type="radio" name="q18" value="2"> c) Permet de récupérer l'instruction d'un signal qui provient de l'utilisateur</label>
+                        <label><input type="radio" name="q18" value="3"> d) Sert à sauvegarder les données dans le disque dur</label>
+                        <label><input type="radio" name="q18" value="4"> e) Aucune bonne réponse</label>
+                    </div>
+                    <div id="q18-correction" class="correction-message" style="display:none;"></div>
+                </li>
+                <li class="question-item">
+                    <p><span class="question-number">19.</span> Quelle est la fonction principale du BIOS ?</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q19" value="0"> a) Supprimer les virus système</label>
+                        <label><input type="radio" name="q19" value="1"> b) Installer des applications au démarrage</label>
+                        <label><input type="radio" name="q19" value="2"> c) Configurer le matériel de l'ordinateur au démarrage</label>
+                        <label><input type="radio" name="q19" value="3"> d) Sauvegarder les fichiers de l'utilisateur</label>
+                        <label><input type="radio" name="q19" value="4"> e) Accélérer la Vitesse du processeur</label>
+                    </div>
+                    <div id="q19-correction" class="correction-message" style="display:none;"></div>
+                </li>
+                <li class="question-item">
+                    <p><span class="question-number">20.</span> Que signifie la fréquence d'un processeur exprimée en MHz ?</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q20" value="0"> a) La température maximale du CPU</label>
+                        <label><input type="radio" name="q20" value="1"> b) Le nombre de cœurs dans le processeur</label>
+                        <label><input type="radio" name="q20" value="2"> c) La qualité de mémoire Installée</label>
+                        <label><input type="radio" name="q20" value="3"> d) La vitesse à laquelle il exécute les instructions</label>
+                        <label><input type="radio" name="q20" value="4"> e) Aucune bonne réponse</label>
+                    </div>
+                    <div id="q20-correction" class="correction-message" style="display:none;"></div>
+                </li>
+            </ol>
+            <button type="submit" class="submit-button">Voir les Résultats</button>
+        </form>
+
+        <div id="result-container" style="display:none; margin-top: 30px; padding: 20px; background-color: #f5f5dc; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); text-align: center;">
+            <h2 id="score-message"></h2>
+            <p>Veuillez consulter les questions ci-dessus pour la correction détaillée.</p>
+        </div>
+    </main>
+
+    <footer class="quiz-footer">
+        <i>&copy; L1 LMD IG</i>
+    </footer>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const quizForm = document.getElementById('quiz-form');
+        const resultContainer = document.getElementById('result-container');
+        const scoreMessage = document.getElementById('score-message');
+        const questionItems = document.querySelectorAll('.question-item');
+        const submitButton = document.querySelector('.submit-button');
+
+        // Array des bonnes réponses (Valeur de l'input radio : 0 pour a), 1 pour b), 2 pour c), etc.)
+        // J'ai vérifié et ajusté les réponses pour qu'elles correspondent au mieux aux options listées.
+        const correctAnswersValues = [
+            '3', // Q1: d) L'histoire et la science sociale
+            '2', // Q2: c) Science, Traitement, information automatique
+            '3', // Q3: d) Il gère l'interface graphique manipulable par tous
+            '2', // Q4: c) Parmi les fichiers, il existe des fichiers système (plus précis que 'd')
+            '2', // Q5: c) Il manipule les commandes interne et externe du disque
+            '3', // Q6: d) Imprimante (car c'est le seul périphérique non essentiel au fonctionnement minimal)
+            '1', // Q7: b) Le chef d'orchestre (terme classique pour désigner le rôle du SE)
+            '1', // Q8: b) L'informatique et Bureautique (étant donné le sujet)
+            '4', // Q9: e) Aucune bonne réponse (car l'ajout d'équipement se fait par des ports d'extension comme USB, PCI, etc., pas ceux listés)
+            '0', // Q10: a) Le système d'exploitation
+            '3', // Q11: d) MS Word est un logiciel de traitement de texte dans la suite MS Office
+            '2', // Q12: c) Confusion entre scientifique et technique (un problème qu'elle a permis de clarifier)
+            '1', // Q13: b) Le passage du manuel à l'automatique
+            '3', // Q14: d) Accéder à l'image dont on a besoin à temps (l'avantage principal sur l'insertion locale)
+            '1', // Q15: b) Chaque action de l'utilisateur déclenche toujours un retour visuel ou sonore (retour ou feedback)
+            '2', // Q16: c) Un éditeur de texte sert à écrire et modifier du code source (ou du texte brut)
+            '2', // Q17: c) Parce qu'elle fonctionne uniquement quand l'ordinateur est allumé
+            '2', // Q18: c) Permet de récupérer l'instruction d'un signal qui provient de l'utilisateur (ou plus généralement la mémoire)
+            '2', // Q19: c) Configurer le matériel de l'ordinateur au démarrage
+            '3'  // Q20: d) La vitesse à laquelle il exécute les instructions
+        ];
+        
+        // Array des textes des bonnes réponses (pour l'affichage de la correction)
+        const correctAnswersTexts = [
+            'La bonne réponse est : d) L\'histoire et la science sociale. L\'apprentissage de l\'informatique à l\'université combine souvent l\'informatique et la société, l\'histoire/épistémologie et la théorie/système d\'exploitation, mais pas nécessairement l\'histoire et la science sociale comme concept unique de base.',
+            'La bonne réponse est : c) Science, Traitement, information automatique. L\'informatique est la **Science** du **Traitement** de l\'**Information** de manière **Automatique** (INFORmation autoMATIQUE).',
+            'La bonne réponse est : d) Il gère l\'interface graphique manipulable par tous. L\'Interface Homme-Machine (IHM) de Windows est caractérisée par son interface **graphique** (GUI) facile à manipuler.',
+            'La bonne réponse est : c) Parmi les fichiers, il existe des fichiers système. Cette affirmation est la seule incontestablement vraie. Le répertoire racine (d) contient le S.E, mais n\'est pas *défini* par le fait de le contenir.',
+            'La bonne réponse est : c) Il manipule les commandes internes et externes du disque. L\'acronyme **D**OS signifie **D**isk **O**perating **S**ystem, car il a été initialement conçu pour gérer les commandes d\'accès au disque.',
+            'La bonne réponse est : d) Imprimante. Le clavier, la souris, et l\'écran sont des périphériques d\'entrée/sortie **essentiels** pour l\'interaction basique, l\'imprimante est un périphérique de sortie **optionnel**.',
+            'La bonne réponse est : b) Le chef d\'orchestre. C\'est la métaphore classique désignant le rôle du Système d\'Exploitation qui gère et coordonne toutes les ressources (entrées/sorties, applications, utilisateur).',
+            'La bonne réponse est : b) L\'informatique et Bureautique. L\'informatique est un élément critique pour la compréhension de la **Bureautique** (son application pratique au bureau) et les **TIC** (Technologies de l\'Information et de la Communication).',
+            'La bonne réponse est : e) Aucune bonne réponse. L\'ajout d\'équipement (périphériques) se fait via des ports (USB, HDMI, Ethernet, etc.) qui n\'étaient pas listés.',
+            'La bonne réponse est : a) Le système d\'exploitation. C\'est le SE qui contient les pilotes (drivers) et le noyau pour gérer les échanges avec les périphériques.',
+            'La bonne réponse est : d) MS Word est un logiciel de traitement de texte dans la suite MS Office. C\'est la définition la plus complète et précise de MS Word.',
+            'La bonne réponse est : c) Confusion entre scientifique et technique. La reconnaissance comme science a permis de différencier clairement les aspects théoriques (**scientifiques**) des aspects pratiques/outils (**techniques**).',
+            'La bonne réponse est : b) Le passage du manuel à l\'automatique. L\'avantage principal de la bureautique est l\'**automatisation** des tâches administratives.',
+            'La bonne réponse est : d) Accéder à l\'image dont on a besoin à temps. L\'avantage de la fonction "en ligne" est l\'accès immédiat à une vaste bibliothèque sans avoir à stocker les images localement.',
+            'La bonne réponse est : b) Chaque action de l\'utilisateur déclenche toujours un retour visuel ou sonore. En ergonomie, un système doit toujours fournir un **feedback perceptible** (visuel, sonore, ou tactile) à l\'utilisateur après une action.',
+            'La bonne réponse est : c) Un éditeur de texte sert à écrire et modifier du code source. Un éditeur de texte (comme le Bloc-notes) est conçu pour le texte **brut** (non formaté), souvent utilisé pour l\'édition de code.',
+            'La bonne réponse est : c) Parce qu\'elle fonctionne uniquement quand l\'ordinateur est allumé. La mémoire **vive** (Volatile) perd ses données dès que l\'alimentation est coupée.',
+            'La bonne réponse est : c) Permet de récupérer l\'instruction d\'un signal qui provient de l\'utilisateur. La phase **Fetch** (récupération) est la première étape du cycle d\'exécution du processeur : récupérer l\'instruction de la mémoire.',
+            'La bonne réponse est : c) Configurer le matériel de l\'ordinateur au démarrage. Le BIOS (Basic Input/Output System) initialise et configure les composants matériels essentiels avant de lancer le système d\'exploitation.',
+            'La bonne réponse est : d) La vitesse à laquelle il exécute les instructions. La fréquence (MHz, GHz) est l\'unité de mesure de la vitesse d\'horloge du processeur, indiquant le nombre de cycles d\'instructions par seconde.'
+        ];
+        
+        const totalQuestions = correctAnswersValues.length;
+
+        /**
+         * Réinitialise les styles de correction.
+         */
+        function resetCorrection() {
+            questionItems.forEach(item => {
+                // Supprimer les classes de marquage des options
+                item.querySelectorAll('label').forEach(label => {
+                    label.classList.remove('correct-answer', 'incorrect-answer');
+                });
+                // Masquer le message de correction
+                const correctionDiv = item.querySelector('.correction-message');
+                correctionDiv.style.display = 'none';
+            });
+            resultContainer.style.display = 'none';
+        }
+
+
+        quizForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            let score = 0;
+            let allAnswered = true;
+
+            // Retirer les marquages et messages de correction précédents
+            resetCorrection();
+
+            // Boucle de vérification
+            for (let i = 1; i <= totalQuestions; i++) {
+                const questionIndex = i - 1; // Index dans les tableaux (0 à 19)
+                const questionName = 'q' + i;
+                const correctAnswerValue = correctAnswersValues[questionIndex];
+                const correctAnswerText = correctAnswersTexts[questionIndex];
+                
+                // Récupérer la valeur de la réponse sélectionnée par l'utilisateur
+                const selectedInput = quizForm.querySelector(`input[name="${questionName}"]:checked`);
+                const selectedOption = selectedInput ? selectedInput.value : null;
+
+                const questionItem = questionItems[questionIndex]; // L'élément <li> de la question
+                const correctionDiv = questionItem.querySelector('.correction-message');
+
+                // 1. Vérifier si la question a été répondue
+                if (!selectedOption) {
+                    allAnswered = false;
+                    // Marquer la question comme non répondue (optionnel, mais utile)
+                    // On pourrait ajouter une classe ici si on voulait mettre en évidence les questions manquées
+                }
+
+                // 2. Traiter la réponse (pour le score, l'affichage et la correction)
+                if (questionItem) {
+                    const isCorrect = selectedOption === correctAnswerValue;
+                    
+                    if (isCorrect) {
+                        score++;
+                    }
+
+                    // *** MARQUAGE VISUEL DES OPTIONS ***
+                    
+                    // Marquer la bonne réponse (TOUJOURS)
+                    const correctInput = questionItem.querySelector(`input[value="${correctAnswerValue}"][name="${questionName}"]`);
+                    if (correctInput) {
+                        correctInput.closest('label').classList.add('correct-answer');
+                    }
+
+                    // Marquer la réponse de l'utilisateur si elle est INCORRECTE
+                    if (selectedInput && !isCorrect) {
+                        selectedInput.closest('label').classList.add('incorrect-answer');
+                    }
+                    
+                    // *** AFFICHAGE DU MESSAGE DE CORRECTION ***
+                    if (correctionDiv) {
+                        correctionDiv.innerHTML = '<strong>Correction :</strong> ' + correctAnswerText;
+                        correctionDiv.style.display = 'block';
+                    }
+                }
+            } // Fin de la boucle for
+
+            // 4. Afficher le score et/ou les messages
+            if (allAnswered) {
+                // Afficher le score
+                const percentage = (score / totalQuestions) * 100;
+                let message = `Votre score est de ${score} sur ${totalQuestions} (${percentage.toFixed(0)}%).`;
+                
+                if (percentage === 100) {
+                    message += " Excellent travail, Champion !";
+                } else if (percentage >= 70) {
+                    message += " Très bien ! Vous maîtrisez la plupart des notions.";
+                } else if (percentage >= 50) {
+                    message += " Bien. Quelques révisions et vous serez au top !";
+                } else {
+                    message += " Vous avez besoin d'une petite révision. Courage !";
+                }
+
+                scoreMessage.textContent = message;
+                resultContainer.style.display = 'block';
+                submitButton.textContent = 'Recommencer le Quiz'; // Changer le texte du bouton
+                submitButton.onclick = () => window.location.reload(); // Recharger la page pour recommencer
+                
+                // Faire défiler vers le résultat
+                resultContainer.scrollIntoView({ behavior: 'smooth' });
+
+            } else {
+                // Message d'erreur si toutes les questions ne sont pas répondues
+                alert("Veuillez répondre à toutes les questions avant de voir les résultats.");
+                // Réinitialiser la correction pour ne pas laisser un état partiel
+                resetCorrection();
+            }
+        });
+        
+        // S'assurer que le bouton d'origine soumet le formulaire
+        submitButton.addEventListener('click', function(e) {
+            // Empêche le rechargement si l'action a déjà été modifiée pour recharger
+            if (this.textContent === 'Recommencer le Quiz') {
+                e.preventDefault();
+                window.location.reload();
+            }
+        });
+    });
+</script>
+</body>
+</html>

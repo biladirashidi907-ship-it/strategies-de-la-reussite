@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Anglais et Informatique (30 Questions)</title>
+    <style>
+        /* CSS Fourni par l'utilisateur */
+        * {
+            margin: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            padding: 0;
+            background-color: #f0f0f0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* En-tête et navigation */
+        .quiz-header {
+            width: 100%;
+            background-color: #7fffd4;
+            /* aquamarine */
+            padding: 20px 0;
+            text-align: center;
+        }
+
+        .quiz-title {
+            background-color: #f5f5dc;
+            /* beige */
+            padding: 20px 20px;
+            text-align: center;
+        }
+
+        .quiz-intro {
+            padding: 10px 20px;
+            color: #333;
+        }
+
+        /* Contenu principal (questions) */
+        .quiz-container {
+            width: 100%;
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+
+        .question-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .question-item {
+            background-color: #f5f5dc;
+            /* beige */
+            border-radius: 20px;
+            margin-bottom: 20px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border: 2px solid transparent;
+            /* Ajout pour la bordure d'alerte */
+        }
+
+        .question-item p {
+            font-weight: bold;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .question-number {
+            font-weight: bold;
+            color: #008b8b;
+        }
+
+        .question-options {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .question-options label {
+            margin-bottom: 8px;
+            cursor: pointer;
+        }
+
+        .question-options input[type="radio"] {
+            margin-right: 10px;
+        }
+
+        /* Styles d'alerte */
+        .unanswered {
+            border-color: red !important;
+            /* Bordure rouge pour la question non répondue */
+            background-color: #ffe0e0 !important;
+            /* Fond légèrement rouge */
+        }
+
+        /* Bouton de soumission */
+        .submit-button {
+            background-color: #008b8b;
+            /* darkcyan */
+            color: white;
+            border: none;
+            width: 90%;
+            max-width: 300px;
+            margin: 30px auto;
+            height: 50px;
+            border-radius: 40px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s, box-shadow 0.3s;
+            display: block;
+        }
+
+        .submit-button:hover {
+            background-color: #9acd32;
+            /* yellowgreen */
+            color: #161616;
+            box-shadow: 0 0 10px #ffff00;
+            /* yellow */
+        }
+
+        /* Résultats */
+        #results {
+            background-color: #fff;
+            padding: 20px;
+            margin-top: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 900px;
+            margin: 20px auto;
+        }
+
+        #results h2 {
+            color: #008b8b;
+        }
+
+        .correct {
+            background-color: #d4edda;
+            /* Light green for correct answers */
+            border: 1px solid #c3e6cb;
+            padding: 5px;
+            margin-bottom: 5px;
+            border-radius: 5px;
+        }
+
+        .incorrect {
+            background-color: #f8d7da;
+            /* Light red for incorrect answers */
+            border: 1px solid #f5c6cb;
+            padding: 5px;
+            margin-bottom: 5px;
+            border-radius: 5px;
+        }
+
+        /* Pied de page */
+        .quiz-footer {
+            background-color: #f8f9fa;
+            color: #010302;
+            text-align: center;
+            padding: 15px 0;
+            width: 100%;
+            border-top: 1px solid #ddd;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 800px) {
+            .quiz-container {
+                padding: 0 10px;
+            }
+
+            .question-item {
+                width: auto;
+                margin-left: 0;
+                margin-right: 0;
+            }
+
+            .submit-button {
+                width: 100%;
+                margin: 20px auto;
+            }
+        }
+
+        a {
+            background-color: #ddd;
+            border-radius: 9px;
+            text-decoration: none;
+            font-size: 20px;
+            padding: 5px 10px;
+        }
+
+        a:hover {
+            color: orangered;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="quiz-header">
+        <h1 class="quiz-title">Quiz d'Anglais et Concepts Informatiques (30 Questions)</h1>
+        <p class="quiz-intro">Testez vos connaissances en Anglais et en Programmation/Systèmes.</p>
+        <a href="index.html" style="text-decoration: none; font-size: 20px;">Retour</a>
+    </nav>
+
+    <main class="quiz-container">
+        <form id="quiz-form">
+            <ol class="question-list">
+                <li class="question-item">
+                    <p><span class="question-number">1.</span> Which is the most informal way of saying 'Yes'?</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q1" value="0"> A. Definitely</label>
+                        <label><input type="radio" name="q1" value="1"> B. I think so</label>
+                        <label><input type="radio" name="q1" value="2"> C. Yeah</label>
+                        <label><input type="radio" name="q1" value="3"> D. Of course</label>
+                    </div>
+                </li>
+
+                <li class="question-item">
+                    <p><span class="question-number">2.</span> Which phrase expresses that you are not very sure about something?</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q2" value="0"> A. That's right</label>
+                        <label><input type="radio" name="q2" value="1"> B. I hope so</label>
+                        <label><input type="radio" name="q2" value="2"> C. Yes, I can</label>
+                        <label><input type="radio" name="q2" value="3"> D. You bet</label>
+                    </div>
+                </li>
+
+                <li class="question-item">
+                    <p><span class="question-number">3.</span> What is the most common way to formally accept an offer?</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q3" value="0"> A. Yep</label>
+                        <label><input type="radio" name="q3" value="1"> B. Yes, please</label>
+                        <label><input type="radio" name="q3" value="2"> C. I'm afraid so</label>
+                        <label><input type="radio" name="q3" value="3"> D. No way</label>
+                    </div>
+                </li>
+
+                <li class="question-item">
+                    <p><span class="question-number">4.</span> Which of these is an informal way of saying 'No'?</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q4" value="0"> A. I think not</label>
+                        <label><input type="radio" name="q4" value="1"> B. Not really</label>
+                        <label><input type="radio" name="q4" value="2"> C. Nope</label>
+                        <label><input type="radio" name="q4" value="3"> D. I couldn't</label>
+                    </div>
+                </li>
+
+                <li class="question-item">
+                    <p><span class="question-number">5.</span> How do you pronounce the time 6:30?</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q5" value="0"> A. Six thirty OR half past six</label>
+                        <label><input type="radio" name="q5" value="1"> B. Six thirty OR twenty-five past six</label>
+                        <label><input type="radio" name="q5" value="2"> C. Six thirty OR six fifty</label>
+                        <label><input type="radio" name="q5" value="3"> D. Six thirty OR a quarter to six</label>
+                    </div>
+                </li>
+
+                <li class="question-item">
+                    <p><span class="question-number">6.</span> Which word refers to the degree of hotness or coldness?</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q6" value="0"> A. Distance</label>
+                        <label><input type="radio" name="q6" value="1"> B. Capacity</label>
+                        <label><input type="radio" name="q6" value="2"> C. Temperature</label>
+                        <label><input type="radio" name="q6" value="3"> D. Height</label>
+                    </div>
+                </li>
+
+                <li class="question-item">
+                    <p><span class="question-number">7.</span> How is the fraction $3/4$ pronounced?</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q7" value="0"> A. A third</label>
+                        <label><input type="radio" name="q7" value="1"> B. A fifth</label>
+                        <label><input type="radio" name="q7" value="2"> C. Three fifths</label>
+                        <label><input type="radio" name="q7" value="3"> D. Three quarters</label>
+                    </div>
+                </li>
+
+                <li class="question-item">
+                    <p><span class="question-number">8.</span> What is the pronunciation for the percentage $80\%$?</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q8" value="0"> A. Eighty hundred per cent</label>
+                        <label><input type="radio" name="q8" value="1"> B. Eighty per cent</label>
+                        <label><input type="radio" name="q8" value="2"> C. Eighty-five point zero per cent</label>
+                        <label><input type="radio" name="q8" value="3"> D. Fifty per cent</label>
+                    </div>
+                </li>
+
+                <li class="question-item">
+                    <p><span class="question-number">9.</span> What does the symbol $\div$ mean in English?</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q9" value="0"> A. Plus</label>
+                        <label><input type="radio" name="q9" value="1"> B. Minus</label>
+                        <label><input type="radio" name="q9" value="2"> C. Divided by</label>
+                        <label><input type="radio" name="q9" value="3"> D. Equals to</label>
+                    </div>
+                </li>
+
+                <li class="question-item">
+                    <p><span class="question-number">10.</span> When asking about 'Depth' (Profondeur), what is the correct question structure?</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q10" value="0"> A. How tall are you?</label>
+                        <label><input type="radio" name="q10" value="1"> B. How wide is the road?</label>
+                        <label><input type="radio" name="q10" value="2"> C. How deep is the lake?</label>
+                        <label><input type="radio" name="q10" value="3"> D. How long is the rope?</label>
+                    </div>
+                </li>
+
+                <li class="question-item">
+                    <p><span class="question-number">11.</span> The Simple Present tense is primarily used to talk about:</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q11" value="0"> A. Actions that will happen in the future.</label>
+                        <label><input type="radio" name="q11" value="1"> B. Permanent actions or universal truths.</label>
+                        <label><input type="radio" name="q11" value="2"> C. Actions happening right now.</label>
+                        <label><input type="radio" name="q11" value="3"> D. Actions completed in the recent past.</label>
+                    </div>
+                </li>
+
+                <li class="question-item">
+                    <p><span class="question-number">12.</span> In the sentence "Insects have six legs," the verb tense used is:</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q12" value="0"> A. Present Perfect Continuous</label>
+                        <label><input type="radio" name="q12" value="1"> B. Simple Present</label>
+                        <label><input type="radio" name="q12" value="2"> C. Present Continuous</label>
+                        <label><input type="radio" name="q12" value="3"> D. Simple Past</label>
+                    </div>
+                </li>
+
+                <li class="question-item">
+                    <p><span class="question-number">13.</span> What verb tense is used in the question: "When does Bahati study at ISP/Bukavu?"</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q13" value="0"> A. Present Continuous</label>
+                        <label><input type="radio" name="q13" value="1"> B. Simple Present</label>
+                        <label><input type="radio" name="q13" value="2"> C. Present Perfect</label>
+                        <label><input type="radio" name="q13" value="3"> D. Simple Past</label>
+                    </div>
+                </li>
+
+                <li class="question-item">
+                    <p><span class="question-number">14.</span> Which of these is a characteristic of Software?</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q14" value="0"> A. It can be physically touched.</label>
+                        <label><input type="radio" name="q14" value="1"> B. It can be infected by viruses.</label>
+                        <label><input type="radio" name="q14" value="2"> C. It is developed using electronic and other materials.</label>
+                        <label><input type="radio" name="q14" value="3"> D. It will physically wear out over time.</label>
+                    </div>
+                </li>
+
+                <li class="question-item">
+                    <p><span class="question-number">15.</span> ROM stands for:</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q15" value="0"> A. Random Access Memory</label>
+                        <label><input type="radio" name="q15" value="1"> B. Read-Only Memory</label>
+                        <label><input type="radio" name="q15" value="2"> C. Random Output Module</label>
+                        <label><input type="radio" name="q15" value="3"> D. Readily Operational Memory</label>
+                    </div>
+                </li>
+
+                <li class="question-item">
+                    <p><span class="question-number">16.</span> Which term refers to the smallest piece of information used by a computer?</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q16" value="0"> A. CPU</label>
+                        <label><input type="radio" name="q16" value="1"> B. RAM</label>
+                        <label><input type="radio" name="q16" value="2"> C. Bit</label>
+                        <label><input type="radio" name="q16" value="3"> D. HDD</label>
+                    </div>
+                </li>
+
+                <li class="question-item">
+                    <p><span class="question-number">17.</span> An API (Application Programming Interface) is:</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q17" value="0"> A. A type of computer hardware.</label>
+                        <label><input type="radio" name="q17" value="1"> B. A software go-between that brings information from one application to another.</label>
+                        <label><input type="radio" name="q17" value="2"> C. A programming error.</label>
+                        <label><input type="radio" name="q17" value="3"> D. A physical storage device.</label>
+                    </div>
+                </li>
+
+                <li class="question-item">
+                    <p><span class="question-number">18.</span> What is a Bug in programming?</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q18" value="0"> A. A small computer chip</label>
+                        <label><input type="radio" name="q18" value="1"> B. A programming error that causes glitches</label>
+                        <label><input type="radio" name="q18" value="2"> C. A permanent storage device</label>
+                        <label><input type="radio" name="q18" value="3"> D. A set of rules for communication</label>
+                    </div>
+                </li>
+
+                <li class="question-item">
+                    <p><span class="question-number">19.</span> Camel Case is a practice used to improve:</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q19" value="0"> A. System speed</label>
+                        <label><input type="radio" name="q19" value="1"> B. Readability in programming variables</label>
+                        <label><input type="radio" name="q19" value="2"> C. Data structure</label>
+                        <label><input type="radio" name="q19" value="3"> D. Hardware compatibility</label>
+                    </div>
+                </li>
+
+                <li class="question-item">
+                    <p><span class="question-number">20.</span> The process of taking high-level code (like C++) and translating it into machine-readable code is called:</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q20" value="0"> A. Debugging</label>
+                        <label><input type="radio" name="q20" value="1"> B. Compiling</label>
+                        <label><input type="radio" name="q20" value="2"> C. Latency</label>
+                        <label><input type="radio" name="q20" value="3"> D. Scripting</label>
+                    </div>
+                </li>
+
+                <li class="question-item">
+                    <p><span class="question-number">21.</span> Conditional statements in programming are often expressed in an "If, then" format to set terms for when a program:</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q21" value="0"> A. runs out of memory.</label>
+                        <label><input type="radio" name="q21" value="1"> B. translates into machine code.</label>
+                        <label><input type="radio" name="q21" value="2"> C. moves on to the next step.</label>
+                        <label><input type="radio" name="q21" value="3"> D. experiences a bug.</label>
+                    </div>
+                </li>
+
+                <li class="question-item">
+                    <p><span class="question-number">22.</span> What does Latency measure?</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q22" value="0"> A. The number of bugs in a program.</label>
+                        <label><input type="radio" name="q22" value="1"> B. The size of an application.</label>
+                        <label><input type="radio" name="q22" value="2"> C. The measure of time between entering an input and the returned output.</label>
+                        <label><input type="radio" name="q22" value="3"> D. The complexity of an algorithm.</label>
+                    </div>
+                </li>
+
+                <li class="question-item">
+                    <p><span class="question-number">23.</span> Structured data is data that has been:</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q23" value="0"> A. left unprocessed.</label>
+                        <label><input type="radio" name="q23" value="1"> B. 'cleaned' and organized to search, manipulate, and interface well with software applications.</label>
+                        <label><input type="radio" name="q23" value="2"> C. encrypted for security.</label>
+                        <label><input type="radio" name="q23" value="3"> D. stored on secondary storage only.</label>
+                    </div>
+                </li>
+
+                <li class="question-item">
+                    <p><span class="question-number">24.</span> Syntax in programming refers to:</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q24" value="0"> A. The physical components of the computer.</label>
+                        <label><input type="radio" name="q24" value="1"> B. The rules that dictate the structure of a language.</label>
+                        <label><input type="radio" name="q24" value="2"> C. The temporary storage of data.</label>
+                        <label><input type="radio" name="q24" value="3"> D. A type of output device.</label>
+                    </div>
+                </li>
+
+                <li class="question-item">
+                    <p><span class="question-number">25.</span> What are Algorithms at a basic level?</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q25" value="0"> A. Physical parts of a computer</label>
+                        <label><input type="radio" name="q25" value="1"> B. Simply specific procedures used to solve computational problems</label>
+                        <label><input type="radio" name="q25" value="2"> C. Lines of instructions for dynamic page content</label>
+                        <label><input type="radio" name="q25" value="3"> D. Ways of saying "Yes" or "No"</label>
+                    </div>
+                </li>
+
+                <li class="question-item">
+                    <p><span class="question-number">26.</span> The person who is responsible for judging the debate and deciding the winner is called the:</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q26" value="0"> A. Mediator</label>
+                        <label><input type="radio" name="q26" value="1"> B. Adjudicator</label>
+                        <label><input type="radio" name="q26" value="2"> C. Moderator</label>
+                        <label><input type="radio" name="q26" value="3"> D. Attorney</label>
+                    </div>
+                </li>
+
+                <li class="question-item">
+                    <p><span class="question-number">27.</span> Which is NOT a main component of a debate case?</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q27" value="0"> A. Arguments</label>
+                        <label><input type="radio" name="q27" value="1"> B. Evidence</label>
+                        <label><input type="radio" name="q27" value="2"> C. Rebuttals</label>
+                        <label><input type="radio" name="q27" value="3"> D. Personal attacks</label>
+                    </div>
+                </li>
+
+                <li class="question-item">
+                    <p><span class="question-number">28.</span> In technical vocabulary, what does Volatile Memory mean?</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q28" value="0"> A. Memory that is permanent.</label>
+                        <label><input type="radio" name="q28" value="1"> B. Memory that loses its data when the power is turned off (e.g., RAM).</label>
+                        <label><input type="radio" name="q28" value="2"> C. Memory that is stored on a hard disk.</label>
+                        <label><input type="radio" name="q28" value="3"> D. Memory used only for the operating system (e.g., ROM).</label>
+                    </div>
+                </li>
+
+                <li class="question-item">
+                    <p><span class="question-number">29.</span> The term Boolean refers to a function in programming with binary choices, specifically:</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q29" value="0"> A. True or False</label>
+                        <label><input type="radio" name="q29" value="1"> B. High or Low</label>
+                        <label><input type="radio" name="q29" value="2"> C. Yes or No</label>
+                        <label><input type="radio" name="q29" value="3"> D. Both A and C</label>
+                    </div>
+                </li>
+
+                <li class="question-item">
+                    <p><span class="question-number">30.</span> What are Scripts in the context of programming?</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q30" value="0"> A. Hardware components that manage input/output.</label>
+                        <label><input type="radio" name="q30" value="1"> B. A line by line set of instructions for a computer program to follow for automation or dynamic page content.</label>
+                        <label><input type="radio" name="q30" value="2"> C. Rules for a high-level language structure.</label>
+                        <label><input type="radio" name="q30" value="3"> D. A device used to input data into a computer.</label>
+                    </div>
+                </li>
+            </ol>
+            <button type="submit" class="submit-button">Voir les Résultats</button>
+        </form>
+
+        <div id="results" style="display:none;">
+            <h2>Vos Résultats</h2>
+            <p id="score-text"></p>
+        </div>
+    </main>
+
+    <footer class="quiz-footer">
+        <i>&copy; L1 LMD IG - Anglais/Informatique</i>
+    </footer>
+
+    <script>
+        document.getElementById('quiz-form').addEventListener('submit', function(event) {
+            event.preventDefault(); // Empêche l'envoi du formulaire par défaut
+
+            // Les réponses correctes : 0=A, 1=B, 2=C, 3=D, 4=E
+            const correctAnswers = {
+                q1: '2', // C. Yeah
+                q2: '1', // B. I hope so
+                q3: '1', // B. Yes, please
+                q4: '2', // C. Nope
+                q5: '0', // A. Six thirty OR half past six
+                q6: '2', // C. Temperature
+                q7: '3', // D. Three quarters
+                q8: '1', // B. Eighty per cent
+                q9: '2', // C. Divided by
+                q10: '2', // C. How deep is the lake?
+                q11: '1', // B. Permanent actions or universal truths.
+                q12: '1', // B. Simple Present
+                q13: '1', // B. Simple Present
+                q14: '1', // B. It can be infected by viruses.
+                q15: '1', // B. Read-Only Memory
+                q16: '2', // C. Bit
+                q17: '1', // B. A software go-between that brings information from one application to another.
+                q18: '1', // B. A programming error that causes glitches
+                q19: '1', // B. Readability in programming variables
+                q20: '1', // B. Compiling
+                q21: '2', // C. moves on to the next step.
+                q22: '2', // C. The measure of time between entering an input and the returned output.
+                q23: '1', // B. 'cleaned' and organized to search, manipulate, and interface well with software applications.
+                q24: '1', // B. The rules that dictate the structure of a language.
+                q25: '1', // B. Simply specific procedures used to solve computational problems
+                q26: '1', // B. Adjudicator
+                q27: '3', // D. Personal attacks
+                q28: '1', // B. Memory that loses its data when the power is turned off (e.g., RAM).
+                q29: '3', // D. Both A and C
+                q30: '1' // B. A line by line set of instructions for a computer program to follow for automation or dynamic page content.
+            };
+
+            let score = 0;
+            const totalQuestions = Object.keys(correctAnswers).length;
+            const form = event.target;
+            const questionItems = document.querySelectorAll('.question-item');
+
+            // --- VÉRIFICATION DES RÉPONSES ET RÉINITIALISATION ---
+            let allAnswered = true;
+            let firstUnansweredItem = null;
+
+            // 1. Réinitialiser les classes et les couleurs
+            document.getElementById('results').style.display = 'none';
+            questionItems.forEach(item => {
+                item.classList.remove('correct', 'incorrect', 'unanswered');
+                const labels = item.querySelectorAll('.question-options label');
+                labels.forEach(label => label.style.color = 'initial');
+                labels.forEach(label => label.style.fontWeight = 'normal');
+                item.querySelectorAll('input[type="radio"]').forEach(radio => {
+                    radio.disabled = false; // Réactiver pour une nouvelle tentative
+                });
+            });
+
+
+            // 2. Vérification que toutes les questions sont répondues
+            for (const qName of Object.keys(correctAnswers)) {
+                const selectedOption = form.elements[qName].value;
+                const questionItem = document.querySelector(`.question-item:nth-child(${parseInt(qName.substring(1))})`);
+
+                if (!selectedOption) {
+                    allAnswered = false;
+                    questionItem.classList.add('unanswered');
+                    if (!firstUnansweredItem) {
+                        firstUnansweredItem = questionItem;
+                    }
+                }
+            }
+
+            if (!allAnswered) {
+                alert("Veuillez répondre à toutes les questions avant de voir les résultats.");
+                if (firstUnansweredItem) {
+                    firstUnansweredItem.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+                return; // Stoppe le calcul du score
+            }
+
+            // 3. Calcul du score et affichage des corrections
+            for (const [qName, correctAnswerIndex] of Object.entries(correctAnswers)) {
+                const selectedOption = form.elements[qName].value;
+                const questionItem = document.querySelector(`.question-item:nth-child(${parseInt(qName.substring(1))})`);
+
+                if (selectedOption === correctAnswerIndex) {
+                    score++;
+                    questionItem.classList.add('correct');
+                } else {
+                    questionItem.classList.add('incorrect');
+
+                    // Mettre en évidence la mauvaise réponse de l'utilisateur en rouge
+                    const incorrectLabel = questionItem.querySelector(`input[value="${selectedOption}"]`).closest('label');
+                    if (incorrectLabel) {
+                        incorrectLabel.style.color = 'red';
+                        incorrectLabel.style.fontWeight = 'bold';
+                    }
+                }
+
+                // Afficher la bonne réponse en vert et en gras (dans tous les cas)
+                const correctLabel = questionItem.querySelector(`input[value="${correctAnswerIndex}"]`).closest('label');
+                if (correctLabel) {
+                    correctLabel.style.color = 'green';
+                    correctLabel.style.fontWeight = 'bold';
+                }
+
+                // Désactiver tous les boutons radio après la soumission
+                questionItem.querySelectorAll('input[type="radio"]').forEach(radio => {
+                    radio.disabled = true;
+                });
+            }
+
+            // Affichage du score final
+            document.getElementById('score-text').innerHTML = `Vous avez obtenu un score de <strong>${score} / ${totalQuestions}</strong>.`;
+            document.getElementById('results').style.display = 'block';
+
+            // Défiler vers les résultats
+            document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz du Champion - Pédagogie</title>
+    <style>
+        /* Styles de base */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* En-tête et navigation */
+        .quiz-header {
+            width: 100%;
+            background-color: #7fffd4; /* aquamarine */
+            padding: 20px 0;
+            text-align: center;
+        }
+
+        .quiz-title {
+            background-color: #f5f5dc; /* beige */
+            padding: 20px 20px;
+            text-align: center;
+        }
+
+        .quiz-intro {
+            padding: 10px 20px;
+            color: #333;
+        }
+
+        /* Contenu principal (questions) */
+        .quiz-container {
+            width: 100%;
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+
+        .question-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .question-item {
+            background-color: #f5f5dc; /* beige */
+            border-radius: 20px;
+            margin-bottom: 20px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .question-item p {
+            font-weight: bold;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .question-number {
+            font-weight: bold;
+            color: #008b8b;
+        }
+
+        .question-options {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .question-options label {
+            margin-bottom: 8px;
+            cursor: pointer;
+            padding: 5px; 
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .question-options input[type="radio"] {
+            margin-right: 10px;
+        }
+
+        /* Styles de Correction AJOUTÉS */
+        .correct-answer {
+            background-color: #d4edda; /* Vert clair */
+            border: 1px solid #c3e6cb;
+            color: #155724; /* Texte vert foncé */
+        }
+
+        .incorrect-answer {
+            background-color: #f8d7da; /* Rouge clair */
+            border: 1px solid #f5c6cb;
+            color: #721c24; /* Texte rouge foncé */
+        }
+        
+        .correction-message {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #e6f7ff; /* Bleu clair pour le message de correction */
+            color: #008b8b; /* Couleur du texte */
+            font-weight: bold;
+            border-left: 5px solid #008b8b;
+        }
+
+        /* Bouton de soumission */
+        .submit-button {
+            background-color: #008b8b; /* darkcyan */
+            color: white;
+            border: none;
+            width: 90%;
+            max-width: 300px;
+            margin: 30px auto;
+            height: 50px;
+            border-radius: 40px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s, box-shadow 0.3s;
+            display: block;
+        }
+
+        .submit-button:hover {
+            background-color: #9acd32; /* yellowgreen */
+            color: #161616;
+            box-shadow: 0 0 10px #ffff00; /* yellow */
+        }
+
+        /* Pied de page */
+        .quiz-footer {
+            background-color: #f8f9fa;
+            color: #010302;
+            text-align: center;
+            padding: 15px 0;
+            width: 100%;
+            border-top: 1px solid #ddd;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 800px) {
+            .quiz-container {
+                padding: 0 10px;
+            }
+
+            .question-item {
+                width: auto;
+                margin-left: 0;
+                margin-right: 0;
+            }
+
+            .submit-button {
+                width: 100%;
+                margin: 20px auto;
+            }
+        }
+        a{
+            background-color: #ddd;         
+            border-radius: 9px;          
+            text-decoration: none;          
+            font-size: 20px;                
+            padding: 5px 10px;          
+        }
+        a:hover{
+            color: orangered;             
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="quiz-header">
+        <h1 class="quiz-title">Courant éducatif et modèle d'enseignement</h1>
+        <p class="quiz-intro">Le savoir c'est le pouvoir. Celui qui ose répondre, ose apprendre. À l'université, le champion n'est pas le plus fort, mais le plus curieux.</p>
+   <a href="index.html" style="text-decoration: none; font-size: 20px;">Retour</a>
+    
+    </nav>
+
+    <main class="quiz-container">
+        <form id="quiz-form">
+            <ol class="question-list">
+                <li class="question-item">
+                    <p><span class="question-number">1.</span>Une bonne stratégie d'enseignement-apprentissage doit être :</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q1" value="0"> a) Adaptée aux niveaux et aux besoins des élèves</label>
+                        <label><input type="radio" name="q1" value="1"> b) Identique pour tous les élèves</label>
+                        <label><input type="radio" name="q1" value="2"> c) Basée uniquement sur l'évaluation finale</label>
+                        <label><input type="radio" name="q1" value="3"> d) Déconnectée de la réalité de terrain</label>
+                        <label><input type="radio" name="q1" value="4"> e) Aucune bonne réponse</label>
+                    </div>
+                    <div id="q1-correction" class="correction-message" style="display:none;"></div>
+                </li>
+                
+                <li class="question-item">
+                    <p><span class="question-number">2.</span> Quel modèle de communication favorise l'interaction entre l'enseignant et les élèves ?</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q2" value="0"> a) La communication unilatérale</label>
+                        <label><input type="radio" name="q2" value="1"> b) La communication formelle</label>
+                        <label><input type="radio" name="q2" value="2"> c) La communication dialoguée</label>
+                        <label><input type="radio" name="q2" value="3"> d) La communication passive</label>
+                        <label><input type="radio" name="q2" value="4"> e) A et B sont bonnes</label>
+                        <label><input type="radio" name="q2" value="5"> f) Aucune bonne réponse</label>
+                    </div>
+                    <div id="q2-correction" class="correction-message" style="display:none;"></div>
+                </li>
+                
+                <li class="question-item">
+                    <p><span class="question-number">3.</span>Comment un enseignant peut-il prévenir les conflits en classe ?</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q3" value="0"> a) En punissant immédiatement les élèves perturbateurs</label>
+                        <label><input type="radio" name="q3" value="1"> b) En établissant des règles claires dès le début</label>
+                        <label><input type="radio" name="q3" value="2"> c) En évitant toute interaction avec les élèves</label>
+                        <label><input type="radio" name="q3" value="3"> d) En supprimant les discussions en classe</label>
+                        <label><input type="radio" name="q3" value="4"> e) Toutes les réponses sont bonnes</label>
+                    </div>
+                    <div id="q3-correction" class="correction-message" style="display:none;"></div>
+                </li>
+
+                <li class="question-item">
+                    <p><span class="question-number">4.</span>Un exemple de procédé d'acquisition est :</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q4" value="0"> a) le procédé expérimental</label>
+                        <label><input type="radio" name="q4" value="1"> b) L'examen final</label>
+                        <label><input type="radio" name="q4" value="2"> c) L'interrogation surprise</label>
+                        <label><input type="radio" name="q4" value="3"> d) L'absence d'explication en classe</label>
+                        <label><input type="radio" name="q4" value="4"> e) Toutes ces réponses sont bonnes</label>
+                    </div>
+                    <div id="q4-correction" class="correction-message" style="display:none;"></div>
+                </li>
+                
+                <li class="question-item">
+                    <p><span class="question-number">5.</span> Le principe qui veut que l'enseignant utilise les matériels didactiques pour concrétiser son enseignement est :</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q5" value="0"> a) Principe d'activité</label>
+                        <label><input type="radio" name="q5" value="1"> b) Principe d'intérêt</label>
+                        <label><input type="radio" name="q5" value="2"> c) Principe d'intuition</label>
+                        <label><input type="radio" name="q5" value="3"> d) Principe d'adaptation</label>
+                        <label><input type="radio" name="q5" value="4"> e) Toutes ces réponses sont bonnes</label>
+                    </div>
+                    <div id="q5-correction" class="correction-message" style="display:none;"></div>
+                </li>
+                
+                <li class="question-item">
+                    <p><span class="question-number">6.</span> Dans la formation de l'objectif, opérationnel quel comportement observable démontrera que l'objectif est atteint :</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q6" value="0"> a) Verbe d'action</label>
+                        <label><input type="radio" name="q6" value="1"> b) Performance au resultant</label>
+                        <label><input type="radio" name="q6" value="2"> c) Condition de réalisation</label>
+                        <label><input type="radio" name="q6" value="3"> d) Critères de resultant</label>
+                        <label><input type="radio" name="q6" value="4"> e) Aucune bonne réponse</label>
+                    </div>
+                    <div id="q6-correction" class="correction-message" style="display:none;"></div>
+                </li>
+
+                <li class="question-item">
+                    <p><span class="question-number">7.</span> La méthode au strategie d'enseignement par la quelle l'enseignant explique une théorie en s'apuiyant sur le matériel didactique est :</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q7" value="0"> a) Méthode non directive</label>
+                        <label><input type="radio" name="q7" value="1"> b) Méthode créative</label>
+                        <label><input type="radio" name="q7" value="2"> c) Méthode démonstrative</label>
+                        <label><input type="radio" name="q7" value="3"> d) Méthode de discution</label>
+                        <label><input type="radio" name="q7" value="4"> e) Aucune bonne reponse</label>
+                    </div>
+                    <div id="q7-correction" class="correction-message" style="display:none;"></div>
+                </li>
+
+                <li class="question-item">
+                    <p><span class="question-number">8.</span> Le document pédagogique dans le quel l'enseignant réalise une préparation succinte est :</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q8" value="0"> a) Cahier de prévision de la matière</label>
+                        <label><input type="radio" name="q8" value="1"> b) Cahier de préparation</label>
+                        <label><input type="radio" name="q8" value="2"> c) Journal de classe</label>
+                        <label><input type="radio" name="q8" value="3"> d) Toutes les réponses sont bonne</label>
+                        <label><input type="radio" name="q8" value="4"> e) Aucune bonne réponse</label>
+                    </div>
+                    <div id="q8-correction" class="correction-message" style="display:none;"></div>
+                </li>
+                <li class="question-item">
+                    <p><span class="question-number">9.</span> L'approche fondée sur les travaux de lev vygotsky, elle met l'accent sur l'apprentissage par l'interaction sociale sur :</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q9" value="0"> a) Approche contructive</label>
+                        <label><input type="radio" name="q9" value="1"> b) Approche socio-constructive</label>
+                        <label><input type="radio" name="q9" value="2"> c) Approche par objectifs</label>
+                        <label><input type="radio" name="q9" value="3"> d) Approche behavioriste</label>
+                        <label><input type="radio" name="q9" value="4"> e) Aucune bonne réponse</label>
+                    </div>
+                    <div id="q9-correction" class="correction-message" style="display:none;"></div>
+                </li>
+
+                <li class="question-item">
+                    <p><span class="question-number">10.</span> L'approche inspirée par les théories de pav lov et skiner qui se concentre sur le conditionnement et le renforcement pour modeler les comportements des apprenants est :</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q10" value="0"> a) Approche humaniste</label>
+                        <label><input type="radio" name="q10" value="1"> b) Approche experientielle</label>
+                        <label><input type="radio" name="q10" value="2"> c) Approche differenciée</label>
+                        <label><input type="radio" name="q10" value="3"> d) Approche behavioriste</label>
+                        <label><input type="radio" name="q10" value="4"> e) Aucune bonne réponse</label>
+                    </div>
+                    <div id="q10-correction" class="correction-message" style="display:none;"></div>
+                </li>
+
+                <li class="question-item">
+                    <p><span class="question-number">11.</span> L'éducation vise à développer les facultés physique, intellectuel morale de l'individu est :</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q11" value="0"> a) But ultime de l'éducation</label>
+                        <label><input type="radio" name="q11" value="1"> b) But immédiat de l'éducation</label>
+                        <label><input type="radio" name="q11" value="2"> c) de façon généralee toute éducation veut faire la meme chose</label>
+                        <label><input type="radio" name="q11" value="3"> d) Aucune bonne réponse</label>
+                    </div>
+                    <div id="q11-correction" class="correction-message" style="display:none;"></div>
+                </li>
+
+                <li class="question-item">
+                    <p><span class="question-number">12.</span> L'éducation qui est organisée,structuré ayant un programme bien déterminé est :</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q12" value="0"> a) Education formelle</label>
+                        <label><input type="radio" name="q12" value="1"> b) Education informelle</label>
+                        <label><input type="radio" name="q12" value="2"> c) Education physique</label>
+                        <label><input type="radio" name="q12" value="3"> d) Education morale</label>
+                        <label><input type="radio" name="q12" value="4"> e) A et B sont bonne</label>
+                    </div>
+                    <div id="q12-correction" class="correction-message" style="display:none;"></div>
+                </li>
+
+                <li class="question-item">
+                    <p><span class="question-number">13.</span> LL'oeuvre "Ecole sur mésure" est de :</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q13" value="0"> a) Alfred Binet (1857-1911)</label>
+                        <label><input type="radio" name="q13" value="1"> b) Eduard CLAPAREDE(1873-1940)</label>
+                        <label><input type="radio" name="q13" value="2"> c) Bloom(1956)</label>
+                        <label><input type="radio" name="q13" value="3"> d) Aucune bonne réponse</label>
+                    </div>
+                    <div id="q13-correction" class="correction-message" style="display:none;"></div>
+                </li>
+
+                <li class="question-item">
+                    <p><span class="question-number">14.</span> Pour rendre l'enseignement interesant il faut :</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q14" value="0"> a) Avoir l'intuition</label>
+                        <label><input type="radio" name="q14" value="1"> b) organiser des travaux collectifs</label>
+                        <label><input type="radio" name="q14" value="2"> c) Enseigner sans distraction</label>
+                        <label><input type="radio" name="q14" value="3"> d) Répondre aux indignation ou aux objectifs des élèves</label>
+                        <label><input type="radio" name="q14" value="4"> e) Fouetté très fort les dérangeurs</label>
+                    </div>
+                    <div id="q14-correction" class="correction-message" style="display:none;"></div>
+                </li>
+                
+                <li class="question-item">
+                    <p><span class="question-number">15.</span> L'objet principal de la didactique ?</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q15" value="0"> a) Former les élèves</label>
+                        <label><input type="radio" name="q15" value="1"> b) Former les enseignants en RDC</label>
+                        <label><input type="radio" name="q15" value="2"> c) Enseignement</label>
+                        <label><input type="radio" name="q15" value="3"> d) L'éducation et l'enfant</label>
+                        <label><input type="radio" name="q15" value="4"> e) Aucune bonne réponse</label>
+                    </div>
+                    <div id="q15-correction" class="correction-message" style="display:none;"></div>
+                </li>
+                <li class="question-item">
+                    <p><span class="question-number">16.</span> Depuis Bloom(1956) on apris l'habitude de grouper les taxonomis en trois volets qui sont :</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q16" value="0"> a) Cognitif - Affectif - Physique</label>
+                        <label><input type="radio" name="q16" value="1"> b) Affectif - Physique - idéal</label>
+                        <label><input type="radio" name="q16" value="2"> c) Idéal - Physique - psychomoteur</label>
+                        <label><input type="radio" name="q16" value="3"> d) Cognitif - Affectif - psychomoteur</label>
+                        <label><input type="radio" name="q16" value="4"> e) psychomoteur - Affectif - Physique</label>
+                    </div>
+                    <div id="q16-correction" class="correction-message" style="display:none;"></div>
+                </li>
+                <li class="question-item">
+                    <p><span class="question-number">17.</span> Selon R.MAGER un objectif Spécifique est :</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q17" value="0"> a) Ce sont des compétences se situant entre les objectifs généraux</label>
+                        <label><input type="radio" name="q17" value="1"> b) Est un énoncé plus au moins précis</label>
+                        <label><input type="radio" name="q17" value="2"> c) Est une intention communiquée par une déclaration qui décrit modification que l'on désire provoquer chez l'apprenants</label>
+                        <label><input type="radio" name="q17" value="3"> d) Deux de ces réponses sont correcte</label>
+                        <label><input type="radio" name="q17" value="4"> e) Aucune bonne réponse</label>
+                    </div>
+                    <div id="q17-correction" class="correction-message" style="display:none;"></div>
+                </li>
+                <li class="question-item">
+                    <p><span class="question-number">18.</span> Le mode d'enseignement au cours dequel un seul enseignant s'occupe de tous les élèves de sa classe à la fois c'est :</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q18" value="0"> a) Mode mutuel</label>
+                        <label><input type="radio" name="q18" value="1"> b) Mode mixte</label>
+                        <label><input type="radio" name="q18" value="2"> c) Mode individuel</label>
+                        <label><input type="radio" name="q18" value="3"> d) Mode simultané</label>
+                        <label><input type="radio" name="q18" value="4"> e) Mode moderne</label>
+                    </div>
+                    <div id="q18-correction" class="correction-message" style="display:none;"></div>
+                </li>
+                <li class="question-item">
+                    <p><span class="question-number">19.</span> L'homme est chair et OS c'est la conception de :</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q19" value="0"> a) L'intellectualiste</label>
+                        <label><input type="radio" name="q19" value="1"> b) Sociologisme</label>
+                        <label><input type="radio" name="q19" value="2"> c) Matérialisme</label>
+                        <label><input type="radio" name="q19" value="3"> d) L'individualisme </label>
+                        <label><input type="radio" name="q19" value="4"> e) Aucune bonne réponse </label>
+                    </div>
+                    <div id="q19-correction" class="correction-message" style="display:none;"></div>
+                </li>
+              <li class="question-item">
+                    <p><span class="question-number">20.</span> Le partisant de la toute puissance de l'éducation qui dépend l'idée de l'enfant considéré comme "TABULARASA" est :</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q20" value="0"> a) ERASME</label>
+                        <label><input type="radio" name="q20" value="1"> b) COMENUS</label>
+                        <label><input type="radio" name="q20" value="2"> c) WATSON</label>
+                        <label><input type="radio" name="q20" value="3"> d) ARISTOTE</label>
+                        <label><input type="radio" name="q20" value="4"> e) Aucune bonne réponse</label>
+                    </div>
+                    <div id="q19-correction" class="correction-message" style="display:none;"></div>
+                </li>
+            </ol>
+            <button type="submit" class="submit-button">Voir les Résultats</button>
+        </form>
+
+        <div id="result-container" style="display:none; margin-top: 30px; padding: 20px; background-color: #f5f5dc; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); text-align: center;">
+            <h2 id="score-message"></h2>
+            <p>Veuillez consulter les questions ci-dessus pour la correction détaillée.</p>
+        </div>
+        </main>
+
+    <footer class="quiz-footer">
+        <i>&copy; L1 LMD IG</i>
+    </footer>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const quizForm = document.getElementById('quiz-form');
+        const resultContainer = document.getElementById('result-container');
+        const scoreMessage = document.getElementById('score-message');
+        const questionItems = document.querySelectorAll('.question-item');
+
+        // VALEURS DE RÉPONSES CORRIGÉES
+        const correctAnswersValues = [
+            '0', // Q1: a) Adaptée aux niveaux et aux besoins des élèves
+            '2', // Q2: c) La communication dialoguée
+            '1', // Q3: b) En établissant des règles claires dès le début
+            '0', // Q4: a) le procédé expérimental
+            '2', // Q5: c) Principe d'intuition
+            '0', // Q6: a) Verbe d'action
+            '2', // Q7: c) Méthode démonstrative
+            '2', // Q8: c) Journal de classe
+            '1', // Q9: b) Approche socio-constructive
+            '3', // Q10: d) Approche behavioriste
+            '1', // Q11: b) But immédiat de l'éducation
+            '0', // Q12: a) Education formelle
+            '1', // Q13: b) Eduard CLAPAREDE(1873-1940)
+            '3', // Q14: d) Répondre aux indignation ou aux objectifs des élèves
+            '2', // Q15: c) Enseignement
+            '3', // Q16: d) Cognitif - Affectif - psychomoteur
+            '2', // Q17: c) Est une intention communiquée par une déclaration qui décrit modification que l'on désire provoquer chez l'apprenants
+            '3', // Q18: d) Mode simultané
+            '2', // Q19: c) Matérialisme
+            '3'  // Q20: d) ARISTOTE (Attention: la bonne réponse est probablement John Locke ou Comenius pour "Tabula Rasa", mais j'utilise '3' comme vous l'aviez défini pour ARISTOTE)
+        ];
+        
+        // TEXTES DE RÉPONSES CORRIGÉS
+        const correctAnswersTexts = [
+            'La bonne réponse est : a) Adaptée aux niveaux et aux besoins des élèves',
+            'La bonne réponse est : c) La communication dialoguée',
+            'La bonne réponse est : b) En établissant des règles claires dès le début',
+            'La bonne réponse est : a) le procédé expérimental',
+            'La bonne réponse est : c) Principe d\'intuition',
+            'La bonne réponse est : a) Verbe d\'action',
+            'La bonne réponse est : c) Méthode démonstrative',
+            'La bonne réponse est : c) Journal de classe',
+            'La bonne réponse est : b) Approche socio-constructive',
+            'La bonne réponse est : d) Approche behavioriste',
+            'La bonne réponse est : b) But immédiat de l\'éducation',
+            'La bonne réponse est : a) Education formelle',
+            'La bonne réponse est : b) Eduard CLAPAREDE(1873-1940)',
+            'La bonne réponse est : d) Répondre aux indignation ou aux objectifs des élèves',
+            'La bonne réponse est : c) Enseignement',
+            'La bonne réponse est : d) Cognitif - Affectif - psychomoteur',
+            'La bonne réponse est : c) Est une intention communiquée par une déclaration qui décrit modification que l\'on désire provoquer chez l\'apprenants',
+            'La bonne réponse est : d) Mode simultané',
+            'La bonne réponse est : c) Matérialisme',
+            'La bonne réponse est : d) ARISTOTE' // Assurez-vous que cette réponse est correcte selon votre cours.
+        ];
+        
+        const totalQuestions = correctAnswersValues.length;
+
+        quizForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            let score = 0;
+            let allAnswered = true;
+
+            // Retirer les marquages et messages de correction précédents
+            resetCorrection();
+
+            // Boucle de vérification
+            for (let i = 1; i <= totalQuestions; i++) {
+                const questionIndex = i - 1; // Index dans les tableaux (0 à 19)
+                const questionName = 'q' + i;
+                const correctAnswerValue = correctAnswersValues[questionIndex];
+                
+                // Récupérer l'input sélectionné pour marquer et vérifier
+                const selectedInput = quizForm.querySelector(`input[name="${questionName}"]:checked`);
+                const selectedOption = selectedInput ? selectedInput.value : null;
+
+                const questionItem = questionItems[questionIndex]; // L'élément <li> de la question
+
+                // 1. Vérifier si la question a été répondue
+                if (!selectedOption) {
+                    allAnswered = false;
+                }
+
+                // 2. Traiter la réponse (pour le score, l'affichage et la correction)
+                if (questionItem) {
+                    const isCorrect = selectedOption === correctAnswerValue;
+                    
+                    if (isCorrect) {
+                        score++;
+                    }
+
+                    // *** MARQUAGE VISUEL DES OPTIONS ***
+                    const correctInput = questionItem.querySelector(`input[value="${correctAnswerValue}"][name="${questionName}"]`);
+                    if (correctInput) {
+                            correctInput.closest('label').classList.add('correct-answer');
+                    }
+
+                    if (selectedInput && !isCorrect) {
+                        selectedInput.closest('label').classList.add('incorrect-answer');
+                    }
+                }
+            } // Fin de la boucle for
+
+            // 4. Afficher le score et/ou les messages
+            if (allAnswered) {
+                const percentage = (score / totalQuestions) * 100;
+                
+                let message = `Bravo, Champion du Quiz ! Vous avez obtenu un score de ${score} sur ${totalQuestions} (${percentage.toFixed(0)}%).`;
+                
+                if (score === totalQuestions) {
+                    message = `Félicitations ! Vous êtes un véritable expert de la Pédagogie avec ${score} sur ${totalQuestions} (${percentage.toFixed(0)}%).`;
+                } else if (percentage < 50) {
+                    message = `Vous avez obtenu ${score} sur ${totalQuestions} (${percentage.toFixed(0)}%). Veuillez consulter la correction ci-dessous pour revoir vos erreurs. Le savoir c'est le pouvoir !`;
+                }
+
+                scoreMessage.textContent = message;
+                resultContainer.style.display = 'block';
+
+                // *** AFFICHAGE DES MESSAGES DE CORRECTION SOUS LES QUESTIONS ***
+                for (let i = 1; i <= totalQuestions; i++) {
+                    const correctionDiv = document.getElementById(`q${i}-correction`);
+                    if (correctionDiv && correctAnswersTexts[i-1]) {
+                        correctionDiv.innerHTML = correctAnswersTexts[i - 1];
+                        correctionDiv.style.display = 'block';
+                    }
+                }
+
+            } else {
+                // Si toutes les questions n'ont PAS été répondues
+                alert("Attention ! Pour voir les résultats finaux et la correction, vous devez répondre à TOUTES les questions. Veuillez compléter vos réponses.");
+                resultContainer.style.display = 'none'; 
+                resetCorrection();
+            }
+        });
+
+        // Fonction pour nettoyer les marquages et messages de correction
+        function resetCorrection() {
+            // Nettoyer les classes des labels (vert/rouge)
+            document.querySelectorAll('.correct-answer, .incorrect-answer').forEach(el => {
+                el.classList.remove('correct-answer');
+                el.classList.remove('incorrect-answer');
+            });
+            
+            // Cacher les messages de correction
+            document.querySelectorAll('.correction-message').forEach(el => {
+                el.style.display = 'none';
+            });
+        }
+    });
+</script>
+</body>
+</html>

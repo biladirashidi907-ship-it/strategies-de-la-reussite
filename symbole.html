@@ -1,0 +1,522 @@
+<!DOCTYPE html> 
+<html lang="fr"> 
+<head> 
+    <meta charset="UTF-8"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <title>Quiz du Champion - Valeurs et Symbole de la RDC</title> 
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* En-tête et navigation */
+        .quiz-header {
+            width: 100%;
+            background-color: #7fffd4; /* aquamarine */
+            padding: 20px 0;
+            text-align: center;
+        }
+
+        .quiz-title {
+            background-color: #f5f5dc; /* beige */
+            padding: 20px 20px;
+            text-align: center;
+        }
+
+        .quiz-intro {
+            padding: 10px 20px;
+            color: #333;
+        }
+
+        /* Contenu principal (questions) */
+        .quiz-container {
+            width: 100%;
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+
+        .question-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .question-item {
+            background-color: #f5f5dc; /* beige */
+            border-radius: 20px;
+            margin-bottom: 20px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .question-item p {
+            font-weight: bold;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .question-number {
+            font-weight: bold;
+            color: #008b8b;
+        }
+
+        .question-options {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .question-options label {
+            margin-bottom: 8px;
+            padding: 5px; /* Ajouté pour mieux visualiser le marquage */
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .question-options input[type="radio"] {
+            margin-right: 10px;
+        }
+
+        /* Styles de Correction */
+        .correct-answer {
+            background-color: #d4edda !important; /* Vert clair pour la bonne réponse */
+            color: #155724;
+            font-weight: bold;
+        }
+
+        .incorrect-answer.user-selected-incorrect {
+            background-color: #f8d7da !important; /* Rouge clair pour la mauvaise réponse de l'utilisateur */
+            color: #721c24;
+            font-weight: bold;
+            border: 1px solid #f5c6cb;
+        }
+        
+        /* Nouveau style pour l'affichage de la bonne réponse sous la question */
+        .correction-message {
+            margin-top: 15px;
+            padding: 10px;
+            background-color: #e2f0d9; /* Vert clair de correction */
+            border-left: 5px solid #155724; /* Barre verte pour l'indication */
+            font-weight: 500;
+            color: #155724; /* Texte vert foncé */
+            border-radius: 5px;
+            display: none; /* Caché par défaut */
+        }
+        /* Fin Styles de Correction */
+
+        /* Bouton de soumission */
+        .submit-button {
+            background-color: #008b8b; /* darkcyan */
+            color: white;
+            border: none;
+            width: 90%;
+            max-width: 300px;
+            margin: 30px auto;
+            height: 50px;
+            border-radius: 40px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s, box-shadow 0.3s;
+            display: block;
+        }
+
+        .submit-button:hover {
+            background-color: #9acd32; /* yellowgreen */
+            color: #161616;
+            box-shadow: 0 0 10px #ffff00; /* yellow */
+        }
+
+        /* Pied de page */
+        .quiz-footer {
+            background-color: #f8f9fa;
+            color: #010302;
+            text-align: center;
+            padding: 15px 0;
+            width: 100%;
+            border-top: 1px solid #ddd;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 800px) {
+            .quiz-container {
+                padding: 0 10px;
+            }
+
+            .question-item {
+                width: auto;
+                margin-left: 0;
+                margin-right: 0;
+            }
+
+            .submit-button {
+                width: 100%;
+                margin: 20px auto;
+            }
+        }
+        a{
+            background-color: #ddd;         
+            border-radius: 9px;          
+            text-decoration: none;          
+            font-size: 20px;                
+            padding: 5px 10px;          
+        }
+        a:hover{
+            color: orangered;             
+        }
+    </style>
+</head> 
+<body> 
+    <nav class="quiz-header"> 
+        <h1 class="quiz-title">Cours : Valeur et symbole de la RDC</h1> 
+        <p class="quiz-intro">Le savoir c'est le pouvoir. Celui qui ose répondre, ose apprendre. Testez vos connaissances sur les valeurs civiques et les symboles de la Nation.</p> 
+         <a href="index.html" style="text-decoration: none; font-size: 20px;">Retour</a>
+    </nav> 
+
+    <main class="quiz-container"> 
+        <form id="quiz-form"> 
+            <ol class="question-list"> 
+                
+                <li class="question-item"> 
+                    <p><span class="question-number">1.</span>Comment appelle-t-on l'étude de l'origine et du sens des mots du lexique national?</p> 
+                    <div class="question-options"> 
+                        <label><input type="radio" name="q1" value="0"> a) Sémiologie</label> 
+                        <label><input type="radio" name="q1" value="1"> b) Lexicographie</label> 
+                        <label><input type="radio" name="q1" value="2"> c) Étymologie</label> 
+                        <label><input type="radio" name="q1" value="3"> d) Phonétique</label> 
+                        <label><input type="radio" name="q1" value="4"> e) Terminologie</label> 
+                    </div> 
+                    <div id="q1-correction" class="correction-message"></div>
+                </li> 
+                
+                <li class="question-item"> 
+                    <p><span class="question-number">2.</span> Dans le contexte d'un État, que représente le terme "Symbole"?</p> 
+                    <div class="question-options"> 
+                        <label><input type="radio" name="q2" value="0"> a) Un document légal</label> 
+                        <label><input type="radio" name="q2" value="1"> b) Une doctrine politique</label> 
+                        <label><input type="radio" name="q2" value="2"> c) Une représentation tangible d'une identité</label> 
+                        <label><input type="radio" name="q2" value="3"> d) Une loi fondamentale</label> 
+                        <label><input type="radio" name="q2" value="4"> e) Un traité international</label> 
+                    </div> 
+                    <div id="q2-correction" class="correction-message"></div>
+                </li> 
+                
+                <li class="question-item"> 
+                    <p><span class="question-number">3.</span>Selon la Constitution, l'appellation officielle complète de la RDC est :</p> 
+                    <div class="question-options"> 
+                        <label><input type="radio" name="q3" value="0"> a) Congo-Kinshasa</label> 
+                        <label><input type="radio" name="q3" value="1"> b) République Démocratique du Congo</label> 
+                        <label><input type="radio" name="q3" value="2"> c) État du Congo</label> 
+                        <label><input type="radio" name="q3" value="3"> d) La République Démocratique du Congo</label> 
+                        <label><input type="radio" name="q3" value="4"> e) Zaïre</label> 
+                    </div> 
+                    <div id="q3-correction" class="correction-message"></div>
+                </li> 
+
+                <li class="question-item"> 
+                    <p><span class="question-number">4.</span> Le concept de "Valeur" en RDC, dans le cadre de ce cours, renvoie avant tout à:</p> 
+                    <div class="question-options"> 
+                        <label><input type="radio" name="q4" value="0"> a) Sa richesse minière</label> 
+                        <label><input type="radio" name="q4" value="1"> b) Son potentiel humain</label> 
+                        <label><input type="radio" name="q4" value="2"> c) Ses frontières</label> 
+                        <label><input type="radio" name="q4" value="3"> d) Ses principes moraux, éthiques et civiques</label> 
+                        <label><input type="radio" name="q4" value="4"> e) Son armée</label> 
+                    </div> 
+                    <div id="q4-correction" class="correction-message"></div>
+                </li> 
+                
+                <li class="question-item"> 
+                    <p><span class="question-number">5.</span> Quelle est la devise nationale de la RDC, telle qu'énoncée dans sa Constitution?</p> 
+                    <div class="question-options"> 
+                        <label><input type="radio" name="q5" value="0"> a) Unité, Solidarité, Travail</label> 
+                        <label><input type="radio" name="q5" value="1"> b) Justice, Fraternité, Progrès</label> 
+                        <label><input type="radio" name="q5" value="2"> c) Justice, Paix, Travail</label> 
+                        <label><input type="radio" name="q5" value="3"> d) Paix, Unité, Nation</label> 
+                        <label><input type="radio" name="q5" value="4"> e) Force, Courage, Dévouement</label> 
+                    </div> 
+                    <div id="q5-correction" class="correction-message"></div>
+                </li> 
+                
+                <li class="question-item"> 
+                    <p><span class="question-number">6.</span> Parmi les valeurs fondamentales de la RDC, celle qui est primordiale pour maintenir la cohésion entre les différentes communautés est :</p> 
+                    <div class="question-options"> 
+                        <label><input type="radio" name="q6" value="0"> a) Le Patriotisme</label> 
+                        <label><input type="radio" name="q6" value="1"> b) La Démocratie</label> 
+                        <label><input type="radio" name="q6" value="2"> c) La Laïcité</label> 
+                        <label><input type="radio" name="q6" value="3"> d) La Transparence</label> 
+                        <label><input type="radio" name="q6" value="4"> e) L'Unité Nationale</label> 
+                    </div> 
+                    <div id="q6-correction" class="correction-message"></div>
+                </li> 
+
+                <li class="question-item"> 
+                    <p><span class="question-number">7.</span> Quel symbole national incarne l'appel au rassemblement, à la vigilance et à l'édification de la Nation congolaise?</p> 
+                    <div class="question-options"> 
+                        <label><input type="radio" name="q7" value="0"> a) Le Drapeau</label> 
+                        <label><input type="radio" name="q7" value="1"> b) Les Armoiries</label> 
+                        <label><input type="radio" name="q7" value="2"> c) La Devise</label> 
+                        <label><input type="radio" name="q7" value="3"> d) L'Hymne national (Le Debout Congolais)</label> 
+                        <label><input type="radio" name="q7" value="4"> e) Le sceau de l'État</label> 
+                    </div> 
+                    <div id="q7-correction" class="correction-message"></div>
+                </li> 
+
+                <li class="question-item"> 
+                    <p><span class="question-number">8.</span> Quel phénomène est l'antivaleur la plus citée et qui entrave directement la gestion efficace des biens publics et la bonne gouvernance en RDC?</p> 
+                    <div class="question-options"> 
+                        <label><input type="radio" name="q8" value="0"> a) L'incivisme routier</label> 
+                        <label><input type="radio" name="q8" value="1"> b) Le tribalisme</label> 
+                        <label><input type="radio" name="q8" value="2"> c) La fraude électorale</label> 
+                        <label><input type="radio" name="q8" value="3"> d) La Corruption et le détournement</label> 
+                        <label><input type="radio" name="q8" value="4"> e) L'analphabétisme</label> 
+                    </div> 
+                    <div id="q8-correction" class="correction-message"></div>
+                </li> 
+                
+                <li class="question-item"> 
+                    <p><span class="question-number">9.</span> Comment appelle-t-on le fait pour un citoyen de ne pas respecter les lois, les règles de la vie collective ou les institutions de la République?</p> 
+                    <div class="question-options"> 
+                        <label><input type="radio" name="q9" value="0"> a) La Malversation</label> 
+                        <label><input type="radio" name="q9" value="1"> b) Le Népotisme</label> 
+                        <label><input type="radio" name="q9" value="2"> c) L'Incivisme</label> 
+                        <label><input type="radio" name="q9" value="3"> d) Le Fédéralisme</label> 
+                        <label><input type="radio" name="q9" value="4"> e) La Surcharge</label> 
+                    </div> 
+                    <div id="q9-correction" class="correction-message"></div>
+                </li> 
+
+                <li class="question-item"> 
+                    <p><span class="question-number">10.</span> L'antivaleur qui consiste à accorder des faveurs ou des postes à des amis ou des proches en dépit de leurs compétences est appelée :</p> 
+                    <div class="question-options"> 
+                        <label><input type="radio" name="q10" value="0"> a) Tribalisme</label> 
+                        <label><input type="radio" name="q10" value="1"> b) Favoritisme</label> 
+                        <label><input type="radio" name="q10" value="2"> c) Népotisme</label> 
+                        <label><input type="radio" name="q10" value="3"> d) Ostracisme</label> 
+                        <label><input type="radio" name="q10" value="4"> e) Xénophobie</label> 
+                    </div> 
+                    <div id="q10-correction" class="correction-message"></div>
+                </li> 
+
+                <li class="question-item"> 
+                    <p><span class="question-number">11.</span> Que désigne l'expression "Souverain primaire" en droit constitutionnel congolais?</p> 
+                    <div class="question-options"> 
+                        <label><input type="radio" name="q11" value="0"> a) Le Président de la République</label> 
+                        <label><input type="radio" name="q11" value="1"> b) L'Armée Nationale</label> 
+                        <label><input type="radio" name="q11" value="2"> c) Le Parlement</label> 
+                        <label><input type="radio" name="q11" value="3"> d) L'Administration publique</label> 
+                        <label><input type="radio" name="q11" value="4"> e) Le Peuple Congolais</label> 
+                    </div> 
+                    <div id="q11-correction" class="correction-message"></div>
+                </li> 
+
+                <li class="question-item"> 
+                    <p><span class="question-number">12.</span> Le principe de la "Souveraineté nationale" en RDC signifie que tout pouvoir émane de:</p> 
+                    <div class="question-options"> 
+                        <label><input type="radio" name="q12" value="0"> a) La Constitution</label> 
+                        <label><input type="radio" name="q12" value="1"> b) Les partis politiques</label> 
+                        <label><input type="radio" name="q12" value="2"> c) L'Assemblée Nationale</label> 
+                        <label><input type="radio" name="q12" value="3"> d) La Nation</label> 
+                        <label><input type="radio" name="q12" value="4"> e) L'Exécutif</label> 
+                    </div> 
+                    <div id="q12-correction" class="correction-message"></div>
+                </li> 
+
+                <li class="question-item"> 
+                    <p><span class="question-number">13.</span> L'expression "État souverain" dans les relations internationales signifie que l'État :</p> 
+                    <div class="question-options"> 
+                        <label><input type="radio" name="q13" value="0"> a) Est sous un protectorat</label> 
+                        <label><input type="radio" name="q13" value="1"> b) A une forte armée</label> 
+                        <label><input type="radio" name="q13" value="2"> c) N'est soumis à aucune autre autorité légale</label> 
+                        <label><input type="radio" name="q13" value="3"> d) Est membre de l'ONU</label> 
+                        <label><input type="radio" name="q13" value="4"> e) Est neutre</label> 
+                    </div> 
+                    <div id="q13-correction" class="correction-message"></div>
+                </li> 
+
+                <li class="question-item"> 
+                    <p><span class="question-number">14.</span> Quelle expression, découlant du mot "souverain", fait référence à l'autorité suprême du peuple dans l'exercice du pouvoir?</p> 
+                    <div class="question-options"> 
+                        <label><input type="radio" name="q14" value="0"> a) Souveraineté monétaire</label> 
+                        <label><input type="radio" name="q14" value="1"> b) Souveraineté alimentaire</label> 
+                        <label><input type="radio" name="q14" value="2"> c) Souveraineté médicale</label> 
+                        <label><input type="radio" name="q14" value="3"> d) Souveraineté religieuse</label> 
+                        <label><input type="radio" name="q14" value="4"> e) Souveraineté populaire</label> 
+                    </div> 
+                    <div id="q14-correction" class="correction-message"></div>
+                </li> 
+                
+                <li class="question-item"> 
+                    <p><span class="question-number">15.</span> La "Souveraineté externe" d'un État se traduit principalement par le principe de :</p> 
+                    <div class="question-options"> 
+                        <label><input type="radio" name="q15" value="0"> a) La bonne gouvernance interne</label> 
+                        <label><input type="radio" name="q15" value="1"> b) La non-ingérence des États étrangers</label> 
+                        <label><input type="radio" name="q15" value="2"> c) L'indépendance économique</label> 
+                        <label><input type="radio" name="q15" value="3"> d) La suprématie de la loi interne</label> 
+                        <label><input type="radio" name="q15" value="4"> e) La gestion territoriale</label> 
+                    </div> 
+                    <div id="q15-correction" class="correction-message"></div>
+                </li> 
+                
+            </ol> 
+            <button type="submit" class="submit-button">Voir les Résultats</button> 
+        </form> 
+
+        <div id="result-container" style="display: none;">
+            <p id="score-message"></p>
+        </div>
+    </main> 
+
+    <footer class="quiz-footer"> 
+        <i>&copy; L1 LMD IG</i> 
+    </footer> 
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const quizForm = document.getElementById('quiz-form');
+        const resultContainer = document.getElementById('result-container');
+        const scoreMessage = document.getElementById('score-message');
+        const questionItems = document.querySelectorAll('.question-item');
+
+        // Array des bonnes réponses (Valeur de l'input radio : 0 à 4)
+        const correctAnswersValues = [
+            '2', // Q1: Étymologie (c)
+            '2', // Q2: Représentation tangible (c)
+            '1', // Q3: République Démocratique du Congo (b)
+            '3', // Q4: Principes moraux, éthiques et civiques (d)
+            '2', // Q5: Justice, Paix, Travail (c)
+            '4', // Q6: L\'Unité Nationale (e)
+            '3', // Q7: L\'Hymne national (Le Debout Congolais) (d)
+            '3', // Q8: La Corruption et le détournement (d)
+            '2', // Q9: L\'Incivisme (c)
+            '2', // Q10: Népotisme (c)
+            '4', // Q11: Le Peuple Congolais (e)
+            '3', // Q12: La Nation (d)
+            '2', // Q13: N\'est soumis à aucune autre autorité légale (c)
+            '4', // Q14: Souveraineté populaire (e)
+            '1'  // Q15: La non-ingérence des États étrangers (b)
+        ];
+        
+        // Array des textes des bonnes réponses (pour l'affichage)
+        const correctAnswersTexts = [
+            'La bonne réponse est : c) Étymologie',
+            'La bonne réponse est : c) Une représentation tangible d\'une identité',
+            'La bonne réponse est : b) République Démocratique du Congo',
+            'La bonne réponse est : d) Ses principes moraux, éthiques et civiques',
+            'La bonne réponse est : c) Justice, Paix, Travail',
+            'La bonne réponse est : e) L\'Unité Nationale',
+            'La bonne réponse est : d) L\'Hymne national (Le Debout Congolais)',
+            'La bonne réponse est : d) La Corruption et le détournement',
+            'La bonne réponse est : c) L\'Incivisme',
+            'La bonne réponse est : c) Népotisme',
+            'La bonne réponse est : e) Le Peuple Congolais',
+            'La bonne réponse est : d) La Nation',
+            'La bonne réponse est : c) N\'est soumis à aucune autre autorité légale',
+            'La bonne réponse est : e) Souveraineté populaire',
+            'La bonne réponse est : b) La non-ingérence des États étrangers'
+        ];
+        
+        const totalQuestions = correctAnswersValues.length;
+
+        quizForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            let score = 0;
+            let allAnswered = true;
+
+            // Retirer les marquages et messages de correction précédents
+            resetCorrection();
+
+            // Boucle de vérification
+            for (let i = 1; i <= totalQuestions; i++) {
+                const questionIndex = i - 1; // Index dans les tableaux (0 à 14)
+                const questionName = 'q' + i;
+                const correctAnswerValue = correctAnswersValues[questionIndex];
+                
+                // Récupérer la valeur de la réponse sélectionnée par l'utilisateur
+                const selectedOption = quizForm.elements[questionName]?.value; // Utilisation de ?. pour la sécurité
+                const questionItem = questionItems[questionIndex]; // L'élément <li> de la question
+
+                // 1. Vérifier si la question a été répondue
+                if (!selectedOption) {
+                    allAnswered = false;
+                }
+
+                // 2. Traiter la réponse (pour le score, l'affichage et la correction)
+                if (selectedOption) {
+                    const isCorrect = selectedOption === correctAnswerValue;
+                    
+                    if (isCorrect) {
+                        score++;
+                    }
+
+                    // *** MARQUAGE VISUEL DES OPTIONS ***
+                    // Marquer la bonne réponse (TOUJOURS)
+                    const correctLabel = questionItem.querySelector(`input[value="${correctAnswerValue}"]`).closest('label');
+                    correctLabel.classList.add('correct-answer');
+
+                    // Marquer la réponse de l'utilisateur si elle est INCORRECTE
+                    if (!isCorrect) {
+                        const userLabel = questionItem.querySelector(`input[value="${selectedOption}"]`).closest('label');
+                        userLabel.classList.add('incorrect-answer');
+                        userLabel.classList.add('user-selected-incorrect');
+                    }
+                }
+            } // Fin de la boucle for
+
+            // 4. Afficher le score et/ou les messages
+            if (allAnswered) {
+                const percentage = (score / totalQuestions) * 100;
+                
+                let message = `Bravo, Champion du Quiz ! Vous avez obtenu un score de ${score} sur ${totalQuestions} (${percentage.toFixed(0)}%).`;
+                
+                if (score === totalQuestions) {
+                    message = `Félicitations ! Vous êtes un véritable expert de la RDC avec ${score} sur ${totalQuestions} (${percentage.toFixed(0)}%).`;
+                } else if (percentage < 50) {
+                    message = `Vous avez obtenu ${score} sur ${totalQuestions} (${percentage.toFixed(0)}%). Veuillez consulter la correction ci-dessous pour revoir vos erreurs.`;
+                }
+
+                scoreMessage.textContent = message;
+                resultContainer.style.display = 'block';
+
+                // *** AFFICHAGE DES MESSAGES DE CORRECTION SOUS LES QUESTIONS ***
+                for (let i = 1; i <= totalQuestions; i++) {
+                    const correctionDiv = document.getElementById(`q${i}-correction`);
+                    if (correctionDiv) { // S'assurer que le div de correction existe
+                         correctionDiv.innerHTML = correctAnswersTexts[i - 1]; // Insère le texte
+                         correctionDiv.style.display = 'block'; // Affiche la correction
+                    }
+                }
+
+
+            } else {
+                // Si toutes les questions n'ont PAS été répondues
+                alert("Attention ! Pour voir les résultats finaux et la correction, vous devez répondre à TOUTES les questions. Veuillez compléter vos réponses.");
+                resultContainer.style.display = 'none'; 
+                // Assurez-vous que les marquages et corrections sont masqués si l'utilisateur n'a pas tout rempli
+                resetCorrection();
+            }
+        });
+
+        // Fonction pour nettoyer les marquages et messages de correction
+        function resetCorrection() {
+            // Nettoyer les classes des labels (vert/rouge)
+            document.querySelectorAll('.correct-answer, .incorrect-answer, .user-selected-incorrect').forEach(el => {
+                el.classList.remove('correct-answer', 'incorrect-answer', 'user-selected-incorrect');
+            });
+
+            // Masquer les divs de correction
+            document.querySelectorAll('.correction-message').forEach(el => {
+                el.style.display = 'none';
+                el.innerHTML = ''; // Vider le contenu
+            });
+        }
+    });
+    </script>
+</body> 
+</html>

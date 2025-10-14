@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz de système d'exploitation SE</title>
+    <style>
+        /* Styles de base */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* En-tête et navigation */
+        .quiz-header {
+            width: 100%;
+            background-color: #7fffd4; /* aquamarine */
+            padding: 20px 0;
+            text-align: center;
+        }
+
+        .quiz-title {
+            background-color: #f5f5dc; /* beige */
+            padding: 20px 20px;
+            text-align: center;
+        }
+
+        .quiz-intro {
+            padding: 10px 20px;
+            color: #333;
+        }
+
+        /* Contenu principal (questions) */
+        .quiz-container {
+            width: 100%;
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+
+        .question-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .question-item {
+            background-color: #f5f5dc; /* beige */
+            border-radius: 20px;
+            margin-bottom: 20px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border: 2px solid transparent; /* Ajout pour la bordure d'alerte */
+        }
+
+        .question-item p {
+            font-weight: bold;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .question-number {
+            font-weight: bold;
+            color: #008b8b;
+        }
+
+        .question-options {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .question-options label {
+            margin-bottom: 8px;
+            cursor: pointer;
+        }
+
+        .question-options input[type="radio"] {
+            margin-right: 10px;
+        }
+
+        /* NOUVEAU STYLE (ou réajouté) pour la question non répondu */
+        .unanswered {
+            border-color: red !important;
+            background-color: #ffe0e0 !important; /* Fond légèrement rouge pour attirer l'attention */
+        }
+
+        /* Bouton de soumission */
+        .submit-button {
+            background-color: #008b8b; /* darkcyan */
+            color: white;
+            border: none;
+            width: 90%;
+            max-width: 300px;
+            margin: 30px auto;
+            height: 50px;
+            border-radius: 40px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s, box-shadow 0.3s;
+            display: block;
+        }
+
+        .submit-button:hover {
+            background-color: #9acd32; /* yellowgreen */
+            color: #161616;
+            box-shadow: 0 0 10px #ffff00; /* yellow */
+        }
+        
+        /* Résultats */
+        #results {
+            background-color: #fff;
+            padding: 20px;
+            margin-top: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 900px;
+            margin: 20px auto;
+        }
+
+        #results h2 {
+            color: #008b8b;
+        }
+
+        .correct {
+            background-color: #d4edda; /* Light green for correct answers */
+            border: 1px solid #c3e6cb;
+            padding: 5px;
+            margin-bottom: 5px;
+            border-radius: 5px;
+        }
+
+        .incorrect {
+            background-color: #f8d7da; /* Light red for incorrect answers */
+            border: 1px solid #f5c6cb;
+            padding: 5px;
+            margin-bottom: 5px;
+            border-radius: 5px;
+        }
+
+        /* Pied de page */
+        .quiz-footer {
+            background-color: #f8f9fa;
+            color: #010302;
+            text-align: center;
+            padding: 15px 0;
+            width: 100%;
+            border-top: 1px solid #ddd;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 800px) {
+            .quiz-container {
+                padding: 0 10px;
+            }
+
+            .question-item {
+                width: auto;
+                margin-left: 0;
+                margin-right: 0;
+            }
+
+            .submit-button {
+                width: 100%;
+                margin: 20px auto;
+            }
+        }
+        a{
+            background-color: #ddd; 		
+            border-radius: 9px; 		
+            text-decoration: none; 			
+            font-size: 20px; 				
+            padding: 5px 10px; 			
+        }
+        a:hover{
+            color: orangered; 			
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="quiz-header">
+        <h1 class="quiz-title">Quiz de système d'exploitation SE</h1>
+        <p class="quiz-intro">Le savoir c'est le pouvoir. Celui qui ose répondre, ose apprendre. À l'université, le champion n'est pas le plus fort, mais le plus curieux.</p>
+        <a href="index.html" style="text-decoration: none; font-size: 20px;">Retour</a>
+    </nav>
+
+    <main class="quiz-container">
+        <form id="quiz-form">
+            <ol class="question-list">
+                <li class="question-item">
+                    <p><span class="question-number">1.</span> Dans le programme de U.E le cours de système d'exploitation vient pour :</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q1" value="a"> a) Completer les dificultés au cours de NOS</label>
+                        <label><input type="radio" name="q1" value="b"> b) Nous aider à devenir informaticien</label>
+                        <label><input type="radio" name="q1" value="c"> c) Nous aider à devenir des bons  utilisateur qui comprennent les fonctionnement et la gestion du système d'exploitation</label>
+                        <label><input type="radio" name="q1" value="d"> d) Toute le réponse sont bonne</label>
+                        <label><input type="radio" name="q1" value="e"> e) Aucune bonne réponse</label>
+                    </div>
+                </li>
+                <li class="question-item">
+                    <p><span class="question-number">2.</span> On appel le système d'exploitation chef d'orchestre parceque :</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q2" value="a"> a) Sans lui le concert n'a pas lieu</label>
+                        <label><input type="radio" name="q2" value="b"> b) Jl permet la bonne gestion de l'orchestre</label>
+                        <label><input type="radio" name="q2" value="c"> c) Jl permet la gestion des utilisateurs, du noyau, de système de fichiers dont-il est chef</label>
+                        <label><input type="radio" name="q2" value="d"> d) Toutes les réponses sont bonne</label>
+                    </div>
+                </li>
+                
+                <li class="question-item">
+                    <p><span class="question-number">3.</span> Le fait pour l'enseigant de donner le support du cours après est liée à :</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q3" value="a"> a) favorisé la consatration pendant les heures de cours</label>
+                        <label><input type="radio" name="q3" value="b"> b) Permet aux étudiants de suivre les explication avec Attention</label>
+                        <label><input type="radio" name="q3" value="c"> c) Décourager les étudiants pareusseux</label>
+                        <label><input type="radio" name="q3" value="d"> d) Trois premiers réponses rencotre la réalité</label>
+                        <label><input type="radio" name="q3" value="e"> e) Aucune bonne réponse</label>
+                    </div>
+                </li>
+
+                <li class="question-item">
+                    <p><span class="question-number">4.</span> Dans la gestion du système d'exploitation un seul assertion est vrai, il s'agit de :</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q4" value="a"> a) Le logiciel d'application joue le même rôle que le système d'exploitation</label>
+                        <label><input type="radio" name="q4" value="b"> b) La décompression pendant l'Installation permet à windows de bien fonctionner</label>
+                        <label><input type="radio" name="q4" value="c"> c) La décompression pendant l'Installation rend windows vilnerable pendant son Utilisation</label>
+                        <label><input type="radio" name="q4" value="d"> d) Toutes les réponses sont bonne</label>
+                        <label><input type="radio" name="q4" value="e"> e) Aucune bonne réponse</label>
+                    </div>
+                </li>
+
+                <li class="question-item">
+                    <p><span class="question-number">5.</span> Dans la hiérarchisation ont peu ranger les différents concepts comme suit:</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q5" value="a"> a) instruction, Programme, Logiciel, système d'exploitation</label>
+                        <label><input type="radio" name="q5" value="b"> b) Processus, Programme, instruction, Processeur</label>
+                        <label><input type="radio" name="q5" value="c"> c) Le système d'explication, Processus, Processeur, disque-dur, RAM</label>
+                        <label><input type="radio" name="q5" value="d"> d) Les deux premiers réponses sont vrai</label>
+                        <label><input type="radio" name="q5" value="e"> e) Toutes les réponses sont fausse</label>
+                    </div>
+                </li>
+                
+                <li class="question-item">
+                    <p><span class="question-number">6.</span> Dans le choix d'achat d'un ordinateur la motivation provient de :</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q6" value="a"> a) La marque</label>
+                        <label><input type="radio" name="q6" value="b"> b) La couleur</label>
+                        <label><input type="radio" name="q6" value="c"> c) La Capacité de son disque-dur</label>
+                        <label><input type="radio" name="q6" value="d"> d) La Capacité de son processeur en GHZ ainsi que sa mémoire RAM</label>
+                        <label><input type="radio" name="q6" value="e"> e) Deux de ces réponses sont vrai ou fausse</label>
+                    </div>
+                </li>
+
+                <li class="question-item">
+                    <p><span class="question-number">7.</span> Dans la manipulation des processus l'utilisateur est confronter à beaucoup des problèmes liées à la comprehention.  ces problèmes provient de :</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q7" value="a"> a) La comprehention du processus lui-meme</label>
+                        <label><input type="radio" name="q7" value="b"> b) L'Utilisation du processus</label>
+                        <label><input type="radio" name="q7" value="c"> c) Le manque des structures peuvent permettre à l'utilisateur de comprendre les fonctionnements du processus</label>
+                        <label><input type="radio" name="q7" value="d"> d) Toute les réponses sont correct</label>
+                        <label><input type="radio" name="q7" value="e"> e) Aucune bonne réponse</label>
+                    </div>
+                </li>
+
+                <li class="question-item">
+                    <p><span class="question-number">8.</span> De toutes les phases liées au fonctionnement du processus la fausse est :</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q8" value="a"> a) Un processus n'a qu'un seul père</label>
+                        <label><input type="radio" name="q8" value="b"> b) Plusieur processus peuvent entrées en section critique</label>
+                        <label><input type="radio" name="q8" value="c"> c) L'ordonnanceur est chargé gèrer le temps d'exécution d'un processus</label>
+                        <label><input type="radio" name="q8" value="d"> d) La zone mémoire non-swappée permet à l'utilisateur de stocker les données sur le disque-dur</label>
+                        <label><input type="radio" name="q8" value="e"> e) Toutes les réponses sont bonne</label>
+                    </div>
+                </li>
+                
+                <li class="question-item">
+                    <p><span class="question-number">9.</span> L'algorithme d'ordonnancement permet de :</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q9" value="a"> a) Gèrer le processeur</label>
+                        <label><input type="radio" name="q9" value="b"> b) Lancer les processus</label>
+                        <label><input type="radio" name="q9" value="c"> c) Mettre les processus en section critique</label>
+                        <label><input type="radio" name="q9" value="d"> d) Déterminer la localisation du processus</label>
+                        <label><input type="radio" name="q9" value="e"> e) Aucune bonne réponse</label>
+                    </div>
+                </li>
+                
+                <li class="question-item">
+                    <p><span class="question-number">10.</span> Les Etablissements FRIZON récrittent un informaticien, parmis les critères de récritement le résponsable exige maitrise de certaines notion informatique pour bien gèrer sa boite de nuit.  si ont vous récrite comme consiltant, les exigences pour acheter un ordinateur serait :</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q10" value="a"> a) Un ordinateur de la dernière génération doter d'une mémoire RAM d'environ 8G et d'un disque-dur Tera octé</label>
+                        <label><input type="radio" name="q10" value="b"> b) Un ordinateur avec un processeur succeptible de gèrer le logiciel de musique et une capacité raisonnable suffiré</label>
+                        <label><input type="radio" name="q10" value="c"> c) N'importe quelle ordinateur pourvus que ça s'allume</label>
+                        <label><input type="radio" name="q10" value="d"> d) Un ordinateur dotée d'une autonomie d'environ 6H pour pallier au coupir du courant</label>
+                        <label><input type="radio" name="q10" value="e"> e) Aucune bonne réponse</label>
+                    </div>
+                </li>
+
+                <li class="question-item">
+                    <p><span class="question-number">11.</span> Dans la gestion des taches deux sont obligatoirement successives, il s'agit de :</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q11" value="a"> a) Connexion Flash - Ouverture</label>
+                        <label><input type="radio" name="q11" value="b"> b) Ouverture Flash - lecture musique</label>
+                        <label><input type="radio" name="q11" value="c"> c) Ouverture MS word - préparation clavier</label>
+                        <label><input type="radio" name="q11" value="d"> d) Introduction Flash - Ouverture dossier</label>
+                        <label><input type="radio" name="q11" value="e"> e) Aucune bonne réponse</label>
+                    </div>
+                </li>
+
+                <li class="question-item">
+                    <p><span class="question-number">12.</span> Dans la gestion des processus un seul est lancé par le système d'explication, il s'agit de :</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q12" value="a"> a) Connexion Flash</label>
+                        <label><input type="radio" name="q12" value="b"> b) Mouvement de la souris</label>
+                        <label><input type="radio" name="q12" value="c"> c) Lecteur audion</label>
+                        <label><input type="radio" name="q12" value="d"> d) Toute les réponses sont correcte</label>
+                        <label><input type="radio" name="q12" value="e"> e) Aucune bonne réponse</label>
+                    </div>
+                </li>
+                
+                <li class="question-item">
+                    <p><span class="question-number">13.</span> Pendant la manipulation de la calculatrice  son affichage à l'écran à été fourni à la phase :</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q13" value="a"> a) Fetch pahase</label>
+                        <label><input type="radio" name="q13" value="b"> b) Decoding phase</label>
+                        <label><input type="radio" name="q13" value="c"> c) execution phase</label>
+                        <label><input type="radio" name="q13" value="d"> d) Toutes les réponses sont bonne</label>
+                        <label><input type="radio" name="q13" value="e"> e) Aucune bonne réponse</label>
+                    </div>
+                </li>
+                
+                <li class="question-item">
+                    <p><span class="question-number">14.</span> Parmis les étapes du fonctionnement de processeur l'étape au cours de laquelle la calculatrice à commencer ses informations est :</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q14" value="a"> a) Traitement </label>
+                        <label><input type="radio" name="q14" value="b"> b) Mémorisation </label>
+                        <label><input type="radio" name="q14" value="c"> c) Communication</label>
+                        <label><input type="radio" name="q14" value="d"> d) Enregistrement</label>
+                        <label><input type="radio" name="q14" value="e"> e) Aucune bonne réponse</label>
+                    </div>
+                </li>
+
+                <li class="question-item">
+                    <p><span class="question-number">15.</span> Monsieur FRANÇOIS venez de découvrir que dans son ordinateur il y avait une calculatrice, on lui démande donc de faire le calcul entre 2 chiffre, le résulat obténu sont liée grâce à :</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q15" value="a"> a) Le Processeur</label>
+                        <label><input type="radio" name="q15" value="b"> b) Calculatrice</label>
+                        <label><input type="radio" name="q15" value="c"> c) L'écran'</label>
+                        <label><input type="radio" name="q15" value="d"> d) L'Addition</label>
+                        <label><input type="radio" name="q15" value="e"> e) Toutes les réponses sont bonne</label>
+                    </div>
+                </li>
+
+                <li class="question-item">
+                    <p><span class="question-number">16.</span> Après la Connexion de Flash disque le processus de copie du fichier à été en mode :</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q16" value="a"> a) Élu</label>
+                        <label><input type="radio" name="q16" value="b"> b) Prêt</label>
+                        <label><input type="radio" name="q16" value="c"> c) Bloqué</label>
+                        <label><input type="radio" name="q16" value="d"> d) L'un ou l'autre</label>
+                        <label><input type="radio" name="q16" value="e"> e) Aucune bonne réponse</label>
+                    </div>
+                </li>
+                
+                <li class="question-item">
+                    <p><span class="question-number">17.</span> Madame SIKUZANI est gestion de la base de donnée chez CICR son client CUBAKA vient avec un flash-disk, il connecte, il ouvre et récupere les documents. en question les processus ci-haut citez  sont lancément par :</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q17" value="a"> a) L'utilisateur</label>
+                        <label><input type="radio" name="q17" value="b"> b) algorithme d'ordonnancement</label>
+                        <label><input type="radio" name="q17" value="c"> c) système d'exploitation</label>
+                        <label><input type="radio" name="q17" value="d"> d) Materiel</label>
+                        <label><input type="radio" name="q17" value="e"> e) 3 de ces réponses sont bonne</label>
+                    </div>
+                </li>
+
+                <li class="question-item">
+                    <p><span class="question-number">18.</span> Se réferent à l'énoncé ci-haut le processus de copie du document en question set gèrer par :</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q18" value="a"> a) S.E</label>
+                        <label><input type="radio" name="q18" value="b"> b) flash-disk</label>
+                        <label><input type="radio" name="q18" value="c"> c) L'utilisateur</label>
+                        <label><input type="radio" name="q18" value="d"> d) L'algorithme d'ordonnancement ou l'ordonnanceur</label>
+                        <label><input type="radio" name="q18" value="e"> e) Aucune bonne réponse</label>
+                    </div>
+                </li>
+
+            </ol>
+            <button type="submit" class="submit-button">Voir les Résultats</button>
+        </form>
+
+        <div id="results" style="display:none;">
+            <h2>Vos Résultats</h2>
+            <p id="score-text"></p>
+        </div>
+    </main>
+
+    <footer class="quiz-footer">
+        <i>&copy; L1 LMD IG - Droit Civil</i>
+    </footer>
+
+    <script>
+        document.getElementById('quiz-form').addEventListener('submit', function(event) {
+            event.preventDefault(); // Empêche l'envoi du formulaire par défaut
+
+            // Les réponses correctes : a, b, c, d, e
+            const correctAnswers = {
+                q1: 'c', // Nous aider à devenir des bons  utilisateur qui comprennent les fonctionnement et la gestion du système d'exploitation
+                q2: 'c', // Jl permet la gestion des utilisateurs, du noyau, de système de fichiers dont-il est chef
+                q3: 'd', // Trois premiers réponses rencotre la réalité
+                q4: 'c', // La décompression pendant l'Installation rend windows vilnerable pendant son Utilisation
+                q5: 'a', // instruction, Programme, Logiciel, système d'exploitation
+                q6: 'd', // La Capacité de son processeur en GHZ ainsi que sa mémoire RAM
+                q7: 'c', // Le manque des structures peuvent permettre à l'utilisateur de comprendre les fonctionnements du processus
+                q8: 'd', // La zone mémoire non-swappée permet à l'utilisateur de stocker les données sur le disque-dur
+                q9: 'e', // Aucune bonne réponse
+                q10: 'b', // Un ordinateur avec un processeur succeptible de gèrer le logiciel de musique et une capacité raisonnable suffiré
+
+                q11: 'c', // Ouverture MS word - préparation clavier
+                q12: 'e', // Aucune bonne réponse
+                q13: 'c', // execution phase
+                q14: 'c', // Communication
+
+                q15: 'a', // Le Processeur
+                q16: 'e', // Aucune bonne réponse
+                q17: 'a', // L'utilisateur
+
+                q18: 'd', // L'algorithme d'ordonnancement ou l'ordonnanceur
+            };
+
+            let score = 0;
+            const totalQuestions = Object.keys(correctAnswers).length;
+            const form = document.getElementById('quiz-form');
+            const questionList = form.querySelector('.question-list');
+            const questionItems = document.querySelectorAll('.question-item');
+            const resultsDiv = document.getElementById('results');
+
+            let allAnswered = true;
+            let firstUnansweredItem = null;
+
+            resultsDiv.style.display = 'none'; 
+            questionItems.forEach(item => {
+                item.classList.remove('correct', 'incorrect', 'unanswered');
+                item.querySelectorAll('label').forEach(label => {
+                    label.style.backgroundColor = 'transparent';
+                    label.style.fontWeight = 'normal';
+                });
+                item.querySelectorAll('input[type="radio"]').forEach(radio => {
+                    radio.disabled = false; 
+                });
+            });
+
+            // 2. Vérification que toutes les questions sont répondues
+            for (let i = 1; i <= totalQuestions; i++) {
+                const questionName = `q${i}`;
+                const selectedOption = form.querySelector(`input[name="${questionName}"]:checked`);
+                const questionItem = questionList.children[i - 1];
+
+                if (!selectedOption) {
+                    allAnswered = false;
+                    questionItem.classList.add('unanswered');
+                    if (!firstUnansweredItem) {
+                        firstUnansweredItem = questionItem;
+                    }
+                }
+            }
+
+            // Si toutes les questions NE SONT PAS répondues, on ALERTE et on s'arrête.
+            if (!allAnswered) {
+                alert("Veuillez répondre à toutes les questions pour voir les résultats.");
+                if (firstUnansweredItem) {
+                    firstUnansweredItem.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+                return; // Stoppe l'exécution du reste du script (pas de score affiché)
+            }
+
+
+            // --- ÉTAPE 2 : Calcul du score et Affichage des corrections détaillées ---
+            
+            let detailedResults = '';
+
+            for (let i = 1; i <= totalQuestions; i++) {
+                const questionName = `q${i}`;
+                const questionItem = questionList.children[i - 1];
+                const selectedOption = form.querySelector(`input[name="${questionName}"]:checked`);
+                const correctAnswerValue = correctAnswers[questionName];
+
+                // Désactiver les boutons radio pour éviter de modifier la réponse après le score
+                questionItem.querySelectorAll('input[type="radio"]').forEach(radio => {
+                    radio.disabled = true;
+                });
+
+                // Récupérer le label de la bonne réponse
+                const correctInput = questionItem.querySelector(`input[value="${correctAnswerValue}"]`);
+                const correctLabel = correctInput ? correctInput.closest('label') : null;
+
+                if (selectedOption) {
+                    const selectedValue = selectedOption.value;
+                    const selectedLabel = selectedOption.closest('label');
+
+                    if (selectedValue === correctAnswerValue) {
+                        score++;
+                        questionItem.classList.add('correct');
+                        detailedResults += `<p class="correct">Question ${i}: Correct. Votre réponse: ${selectedLabel.textContent.trim()}</p>`;
+                    } else {
+                        questionItem.classList.add('incorrect');
+                        detailedResults += `<p class="incorrect">Question ${i}: Incorrect. Votre réponse: ${selectedLabel.textContent.trim()}. La bonne réponse était: ${correctLabel ? correctLabel.textContent.trim() : 'Non trouvée'}</p>`;
+                        // Mettre en évidence la mauvaise réponse de l'utilisateur en rouge pâle
+                        selectedLabel.style.backgroundColor = '#f8d7da';
+                    }
+                }
+                
+                // Mettre en évidence la bonne réponse en vert (dans tous les cas)
+                if (correctLabel) {
+                    correctLabel.style.backgroundColor = '#9acd32'; /* yellowgreen */
+                    correctLabel.style.fontWeight = 'bold';
+                }
+            }
+
+            // Affichage du score final
+            document.getElementById('score-text').innerHTML = `Vous avez obtenu <strong>${score} / ${totalQuestions}</strong> (${((score / totalQuestions) * 100).toFixed(2)}%)`;
+            resultsDiv.innerHTML = '<h2>Vos Résultats</h2><p id="score-text"></p>' + detailedResults;
+            
+            // Défilement vers les résultats
+            resultsDiv.scrollIntoView({ behavior: 'smooth' });
+            resultsDiv.style.display = 'block';
+
+        });
+    </script>
+</body>
+</html>

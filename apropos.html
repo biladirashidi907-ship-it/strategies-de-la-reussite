@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>À Propos de Nous - L'Équipe de Création</title>
+    <link rel="stylesheet" href="styles_apropos.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f8f9fa; 
+    color: #343a40; 
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+a {
+    text-decoration: none;
+    color: #007bff;
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: #0056b3;
+}
+
+.page-header {
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%); 
+    color: white;
+    padding: 60px 20px;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.page-header h1 {
+    font-size: 3em;
+    margin-bottom: 5px;
+    animation: slideDown 1s ease-out;
+}
+
+.page-header p {
+    font-size: 1.2em;
+    opacity: 0.9;
+}
+
+.back-button {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background-color: rgba(255, 255, 255, 0.2);
+    color: white;
+    padding: 10px 15px;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: background-color 0.3s;
+    z-index: 10;
+}
+
+.back-button:hover {
+    background-color: rgba(255, 255, 255, 0.4);
+}
+
+@keyframes slideDown {
+    from { transform: translateY(-30px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+.intro-section {
+    text-align: center;
+    padding: 40px 0;
+    margin-bottom: 30px;
+    border-bottom: 2px dashed #ccc;
+}
+
+.intro-section h2 {
+    color: #dc3545; 
+    font-size: 2em;
+    margin-bottom: 15px;
+}
+
+.team-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px;
+    padding-bottom: 50px;
+}
+
+.team-member {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 250px;
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+    border-top: 5px solid #007bff; /* Bande d'accentuation */
+}
+
+.team-member:hover {
+    transform: translateY(-10px) rotateX(2deg); 
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2); 
+}
+
+.profile-img-container {
+    width: 120px;
+    height: 120px;
+    margin: 0 auto 15px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 4px solid #ffc107; 
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.profile-img-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.team-member:hover img {
+    transform: scale(1.1); 
+}
+
+.team-member h3 {
+    margin-top: 0;
+    margin-bottom: 5px;
+    color: #007bff;
+}
+
+.team-member .role {
+    font-style: italic;
+    color: #6c757d;
+    margin-bottom: 15px;
+    border-bottom: 1px dotted #ccc;
+    padding-bottom: 10px;
+}
+
+.contact-info label {
+    display: block;
+    font-size: 0.9em;
+    margin-bottom: 5px;
+    text-align: left;
+}
+
+.contact-info i {
+    width: 20px;
+    color: #28a745; 
+}
+
+.site-footer {
+    background-color: #343a40; 
+    color: #f8f9fa;
+    padding: 40px 0 0;
+    font-size: 0.9em;
+}
+
+.footer-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    padding-bottom: 30px;
+    border-bottom: 1px solid #495057;
+}
+
+.footer-col h4 {
+    color: #ffc107;
+    margin-bottom: 15px;
+    font-size: 1.1em;
+    border-bottom: 2px solid #ffc107;
+    padding-bottom: 5px;
+}
+
+.footer-col ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-col ul li {
+    margin-bottom: 8px;
+}
+
+.footer-col a {
+    color: #ccc;
+    transition: color 0.3s;
+}
+
+.footer-col a:hover {
+    color: #fff;
+}
+
+.social-icons a {
+    font-size: 1.2em;
+    margin-right: 15px;
+    color: white;
+    transition: transform 0.3s;
+}
+.social-icons a:hover {
+    color: #ffc107;
+    transform: scale(1.2);
+}
+
+.footer-bottom {
+    text-align: center;
+    padding: 15px 0;
+    background-color: #212529; /* Couleur encore plus foncée */
+}
+
+/* Media Query pour la réactivité */
+@media (max-width: 900px) {
+    .footer-grid {
+        grid-template-columns: 1fr; /* Colonne unique sur mobile */
+        text-align: center;
+    }
+    .footer-col {
+        margin-bottom: 20px;
+    }
+    .back-button {
+        position: static;
+        display: block;
+        margin-bottom: 20px;
+    }
+    .page-header {
+        padding-top: 20px;
+    }
+}
+    </style>
+</head>
+<body>
+
+    <header class="page-header">
+        <div class="header-content">
+            <a href="accueil.html" class="back-button">
+                <i class="fas fa-arrow-left"></i> Retour à l'Accueil
+            </a>
+            <h1>Rencontrez les Visionnaires</h1>
+            <p>Notre équipe passionnée et dévouée derrière ce projet.</p>
+        </div>
+    </header>
+
+    <main class="container">
+        
+        <section class="intro-section">
+            <h2>Pourquoi nous faire confiance ?</h2>
+            <p>Nous combinons expertise technique et vision créative pour livrer des solutions web performantes. Chaque membre apporte une compétence unique, garantissant un produit final de haute qualité, conçu pour impressionner et convertir.</p>
+        </section>
+
+        <section class="team-grid">
+            
+            <div class="team-member rashidi">
+                <div class="profile-img-container">
+                    <img src="62c2f9a4-b82f-4b00-a27e-f8298fb50246_0_watermark.jpeg" alt="Photo de RASHIDI Levieux">
+                </div>
+                <h3>BILADI RASHIDI Levieux</h3>
+                <p class="role">Chef de Projet & Développeur Principal</p>
+                <div class="contact-info">
+                    <label><i class="fas fa-mobile-alt"></i> +243 977 126 962</label>
+                    <label><i class="fas fa-envelope"></i> biladirashidi907@gmail.com</label>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-whatsapp"></i></a>
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-tiktok"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="team-member patient">
+                <div class="profile-img-container">
+                    <img src="PXL_20250529_120420788.PORTRAIT.jpg" alt="Photo de Patient">
+                </div>
+                <h3>BYANDIKE BISIMWA Patient</h3>
+                <p class="role">Structure et Design</p>
+                <div class="contact-info">
+                    <label><i class="fas fa-mobile-alt"></i> N°Tel: +243 975 645 678</label>
+                    <label><i class="fas fa-map-marker-alt"></i> Adresse: byndikepatient77@gmail.com</label>
+                </div>
+            </div>
+            
+            <div class="team-member wiseman">
+                <div class="profile-img-container">
+                    <img src="0e7f84b7-635e-46ef-8b84-c3a95741fba4_0_watermark_093909.jpeg" alt="Photo de Wiseman">
+                </div>
+                <h3>BONNE ANNEE BASHIMBE Wiseman</h3>
+                <p class="role">Collaborateur /homme de logique</p>
+                <div class="contact-info">
+                    <label><i class="fas fa-mobile-alt"></i> N°Tel: +243 978 213 695</label>
+                    <label><i class="fas fa-map-marker-alt"></i> Adresse: bonneanneebashimbejavier@gmail.com</label>
+                </div>
+            </div>
+
+            
+            <div class="team-member thiagos">
+                <div class="profile-img-container">
+                    <img src="PXL_20250708_143840697.PORTRAIT~2.jpg" alt="Photo de Thiagos">
+                </div>
+                <h3>BIRINGANINE BARHEBWA</h3>
+                <p class="role">Collaborateur</p>
+                <div class="contact-info">
+                    <label><i class="fas fa-mobile-alt"></i> N°Tel: +243 994 343 134</label>
+                    <label><i class="fas fa-map-marker-alt"></i> Adresse: biringaninemichael3@gmail.com</label>
+                </div>
+            </div>
+            <div class="team-member sosthene">
+                <div class="profile-img-container">
+                    <img src="sosthene.jpg" alt="Photo de CP">
+                </div>
+                <h3>BYAMUNGU CIRIMWAMI Sosthène</h3>
+                <p class="role">Collaborateur</p>
+                <div class="contact-info">
+                    <label><i class="fas fa-mobile-alt"></i> N°Tel: +243 974 535 410</label>
+                    <label><i class="fas fa-map-marker-alt"></i> Adresse: sosthenebyamungucirimwami@gmail.com</label>
+                </div>
+            </div>
+            <div class="team-member cp">
+                <div class="profile-img-container">
+                    <img src="PXL_20250708_143715016.PORTRAIT~2.jpg" alt="Photo de CP">
+                </div>
+                <h3>MUHIGIRHWA CITO Samuel</h3>
+                <p class="role">Chef de promotion</p>
+                <div class="contact-info">
+                    <label><i class="fas fa-mobile-alt"></i> N°Tel: +243 970 725 663</label>
+                    <label><i class="fas fa-map-marker-alt"></i> Adresse: (à compléter)</label>
+                </div>
+            </div>
+           <div class="team-member cam's">
+                <div class="profile-img-container">
+                    <img src="MA PHOTO PROFIL.jpg" alt="Photo de CP">
+                </div>
+                <h3>EMMANUEL Cam's</h3>
+                <p class="role">Design Logo</p>
+                <div class="contact-info">
+                    <label><i class="fas fa-mobile-alt"></i> N°Tel: +243 825 050 027</label>
+                    <label><i class="fas fa-map-marker-alt"></i> Adresse: emmanuelcams@outlook.com</label>
+                </div>
+            </div>
+            <div class="team-member emile">
+                <div class="profile-img-container">
+                    <img src="_20250919_142353.JPG.jpg" alt="Photo de CP">
+                </div>
+                <h3>BIRINGANINE MBIRIZE Emile</h3>
+                <p class="role">Collaborateur</p>
+                <div class="contact-info">
+                    <label><i class="fas fa-mobile-alt"></i> N°Tel: +243 982 482 747</label>
+                    <label><i class="fas fa-map-marker-alt"></i> Adresse: jordanemile119@gmail.com</label>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="site-footer">
+        <div class="footer-grid container">
+            
+            <div class="footer-col about-us">
+                <h4>À Propos du Site</h4>
+                <p>Créé par des étudiants passionnés de l'ISP, ce site est le fruit d'un projet académique et professionnel visant l'excellence et l'innovation dans le développement web.</p>
+            </div>
+
+            <div class="footer-col quick-links">
+                <h4>Liens Rapides</h4>
+                <ul>
+                    <li><a href="index.html">Accueil</a></li>
+                    <li><a href="https://github.com/biladirashidi907-ship-it/BRLev.rash">Nous Contacter</a></li>
+                    <li><a href="confidential.html">Politique de Confidentialité</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col contact-details">
+                <h4>Nous Joindre</h4>
+                <p><i class="fas fa-envelope"></i> https://github.com/biladirashidi907-ship-it/BRLev.rash</p>
+                <p><i class="fas fa-phone"></i> +243 977 126 962</p>
+                <p><i class="fas fa-home"></i> BUKAVU, ISP</p>
+                <div class="social-icons">
+                    <a href="https://www.linkedin.com/in/rashidi-biladi-189841387?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                    <a href="https://www.tiktok.com/@234rashidi" aria-label="tiktok"><i class="fab fa-tiktok"></i></a>
+                    <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://wa.me/243977126962" aria-label="whatsapp"><i class="fab fa-whatsapp"></i></a>
+                </div>
+            </div>
+
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Équipe de Création ISP. <i>Stratégie de la réussite</i>.</p>
+        </div>
+    </footer>
+
+</body>
+</html>

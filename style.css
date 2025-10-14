@@ -1,0 +1,214 @@
+/* Style de base et réinitialisation */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f7f6; /* Fond légèrement gris/bleu */
+    color: #333;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* ----------------------------------- */
+/* 1. Animation de la Section Hero (Titre) */
+/* ----------------------------------- */
+.hero-section {
+    background: linear-gradient(135deg, #007bff, #0056b3); /* Dégradé bleu */
+    color: white;
+    padding: 80px 20px;
+    text-align: center;
+    overflow: hidden; /* Important pour l'animation */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.hero-section h1 {
+    font-size: 3em;
+    margin-bottom: 10px;
+    /* Animation du titre : glisse et apparaît */
+    animation: slideIn 1s ease-out;
+}
+
+.hero-section .slogan {
+    font-size: 1.5em;
+    opacity: 0;
+    /* Animation du slogan : apparaît après le titre */
+    animation: fadeIn 1.5s ease-out 0.8s forwards; /* 'forwards' maintient l'état final */
+}
+
+@keyframes slideIn {
+    from { transform: translateY(-50px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+
+/* ----------------------------------- */
+/* 2. Style de la Liste de Cours et des Boutons Animés */
+/* ----------------------------------- */
+.course-list {
+    text-align: center;
+    padding: 40px 0;
+}
+
+.course-list h2 {
+    font-size: 2em;
+    color: #007bff;
+    margin-bottom: 30px;
+    border-bottom: 3px solid #007bff;
+    display: inline-block;
+    padding-bottom: 5px;
+}
+
+.course-grid {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap; /* Permet aux éléments d'aller à la ligne si l'écran est petit */
+    gap: 30px;
+}
+
+.course-button {
+    /* Style de base du bouton */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: white;
+    width: 250px;
+    height: 150px;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: all 0.4s ease-in-out; /* Transition fluide pour les animations */
+    position: relative;
+    overflow: hidden; /* Important pour l'effet de remplissage */
+    font-weight: bold;
+    font-size: 1.1em;
+}
+
+/* Couleurs spécifiques des cours */
+.math-course { background-color: #28a745; } /* Vert */
+.info-course { background-color: #ffc107; } /* Jaune/Or */
+.gestion-course { background-color: #dc3545; } /* Rouge */
+
+.course-button i {
+    font-size: 3em;
+    margin-bottom: 10px;
+    z-index: 2; /* S'assure que l'icône reste au-dessus de l'animation */
+}
+.course-button span {
+    z-index: 2;
+}
+
+/* --- L'Animation "Impressionnante" : Effet Vague/Remplissage au Survol --- */
+
+/* Pseudo-élément pour l'effet de remplissage */
+.course-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.2); /* Vague blanche semi-transparente */
+    transform: translateX(-100%) skewX(-30deg); /* Commence hors-champ à gauche */
+    transition: all 0.5s ease-in-out;
+    z-index: 1;
+}
+
+/* Au survol : effet d'échelle, soulèvement et animation de la vague */
+.course-button:hover {
+    transform: scale(1.05) translateY(-5px); /* Grossit légèrement et se soulève */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3); /* Ombre plus prononcée */
+}
+
+.course-button:hover::before {
+    transform: translateX(100%) skewX(-30deg); /* La vague traverse le bouton */
+}
+
+/* ----------------------------------- */
+/* 3. Section Multimédia (Réservée Image/Vidéo) */
+/* ----------------------------------- */
+.media-section {
+    padding: 60px 0;
+    text-align: center;
+    background-color: #e9ecef; /* Fond gris clair pour démarquer la section */
+    margin-top: 40px;
+}
+
+.media-section h2 {
+    color: #007bff;
+    margin-bottom: 30px;
+}
+
+.media-placeholder {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.video-placeholder {
+    width: 100%;
+    max-width: 800px;
+    min-height: 450px; /* Hauteur réservée */
+    background-color: #343a40; /* Fond foncé, style écran TV */
+    border: 5px solid #0056b3; /* Bordure épaisse */
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    position: relative;
+    /* Petite animation de pulsation pour attirer l'oeil */
+    animation: pulse 3s infinite alternate;
+}
+
+.placeholder-text {
+    color: #ccc;
+    font-style: italic;
+    line-height: 1.5;
+    padding: 20px;
+}
+
+/* Keyframes pour l'animation de pulsation */
+@keyframes pulse {
+    from { box-shadow: 0 0 20px rgba(0, 123, 255, 0.4); }
+    to { box-shadow: 0 0 30px rgba(0, 123, 255, 0.8); }
+}
+
+/* ----------------------------------- */
+/* 4. Footer (Pied de page) */
+/* ----------------------------------- */
+footer {
+    text-align: center;
+    padding: 20px;
+    background-color: #333;
+    color: white;
+    margin-top: 20px;
+}
+
+/* Media Query pour les petits écrans */
+@media (max-width: 768px) {
+    .course-grid {
+        flex-direction: column;
+        align-items: center;
+    }
+    .course-button {
+        width: 90%;
+        margin-bottom: 20px;
+    }
+    .hero-section h1 {
+        font-size: 2em;
+    }
+    .hero-section .slogan {
+        font-size: 1.2em;
+    }
+}

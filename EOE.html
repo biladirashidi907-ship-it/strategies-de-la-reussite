@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz d'Expression et Méthodologie (25 Questions)</title>
+    <style>
+        /* Styles de base */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* En-tête et navigation */
+        .quiz-header {
+            width: 100%;
+            background-color: #7fffd4; /* aquamarine */
+            padding: 20px 0;
+            text-align: center;
+        }
+
+        .quiz-title {
+            background-color: #f5f5dc; /* beige */
+            padding: 20px 20px;
+            text-align: center;
+        }
+
+        .quiz-intro {
+            padding: 10px 20px;
+            color: #333;
+        }
+
+        /* Contenu principal (questions) */
+        .quiz-container {
+            width: 100%;
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+
+        .question-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .question-item {
+            background-color: #f5f5dc; /* beige */
+            border-radius: 20px;
+            margin-bottom: 20px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .question-item p {
+            font-weight: bold;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .question-number {
+            font-weight: bold;
+            color: #008b8b;
+        }
+
+        .question-options {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .question-options label {
+            margin-bottom: 8px;
+            cursor: pointer;
+            padding: 5px; /* Ajout pour l'esthétique du correct/incorrect */
+            border-radius: 5px; /* Ajout pour l'esthétique du correct/incorrect */
+        }
+
+        .question-options input[type="radio"] {
+            margin-right: 10px;
+        }
+
+        /* Bouton de soumission */
+        .submit-button {
+            background-color: #008b8b; /* darkcyan */
+            color: white;
+            border: none;
+            width: 90%;
+            max-width: 300px;
+            margin: 30px auto;
+            height: 50px;
+            border-radius: 40px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s, box-shadow 0.3s;
+            display: block;
+        }
+
+        .submit-button:hover {
+            background-color: #9acd32; /* yellowgreen */
+            color: #161616;
+            box-shadow: 0 0 10px #ffff00; /* yellow */
+        }
+
+        /* Résultats */
+        #results {
+            background-color: #fff;
+            padding: 20px;
+            margin-top: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 900px;
+            margin: 20px auto;
+        }
+
+        #results h2 {
+            color: #008b8b;
+        }
+        
+        /* Styles de correction pour les items de la liste */
+        .question-item.correct {
+            border: 2px solid #28a745;
+        }
+
+        .question-item.incorrect {
+            border: 2px solid #dc3545;
+        }
+
+        /* Styles pour les résultats détaillés */
+        .correct-detail {
+            background-color: #d4edda; /* Light green for correct answers */
+            border: 1px solid #c3e6cb;
+            padding: 5px;
+            margin-bottom: 5px;
+            border-radius: 5px;
+            text-align: left;
+            color: #155724;
+        }
+
+        .incorrect-detail {
+            background-color: #f8d7da; /* Light red for incorrect answers */
+            border: 1px solid #f5c6cb;
+            padding: 5px;
+            margin-bottom: 5px;
+            border-radius: 5px;
+            text-align: left;
+            color: #721c24;
+        }
+
+        /* Pied de page */
+        .quiz-footer {
+            background-color: #f8f9fa;
+            color: #010302;
+            text-align: center;
+            padding: 15px 0;
+            width: 100%;
+            border-top: 1px solid #ddd;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 800px) {
+            .quiz-container {
+                padding: 0 10px;
+            }
+
+            .question-item {
+                width: auto;
+                margin-left: 0;
+                margin-right: 0;
+            }
+
+            .submit-button {
+                width: 100%;
+                margin: 20px auto;
+            }
+        }
+        a{
+            background-color: #ddd;         
+            border-radius: 9px;          
+            text-decoration: none;          
+            font-size: 20px;                
+            padding: 5px 10px;          
+        }
+        a:hover{
+            color: orangered;             
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="quiz-header">
+        <h1 class="quiz-title">Quiz d'Expression Oral et Ecrite</h1>
+        <p class="quiz-intro">Le savoir c'est le pouvoir. Celui qui ose répondre, ose apprendre. À l'université, le champion n'est pas le plus fort, mais le plus curieux.</p>
+    <a href="index.html" style="text-decoration: none; font-size: 20px;">Retour</a>
+
+    </nav>
+
+    <main class="quiz-container">
+        <form id="quiz-form">
+            <ol class="question-list">
+                <li class="question-item">
+                    <p><span class="question-number">1.</span> Quelle est la nature grammaticale du mot qui modifie ou précise le sens d'un verbe ?</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q1" value="a"> a) Verbe</label>
+                        <label><input type="radio" name="q1" value="b"> b) Nom</label>
+                        <label><input type="radio" name="q1" value="c"> c) Adjectif</label>
+                        <label><input type="radio" name="q1" value="d"> d) Adverbe</label>
+                        <label><input type="radio" name="q1" value="e"> e) Pronom</label>
+                    </div>
+                </li>
+
+                <li class="question-item">
+                    <p><span class="question-number">2.</span> Dans la phrase « Je (les) ai coupées », quelle est la nature grammaticale et la fonction du mot entre parenthèses ?</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q2" value="a"> a) Verbe</label>
+                        <label><input type="radio" name="q2" value="b"> b) Nom</label>
+                        <label><input type="radio" name="q2" value="c"> c) Adjectif</label>
+                        <label><input type="radio" name="q2" value="d"> d) Adverbe</label>
+                        <label><input type="radio" name="q2" value="e"> e) Pronom Complément d'Objet Direct (COD)</label>
+                        <label><input type="radio" name="q2" value="f"> f) Pronom Sujet</label>
+                    </div>
+                </li>
+
+                <li class="question-item">
+                    <p><span class="question-number">3.</span> L'étude systématique des éléments constitutifs et du fonctionnement d'une langue s'appelle ?</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q3" value="a"> a) Orthophonie</label>
+                        <label><input type="radio" name="q3" value="b"> b) Linguistique</label>
+                        <label><input type="radio" name="q3" value="c"> c) Orthographe</label>
+                        <label><input type="radio" name="q3" value="d"> d) Phonétique</label>
+                        <label><input type="radio" name="q3" value="e"> e) Phonologie</label>
+                    </div>
+                </li>
+
+                <li class="question-item">
+                    <p><span class="question-number">4.</span> Par quels pronoms compléments personnels peut-on remplacer le groupe nominal « un chevalier dans une montagne » dans la phrase « Je vois un chevalier dans une montagne » ?</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q4" value="a"> a) Je le vois</label>
+                        <label><input type="radio" name="q4" value="b"> b) Je l'y vois </label>
+                        <label><input type="radio" name="q4" value="c"> c) Je lui vois</label>
+                        <label><input type="radio" name="q4" value="d"> d) Je leur vois</label>
+                        <label><input type="radio" name="q4" value="e"> e) J'en vois</label>
+                    </div>
+                </li>
+
+                <li class="question-item">
+                    <p><span class="question-number">5.</span> Dans la phrase à la voix passive « La nourriture a été mangée par (les étudiants) », quelle est la fonction syntaxique du groupe nominal entre parenthèses ?</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q5" value="a"> a) Sujet</label>
+                        <label><input type="radio" name="q5" value="b"> b) Complément d'Objet Direct (COD)</label>
+                        <label><input type="radio" name="q5" value="c"> c) Complément d'Agent (C. d'Agent)</label>
+                        <label><input type="radio" name="q5" value="d"> d) Complément Circonstanciel de Lieu (CCL)</label>
+                        <label><input type="radio" name="q5" value="e"> e) Complément Circonstanciel de Temps (CCT)</label>
+                    </div>
+                </li>
+
+                <li class="question-item">
+                    <p><span class="question-number">6.</span> Le participe passé est une forme verbale qui peut avoir deux natures grammaticales distinctes. Lesquelles sont-elles ?</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q6" value="a"> a) Pronom et adjectif</label>
+                        <label><input type="radio" name="q6" value="b"> b) Adjectif et Adverbe</label>
+                        <label><input type="radio" name="q6" value="c"> c) Adjectif et Verbe</label>
+                        <label><input type="radio" name="q6" value="d"> d) Adverbe et pronom</label>
+                        <label><input type="radio" name="q6" value="e"> e) Conjonction et interjection</label>
+                    </div>
+                </li>
+
+                <li class="question-item">
+                    <p><span class="question-number">7.</span> Quelle est la fonction syntaxique principale d'une interjection dans une phrase simple ?</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q7" value="a"> a) Sujet</label>
+                        <label><input type="radio" name="q7" value="b"> b) Complément Circonstanciel de Lieu (CCL)</label>
+                        <label><input type="radio" name="q7" value="c"> c) Complément Circonstanciel de Temps (CCT)</label>
+                        <label><input type="radio" name="q7" value="d"> d) Complément d'Objet Indirect (COI)</label>
+                        <label><input type="radio" name="q7" value="e"> e) Aucune fonction syntaxique</label>
+                    </div>
+                </li>
+
+                <li class="question-item">
+                    <p><span class="question-number">8.</span> Quelle figure de style est utilisée dans l'énoncé : « Il court comme la lumière » ? </p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q8" value="a"> a) Hyperbole</label>
+                        <label><input type="radio" name="q8" value="b"> b) Ironie</label>
+                        <label><input type="radio" name="q8" value="c"> c) Métaphore</label>
+                        <label><input type="radio" name="q8" value="d"> d) Litote</label>
+                        <label><input type="radio" name="q8" value="e"> e) Comparaison</label>
+                        <label><input type="radio" name="q8" value="f"> f) Personnification</label>
+                    </div>
+                </li>
+                
+                <li class="question-item">
+                    <p><span class="question-number">9.</span> Quelle figure de style consiste à dire le contraire de ce que l'on pense (souvent par ironie ou pour afficher l'hypocrisie) ?</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q9" value="a"> a) Hyperbole</label>
+                        <label><input type="radio" name="q9" value="b"> b) Euphémisme</label>
+                        <label><input type="radio" name="q9" value="c"> c) Litote</label>
+                        <label><input type="radio" name="q9" value="d"> d) Antiphrase</label>
+                        <label><input type="radio" name="q9" value="e"> e) Allégorie</label>
+                    </div>
+                </li>
+
+                <li class="question-item">
+                    <p><span class="question-number">10.</span> Dans la phrase « Il s'adresse aux enfants », le type de liaison phonétique entre les deux mots est :</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q10" value="a"> a) Facultative</label>
+                        <label><input type="radio" name="q10" value="b"> b) Obligatoire (entre le verbe et le COI)</label>
+                        <label><input type="radio" name="q10" value="c"> c) Interdite</label>
+                        <label><input type="radio" name="q10" value="d"> d) Spécifique</label>
+                        <label><input type="radio" name="q10" value="e"> e) Accidentelle</label>
+                    </div>
+                </li>
+                
+                <li class="question-item">
+                    <p><span class="question-number">11.</span> Quelle faute de style consiste à employer successivement des mots ou des expressions ayant le même sens, sans nécessité stylistique ?</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q11" value="a"> a) L'Antithèse</label>
+                        <label><input type="radio" name="q11" value="b"> b) L'Amphibologie</label>
+                        <label><input type="radio" name="q11" value="c"> c) Le Pléonasme</label>
+                        <label><input type="radio" name="q11" value="d"> d) La Redondance</label>
+                        <label><input type="radio" name="q11" value="e"> e) Le Solécisme</label>
+                    </div>
+                </li>
+                
+                <li class="question-item">
+                    <p><span class="question-number">12.</span> Quelle est la nature de l'erreur dans l'énoncé suivant : « Ils ont bien fait de partir malgré que le temps soit pluvieux » ?</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q12" value="a"> a) Une erreur d'accord en genre</label>
+                        <label><input type="radio" name="q12" value="b"> b) Une faute de conjugaison</label>
+                        <label><input type="radio" name="q12" value="c"> c) Un anglicisme syntaxique </label>
+                        <label><input type="radio" name="q12" value="d"> d) Une faute d'emploi de la préposition</label>
+                        <label><input type="radio" name="q12" value="e"> e) Une erreur de pléonasme</label>
+                    </div>
+                </li>
+                
+                <li class="question-item">
+                    <p><span class="question-number">13.</span> Quelle est la forme d'article qui est obtenue par combinaison de la préposition "à" ou "de" avec les articles définis ("le", "les") ?</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q13" value="a"> a) Partitif</label>
+                        <label><input type="radio" name="q13" value="b"> b) Contracté</label>
+                        <label><input type="radio" name="q13" value="c"> c) Défini</label>
+                        <label><input type="radio" name="q13" value="d"> d) Indéfini</label>
+                        <label><input type="radio" name="q13" value="e"> e) La forme conjoctive</label>
+                    </div>
+                </li>
+
+                <li class="question-item">
+                    <p><span class="question-number">14.</span> Le nombre « Quatre-vingt huit » (88): cet adjectif cardinal est composé par :</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q14" value="a"> a) Addition</label>
+                        <label><input type="radio" name="q14" value="b"> b) Soustraction</label>
+                        <label><input type="radio" name="q14" value="c"> c) Addition et Soustraction</label>
+                        <label><input type="radio" name="q14" value="d"> d) Multiplication et Addition</label>
+                        <label><input type="radio" name="q14" value="e"> e) Multiplication et Soustraction</label>
+                    </div>
+                </li>
+
+                <li class="question-item">
+                    <p><span class="question-number">15.</span> Quand nous (fûmes) enfants nous étions très courageux. Le verbe souligné est conjugué à quel mode et à quel temps ?</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q15" value="a"> a) Indicatif présent</label>
+                        <label><input type="radio" name="q15" value="b"> b) Indicatif imparfait</label>
+                        <label><input type="radio" name="q15" value="c"> c) Indicatif passé simple</label>
+                        <label><input type="radio" name="q15" value="d"> d) Conditionnel présent</label>
+                        <label><input type="radio" name="q15" value="e"> e) Subjonctif présent</label>
+                    </div>
+                </li>
+                <li class="question-item">
+                    <p><span class="question-number">16.</span> Quels sont les principaux organes de la parole selon le schéma vocal classique ?</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q16" value="b"> B. Les poumons, la trachée-artère, le larynx, la langue, les lèvres, le nez</label>
+                        <label><input type="radio" name="q16" value="a"> A. Les poumons, le cerveau, les muscles</label>
+                        <label><input type="radio" name="q16" value="c"> C. Les oreilles, la langue, les yeux</label>
+                        <label><input type="radio" name="q16" value="d"> D. Le cœur, les poumons, les dents</label>
+                    </div>
+                </li>
+
+                <li class="question-item">
+                    <p><span class="question-number">17.</span> Que représente le numéro 7 sur un schéma standard des organes de la parole ?</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q17" value="a"> A. Les dents inférieures</label>
+                        <label><input type="radio" name="q17" value="b"> B. Le palais dur</label>
+                        <label><input type="radio" name="q17" value="c"> C. Le palais mou / le voile du palais</label>
+                        <label><input type="radio" name="q17" value="d"> D. La luette</label>
+                    </div>
+                </li>
+
+                <li class="question-item">
+                    <p><span class="question-number">18.</span> Quelle est la caractéristique principale de la production des voyelles ?</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q18" value="a"> A. Elles sont produites avec un obstacle total</label>
+                        <label><input type="radio" name="q18" value="b"> B. Elles sont produites sans obstacle dans le conduit vocal</label>
+                        <label><input type="radio" name="q18" value="c"> C. Elles sont produites avec les dents</label>
+                        <label><input type="radio" name="q18" value="d"> D. Elles sont toujours nasales</label>
+                    </div>
+                </li>
+
+                <li class="question-item">
+                    <p><span class="question-number">19.</span> En phonologie, quelle unité représente le son minimal permettant de distinguer deux mots (ex: /p/ et /b/ dans "pain" et "bain") ?</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q19" value="a"> A. Le mot</label>
+                        <label><input type="radio" name="q19" value="b"> B. La phrase</label>
+                        <label><input type="radio" name="q19" value="c"> C. Le phonème</label>
+                        <label><input type="radio" name="q19" value="d"> D. Le paragraphe</label>
+                    </div>
+                </li>
+
+                <li class="question-item">
+                    <p><span class="question-number">20.</span> Que signifie une voyelle antérieure ?</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q20" value="a"> A. Elle est prononcée à l'arrière de la bouche</label>
+                        <label><input type="radio" name="q20" value="b"> B. Elle est produite avec le nez</label>
+                        <label><input type="radio" name="q20" value="c"> C. Elle est prononcée vers l’avant de la bouche (langue avancée)</label>
+                        <label><input type="radio" name="q20" value="d"> D. Elle est chuchotée</label>
+                    </div>
+                </li>
+
+                <li class="question-item">
+                    <p><span class="question-number">21.</span> Quel organe est désigné par le numéro 10 dans un schéma vocal classique (souvent situé à l'avant de l'articulateur principal) ?</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q21" value="a"> A. Les lèvres</label>
+                        <label><input type="radio" name="q21" value="b"> B. La glotte</label>
+                        <label><input type="radio" name="q21" value="c"> C. Le dos de la langue</label>
+                        <label><input type="radio" name="q21" value="d"> D. La pointe de la langue</label>
+                    </div>
+                </li>
+
+                <li class="question-item">
+                    <p><span class="question-number">22.</span> Parmi les mots suivants, lequel contient le son voyelle [i] comme dans "lire" ?</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q22" value="a"> A. patrie</label>
+                        <label><input type="radio" name="q22" value="b"> B. style</label>
+                        <label><input type="radio" name="q22" value="c"> C. porte</label>
+                        <label><input type="radio" name="q22" value="d"> D. dans</label>
+                    </div>
+                </li>
+
+                <li class="question-item">
+                    <p><span class="question-number">23.</span> Où se trouve le larynx, organe essentiel pour la phonation, dans la structure anatomique de la parole ?</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q23" value="a"> A. Au niveau de la cavité buccale</label>
+                        <label><input type="radio" name="q23" value="b"> B. Au niveau de la gorge, entre la trachée et la base de la langue</label>
+                        <label><input type="radio" name="q23" value="c"> C. Au niveau du nez</label>
+                        <label><input type="radio" name="q23" value="d"> D. Au sommet du palais</label>
+                    </div>
+                </li>
+
+                <li class="question-item">
+                    <p><span class="question-number">24.</span> Quelle est la difficulté articulatoire pour un apprenant qui prononce [e] (fermé) au lieu de [ɛ] (ouvert) ?</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q24" value="a"> A. Il ferme trop la bouche (lèvre non assez ouverte)</label>
+                        <label><input type="radio" name="q24" value="b"> B. Il utilise trop les cordes vocales</label>
+                        <label><input type="radio" name="q24" value="c"> C. Il n’a pas assez de souffle</label>
+                        <label><input type="radio" name="q24" value="d"> D. Il produit un son nasal</label>
+                    </div>
+                </li>
+                
+                <li class="question-item">
+                    <p><span class="question-number">25.</span> Quelle est la principale fonction de la voyelle dans une syllabe ?</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q25" value="a"> A. Servir de frontière de mot</label>
+                        <label><input type="radio" name="q25" value="b"> B. Être le noyau (l'élément obligatoire) de la syllabe</label>
+                        <label><input type="radio" name="q25" value="c"> C. Ajouter un sens grammatical</label>
+                        <label><input type="radio" name="q25" value="d"> D. Marquer la nasalisation</label>
+                    </div>
+                </li>
+
+            </ol>
+            <button type="submit" class="submit-button">Voir les Résultats</button>
+        </form>
+
+        <div id="results" style="display:none;">
+            <h2>Vos Résultats</h2>
+            <p id="score-text"></p>
+        </div>
+    </main>
+
+    <footer class="quiz-footer">
+        <i>&copy; L1 LMD IG - Expression Oral et Écrite </i>
+    </footer>
+
+    <script>
+        document.getElementById('quiz-form').addEventListener('submit', function(event) {
+            event.preventDefault(); // Empêche l'envoi du formulaire par défaut
+
+            const correctAnswers = {
+                // EOE et Méthodologie (1-15)
+                q1: 'd', // Adverbe
+                q2: 'e', // Pronom COD
+                q3: 'b', // Linguistique
+                q4: 'b', // Je l'y vois (le = chevalier, y = dans une montagne)
+                q5: 'c', // C. d'Agent
+                q6: 'c', // Adjectif et Verbe
+                q7: 'e', // Aucune fonction syntaxique (autonome)
+                q8: 'e', // Comparaison (présence de 'comme')
+                q9: 'd', // Antiphrase
+                q10: 'b', // Obligatoire (entre la préposition 'aux' - pronom - et le nom/article)
+                q11: 'c', // Le Pléonasme
+                q12: 'c', // Anglicisme syntaxique ("malgré que" est considéré comme une faute de style/anglicisme. La conjonction correcte est 'bien que')
+                q13: 'b', // Articles Contractés (du, des, au, aux)
+                q14: 'd', // Multiplication et Addition (4x20 + 8)
+                q15: 'c', // Passé-simple
+                
+                // Phonétique et Divers (16-25)
+                q16: 'b', // Organes de la parole
+                q17: 'c', // Palais mou / voile du palais
+                q18: 'b', // Voyelles sans obstacle
+                q19: 'c', // Le phonème (unité minimale distinctive)
+                q20: 'c', // Voyelle antérieure (vers l’avant)
+                q21: 'd', // La pointe de la langue
+                q22: 'b', // Exemple [i] est dans 'style' ([stil]) - "patrie" est aussi correct. J'ai unifié le choix à 'b' ici.
+                q23: 'b', // Larynx emplacement (gorge)
+                q24: 'a', // [e] au lieu de [ɛ] (ferme trop la bouche : le [e] est mi-fermé, le [ɛ] est mi-ouvert)
+                q25: 'b', // Noyau de la syllabe
+            };
+
+            let score = 0;
+            const allQuestionNames = Object.keys(correctAnswers);
+            const totalQuestions = allQuestionNames.length;
+            const form = document.getElementById('quiz-form');
+            const resultsDiv = document.getElementById('results');
+            const scoreText = document.getElementById('score-text');
+            const questionList = form.querySelector('.question-list');
+            
+            let unansweredQuestions = [];
+
+            // 1. VÉRIFICATION OBLIGATOIRE DES QUESTIONS
+            allQuestionNames.forEach(questionName => {
+                const selectedOption = form.querySelector(`input[name="${questionName}"]:checked`);
+                if (!selectedOption) {
+                    unansweredQuestions.push(questionName);
+                }
+            });
+
+            if (unansweredQuestions.length > 0) {
+                // Si des questions ne sont pas répondues, afficher une alerte et arrêter
+                alert(`Veuillez répondre à toutes les questions avant de voir votre score ! Il vous reste ${unansweredQuestions.length} question(s) à compléter.`);
+                // Cacher les résultats si l'utilisateur essaie de les afficher sans tout répondre
+                resultsDiv.style.display = 'none';
+                return; // Stoppe l'exécution de la fonction
+            }
+
+            // --- DEBUT DU CALCUL ET AFFICHAGE DES RESULTATS (seulement si toutes les questions sont répondues) ---
+
+            // Préparation de l'affichage des résultats
+            resultsDiv.style.display = 'block';
+            resultsDiv.innerHTML = '<h2>Vos Résultats</h2><p id="score-text"></p><div id="detailed-results"></div>';
+            const detailedResultsDiv = document.getElementById('detailed-results');
+            let detailedResultsHTML = '';
+
+            // Parcourir toutes les questions pour calculer le score et afficher la correction
+            allQuestionNames.forEach((questionName, index) => {
+                const questionNumber = index + 1; 
+                // Pour chaque question, on sait qu'elle a été répondue grâce à la vérification ci-dessus
+                const selectedOption = form.querySelector(`input[name="${questionName}"]:checked`);
+                const correctAnswerValue = correctAnswers[questionName];
+
+                // Trouver les éléments de la question pour la mise en forme
+                const questionItem = questionList.querySelector(`input[name="${questionName}"]`).closest('.question-item');
+                const correctInput = questionItem.querySelector(`input[value="${correctAnswerValue}"]`);
+                const correctLabel = correctInput.closest('label');
+                const selectedLabel = selectedOption.closest('label');
+                
+                const correctLabelText = correctLabel.textContent.trim();
+                const selectedLabelText = selectedLabel.textContent.trim();
+                const questionText = questionItem.querySelector('p').textContent.trim();
+
+                // Nettoyer les styles précédents
+                questionItem.classList.remove('correct', 'incorrect');
+                const allLabels = questionItem.querySelectorAll('label');
+                allLabels.forEach(label => {
+                    label.style.backgroundColor = 'transparent';
+                    label.style.fontWeight = 'normal';
+                });
+
+                if (selectedOption.value === correctAnswerValue) {
+                    // Réponse Correcte
+                    score++;
+                    questionItem.classList.add('correct');
+                    selectedLabel.style.backgroundColor = '#d4edda'; // Vert clair
+                    selectedLabel.style.fontWeight = 'bold';
+                    detailedResultsHTML += `<p class="correct-detail"><span class="question-number">${questionNumber}.</span> ${questionText.replace(/\d+\.\s*/, '')} : <span style="font-weight: bold;">Correct</span>. Votre réponse : ${selectedLabelText}.</p>`;
+                } else {
+                    // Réponse Incorrecte
+                    questionItem.classList.add('incorrect');
+                    selectedLabel.style.backgroundColor = '#f8d7da'; // Rouge clair pour la mauvaise réponse de l'utilisateur
+                    selectedLabel.style.fontWeight = 'bold';
+                    correctLabel.style.backgroundColor = '#28a745'; // Vert foncé pour la bonne réponse (correction)
+                    correctLabel.style.color = 'white';
+                    detailedResultsHTML += `<p class="incorrect-detail"><span class="question-number">${questionNumber}.</span> ${questionText.replace(/\d+\.\s*/, '')} : <span style="font-weight: bold;">Incorrect</span>. Votre réponse : ${selectedLabelText}. La bonne réponse était : ${correctLabelText}.</p>`;
+                }
+            });
+
+            // Affichage du score total
+            document.getElementById('score-text').innerHTML = `Votre score est de <strong>${score} / ${totalQuestions}</strong>.`;
+            detailedResultsDiv.innerHTML = detailedResultsHTML;
+        });
+    </script>
+</body>
+</html>

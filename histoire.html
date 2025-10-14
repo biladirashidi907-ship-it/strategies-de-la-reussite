@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz du Champion</title>
+    <style>
+        /* Styles de base */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* En-tête et navigation */
+        .quiz-header {
+            width: 100%;
+            background-color: #7fffd4; /* aquamarine */
+            padding: 20px 0;
+            text-align: center;
+        }
+
+        .quiz-title {
+            background-color: #f5f5dc; /* beige */
+            padding: 20px 20px;
+            text-align: center;
+        }
+
+        .quiz-intro {
+            padding: 10px 20px;
+            color: #333;
+        }
+
+        /* Contenu principal (questions) */
+        .quiz-container {
+            width: 100%;
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+
+        .question-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .question-item {
+            background-color: #f5f5dc; /* beige */
+            border-radius: 20px;
+            margin-bottom: 20px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .question-item p {
+            font-weight: bold;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .question-number {
+            font-weight: bold;
+            color: #008b8b;
+        }
+
+        .question-options {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .question-options label {
+            margin-bottom: 8px;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        
+        /* Styles pour la correction */
+        .correct-answer {
+            background-color: #d4edda; /* Vert clair */
+            border: 1px solid #c3e6cb;
+            color: #155724;
+            font-weight: bold;
+        }
+
+        .incorrect-answer {
+            background-color: #f8d7da; /* Rouge clair */
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+        
+        .correction-message {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #fff8e1; /* Jaune très clair */
+            border: 1px solid #ffe0b2;
+            border-radius: 5px;
+            font-size: 0.9em;
+            color: #333;
+            display: none; /* Caché par défaut */
+        }
+
+        .question-options input[type="radio"] {
+            margin-right: 10px;
+        }
+
+        /* Bouton de soumission */
+        .submit-button {
+            background-color: #008b8b; /* darkcyan */
+            color: white;
+            border: none;
+            width: 90%;
+            max-width: 300px;
+            margin: 30px auto;
+            height: 50px;
+            border-radius: 40px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s, box-shadow 0.3s;
+            display: block;
+        }
+
+        .submit-button:hover {
+            background-color: #9acd32; /* yellowgreen */
+            color: #161616;
+            box-shadow: 0 0 10px #ffff00; /* yellow */
+        }
+        
+        /* Conteneur des résultats */
+        #result-container {
+            display: none; /* Caché par défaut */
+            max-width: 900px;
+            width: 100%;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+        
+        #score-message {
+            font-size: 1.5rem;
+            color: #008b8b;
+            font-weight: bold;
+        }
+
+        /* Pied de page */
+        .quiz-footer {
+            background-color: #f8f9fa;
+            color: #010302;
+            text-align: center;
+            padding: 15px 0;
+            width: 100%;
+            border-top: 1px solid #ddd;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 800px) {
+            .quiz-container {
+                padding: 0 10px;
+            }
+
+            .question-item {
+                width: auto;
+                margin-left: 0;
+                margin-right: 0;
+            }
+
+            .submit-button {
+                width: 100%;
+                margin: 20px auto;
+            }
+        }
+        a{
+            background-color: #ddd;         
+            border-radius: 9px;          
+            text-decoration: none;          
+            font-size: 20px;                
+            padding: 5px 10px;          
+        }
+        a:hover{
+            color: orangered;             
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="quiz-header">
+        <h1 class="quiz-title">Histoire et Epistémologie de l'informatique</h1>
+        <p class="quiz-intro">Le savoir c'est le pouvoir. Celui qui ose répondre, ose apprendre. À l'université, le champion n'est pas le plus fort, mais le plus curieux.</p>
+<a href="index.html" style="text-decoration: none; font-size: 20px;">Retour</a>      
+</nav>
+
+    <main class="quiz-container">
+        <form id="quiz-form">
+            <ol class="question-list">
+                <li class="question-item">
+                    <p><span class="question-number">1.</span>Le mot Ordinateur en anglais signifie :</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q1" value="0"> a) Ordinator</label>
+                        <label><input type="radio" name="q1" value="1"> b) Ordonner</label>
+                        <label><input type="radio" name="q1" value="2"> c) Compiler</label>
+                        <label><input type="radio" name="q1" value="3"> d) Computer</label>
+                        <label><input type="radio" name="q1" value="4"> e) Aucune bonne réponse</label>
+                    </div>
+                    <div id="q1-correction" class="correction-message"></div>
+                </li>
+                <li class="question-item">
+                    <p><span class="question-number">2.</span> Que signifie IBM :</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q2" value="0"> a) International Basic Machine</label>
+                        <label><input type="radio" name="q2" value="1"> b) International Business Machine</label>
+                        <label><input type="radio" name="q2" value="2"> c) Internet Basé sur la machine</label>
+                        <label><input type="radio" name="q2" value="3"> d) Deux de ces réponses sont correctes</label>
+                        <label><input type="radio" name="q2" value="4"> e) Aucune bonne réponse</label>
+                    </div>
+                    <div id="q2-correction" class="correction-message"></div>
+                </li>
+                
+                <li class="question-item">
+                    <p><span class="question-number">3.</span>Quelles sont les deux opérations que la pascaline affectuée ?</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q3" value="0"> a) Addition et Multiplication</label>
+                        <label><input type="radio" name="q3" value="1"> b) Addition et la division</label>
+                        <label><input type="radio" name="q3" value="2"> c) Addition et la racine carrée</label>
+                        <label><input type="radio" name="q3" value="3"> d) Addition et Soustraction</label>
+                        <label><input type="radio" name="q3" value="4"> e) Aucune bonne réponse</label>
+                    </div>
+                    <div id="q3-correction" class="correction-message"></div>
+                </li>
+                <li class="question-item">
+                    <p><span class="question-number">4.</span>Le terme informatique avait été inventé par ?</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q4" value="0"> a) Philipe Drettier</label>
+                        <label><input type="radio" name="q4" value="1"> b) Mickael thiagos</label>
+                        <label><input type="radio" name="q4" value="2"> c) Michel brancher</label>
+                        <label><input type="radio" name="q4" value="3"> d) Philipe Dreyfus</label>
+                        <label><input type="radio" name="q4" value="4"> e) Aucune bonne réponse</label>
+                    </div>
+                    <div id="q4-correction" class="correction-message"></div>
+                </li>
+                <li class="question-item">
+                    <p><span class="question-number">5.</span> Le terme informatique avait été inventé en quelle année ?</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q5" value="0"> a) 1961</label>
+                        <label><input type="radio" name="q5" value="1"> b) 1962</label>
+                        <label><input type="radio" name="q5" value="2"> c) 1960</label>
+                        <label><input type="radio" name="q5" value="3"> d) 2002</label>
+                        <label><input type="radio" name="q5" value="4"> e) 1637</label>
+                    </div>
+                    <div id="q5-correction" class="correction-message"></div>
+                </li>
+                <li class="question-item">
+                    <p><span class="question-number">6.</span> La machine de wilhem schickard faisait :</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q6" value="0"> a) Addition - Soustraction - Multiplication</label>
+                        <label><input type="radio" name="q6" value="1"> b) Addition - Soustraction - division</label>
+                        <label><input type="radio" name="q6" value="2"> c) Addition - racine carrée</label>
+                        <label><input type="radio" name="q6" value="3"> d) Multiplication - Soustraction</label>
+                        <label><input type="radio" name="q6" value="4"> e) Aucune bonne réponse</label>
+                    </div>
+                    <div id="q6-correction" class="correction-message"></div>
+                </li>
+
+                <li class="question-item">
+                    <p><span class="question-number">7.</span> Quelle est la machine qui contenait les concepts de ce sera l'ordinateur moderne !</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q7" value="0"> a) Rachel micky</label>
+                        <label><input type="radio" name="q7" value="1"> b) la machine de Charles Babbage</label>
+                        <label><input type="radio" name="q7" value="2"> c) la machine de leibniz</label>
+                        <label><input type="radio" name="q7" value="3"> d) wilhem schickard</label>
+                        <label><input type="radio" name="q7" value="4"> e) Aucune bonne réponse</label>
+                    </div>
+                    <div id="q7-correction" class="correction-message"></div>
+                </li>
+
+                <li class="question-item">
+                    <p><span class="question-number">8.</span> Quelle est la prémiere mathematicienne qui definit pour la première fois leprincipes des itération successifs ;</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q8" value="0"> a) Ada materking</label>
+                        <label><input type="radio" name="q8" value="1"> b) Rachel micky</label>
+                        <label><input type="radio" name="q8" value="2"> c) Elianne patricia</label>
+                        <label><input type="radio" name="q8" value="3"> d) Ada lovelace</label>
+                        <label><input type="radio" name="q8" value="4"> e) Pascaline</label>
+                    </div>
+                    <div id="q8-correction" class="correction-message"></div>
+                </li>
+                <li class="question-item">
+                    <p><span class="question-number">9.</span> Pourquoi dit-on que la machine analytique de charles BABBAGE contenait les concepts de ce que sera l'ordinateur moderne ?</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q9" value="0"> a) Parcequ'elle avait l'unité de calcul</label>
+                        <label><input type="radio" name="q9" value="1"> b) Parcequ'elle avait le processeur</label>
+                        <label><input type="radio" name="q9" value="2"> c) Parcequ'elle avait l'unité de calcul, mémoire et le registre</label>
+                        <label><input type="radio" name="q9" value="3"> d) Parcequ'elle faisait plusieur calcul a la fois</label>
+                        <label><input type="radio" name="q9" value="4"> e) Aucune bonne réponse</label>
+                    </div>
+                    <div id="q9-correction" class="correction-message"></div>
+                </li>
+
+                <li class="question-item">
+                    <p><span class="question-number">10.</span> Qui avait publié le processus logique decomposé en une suite d'opération logique ?</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q10" value="0"> a) Boule</label>
+                        <label><input type="radio" name="q10" value="1"> b) Boole</cite></label>
+                        <label><input type="radio" name="q10" value="2"> c) wilhem schickard</label>
+                        <label><input type="radio" name="q10" value="3"> d) Frère chappe</label>
+                        <label><input type="radio" name="q10" value="4"> e) Aucune bonne réponse</label>
+                    </div>
+                    <div id="q10-correction" class="correction-message"></div>
+                </li>
+
+                <li class="question-item">
+                    <p><span class="question-number">11.</span> Qui avait inventé le télephone et fondé la compagnie Bell telephon company ?</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q11" value="0"> a) Américain Bell</label>
+                        <label><input type="radio" name="q11" value="1"> b) Américain thiagos</label>
+                        <label><input type="radio" name="q11" value="2"> c) Wisnay taylor</label>
+                        <label><input type="radio" name="q11" value="3"> d) Américain Graham Bell</label>
+                        <label><input type="radio" name="q11" value="4"> e) Aucune bonne réponse</label>
+                    </div>
+                    <div id="q11-correction" class="correction-message"></div>
+                </li>
+
+                <li class="question-item">
+                    <p><span class="question-number">12.</span> Quelle machine qui est considrée comme le premier ordinateur ?</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q12" value="0"> a) EDVAC</label>
+                        <label><input type="radio" name="q12" value="1"> b) UNIVAC</label>
+                        <label><input type="radio" name="q12" value="2"> c) ENIAC</label>
+                        <label><input type="radio" name="q12" value="3"> d) PC</label>
+                        <label><input type="radio" name="q12" value="4"> e) Aucune bonne réponse</label>
+                    </div>
+                    <div id="q12-correction" class="correction-message"></div>
+                </li>
+
+                <li class="question-item">
+                    <p><span class="question-number">13.</span> Que signifie ENIAC en anglais</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q13" value="0"> a) Electronic numerical international accomplished computer</label>
+                        <label><input type="radio" name="q13" value="1"> b) Electronic numerical international access commercial</label>
+                        <label><input type="radio" name="q13" value="2"> c) Electronic numerical integrator and computer</label>
+                        <label><input type="radio" name="q13" value="3"> d) Electronic computer and integrator</label>
+                        <label><input type="radio" name="q13" value="4"> e) Aucune bonne réponse</label>
+                    </div>
+                    <div id="q13-correction" class="correction-message"></div>
+                </li>
+
+                <li class="question-item">
+                    <p><span class="question-number">14.</span> Quel est le poids exacte de l'ENIAC ?</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q14" value="0"> a) 30kg</label>
+                        <label><input type="radio" name="q14" value="1"> b) 30tonnes</label>
+                        <label><input type="radio" name="q14" value="2"> c) 245kg</label>
+                        <label><input type="radio" name="q14" value="3"> d) 300tonnes</label>
+                        <label><input type="radio" name="q14" value="4"> e) Aucune bonne réponse</label>
+                    </div>
+                    <div id="q14-correction" class="correction-message"></div>
+                </li>
+                
+                <li class="question-item">
+                    <p><span class="question-number">15.</span> Quelle est la caractéristique principal des superordinateur ?</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q15" value="0"> a) Capacité extreme</label>
+                        <label><input type="radio" name="q15" value="1"> b) Capacité extreme dans l'execution des taches</label>
+                        <label><input type="radio" name="q15" value="2"> c) Capacité de mémoire RAM</label>
+                        <label><input type="radio" name="q15" value="3"> d) Sa performance</label>
+                        <label><input type="radio" name="q15" value="4"> e) Aucune bonne réponse</label>
+                    </div>
+                    <div id="q15-correction" class="correction-message"></div>
+                </li>
+                <li class="question-item">
+                    <p><span class="question-number">16.</span> Quelle est la technologie qui caractérisé la 2éme génération de l'ordinateur</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q16" value="0"> a) Tubes à vide</label>
+                        <label><input type="radio" name="q16" value="1"> b) Transistors</label>
+                        <label><input type="radio" name="q16" value="2"> c) Circuit integré</label>
+                        <label><input type="radio" name="q16" value="3"> d) Microprocesseur</label>
+                        <label><input type="radio" name="q16" value="4"> e) Aucune bonne réponse</label>
+                    </div>
+                    <div id="q16-correction" class="correction-message"></div>
+                </li>
+                <li class="question-item">
+                    <p><span class="question-number">17.</span> Quelle est la technologie qui caractérisé la 5éme génération des ordinateurs !</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q17" value="0"> a) Transistors</label>
+                        <label><input type="radio" name="q17" value="1"> b) Tubes à vide</label>
+                        <label><input type="radio" name="q17" value="2"> c) Intelligence Artificielle</label>
+                        <label><input type="radio" name="q17" value="3"> d) ChatGPT</label>
+                        <label><input type="radio" name="q17" value="4"> e) Aucune bonne réponse</label>
+                    </div>
+                    <div id="q17-correction" class="correction-message"></div>
+                </li>
+                <li class="question-item">
+                    <p><span class="question-number">18.</span> Quelle est la caractéristique principale de macro-ordinateur</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q18" value="0"> a) Capacité de transfert de donnée</label>
+                        <label><input type="radio" name="q18" value="1"> b) Vitesse d'execution</label>
+                        <label><input type="radio" name="q18" value="2"> c) Capacité de stockage des données</label>
+                        <label><input type="radio" name="q18" value="3"> d) Capacité dans l'unité de traitement et de stockage</label>
+                        <label><input type="radio" name="q18" value="4"> e) Deux de ces réponses sont correctes</label>
+                    </div>
+                    <div id="q18-correction" class="correction-message"></div>
+                </li>
+                <li class="question-item">
+                    <p><span class="question-number">19.</span> Quelle est le rôle de l'interface graphique</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q19" value="0"> a) Voir les images et téléchager</label>
+                        <label><input type="radio" name="q19" value="1"> b) Accèder dans le dossier</label>
+                        <label><input type="radio" name="q19" value="2"> c) Visualiser, Accèder dans les données</label>
+                        <label><input type="radio" name="q19" value="3"> d) Accèder dans les dossier et voir de film</label>
+                        <label><input type="radio" name="q19" value="4"> e) Aucune bonne réponse</label>
+                    </div>
+                    <div id="q19-correction" class="correction-message"></div>
+                </li>
+          
+                <li class="question-item">
+                    <p><span class="question-number">20.</span> Quelle est le tout premier langage, mais qui n'avait pas de compilateur ?</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q20" value="0"> a) Auto code</label>
+                        <label><input type="radio" name="q20" value="1"> b) Plankalkul</label>
+                        <label><input type="radio" name="q20" value="2"> c) Fortran</label>
+                        <label><input type="radio" name="q20" value="3"> d) Lisp</label>
+                        <label><input type="radio" name="q20" value="4"> e) Cobol</label>
+                    </div>
+                    <div id="q20-correction" class="correction-message"></div>
+                </li>
+
+                <li class="question-item">
+                    <p><span class="question-number">21.</span> Quel est le premier langage de programmation compilé §</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q21" value="0"> a) Plankalkul</label>
+                        <label><input type="radio" name="q21" value="1"> b) Short Code</label>
+                        <label><input type="radio" name="q21" value="2"> c) Auto Code</label>
+                        <label><input type="radio" name="q21" value="3"> d) Fortran</label>
+                        <label><input type="radio" name="q21" value="4"> e) Pascal</label>
+                    </div>
+                    <div id="q21-correction" class="correction-message"></div>
+                </li>
+
+                <li class="question-item">
+                    <p><span class="question-number">22.</span> Quel est le premier langage de haut niveau mais qui n'a jamais développés ?</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q22" value="0"> a) Assembleur</label>
+                        <label><input type="radio" name="q22" value="1"> b) JAVA</label>
+                        <label><input type="radio" name="q22" value="2"> c) C++</label>
+                        <label><input type="radio" name="q22" value="3"> d) Short code</label>
+                        <label><input type="radio" name="q22" value="4"> e) Fortran</label>
+                    </div>
+                    <div id="q22-correction" class="correction-message"></div>
+                </li>
+
+                <li class="question-item">
+                    <p><span class="question-number">23.</span> Quel est l'inventeur de short code !</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q23" value="0"> a) John MC carthy</label>
+                        <label><input type="radio" name="q23" value="1"> b) Mickael thiagos</label>
+                        <label><input type="radio" name="q23" value="2"> c) John Mauchly</label>
+                        <label><input type="radio" name="q23" value="3"> d) Grace hopper</label>
+                        <label><input type="radio" name="q23" value="4"> e) Aucune bonne réponse</label>
+                    </div>
+                    <div id="q23-correction" class="correction-message"></div>
+                </li>
+                
+                <li class="question-item">
+                    <p><span class="question-number">24.</span> Qui est l'inventeur de l'Auto code ?</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q24" value="0"> a) John Mauchly</label>
+                        <label><input type="radio" name="q24" value="1"> b) John thiagos</label>
+                        <label><input type="radio" name="q24" value="2"> c) Alick Glennie</label>
+                        <label><input type="radio" name="q24" value="3"> d) Wisnay taylor</label>
+                        <label><input type="radio" name="q24" value="4"> e) Corrado bohm</label>
+                    </div>
+                    <div id="q24-correction" class="correction-message"></div>
+                </li>
+                <li class="question-item">
+                    <p><span class="question-number">25.</span> Qui est l'inventeur de langage de programmation C !</p>
+                    <div class="question-options">
+                        <label><input type="radio" name="q25" value="0"> a) Konrad Zuse</label>
+                        <label><input type="radio" name="q25" value="1"> b) Eduard</label>
+                        <label><input type="radio" name="q25" value="2"> c) Dennis Ritchie</label>
+                        <label><input type="radio" name="q25" value="3"> d) Microprocesseur</label>
+                        <label><input type="radio" name="q25" value="4"> e) Aucune bonne réponse</label>
+                    </div>
+                    <div id="q25-correction" class="correction-message"></div>
+                </li>
+            </ol>
+            <button type="submit" class="submit-button">Voir les Résultats</button>
+        </form>
+        
+                <div id="result-container">
+            <p id="score-message"></p>
+        </div>
+    </main>
+
+    <footer class="quiz-footer">
+        <i>&copy; L1 LMD IG</i>
+    </footer>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const quizForm = document.getElementById('quiz-form');
+        const resultContainer = document.getElementById('result-container');
+        const scoreMessage = document.getElementById('score-message');
+        const questionItems = document.querySelectorAll('.question-item');
+
+        const correctAnswersValues = [
+            '3', // Q1: Le mot Ordinateur en anglais signifie : d) Computer
+            '1', // Q2: Que signifie IBM : b) International Business Machine
+            '3', // Q3: Quelles sont les deux opérations que la pascaline affectuée ? d) Addition et Soustraction
+            '3', // Q4: Le terme informatique avait été inventé par ? d) Philipe Dreyfus
+            '0', // Q5: Le terme informatique avait été inventé en quelle année ? a) 1961
+            '0', // Q6: La machine de wilhem schickard faisait : a) Addition - Soustraction - Multiplication
+            '2', // Q7: Quelle est la machine qui contenait les concepts de ce sera l'ordinateur moderne ! : b) la machine de Charles Babbage 
+            '3', // Q8: Première mathématicienne qui définit le principe des itérations successives : d) Ada Lovelace
+            '2', // Q9: Pourquoi dit-on que la machine analytique de charles BABBAGE contenait les concepts de ce que sera l'ordinateur moderne ? c) Parcequ'elle avait l'unité de calcul, mémoire et le registre
+            '1', // Q10: Qui avait publié le processus logique décomposé en une suite d'opération logique ? b) Boole (George Boole, algèbre de Boole)
+            '3', // Q11: Qui avait inventé le téléphone et fondé la compagnie Bell telephon company ? d) Américain Graham Bell
+            '2', // Q12: Quelle machine qui est considérée comme le premier ordinateur ? c) ENIAC
+            '2', // Q13: Que signifie ENIAC en anglais :  c) Electronic Numerical integrator and computer
+            '1', // Q14: Quel est le poids exact de l'ENIAC ? b) 30tonnes (environ 27 tonnes)
+            '3', // Q15: Quelle est la caractéristique principale des superordinateur ? d) Sa performance (Capacité de calcul brute, très haute performance)
+            '1', // Q16: Quelle est la technologie qui caractérisé la 2éme génération de l'ordinateur : b) Transistors
+            '2', // Q17: Quelle est la technologie qui caractérisé la 5éme génération des ordinateurs ! c) Intelligence Artificielle (ou l'intégration à très grande échelle/VLSI, mais l'IA est le concept de la 5e gen)
+            '3', // Q18: Quelle est la caractéristique principale de macro-ordinateur : d) Capacité dans l'unité de traitement et de stockage (Unité de traitement : performance, stockage : grande capacité pour beaucoup d'utilisateurs)
+            '2', // Q19: Quelle est le rôle de l'interface graphique : c) Visualiser, Accèder dans les données (Interface graphique utilisateur ou GUI permet l'accès visuel aux données et fonctions)
+            '1', // Q20: Quelle est le tout premier langage, mais qui n'avait pas de compilateur ? b) Plankalkul (par Konrad Zuse, conçu avant d'être implémenté)
+            '3', // Q21: Quel est le premier langage de programmation compilé ? d) Fortran
+            '3', // Q22: Quel est le premier langage de haut niveau mais qui n'a jamais développés ? d) Short code (Short Code est considéré comme le premier langage de haut niveau à avoir été implémenté en 1949/1950. Plankalkül est le premier conçu, mais jamais implémenté à l'époque)
+            '2', // Q23: Quel est l'inventeur de short code ! c) John Mauchly (création par Mauchly, implémentation par William F. Schmitt)
+            '2', // Q24: Qui est l'inventeur de l'Auto code ? c) Alick Glennie
+            '2', // Q25: Qui est l'inventeur de langage de programmation C ! c) Dennis Ritchie
+        ];
+        
+        // TEXTES DE RÉPONSES CORRIGÉS pour le thème actuel
+        const correctAnswersTexts = [
+            'La bonne réponse est : d) Computer',
+            'La bonne réponse est : b) International Business Machines (l\'orthographe correcte de Business)',
+            'La bonne réponse est : d) Addition et Soustraction',
+            'La bonne réponse est : d) Philipe Dreyfus',
+            'La bonne réponse est : a) 1961',
+            'La bonne réponse est : a) Addition - Soustraction - Multiplication',
+            'La bonne réponse est : b) Machine Analytique de Charles Babbage  ',
+            'La bonne réponse est : d) Ada Lovelace',
+            'La bonne réponse est : c) Parce qu\'elle avait l\'unité de calcul, mémoire et le registre (les bases de l\'architecture moderne)',
+            'La bonne réponse est : b) Boole (pour l\'algèbre de Boole)',
+            'La bonne réponse est : d) Américain Graham Bell',
+            'La bonne réponse est : c) ENIAC',
+            'La bonne réponse est : c) ENIAC signifie Electronic Numerical Integrator And Computer',
+            'La bonne réponse est : b) 30 tonnes ',
+            'La bonne réponse est : d) Sa performance (Capacité de calcul extrême)',
+            'La bonne réponse est : b) Transistors',
+            'La bonne réponse est : c) Intelligence Artificielle',
+            'La bonne réponse est : d) Capacité dans l\'unité de traitement et de stockage',
+            'La bonne réponse est : c) Visualiser, Accéder dans les données (Interface Homme-Machine)',
+            'La bonne réponse est : b) Plankalkul (par Konrad Zuse, premier langage conçu mais non compilé/développé à l\'époque)',
+            'La bonne réponse est : d) Fortran (développé par IBM)',
+            'La bonne réponse est : d) Short code (premier langage de haut niveau implémenté à l\'époque. )',
+            'La bonne réponse est : c) John Mauchly',
+            'La bonne réponse est : c) Alick Glennie',
+            'La bonne réponse est : c) Dennis Ritchie',
+        ];
+        
+        const totalQuestions = 25; // Mise à jour du nombre total de questions
+
+        quizForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            let score = 0;
+            let allAnswered = true;
+
+            // Retirer les marquages et messages de correction précédents
+            resetCorrection();
+
+            // Boucle de vérification mise à jour pour les 28 questions
+            for (let i = 1; i <= totalQuestions; i++) {
+                const questionIndex = i - 1; // Index dans les tableaux (0 à 27)
+                const questionName = 'q' + i;
+                const correctAnswerValue = correctAnswersValues[questionIndex];
+                
+                // Récupérer l'input sélectionné pour marquer et vérifier
+                const selectedInput = quizForm.querySelector(`input[name="${questionName}"]:checked`);
+                const selectedOption = selectedInput ? selectedInput.value : null;
+
+                const questionItem = questionItems[questionIndex]; // L'élément <li> de la question
+
+                // 1. Vérifier si la question a été répondue
+                if (!selectedOption) {
+                    allAnswered = false;
+                }
+
+                // 2. Traiter la réponse (pour le score, l'affichage et la correction)
+                if (questionItem) {
+                    const isCorrect = selectedOption === correctAnswerValue;
+                    
+                    if (isCorrect) {
+                        score++;
+                    }
+
+                    const correctInput = questionItem.querySelector(`input[value="${correctAnswerValue}"][name="${questionName}"]`);
+                    if (correctInput) {
+                         correctInput.closest('label').classList.add('correct-answer');
+                    }
+
+                    if (selectedInput && !isCorrect) {
+                        selectedInput.closest('label').classList.add('incorrect-answer');
+                    }
+
+                    let correctionDiv = document.getElementById(`q${i}-correction`);
+                    if (!correctionDiv) {
+                        correctionDiv = document.createElement('div');
+                        correctionDiv.id = `q${i}-correction`;
+                        correctionDiv.classList.add('correction-message');
+                        questionItem.appendChild(correctionDiv);
+                    }
+                }
+            } // Fin de la boucle for
+
+            // 4. Afficher le score et/ou les messages
+            if (allAnswered) {
+                const percentage = (score / totalQuestions) * 100;
+                
+                let message = `Bravo, Champion du Quiz ! Vous avez obtenu un score de ${score} sur ${totalQuestions} (${percentage.toFixed(0)}%).`;
+                
+                if (score === totalQuestions) {
+                    message = `Félicitations ! Vous êtes un véritable expert en histoire de l\'informatique avec ${score} sur ${totalQuestions} (${percentage.toFixed(0)}%).`;
+                } else if (percentage < 50) {
+                    message = `Vous avez obtenu ${score} sur ${totalQuestions} (${percentage.toFixed(0)}%). Veuillez consulter la correction ci-dessous pour revoir vos erreurs. Le savoir c'est le pouvoir !`;
+                }
+
+                scoreMessage.textContent = message;
+                resultContainer.style.display = 'block';
+
+                // *** AFFICHAGE DES MESSAGES DE CORRECTION SOUS LES QUESTIONS ***
+                for (let i = 1; i <= totalQuestions; i++) {
+                    const correctionDiv = document.getElementById(`q${i}-correction`);
+                    if (correctionDiv && correctAnswersTexts[i-1]) {
+                        correctionDiv.innerHTML = '<strong>Correction : </strong>' + correctAnswersTexts[i - 1];
+                        correctionDiv.style.display = 'block';
+                    }
+                }
+
+
+            } else {
+                // Si toutes les questions n'ont PAS été répondues
+                alert("Attention ! Pour voir les résultats finaux et la correction, vous devez répondre à TOUTES les questions. Veuillez compléter vos réponses.");
+                resultContainer.style.display = 'none'; 
+                resetCorrection();
+            }
+        });
+
+        // Fonction pour nettoyer les marquages et messages de correction
+        function resetCorrection() {
+            // Nettoyer les classes des labels (vert/rouge)
+            document.querySelectorAll('.correct-answer, .incorrect-answer').forEach(el => {
+                el.classList.remove('correct-answer', 'incorrect-answer');
+            });
+
+            // Cacher les messages de correction
+            document.querySelectorAll('.correction-message').forEach(el => {
+                el.style.display = 'none';
+            });
+        }
+    });
+</script>
+</body>
+</html>
