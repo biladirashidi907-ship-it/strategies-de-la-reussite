@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, maximum-scale=1.0, viewport-fit=cover">
+    <title>ESTRA LINK • Aide & Support</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#0284c7">
+    <style>
+        :root, [data-theme="light"] {
+            --cyan: #0284c7; --bg: #f8fafc; --card-bg: rgba(255,255,255,0.95);
+            --border: rgba(0,0,0,0.1); --text: #0f172a; --text-secondary: #475569;
+            --purple: #7c3aed; --success: #059669; --danger: #dc2626; --warning: #d97706;
+            --input-bg: #f1f5f9; --modal-bg: #ffffff; --toast-bg: #1e293b;
+            --hover-bg: rgba(2,132,199,0.05); --active-bg: rgba(2,132,199,0.1);
+            --gradient-1: linear-gradient(135deg, #0284c7, #7c3aed);
+            --shadow: 0 4px 20px rgba(0,0,0,0.08);
+            --transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+        }
+        [data-theme="dark"] {
+            --cyan: #38bdf8; --bg: #0f172a; --card-bg: rgba(30,41,59,0.6);
+            --border: rgba(56,189,248,0.2); --text: #e2e8f0; --text-secondary: #94a3b8;
+            --purple: #a78bfa; --success: #10b981; --danger: #ef4444; --warning: #f59e0b;
+            --input-bg: rgba(30,41,59,0.8); --modal-bg: #1e293b; --toast-bg: #1e293b;
+            --hover-bg: rgba(56,189,248,0.05); --active-bg: rgba(56,189,248,0.1);
+            --gradient-1: linear-gradient(135deg, #38bdf8, #a78bfa);
+            --shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{
+            font-family:'Segoe UI',system-ui,sans-serif;
+            background:var(--bg);
+            background-image:radial-gradient(at 0% 0%,rgba(56,189,248,0.08) 0px,transparent 50%),radial-gradient(at 100% 100%,rgba(56,189,248,0.08) 0px,transparent 50%);
+            min-height:100vh;color:var(--text);padding:16px;
+            transition:background 0.4s,color 0.4s;
+        }
+        ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--cyan);border-radius:10px}
+
+        .container{max-width:900px;margin:0 auto}
+
+        /* Header */
+        .help-header{
+            background:#38bdf8;
+            text-align:center;padding:20px 10px 20px;
+            
+            background:;border-radius:4px;
+            margin-bottom:24px;color:white;position:relative;overflow:hidden;
+        }
+        .help-header::before{
+            content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;
+            background:radial-gradient(circle,rgba(255,255,255,0.1) 0%,transparent 70%);
+            animation:rotate 20s linear infinite;
+        }
+        @keyframes rotate{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+        .help-header h1{font-size:2rem;margin-bottom:8px;position:relative}
+        .help-header p{font-size:1rem;opacity:0.9;position:relative}
+
+        /* Navigation rapide */
+        .quick-nav{
+            display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px;
+            justify-content:center;
+        }
+        .quick-nav a{
+            padding:10px 18px;background:var(--card-bg);border:1px solid var(--border);
+            border-radius:30px;color:var(--text-secondary);text-decoration:none;
+            font-size:0.85rem;font-weight:600;transition:var(--transition);
+            display:flex;align-items:center;gap:6px;
+        }
+        .quick-nav a:hover{background:var(--active-bg);color:var(--cyan);border-color:var(--cyan)}
+
+        /* Barre de recherche */
+        .search-help{
+            margin-bottom:24px;
+        }
+        .search-help input{
+            width:100%;padding:14px 20px;background:var(--card-bg);border:1px solid var(--border);
+            border-radius:50px;color:var(--text);font-size:0.95rem;outline:none;
+            font-family:inherit;transition:var(--transition);
+        }
+        .search-help input:focus{border-color:var(--cyan);box-shadow:0 0 0 3px rgba(56,189,248,0.15)}
+
+        /* Sections */
+        .help-section{
+            background:var(--gradient) ;border:1px solid var(--border);border-radius:20px;
+            margin-bottom:20px;overflow:hidden;transition:var(--transition);
+        }
+        .help-section-header{
+            padding:18px 24px;cursor:pointer;display:flex;align-items:center;
+            justify-content:space-between;font-weight:700;font-size:1.05rem;
+            transition:var(--transition);user-select:none;
+        }
+        .help-section-header:hover{background:var(--hover-bg)}
+        .help-section-header i{transition:transform 0.3s;color:var(--cyan)}
+        .help-section.open .help-section-header i{transform:rotate(180deg)}
+        .help-section-content{
+            max-height:0;overflow:hidden;transition:max-height 0.4s ease,padding 0.3s;
+        }
+        .help-section.open .help-section-content{
+            max-height:3000px;padding:0 24px 24px;
+        }
+
+        /* Étapes */
+        .step-list{counter-reset:step}
+        .step-item{
+            display:flex;gap:16px;padding:16px 0;border-bottom:1px solid var(--border);
+            counter-increment:step;align-items:flex-start;
+        }
+        .step-item:last-child{border-bottom:none}
+        .step-number{
+            width:40px;height:40px;min-width:40px;background:#38bdf8;
+            border-radius:50%;display:flex;align-items:center;justify-content:center;
+            color:white;font-weight:800;font-size:1rem;box-shadow:0 4px 12px rgba(56,189,248,0.3);
+        }
+        .step-content h4{font-size:0.95rem;margin-bottom:4px;color:var(--text)}
+        .step-content p{font-size:0.8rem;color:var(--text-secondary);line-height:1.5}
+
+        /* Alertes */
+        .alert{
+            padding:14px 18px;border-radius:14px;margin:12px 0;font-size:0.85rem;
+            display:flex;align-items:flex-start;gap:10px;line-height:1.5;
+        }
+        .alert-info{background:rgba(56,189,248,0.1);border:1px solid rgba(56,189,248,0.3);color:var(--cyan)}
+        .alert-success{background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.3);color:var(--success)}
+        .alert-warning{background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.3);color:var(--warning)}
+        .alert-danger{background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);color:var(--danger)}
+
+        /* FAQ */
+        .faq-item{border-bottom:1px solid var(--border);padding:14px 0}
+        .faq-item:last-child{border-bottom:none}
+        .faq-question{
+            font-weight:600;font-size:0.9rem;cursor:pointer;display:flex;
+            align-items:center;justify-content:space-between;color:var(--text);
+            transition:var(--transition);padding:8px 0;
+        }
+        .faq-question:hover{color:var(--cyan)}
+        .faq-answer{max-height:0;overflow:hidden;transition:max-height 0.3s;color:var(--text-secondary);font-size:0.8rem;line-height:1.6}
+        .faq-item.open .faq-answer{max-height:500px;padding-top:8px}
+        .faq-item.open .faq-question i{transform:rotate(180deg);color:var(--cyan)}
+
+        /* Vidéo tutoriel */
+        .video-tutorial{
+            background:var(--card-bg);border:1px solid var(--border);border-radius:20px;
+            padding:24px;text-align:center;margin-bottom:20px;
+        }
+        .video-placeholder{
+            width:100%;height:200px;background:var(--input-bg);border-radius:16px;
+            display:flex;align-items:center;justify-content:center;
+            border:2px dashed var(--border);margin:16px 0;cursor:pointer;
+            transition:var(--transition);flex-direction:column;gap:8px;
+        }
+        .video-placeholder:hover{border-color:var(--cyan);background:var(--active-bg)}
+        .video-placeholder i{font-size:3rem;color:var(--cyan)}
+
+        /* Boutons */
+        .btn{
+            padding:12px 24px;border-radius:30px;border:none;font-weight:600;
+            font-size:0.9rem;cursor:pointer;transition:var(--transition);
+            display:inline-flex;align-items:center;gap:8px;font-family:inherit;
+            text-decoration:none;
+        }
+        .btn-primary{background:var(--cyan);color:#fff}
+        .btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(56,189,248,0.3)}
+        .btn-outline{background:transparent;border:1px solid var(--border);color:var(--text-secondary)}
+        .btn-outline:hover{border-color:var(--cyan);color:var(--cyan);background:var(--active-bg)}
+
+        /* Support */
+        .support-card{
+            background:var(--gradient-1);border-radius:20px;padding:24px;
+            color:white;text-align:center;margin-bottom:20px;
+        }
+        .support-card h3{margin-bottom:8px}
+        .support-card p{margin-bottom:16px;opacity:0.9;font-size:0.85rem}
+
+        /* Retour */
+        .back-btn{
+            display:inline-flex;align-items:center;gap:8px;color:var(--text-secondary);
+            text-decoration:none;font-size:0.85rem;margin-bottom:16px;transition:var(--transition);
+        }
+        .back-btn:hover{color:var(--cyan)}
+
+        .theme-btn{
+            position:fixed;top:16px;right:16px;z-index:50;background:var(--input-bg);
+            border:1px solid var(--border);width:40px;height:40px;border-radius:50%;
+            cursor:pointer;font-size:1.2rem;display:flex;align-items:center;
+            justify-content:center;color:var(--text-secondary);transition:var(--transition);
+        }
+        .theme-btn:hover{background:var(--cyan);color:#fff;border-color:transparent}
+
+        .toast-custom{
+            position:fixed;bottom:24px;left:50%;transform:translateX(-50%);
+            background:var(--toast-bg);color:#fff;padding:10px 24px;z-index:1100;
+            font-size:0.8rem;border-radius:25px;border:1px solid var(--cyan);
+            white-space:nowrap;opacity:0;visibility:hidden;transition:opacity 0.3s,visibility 0.3s;
+        }
+        .toast-custom.show{opacity:1;visibility:visible}
+
+        footer{text-align:center;padding:24px;color:var(--text-secondary);font-size:0.75rem}
+
+        @media(max-width:768px){
+            .help-header h1{font-size:1.5rem}
+            .quick-nav a{font-size:0.75rem;padding:8px 14px}
+        }
+    </style>
+</head>
+<body>
+
+    
+
+    <div class="toast-custom" id="toastMsg"></div>
+
+    <div class="container">
+        <!-- Retour -->
+        <a href="login.html" class="back-btn"><i class="fas fa-arrow-left"></i> Retour à la connexion</a>
+
+        <!-- Header -->
+        <div class="help-header">
+            <h1><i class="fas fa-life-ring"></i> Centre d'aide</h1>
+            <p>Apprenez à créer votre compte et utiliser ESTRA LINK facilement</p>
+        </div>
+
+        <!-- Navigation rapide -->
+        <div class="quick-nav">
+            <a href="#create-account"><i class="fas fa-user-plus"></i> Créer un compte</a>
+            <a href="#video"><i class="fas fa-play-circle"></i> Tutoriel vidéo</a>
+            <a href="#faq"><i class="fas fa-question-circle"></i> FAQ</a>
+            <a href="#problems"><i class="fas fa-exclamation-triangle"></i> Problèmes</a>
+            <a href="#support"><i class="fas fa-headset"></i> Support</a>
+        </div>
+
+        <!-- Recherche -->
+        <div class="search-help">
+            <input type="text" id="helpSearch" placeholder="🔍 Rechercher dans l'aide..." oninput="filterHelp()">
+        </div>
+
+        <!-- SECTION 1 : Créer un compte -->
+        <div class="help-section open" id="create-account">
+            <div class="help-section-header" onclick="toggleSection(this)">
+                <span><i class="fas fa-user-plus" style="color:var(--cyan);margin-right:10px"></i> Comment créer un compte étape par étape</span>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="help-section-content">
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle"></i>
+                    <span>Créer un compte sur ESTRA LINK est <strong>gratuit</strong> et prend moins de <strong>2 minutes</strong>. Suivez ces étapes simples :</span>
+                </div>
+
+                <div class="step-list">
+                    <div class="step-item">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h4>Accédez à la page d'inscription</h4>
+                            <p>Ouvrez l'application ESTRA LINK. Sur la page de connexion, cliquez sur l'onglet <strong>"Inscription"</strong> en haut du formulaire.</p>
+                        </div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h4>Remplissez votre nom complet</h4>
+                            <p>Entrez votre <strong>vrai nom</strong> (prénom et nom). Minimum 3 caractères. Cela permettra à vos amis de vous reconnaître facilement.</p>
+                        </div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h4>Choisissez un nom d'utilisateur</h4>
+                            <p>Créez un <strong>pseudo unique</strong> (minimum 3 caractères). C'est votre identité publique sur ESTRA LINK. Exemple : <em>JeanDu93</em></p>
+                        </div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            <h4>Entrez votre adresse email</h4>
+                            <p>Utilisez une adresse email <strong>valide</strong> (ex: votrenom@gmail.com). C'est important pour récupérer votre mot de passe si vous l'oubliez.</p>
+                        </div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-number">5</div>
+                        <div class="step-content">
+                            <h4>Créez un mot de passe sécurisé</h4>
+                            <p>Choisissez un mot de passe d'au moins <strong>6 caractères</strong>. Pour plus de sécurité, mélangez lettres, chiffres et symboles. La barre de force vous indique si votre mot de passe est fort.</p>
+                            <div class="alert alert-warning" style="margin-top:8px">
+                                <i class="fas fa-lightbulb"></i>
+                                <span><strong>Astuce :</strong> Utilisez une phrase facile à retenir comme "MonChienNoir2026!"</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-number">6</div>
+                        <div class="step-content">
+                            <h4>Confirmez votre mot de passe</h4>
+                            <p>Retapez <strong>exactement le même mot de passe</strong> dans le champ "Confirmation". Les deux doivent être identiques.</p>
+                        </div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-number">7</div>
+                        <div class="step-content">
+                            <h4>Acceptez les conditions</h4>
+                            <p>Cochez la case <strong>"J'accepte les conditions d'utilisation"</strong>. Cela confirme que vous respectez les règles de la plateforme.</p>
+                        </div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-number">8</div>
+                        <div class="step-content">
+                            <h4>Cliquez sur "Créer mon compte"</h4>
+                            <p>Appuyez sur le bouton bleu <strong>"Créer mon compte"</strong>. Si tout est correct, vous serez automatiquement connecté ! 🎉</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="alert alert-success">
+                    <i class="fas fa-check-circle"></i>
+                    <span><strong>Félicitations !</strong> Votre compte est créé. Vous pouvez maintenant explorer ESTRA LINK, publier, discuter et rejoindre des groupes.</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 2 : Tutoriel vidéo -->
+        <div class="help-section" id="video">
+            <div class="help-section-header" onclick="toggleSection(this)">
+                <span><i class="fas fa-play-circle" style="color:var(--cyan);margin-right:10px"></i> Tutoriel vidéo</span>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="help-section-content">
+                <div class="video-tutorial">
+                    <h4>📹 Vidéo : Comment créer un compte en 2 minutes</h4>
+                    <div class="video-placeholder" onclick="playDemoVideo()">
+                        <i class="fas fa-play-circle"></i>
+                        <span>Cliquez pour lancer la démonstration</span>
+                        <small style="color:var(--text-secondary)">Durée : 1 min 45</small>
+                    </div>
+                    <p style="font-size:0.8rem;color:var(--text-secondary)">Cette vidéo vous montre chaque étape en détail.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 3 : FAQ -->
+        <div class="help-section" id="faq">
+            <div class="help-section-header" onclick="toggleSection(this)">
+                <span><i class="fas fa-question-circle" style="color:var(--cyan);margin-right:10px"></i> Questions fréquentes (FAQ)</span>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="help-section-content">
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <span>🔐 Que faire si j'ai oublié mon mot de passe ?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Sur la page de connexion, cliquez sur <strong>"Mot de passe oublié ?"</strong>. Entrez votre adresse email, recevez un code de vérification, puis créez un nouveau mot de passe.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <span>📧 Je n'ai pas reçu le code de vérification</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Vérifiez d'abord vos <strong>spams</strong> ou courriers indésirables. Assurez-vous d'avoir entré la bonne adresse email. Cliquez sur <strong>"Renvoyer le code"</strong> pour recevoir un nouveau code.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <span>👤 Puis-je changer mon nom d'utilisateur plus tard ?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Oui ! Allez dans <strong>Paramètres</strong> depuis le menu latéral, puis modifiez votre profil. Le changement de pseudo est possible une fois par mois.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <span>🛡️ Mes données sont-elles en sécurité ?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Absolument. Toutes les données sont <strong>cryptées</strong> et protégées. Nous ne partageons jamais vos informations personnelles avec des tiers.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <span>🌐 Puis-je utiliser ESTRA LINK sans connexion internet ?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Certaines fonctionnalités de base sont disponibles en mode hors-ligne grâce à la PWA. Vous pouvez consulter vos messages et posts déjà chargés.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <span>📱 L'application est-elle disponible sur mobile ?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Oui ! ESTRA LINK est une <strong>PWA (Progressive Web App)</strong>. Vous pouvez l'installer sur votre écran d'accueil depuis Chrome ou Safari en cliquant sur "Installer l'application".</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <span>❌ J'ai un message d'erreur "Email déjà utilisé"</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Cela signifie qu'un compte existe déjà avec cette adresse email. Essayez de vous <strong>connecter</strong> avec cet email, ou utilisez l'option "Mot de passe oublié" pour réinitialiser votre mot de passe.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <span>🔑 Comment créer un mot de passe fort ?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Un bon mot de passe contient : <strong>au moins 8 caractères</strong>, une majuscule, un chiffre et un symbole. Exemple : <em>ESTRA2026!Link</em>. La barre de force vous guide en temps réel.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 4 : Problèmes courants -->
+        <div class="help-section" id="problems">
+            <div class="help-section-header" onclick="toggleSection(this)">
+                <span><i class="fas fa-exclamation-triangle" style="color:var(--warning);margin-right:10px"></i> Problèmes courants et solutions</span>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="help-section-content">
+                <div class="alert alert-danger">
+                    <i class="fas fa-times-circle"></i>
+                    <span><strong>Problème :</strong> Le bouton "Créer mon compte" ne fonctionne pas</span>
+                </div>
+                <p style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:16px">
+                    ✅ <strong>Solution :</strong> Vérifiez que tous les champs obligatoires sont remplis et que les mots de passe correspondent. La case des conditions doit être cochée.
+                </p>
+
+                <div class="alert alert-danger">
+                    <i class="fas fa-times-circle"></i>
+                    <span><strong>Problème :</strong> "Nom d'utilisateur déjà pris"</span>
+                </div>
+                <p style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:16px">
+                    ✅ <strong>Solution :</strong> Choisissez un autre pseudo. Ajoutez des chiffres ou un underscore. Exemple : <em>Jean_2026</em> au lieu de <em>Jean</em>.
+                </p>
+
+                <div class="alert alert-danger">
+                    <i class="fas fa-times-circle"></i>
+                    <span><strong>Problème :</strong> L'application ne charge pas</span>
+                </div>
+                <p style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:16px">
+                    ✅ <strong>Solution :</strong> Vérifiez votre connexion internet. Actualisez la page. Si le problème persiste, videz le cache de votre navigateur.
+                </p>
+
+                
+            </div>
+        </div>
+
+
+
+        <!-- Footer -->
+        <footer>
+            <p>© 2026 ESTRA Link • <a href="privacy.html" style="color:var(--cyan)">Confidentialité</a> • <a href="terms.html" style="color:var(--cyan)">Conditions</a></p>
+        </footer>
+    </div>
+
+<script>
+    // Thème
+    function toggleTheme(){
+        const cur=document.documentElement.getAttribute('data-theme')||'light';
+        const next=cur==='light'?'dark':'light';
+        document.documentElement.setAttribute('data-theme',next);
+        localStorage.setItem('estra_theme',next);
+        const icon=document.querySelector('#themeToggleBtn i');
+        if(next==='dark'){icon.classList.replace('fa-moon','fa-sun');}
+        else{icon.classList.replace('fa-sun','fa-moon');}
+    }
+
+    function initTheme(){
+        const saved=localStorage.getItem('estra_theme')||'light';
+        document.documentElement.setAttribute('data-theme',saved);
+        const icon=document.querySelector('#themeToggleBtn i');
+        if(saved==='dark'){icon.classList.replace('fa-moon','fa-sun');}
+    }
+
+    // Sections pliables
+    function toggleSection(header){
+        const section=header.parentElement;
+        section.classList.toggle('open');
+    }
+
+    // FAQ
+    function toggleFaq(question){
+        const item=question.parentElement;
+        item.classList.toggle('open');
+    }
+
+    // Recherche
+    function filterHelp(){
+        const query=document.getElementById('helpSearch').value.toLowerCase();
+        const sections=document.querySelectorAll('.help-section');
+        sections.forEach(section=>{
+            const text=section.textContent.toLowerCase();
+            if(query===''||text.includes(query)){
+                section.style.display='block';
+                if(query!=='')section.classList.add('open');
+            }else{
+                section.style.display='none';
+            }
+        });
+
+        // Aussi chercher dans les FAQ
+        const faqItems=document.querySelectorAll('.faq-item');
+        faqItems.forEach(item=>{
+            const text=item.textContent.toLowerCase();
+            if(query!==''&&text.includes(query)){
+                item.classList.add('open');
+                item.closest('.help-section').classList.add('open');
+                item.closest('.help-section').style.display='block';
+            }
+        });
+    }
+
+    // Toast
+    function showToast(msg,isErr=false){
+        const t=document.getElementById('toastMsg');
+        t.textContent=msg;
+        t.style.borderColor=isErr?'#ef4444':'var(--cyan)';
+        t.classList.add('show');
+        setTimeout(()=>t.classList.remove('show'),3000);
+    }
+
+    // Vidéo démo
+    function playDemoVideo(){
+        showToast('🎬 Lancement de la démonstration...');
+        // Simulation : ouvre une animation ou un tutoriel
+        alert('📹 TUTORIEL DÉMO\n\n1. Ouvrez la page de connexion\n2. Cliquez sur "Inscription"\n3. Remplissez le formulaire\n4. Validez\n\nC\'est tout ! 🎉');
+    }
+
+    // Init
+    document.addEventListener('DOMContentLoaded',()=>{
+        initTheme();
+
+        // Ouvrir la première section par défaut
+        const firstSection=document.querySelector('.help-section');
+        if(firstSection)firstSection.classList.add('open');
+
+        // Gérer le hash dans l'URL pour navigation directe
+        const hash=window.location.hash;
+        if(hash){
+            const target=document.querySelector(hash);
+            if(target){
+                target.scrollIntoView({behavior:'smooth'});
+                if(target.classList.contains('help-section')){
+                    target.classList.add('open');
+                }
+            }
+        }
+    });
+</script>
+</body>
+</html>

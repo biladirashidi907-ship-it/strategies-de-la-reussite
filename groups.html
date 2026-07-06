@@ -1,0 +1,1344 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title data-i18n="page_title">ESTRA LINK | Suggestions & Groupes</title>
+    
+    <!-- SEO & Social Media Open Graph -->
+    <meta property="og:title" content="ESTRA LINK | Suggestions & Groupes">
+    <meta property="og:description" content="Découvrez des suggestions de groupes d'étude, de travail et de discussion sur ESTRA LINK. Partagez vos connaissances et développez votre réseau.">
+    <meta property="og:image" content="https://ui-avatars.com/api/?background=38bdf8&color=fff&name=ESTRA&size=512">
+    <meta property="og:type" content="website">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <!-- PWA -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#38bdf8">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="ESTRA LINK">
+    <link rel="apple-touch-icon" href="https://ui-avatars.com/api/?background=38bdf8&color=fff&name=E&size=152">
+    <style>
+       :root {
+    /* Couleurs principales du thème clair */
+    --estra-cyan: #38bdf8;
+    --estra-bg-dark: #f8fafc;
+    --estra-card-bg: rgba(255, 255, 255, 0.95);
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --estra-border: rgba(0, 0, 0, 0.1);
+    --estra-purple: #a78bfa;
+    --estra-success: #10b981;
+    --estra-danger: #ef4444;
+    --estra-warning: #f59e0b;
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+        }
+
+        [data-theme="light"] {
+            --estra-bg-dark: #f8fafc;
+            --estra-card-bg: rgba(255,255,255,0.95);
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --estra-border: rgba(0,0,0,0.1);
+        }
+
+        /* ============ BOUTON ECO DATA ============ */
+        .btn-eco {
+            background: rgba(16, 185, 129, 0.15);
+            border: 1px solid rgba(16, 185, 129, 0.4);
+            color: var(--estra-success);
+            padding: 8px 16px;
+            border-radius: 25px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: var(--transition);
+            font-family: inherit;
+            white-space: nowrap;
+        }
+        .btn-eco:hover {
+            background: rgba(16, 185, 129, 0.25);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+        }
+        .btn-eco.active {
+            background: var(--estra-success);
+            color: #fff;
+            border-color: transparent;
+            animation: ecoPulse 2s infinite;
+        }
+        @keyframes ecoPulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
+            50% { box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
+        }
+        [data-theme="light"] .btn-eco {
+            background: rgba(5, 150, 105, 0.1);
+            border-color: rgba(5, 150, 105, 0.3);
+            color: #059669;
+        }
+        [data-theme="light"] .btn-eco.active {
+            background: #059669;
+            color: #fff;
+        }
+
+        /* ============ THEME CLAIR ============ */
+        [data-theme="light"] .sidebar { background: #ffffff; border-right: 1px solid rgba(0,0,0,0.1); }
+        [data-theme="light"] .sidebar .profile-section { border-bottom-color: rgba(0,0,0,0.1); }
+        [data-theme="light"] .sidebar .sidebar-link { color: #475569; }
+        [data-theme="light"] .sidebar .sidebar-link:hover, [data-theme="light"] .sidebar .sidebar-link.active { background: rgba(2,132,199,0.08); color: #0284c7; }
+        [data-theme="light"] .sidebar .profile-stats span { color: #475569; }
+        [data-theme="light"] .sidebar h3 { color: #0f172a !important; }
+        [data-theme="light"] .navbar { background: rgba(255,255,255,0.9); border-bottom-color: rgba(0,0,0,0.1); }
+        [data-theme="light"] .main-content { background: rgba(255,255,255,0.95); border-color: rgba(0,0,0,0.08); }
+        [data-theme="light"] .search-input { background: #f1f5f9; border-color: rgba(0,0,0,0.1); color: #0f172a; }
+        [data-theme="light"] .filter-btn { background: #f1f5f9; color: #475569; }
+        [data-theme="light"] .filter-btn.active { background: #0284c7; color: #fff; }
+        [data-theme="light"] .group-card { border-bottom-color: rgba(0,0,0,0.1); }
+        [data-theme="light"] .group-info h3 { color: #0f172a; }
+        [data-theme="light"] .modal-content { background: #ffffff; border-color: rgba(0,0,0,0.1); }
+        [data-theme="light"] .bottom-nav { background: rgba(255,255,255,0.95); border-top-color: rgba(0,0,0,0.1); }
+        [data-theme="light"] .right-panel { background: rgba(255,255,255,0.95); border-left-color: rgba(0,0,0,0.1); }
+        [data-theme="light"] .group-detail-info h2 { color: #0f172a; }
+        [data-theme="light"] .post-card { border-bottom-color: rgba(0,0,0,0.1); }
+        [data-theme="light"] .post-name, [data-theme="light"] .post-text { color: #0f172a; }
+        [data-theme="light"] .comment-bubble { background: #f1f5f9; }
+        [data-theme="light"] .comment-author { color: #0f172a; }
+        [data-theme="light"] .comment-input { background: #f1f5f9; color: #0f172a; border-color: rgba(0,0,0,0.1); }
+        [data-theme="light"] .create-post-input { background: #f1f5f9; border-color: rgba(0,0,0,0.1); color: #475569; }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--estra-bg-dark);
+            background-image: radial-gradient(at 0% 0%, rgba(56, 189, 248, 0.08) 0px, transparent 50%), radial-gradient(at 100% 100%, rgba(56, 189, 248, 0.08) 0px, transparent 50%);
+            color: var(--text-primary);
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            padding-bottom: 80px; min-height: 100vh; overflow-x: hidden;
+        }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #1e293b; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: var(--estra-cyan); border-radius: 10px; }
+
+        .offline-banner { position: fixed; top: 0; left: 0; right: 0; background: #f59e0b; color: #000; text-align: center; padding: 6px; z-index: 9999; font-size: 0.8rem; font-weight: 600; display: none; }
+
+        .sidebar-overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(4px); z-index: 1050; opacity: 0; visibility: hidden; transition: var(--transition); }
+        .sidebar-overlay.active { opacity: 1; visibility: visible; }
+
+        .sidebar { position: fixed; top: 0; left: -280px; width: 220px; height: 100vh; background: #0f172a; border-right: 1px solid rgba(56, 189, 248, 0.15); z-index: 1060; transition: left 0.3s ease; padding: 30px 15px; overflow-y: auto; }
+        .sidebar.open { left: 0; }
+
+        .profile-section { text-align: center; padding-bottom: 25px; border-bottom: 1px solid rgba(51, 65, 85, 0.4); margin-bottom: 20px; position: relative; }
+        .profile-img-sidebar { width: 65px; height: 65px; border-radius: 50%; border: 2px solid var(--estra-cyan); margin-bottom: 10px; object-fit: cover; }
+        .online-indicator { position: absolute; top: 50px; right: 50px; width: 18px; height: 18px; border-radius: 50%; background: #10b981; border: 2px solid #0f172a; }
+        .profile-stats { display: flex; justify-content: center; gap: 20px; margin-top: 12px; }
+        .profile-stats div { text-align: center; }
+        .profile-stats strong { display: block; font-size: 0.95rem; color: var(--estra-cyan); }
+        .profile-stats span { font-size: 0.65rem; color: var(--text-secondary); }
+
+        .sidebar-nav { display: flex; flex-direction: column; gap: 4px; }
+        .sidebar-link { display: flex; align-items: center; gap: 12px; padding: 12px 15px; border-radius: 10px; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: var(--transition); background: 0 0; border: 0; width: 100%; font-family: inherit; }
+        .sidebar-link svg { width: 20px; height: 20px; stroke-width: 2; flex-shrink: 0; }
+        .sidebar-link:hover, .sidebar-link.active { background: rgba(56, 189, 248, 0.1); color: var(--estra-cyan); transform: translateX(5px); border-right: 2px solid var(--estra-cyan); }
+        .sidebar-link.logout-link { color: #ef4444; }
+
+        .navbar { padding: 10px 15px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(51, 65, 85, 0.5); background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(12px); position: sticky; top: 0; z-index: 100; }
+        .nav-left, .nav-right { display: flex; align-items: center; gap: 12px; }
+        .navbar-brand { font-weight: 800; color: coral; letter-spacing: 1.5px; font-size: 1.1rem; text-decoration: none; }
+        .menu-toggle { background: none; border: none; cursor: pointer; padding: 8px; display: flex; align-items: center; color: var(--text-secondary); transition: var(--transition); }
+        .avatar-nav { width: 34px; height: 34px; border-radius: 50%; border: 1.5px solid var(--estra-cyan); object-fit: cover; cursor: pointer; }
+
+        /* ============ COLONNE 2: LISTE DES GROUPES & SUGGESTIONS ============ */
+        .main-content { max-width: 800px; margin: 0 auto; background: var(--estra-card-bg); border-left: 1px solid var(--estra-border); border-right: 1px solid var(--estra-border); min-height: calc(100vh - 60px); backdrop-filter: blur(8px); }
+
+        .page-header { display: flex; align-items: center; justify-content: space-between; padding: 20px 24px; border-bottom: 1px solid var(--estra-border); }
+        .page-header h2 { font-size: 1.3rem; display: flex; align-items: center; gap: 10px; }
+        .create-btn { background: var(--estra-cyan); border: none; padding: 10px 20px; border-radius: 30px; color: white; cursor: pointer; font-weight: 600; display: flex; align-items: center; gap: 8px; transition: var(--transition); }
+
+        .search-bar { padding: 12px 24px; border-bottom: 1px solid var(--estra-border); }
+        .search-input { width: 100%; padding: 12px 18px; background: #1e293b; border: 1px solid rgba(51, 65, 85, 0.5); border-radius: 30px; outline: none; color: var(--text-primary); }
+
+        .groups-filters { display: flex; gap: 8px; padding: 12px 24px; border-bottom: 1px solid var(--estra-border); overflow-x: auto; scrollbar-width: none; }
+        .groups-filters::-webkit-scrollbar { display: none; }
+        .filter-btn { padding: 8px 16px; background: rgba(30, 41, 59, 0.8); border: 1px solid var(--estra-border); border-radius: 30px; color: var(--text-secondary); cursor: pointer; font-size: 0.85rem; white-space: nowrap; transition: var(--transition); }
+        .filter-btn.active { background: var(--estra-cyan); color: white; border-color: transparent; }
+
+        /* ============ SÉPARATEUR DE SECTION ============ */
+        .section-separator {
+            padding: 16px 24px 8px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .section-separator::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--estra-border);
+        }
+        .section-separator span {
+            background: var(--estra-bg-dark);
+            padding: 4px 12px;
+            border-radius: 20px;
+            border: 1px solid var(--estra-border);
+            color: var(--estra-cyan);
+        }
+
+        .groups-count { padding: 12px 24px; color: var(--text-secondary); font-size: 0.85rem; border-bottom: 1px solid var(--estra-border); }
+
+        .group-card { display: flex; align-items: center; gap: 14px; padding: 16px 24px; border-bottom: 1px solid var(--estra-border); cursor: pointer; transition: var(--transition); border-left: 4px solid transparent; }
+        .group-card:hover { background: rgba(56, 189, 248, 0.03); }
+        .group-icon { width: 52px; height: 52px; background: linear-gradient(135deg, var(--estra-cyan), var(--estra-purple)); border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; color: white; flex-shrink: 0; }
+        .group-avatar-img { width: 52px; height: 52px; border-radius: 16px; background-size: cover; background-position: center; flex-shrink: 0; }
+        .group-info { flex: 1; min-width: 0; }
+        .group-info h3 { font-size: 1rem; font-weight: 600; margin-bottom: 4px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+        
+        /* ============ BADGE NOTIFICATION GROUPE ============ */
+        .group-badge {
+            background: var(--estra-danger);
+            color: white;
+            font-size: 0.65rem;
+            font-weight: bold;
+            padding: 2px 6px;
+            border-radius: 4px; /* Petite barre */
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            margin-left: auto; /* Pousse le badge à droite */
+            box-shadow: 0 2px 6px rgba(239, 68, 68, 0.3);
+        }
+        .group-badge::before {
+            content: '';
+            display: block;
+            width: 3px;
+            height: 10px;
+            background: #fff;
+            border-radius: 2px;
+            opacity: 0.8;
+        }
+
+        .group-info p { font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
+        .group-meta { display: flex; gap: 16px; font-size: 0.7rem; color: var(--text-secondary); flex-wrap: wrap; }
+        
+     /* ============ BOUTONS GÉNÉRAUX (THÈME ADAPTATIF) ============ */
+.join-btn, .leave-btn { 
+    padding: 8px 18px; border-radius: 30px; font-size: 0.8rem; font-weight: 600; 
+    cursor: pointer; border: none; flex-shrink: 0; transition: var(--transition); 
+}
+.join-btn { background: var(--estra-cyan); color: white; }
+.leave-btn { 
+    background: transparent; 
+    color: var(--text-primary); 
+    border: 1px solid var(--estra-border); 
+}
+.leave-btn:hover { background: rgba(239, 68, 68, 0.1); border-color: var(--estra-danger); color: var(--estra-danger); }
+
+
+
+        /* ================= MODALS (UNIFIÉES) ================= */
+.modal-overlay { 
+    position: fixed; inset: 0; 
+    background: rgba(0,0,0,0.7); /* Plus de transparence pour mieux voir le contenu */
+    backdrop-filter: blur(4px); 
+    z-index: 2000; display: none; align-items: center; justify-content: center; transition: var(--transition); 
+}
+.modal-overlay.active { display: flex; }
+.modal-content { 
+    background: var(--estra-card-bg); /* ✅ S'adapte au thème */
+    width: 100%; max-width: 520px; border-radius: 16px; padding: 24px; 
+    border: 1px solid var(--estra-border); 
+    max-height: 90vh; overflow-y: auto; 
+}
+.modal-header { 
+    display: flex; justify-content: space-between; align-items: center; 
+    margin-bottom: 20px; border-bottom: 1px solid var(--estra-border); /*  S'adapte */
+    padding-bottom: 10px; 
+}
+.modal-header h3 { font-size: 1.1rem; color: var(--estra-cyan); margin: 0; }
+.modal-close { background: none; border: none; color: var(--text-secondary); font-size: 28px; cursor: pointer; line-height: 1; }
+
+.form-group { margin-bottom: 14px; }
+.form-group label { display: block; margin-bottom: 5px; font-size: 0.85rem; font-weight: 500; color: var(--text-primary); }
+.form-group input, .form-group select, .form-group textarea { 
+    width: 100%; padding: 11px 14px; 
+    background: var(--estra-bg-dark); /*  S'adapte au thème */
+    border: 1px solid var(--estra-border); 
+    border-radius: 12px; outline: none; 
+    color: var(--text-primary); 
+    font-size: 0.9rem; font-family: inherit; 
+}
+.form-group textarea { min-height: 70px; resize: vertical; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        
+/* Boutons Annuler / Fermer */
+.btn-cancel { 
+    padding: 10px 20px; 
+    background: transparent; 
+    border: 1px solid var(--estra-border); 
+    border-radius: 30px; 
+    cursor: pointer; 
+    color: var(--text-primary); 
+    font-family: inherit; 
+}
+.btn-cancel:hover { background: rgba(239, 68, 68, 0.08); border-color: var(--estra-danger); }
+
+/* Bouton Créer / Valider */
+.btn-create { 
+    padding: 10px 20px; 
+    background: var(--estra-cyan); 
+    border: none; 
+    border-radius: 30px; 
+    color: white; 
+    cursor: pointer; 
+    font-weight: 600; 
+    font-family: inherit; 
+}
+.btn-create:hover { opacity: 0.9; }
+
+/* Boutons dans les détails du groupe (Desktop) */
+.btn-invite, .btn-manage, .btn-leave, .btn-join { 
+    padding: 8px 18px; border-radius: 30px; font-weight: 600; 
+    cursor: pointer; border: 1px solid var(--estra-border); 
+    background: transparent; color: var(--text-primary); 
+    transition: var(--transition); font-size: 0.8rem; font-family: inherit; 
+}
+.btn-invite:hover, .btn-manage:hover { background: var(--estra-cyan); color: #fff; border-color: var(--estra-cyan); }
+.btn-join { background: var(--estra-cyan); color: white; border-color: transparent; }
+.btn-join:hover { opacity: 0.9; }
+.btn-leave:hover { background: rgba(239, 68, 68, 0.1); border-color: var(--estra-danger); color: var(--estra-danger); }
+
+        
+        .avatar-upload-area { display: flex; align-items: center; gap: 16px; margin-top: 8px; }
+        .avatar-preview { width: 60px; height: 60px; border-radius: 16px; background-size: cover; background-position: center; border: 2px solid var(--estra-cyan); flex-shrink: 0; }
+        .avatar-upload-btn { padding: 8px 16px; background: rgba(56,189,248,0.1); border: 1px solid var(--estra-cyan); border-radius: 20px; color: var(--estra-cyan); cursor: pointer; font-size: 0.85rem; }
+
+        .modal-actions { display: flex; gap: 12px; justify-content: flex-end; margin-top: 20px; border-top: 1px solid rgba(51,65,85,0.5); padding-top: 15px;}
+
+
+        /* ================= BOTTOM NAV ================= */
+        .bottom-nav { position: fixed; bottom: 0; width: 100%; height: 60px; background: rgba(15, 23, 42, 0.92); backdrop-filter: blur(15px); border-top: 1px solid rgba(51, 65, 85, 0.5); display: flex; justify-content: space-around; align-items: center; z-index: 1000; }
+        .bottom-nav-item { color: var(--text-secondary); padding: 8px; cursor: pointer; transition: var(--transition); position: relative; text-decoration: none; display: flex; align-items: center; }
+        .bottom-nav-item svg { width: 22px; height: 22px; }
+        .bottom-nav-item:hover, .bottom-nav-item.active { color: var(--estra-cyan); }
+        .badge-count { position: absolute; top: 0px; right: -2px; background: var(--estra-danger); color: white; font-size: 0.55rem; padding: 2px 5px; border-radius: 10px; font-weight: 700; border: 1px solid #7f1d1d; box-shadow: 0 0 0 2px var(--estra-bg-dark); min-width: 16px; text-align: center; display: none; }
+
+        .toast-custom { position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%); background: #1e293b; color: white; padding: 10px 20px; z-index: 9999; font-size: 0.8rem; border-radius: 25px; border: 1px solid var(--estra-cyan); white-space: nowrap; opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s ease; box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+        .toast-custom.show { opacity: 1; visibility: visible; }
+
+        /* ================= COLONNE 3: DETAILS (DESKTOP SEULEMENT) ================= */
+        .desktop-only { display: none; }
+        
+        .group-cover { height: 160px; background: var(--estra-cyan); position: relative; background-size: cover; background-position: center; border-radius: 0; }
+        .cover-edit-btn { position: absolute; bottom: 12px; right: 12px; background: rgba(0,0,0,0.6); border: none; color: white; padding: 6px 12px; border-radius: 20px; font-size: 12px; cursor: pointer; }
+        .group-avatar-detail { width: 90px; height: 90px; border-radius: 50%; border: 4px solid var(--estra-bg-dark); object-fit: cover; margin-top: -45px; margin-left: 20px; position: relative; z-index: 2; background: var(--estra-cyan); }
+        .avatar-edit-btn { position: absolute; bottom: 0; right: 0; background: rgba(0,0,0,0.6); border: none; color: white; width: 30px; height: 30px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 3; }
+        
+        .group-detail-info { padding: 10px 20px 20px; border-bottom: 1px solid var(--estra-border); }
+        .group-detail-info h2 { font-size: 1.4rem; margin-bottom: 8px; display: flex; align-items: center; gap: 10px; }
+        .group-detail-info p { color: var(--text-secondary); margin-bottom: 16px; line-height: 1.5; font-size: 0.9rem; }
+        .group-detail-meta { display: flex; gap: 15px; font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 16px; flex-wrap: wrap; }
+        .group-actions-detail { display: flex; gap: 10px; flex-wrap: wrap; }
+        .btn-invite, .btn-manage { padding: 8px 18px; border-radius: 30px; font-weight: 600; cursor: pointer; border: 1px solid var(--estra-border); background: transparent; color: var(--text-secondary); transition: var(--transition); font-size: 0.8rem; font-family: inherit; }
+        .btn-invite:hover, .btn-manage:hover { background: var(--estra-cyan); color: #fff; }
+
+        .create-post { padding: 16px 20px; border-bottom: 1px solid var(--estra-border); }
+        .create-post-header { display: flex; gap: 12px; align-items: center; }
+        .create-post-input { flex: 1; background: rgba(15,23,42,0.5); border: 1px solid var(--estra-border); border-radius: 30px; padding: 10px 16px; color: var(--text-secondary); cursor: pointer; font-size: 0.85rem;}
+
+        .post-card { padding: 16px 20px; border-bottom: 1px solid var(--estra-border); }
+        .post-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+        .post-avatar { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; }
+        .post-info { flex: 1; } .post-name { font-weight: 600; font-size: 0.9rem;} .post-time { font-size: 0.7rem; color: var(--text-secondary); }
+        .post-text { margin-bottom: 10px; line-height: 1.5; font-size: 0.85rem; white-space: pre-wrap; word-break: break-word; }
+        .post-media { margin-top: 10px; border-radius: 12px; overflow: hidden; }
+        .post-media img { width: 100%; max-height: 300px; object-fit: cover; cursor: pointer; border-radius: 12px; }
+        .post-stats { display: flex; gap: 15px; padding: 8px 0; border-top: 1px solid rgba(51,65,85,0.3); font-size: 0.8rem; color: var(--text-secondary); }
+        .post-actions { display: flex; justify-content: space-between; padding-top: 8px; }
+        .post-action-btn { background: none; border: none; color: var(--text-secondary); font-size: 0.8rem; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: var(--transition); font-family: inherit; }
+        .post-action-btn:hover { color: var(--estra-cyan); }
+        .post-action-btn.liked { color: var(--estra-danger); }
+        .comments-section { padding: 10px 0 0; display: none; }
+        .comments-section.show { display: block; }
+        .comment-item { display: flex; gap: 8px; margin-bottom: 8px; }
+        .comment-bubble { flex: 1; background: #1e293b; padding: 6px 10px; border-radius: 12px; }
+        .comment-author { font-weight: 600; font-size: 0.7rem; margin-bottom: 2px; }
+        .comment-text { font-size: 0.75rem; line-height: 1.4; }
+        .comment-time { font-size: 0.6rem; color: var(--text-secondary); margin-top: 2px; }
+        .comment-input-area { display: flex; gap: 8px; margin-top: 10px; }
+        .comment-input { flex: 1; background: #1e293b; border: 1px solid rgba(56,189,248,0.2); border-radius: 20px; padding: 8px 12px; color: white; font-size: 0.8rem; outline: none; }
+
+        /* AUTRES MODALS DU GROUPE */
+        .cover-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; max-height: 300px; overflow-y: auto; padding: 10px 0; }
+        .cover-option { aspect-ratio: 16/9; border-radius: 10px; cursor: pointer; background-size: cover; background-position: center; border: 2px solid transparent; transition: var(--transition); }
+        .cover-option:hover, .cover-option.selected { border-color: var(--estra-cyan); }
+        
+        .invite-tabs { display: flex; gap: 0; margin-bottom: 20px; background: #0f172a; border-radius: 30px; padding: 4px; }
+        .invite-tab { flex: 1; text-align: center; padding: 8px; cursor: pointer; border-radius: 26px; font-size: 0.85rem; color: var(--text-secondary); transition: var(--transition); font-weight: 500; }
+        .invite-tab.active { background: var(--estra-cyan); color: white; }
+        .invite-item { display: flex; align-items: center; gap: 10px; padding: 10px; border-bottom: 1px solid var(--estra-border); cursor: pointer; }
+        .invite-item:hover { background: rgba(56,189,248,0.05); }
+        .invite-link-method { display: flex; align-items: center; gap: 12px; padding: 12px; background: #0f172a; border-radius: 12px; cursor: pointer; margin-bottom: 10px;}
+        .invite-link-method:hover { background: rgba(56,189,248,0.1); }
+        .invite-link-method i { width: 24px; font-size: 1.2rem; color: var(--estra-cyan); text-align: center; }
+
+        /* ================= GRANDS ÉCRANS (PC/MAC - 4 COLONNES) ================= */
+        @media(min-width: 1024px) {
+            body { padding-left: 0; padding-bottom: 0; overflow-x: hidden; }
+            
+            .sidebar { left: 0 !important; width: 240px; box-shadow: none; border-right: 1px solid var(--estra-border); display: block; }
+            .sidebar-overlay { display: none !important; }
+            .menu-toggle { display: none; }
+            
+            .navbar { width: calc(100% - 320px) !important; left: 240px !important; z-index: 1000 !important; }
+            
+            .main-content { 
+                margin-top: 60px; 
+                margin-left: 240px; 
+                margin-right: 440px;
+                max-width: 100%; 
+                border-radius: 0; 
+                box-shadow: none; 
+                border-left: none; border-right: none;
+            }
+            
+            .right-panel { 
+                display: block !important; flex-direction: column;
+                position: fixed; top: 0; right: 80px; width: 360px; 
+                height: 100vh; padding: 60px 0 20px;
+                border-left: 1px solid var(--estra-border); background: var(--estra-bg-dark);
+                overflow-y: auto; scrollbar-width: none; z-index: 90;
+            }
+            .right-panel::-webkit-scrollbar { display: none; }
+            
+            .bottom-nav {
+                display: flex !important; flex-direction: column; justify-content: flex-start;
+                position: fixed; top: 0; right: 0; bottom: auto; width: 80px; height: 100vh;
+                background: var(--estra-bg-dark); border-top: none; border-left: 1px solid var(--estra-border);
+                padding-top: 30px; gap: 20px; z-index: 1060;
+            }
+            [data-theme="light"] .bottom-nav { background: #ffffff; }
+            .bottom-nav-item { width: 100%; padding: 15px; justify-content: center; border-radius: 12px; }
+
+            .modal-overlay { justify-content: flex-end; align-items: flex-start; padding: 0; }
+            .modal-content { 
+                margin: 0; height: 100vh; max-height: 100vh; width: 450px; border-radius: 0; 
+                border-top: none; border-bottom: none; border-right: none; border-left: 1px solid var(--estra-border);
+                transform: translateX(100%); transition: transform 0.3s ease; 
+            }
+            .modal-overlay.active .modal-content { transform: translateX(0); }
+            
+            .toast-custom { bottom: 30px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="offline-banner" id="offlineBanner"> <span data-i18n="offline_mode">Mode hors-ligne</span></div>
+
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
+    <!-- 1. SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+        <div class="profile-section">
+            <div style="position: relative; display: inline-block;">
+                <img src="" class="profile-img-sidebar" id="sidebarAvatar" alt="Avatar">
+                <div class="online-indicator" id="userOnlineIndicator"></div>
+            </div>
+            <h3 style="margin: 0; font-size: 1.05rem; color: var(--text-primary);" id="sidebarName">Rashidi</h3>
+            <div class="profile-stats">
+                <div><strong id="sidebarPosts">0</strong><span data-i18n="posts">Posts</span></div>
+                <div><strong id="sidebarFriends">0</strong><span data-i18n="friends_label">Amis</span></div>
+                <div><strong id="sidebarGroups">0</strong><span data-i18n="groups_label">Groupes</span></div>
+            </div>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="home.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg> <span data-i18n="home">Accueil</span></a>
+            <a href="saved.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg> <span data-i18n="saved">Enregistrés</span></a>
+            <a href="friends.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg> <span data-i18n="friends_label">Amis</span></a>
+            <a href="courses.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg> <span data-i18n="courses">Cours</span></a>
+            <a href="events.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> <span data-i18n="events">Événements</span></a>
+            <a href="groups.html" class="sidebar-link active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> <span data-i18n="groups_label">Groupes</span></a>
+<a href="mentorship.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg> <span >Mentorat</span></a>
+            <a href="profile.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> <span data-i18n="my_profile">Mon Profil</span></a>
+            <hr style="margin:10px 0;border-color:rgba(51,65,85,.4);">
+            <a href="settings.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg> <span data-i18n="settings">Paramètres</span></a>
+            <hr style="margin:10px 0;border-color:rgba(51,65,85,.4);">
+            <button class="sidebar-link logout-link" onclick="logout()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg> <span data-i18n="logout">Déconnexion</span></button>
+        </nav>
+    </aside>
+
+    <nav class="navbar">
+        <div class="nav-left">
+            <button class="menu-toggle" onclick="toggleSidebar()" aria-label="Menu">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="4" y1="7" x2="16" y2="7" /><line x1="4" y1="12" x2="20" y2="12" /><line x1="4" y1="17" x2="12" y2="17" /><circle cx="18" cy="17" r="2" />
+                </svg>
+            </button>
+            <a href="home.html" class="navbar-brand">ESTRA LINK</a>
+        </div>
+        <div class="nav-right">
+            <img src="" class="avatar-nav" id="navAvatar" onclick="window.location.href='profile.html'" alt="Avatar">
+        </div>
+    </nav>
+
+    <!-- 2. COLONNE CENTRALE (Liste des groupes / Suggestions) -->
+    <main class="main-content">
+        <div class="page-header">
+            <h2><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> <span data-i18n="groups_label">Suggestions & Groupes</span></h2>
+            <button class="create-btn" onclick="openCreateGroupModal()"><i class="fas fa-plus"></i> <span data-i18n="create_group_btn">Créer</span></button>
+        </div>
+        <div class="search-bar"><input type="text" class="search-input" id="groupSearchInput" data-i18n-placeholder="search_placeholder" oninput="renderGroups()"></div>
+        <div class="groups-filters">
+            <button class="filter-btn active" data-filter="all" onclick="filterGroups('all', this)" data-i18n="filter_all">Tous</button>
+            <button class="filter-btn" data-filter="joined" onclick="filterGroups('joined', this)" data-i18n="filter_my_groups">Mes groupes</button>
+            <button class="filter-btn" data-filter="business" onclick="filterGroups('business', this)">💼 <span data-i18n="filter_business">Business</span></button>
+            <button class="filter-btn" data-filter="shopping" onclick="filterGroups('shopping', this)">🛍️ <span data-i18n="filter_shopping">Shopping</span></button>
+            <button class="filter-btn" data-filter="school" onclick="filterGroups('school', this)">🏫 <span data-i18n="filter_school">École</span></button>
+            <button class="filter-btn" data-filter="university" onclick="filterGroups('university', this)">🎓 <span data-i18n="filter_university">Université</span></button>
+        </div>
+        
+        <!-- Liste séparée : Vos groupes d'abord, Suggestions en bas -->
+        <div id="groupsContainer"></div>
+
+    </main>
+
+    <!-- 3. COLONNE DROITE (Détail du groupe sur Desktop) -->
+    <aside class="right-panel desktop-only" id="rightPanel">
+        <div id="groupDetailContainerDesktop">
+            <div class="empty-state" style="margin-top:50px;">
+                <i class="fas fa-users" style="font-size:3rem;margin-bottom:16px;color:var(--text-secondary)"></i>
+                <p data-i18n="select_group_desktop">Sélectionnez un groupe pour voir les détails</p>
+            </div>
+        </div>
+    </aside>
+
+    <!-- 4. BOTTOM NAV (Mobile) / VERTICAL NAV (Desktop) -->
+    <div class="bottom-nav">
+        <a href="home.html" class="bottom-nav-item" title="Accueil"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></a>
+
+        <a href="notifications.html" class="bottom-nav-item" title="Notifications" style="position:relative;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg><span class="badge-count" id="notifBadge" style="display:none;">0</span></a>
+        <a href="messages.html" class="bottom-nav-item" style="position:relative"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg><span class="badge-count" id="msgBadge" style="display:none">0</span></a>
+        <a href="courses.html" class="bottom-nav-item" style="position:relative"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg><span class="badge-count" id="msgBadge" style="display:none">0</span></a>
+        <a href="profile.html" class="bottom-nav-item" title="Profil"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></a>
+    </div>
+
+    <!-- MODAL CRÉER GROUPE -->
+    <div class="modal-overlay" id="createGroupModal">
+        <div class="modal-content">
+            <div class="modal-header"><h3><i class="fas fa-users"></i> <span data-i18n="create_group_modal_title">Créer un groupe</span></h3><button class="modal-close" onclick="closeCreateGroupModal()">&times;</button></div>
+            
+            <div class="form-group">
+                <label data-i18n="group_photo_label">Photo du groupe</label>
+                <div class="avatar-upload-area">
+                    <div class="avatar-preview" id="groupAvatarPreview" style="background-image:url('https://ui-avatars.com/api/?background=38bdf8&color=fff&name=GR&size=60')"></div>
+                    <input type="file" id="groupAvatarInput" accept="image/*" style="display:none;" onchange="handleGroupAvatarSelect(event)">
+                    <button class="avatar-upload-btn" onclick="document.getElementById('groupAvatarInput').click()"><i class="fas fa-camera"></i> <span data-i18n="choose_photo">Choisir</span></button>
+                </div>
+            </div>
+
+            <div class="form-group"><label data-i18n="group_name_label">Nom du groupe *</label><input type="text" id="groupName" data-i18n-placeholder="group_name_placeholder"></div>
+            <div class="form-group"><label data-i18n="group_description_label">Description</label><textarea id="groupDescription" data-i18n-placeholder="group_description_placeholder"></textarea></div>
+            
+            <div class="form-row">
+                <div class="form-group"><label data-i18n="category_label">Catégorie *</label><select id="groupCategory" onchange="handleCategoryChange()">
+                    <option value="business">💼 <span data-i18n="cat_business">Business</span></option>
+                    <option value="shopping">🛍️ <span data-i18n="cat_shopping">Shopping</span></option>
+                    <option value="school">🏫 <span data-i18n="cat_school">École</span></option>
+                    <option value="university">🎓 <span data-i18n="cat_university">Université</span></option>
+                    <option value="company">🏢 <span data-i18n="cat_company">Entreprise</span></option>
+                    <option value="other">📌 <span data-i18n="cat_other">Autre</span></option>
+                </select></div>
+                <div class="form-group"><label data-i18n="group_type_label">Type</label><select id="groupType"><option value="public">🌍 <span data-i18n="type_public">Public</span></option><option value="private">🔒 <span data-i18n="type_private">Privé</span></option></select></div>
+            </div>
+
+            <div id="dynamicCategoryFields"></div>
+
+            <div class="modal-actions"><button class="btn-cancel" onclick="closeCreateGroupModal()" data-i18n="cancel">Annuler</button><button class="btn-create" onclick="createGroup()" data-i18n="create_group_submit">Créer le groupe</button></div>
+        </div>
+    </div>
+
+    <!-- MODAL POSTER (Ajouté pour le support Desktop) -->
+    <div class="modal-overlay" id="postModal"><div class="modal-content"><div class="modal-header"><h3><i class="fas fa-pen-fancy"></i> <span data-i18n="new_post">Nouvelle publication</span></h3><button class="modal-close" onclick="closePostModal()">&times;</button></div><textarea class="post-textarea" id="postContent" rows="4" data-i18n-placeholder="post_placeholder"></textarea><div id="mediaPreview"></div><div class="modal-actions"><div class="attachments"><button class="attachment-btn" id="addImageBtn"><i class="fas fa-image"></i></button></div><button class="btn-create" id="submitPostBtn" data-i18n="publish">Publier</button></div></div></div>
+    
+    <!-- MODAL PARTAGE (Ajouté pour le support Desktop) -->
+    <div class="modal-overlay" id="shareModal"><div class="modal-content"><div class="modal-header"><h3><i class="fas fa-share-alt"></i> <span data-i18n="share_title">Partager</span></h3><button class="modal-close" onclick="closeShareModal()">&times;</button></div><div class="invite-tabs"><div class="invite-tab active" onclick="switchShareTab('social',this)" data-i18n="share_social">Réseaux</div><div class="invite-tab" onclick="switchShareTab('friends',this)" data-i18n="share_friends">Amis</div></div><div id="shareSocialTab"><div class="invite-link-methods"><div class="invite-link-method" onclick="sharePostVia('whatsapp')"><i class="fab fa-whatsapp" style="color:#25D366;"></i><span>WhatsApp</span></div><div class="invite-link-method" onclick="sharePostVia('facebook')"><i class="fab fa-facebook" style="color:#1877F2;"></i><span>Facebook</span></div><div class="invite-link-method" onclick="sharePostVia('twitter')"><i class="fab fa-twitter" style="color:#1DA1F2;"></i><span>X (Twitter)</span></div><div class="invite-link-method" onclick="sharePostVia('linkedin')"><i class="fab fa-linkedin" style="color:#0077B5;"></i><span>LinkedIn</span></div><div class="invite-link-method" onclick="sharePostVia('telegram')"><i class="fab fa-telegram" style="color:#26A5E4;"></i><span>Telegram</span></div><div class="invite-link-method" onclick="sharePostVia('sms')"><i class="fas fa-sms"></i><span data-i18n="share_sms">SMS</span></div><div class="invite-link-method" onclick="sharePostVia('email')"><i class="fas fa-envelope"></i><span data-i18n="share_email">Email</span></div><div class="invite-link-method" onclick="sharePostVia('copy')"><i class="fas fa-copy"></i><span data-i18n="share_copy_link">Copier le lien</span></div></div></div><div id="shareFriendsTab" style="display:none;"><input type="text" id="searchShareFriend" data-i18n-placeholder="search_friends_placeholder" class="form-group input" style="width:100%;margin-bottom:16px;" oninput="renderShareFriendsList()"><div id="shareFriendsListContainer" class="invite-list" style="max-height: 300px; overflow-y: auto;"></div></div></div></div>
+
+    <div id="toastMsg" class="toast-custom"></div>
+
+<script>
+// ============ TRADUCTIONS MULTILINGUES COMPLÈTES ============
+const translations = {
+    fr: {
+        page_title: "ESTRA LINK | Suggestions & Groupes",
+        offline_mode: "Mode hors-ligne",
+        posts: "Posts", friends_label: "Amis", groups_label: "Groupes",
+        home: "Accueil", saved: "Enregistrés", courses: "Cours",
+        jobs: "Emplois", events: "Événements", marketplace: "Boutique", my_profile: "Mon Profil",
+        settings: "Paramètres", logout: "Déconnexion",
+        create_group_btn: "Créer",
+        search_placeholder: "🔍 Rechercher un groupe...",
+        filter_all: "Tous", filter_my_groups: "Mes groupes",
+        filter_business: "Business", filter_shopping: "Shopping",
+        filter_school: "École", filter_university: "Université",
+        groups_count: "groupe(s)",
+        my_groups_section: "Vos groupes", suggestions_section: "Suggestions pour vous",
+        create_group_modal_title: "Créer un groupe",
+        group_photo_label: "Photo du groupe",
+        choose_photo: "Choisir",
+        group_name_label: "Nom du groupe *",
+        group_name_placeholder: "Ex: Développement Web",
+        group_description_label: "Description",
+        group_description_placeholder: "Décrivez le but de ce groupe...",
+        category_label: "Catégorie *",
+        cat_business: "Business", cat_shopping: "Shopping",
+        cat_school: "École", cat_university: "Université",
+        cat_company: "Entreprise", cat_other: "Autre",
+        group_type_label: "Type",
+        type_public: "Public", type_private: "Privé",
+        cancel: "Annuler", create_group_submit: "Créer le groupe",
+        no_groups: "Aucun groupe trouvé",
+        no_groups_desc: "Créez le premier !",
+        members_label: "membres",
+        join: "Rejoindre", leave: "Quitter",
+        toast_joined: "✅ Rejoint",
+        toast_left: "👋 Quitté",
+        toast_created: "🎉 créé et publié sur l'accueil !",
+        toast_name_required: "Nom requis",
+        toast_online: "🟢 Connexion rétablie",
+        toast_offline: "🔴 Mode hors-ligne",
+        time_today: "Aujourd'hui", time_days: "Il y a X j", time_weeks: "Il y a X sem",
+        university_label: "Université *", promotion_label: "Promotion *",
+        faculty_label: "Faculté *",
+        shopping_type_label: "Type de shopping *",
+        address_label: "Adresse", place_label: "Lieu",
+        school_label: "École *", school_level_label: "Niveau",
+        school_city_label: "Ville",
+        business_sector_label: "Secteur d'activité",
+        business_city_label: "Ville", business_country_label: "Pays",
+        company_name_label: "Entreprise", company_dept_label: "Département",
+        company_city_label: "Ville",
+        category_labels: {business:'💼 Business',shopping:'🛍️ Shopping',school:'🏫 École',university:'🎓 Université',company:'🏢 Entreprise',other:'📌 Autre'},
+        group_not_found: "Groupe non trouvé",
+        select_group_desktop: "Sélectionnez un groupe pour voir les détails",
+        no_description: "Aucune description",
+        created_by: "Créé par", admin_label: "Admin",
+        invite: "Inviter", manage: "Gérer",
+        post_placeholder: "Partagez quelque chose avec le groupe...",
+        new_post: "Nouvelle publication", publish: "Publier",
+        no_posts: "Aucune publication", comments_label: "commentaires",
+        like: "J'aime", comment: "Commenter", share: "Partager",
+        comment_placeholder: "Écrire un commentaire...", send: "Envoyer",
+        share_title: "Partager", share_social: "Réseaux", share_friends: "Amis",
+        share_sms: "SMS", share_email: "Email", share_copy_link: "Copier le lien",
+        search_friends_placeholder: "Rechercher un ami...", cover_picker_title: "Choisir une couverture",
+        close: "Fermer", invite_title: "Inviter des membres",
+        invite_link_tab: "Liens", invite_friends_tab: "Amis",
+        no_friends: "Aucun ami", friend_label: "Ami",
+        invite_link_copy: "Copier le lien d'invitation", invite_link_whatsapp: "Partager via WhatsApp",
+        invite_link_sms: "Inviter par SMS", invite_link_email: "Inviter par Email", invite_link_linkedin: "Partager sur LinkedIn",
+        toast_liked: "❤️ Aimé", toast_unliked: "💔 Like retiré",
+        toast_cover_updated: "✅ Couverture mise à jour !", toast_avatar_updated: "✅ Avatar mis à jour",
+        toast_published: "✅ Publié sur le groupe et l'accueil !", toast_empty_post: "Écrivez quelque chose",
+        toast_link_copied: "🔗 Lien copié !", toast_shared: "📤 Partagé via", toast_shared_with: "📤 Partagé avec",
+        toast_invite_sent: "📨 Invitation envoyée à", toast_manage: "⚙️ Gestion du groupe (bientôt disponible)",
+        confirm_leave: "Quitter", time_just_now: "À l'instant", time_min: "Il y a X min", time_hour: "Il y a X h", time_day: "Il y a X j",
+        modify_cover: "Modifier",
+        notif_group_created: "👥 Nouveau groupe créé",
+        notif_group_joined: "👥 A rejoint un groupe",
+        notif_group_left: "👋 A quitté un groupe",
+        notif_group_post: "📝 Nouvelle publication dans un groupe",
+        notif_group_comment: "💬 Commentaire dans un groupe",
+        notif_group_invite: "📨 Invitation à un groupe"
+    },
+    en: {
+        page_title: "ESTRA LINK | Suggestions & Groups",
+        offline_mode: "Offline mode",
+        posts: "Posts", friends_label: "Friends", groups_label: "Groups",
+        home: "Home", saved: "Saved", courses: "Courses",
+        jobs: "Jobs", events: "Events", marketplace: "Shop", my_profile: "My Profile",
+        settings: "Settings", logout: "Logout",
+        create_group_btn: "Create",
+        search_placeholder: "🔍 Search a group...",
+        filter_all: "All", filter_my_groups: "My groups",
+        filter_business: "Business", filter_shopping: "Shopping",
+        filter_school: "School", filter_university: "University",
+        groups_count: "group(s)",
+        my_groups_section: "Your groups", suggestions_section: "Suggestions for you",
+        create_group_modal_title: "Create a group",
+        group_photo_label: "Group photo",
+        choose_photo: "Choose",
+        group_name_label: "Group name *",
+        group_name_placeholder: "Ex: Web Development",
+        group_description_label: "Description",
+        group_description_placeholder: "Describe the purpose of this group...",
+        category_label: "Category *",
+        cat_business: "Business", cat_shopping: "Shopping",
+        cat_school: "School", cat_university: "University",
+        cat_company: "Company", cat_other: "Other",
+        group_type_label: "Type",
+        type_public: "Public", type_private: "Private",
+        cancel: "Cancel", create_group_submit: "Create group",
+        no_groups: "No groups found",
+        no_groups_desc: "Create the first one!",
+        members_label: "members",
+        join: "Join", leave: "Leave",
+        toast_joined: "✅ Joined",
+        toast_left: "👋 Left",
+        toast_created: "🎉 created and published on the feed!",
+        toast_name_required: "Name required",
+        toast_online: "🟢 Connection restored",
+        toast_offline: "🔴 Offline mode",
+        time_today: "Today", time_days: "X days ago", time_weeks: "X weeks ago",
+        university_label: "University *", promotion_label: "Promotion *",
+        faculty_label: "Faculty *",
+        shopping_type_label: "Shopping type *",
+        address_label: "Address", place_label: "Place",
+        school_label: "School *", school_level_label: "Level",
+        school_city_label: "City",
+        business_sector_label: "Business sector",
+        business_city_label: "City", business_country_label: "Country",
+        company_name_label: "Company", company_dept_label: "Department",
+        company_city_label: "City",
+        category_labels: {business:'💼 Business',shopping:'🛍️ Shopping',school:'🏫 School',university:'🎓 University',company:'🏢 Company',other:'📌 Other'},
+        group_not_found: "Group not found",
+        select_group_desktop: "Select a group to see details",
+        no_description: "No description",
+        created_by: "Created by", admin_label: "Admin",
+        invite: "Invite", manage: "Manage",
+        post_placeholder: "Share something with the group...",
+        new_post: "New post", publish: "Publish",
+        no_posts: "No posts", comments_label: "comments",
+        like: "Like", comment: "Comment", share: "Share",
+        comment_placeholder: "Write a comment...", send: "Send",
+        share_title: "Share", share_social: "Social", share_friends: "Friends",
+        share_sms: "SMS", share_email: "Email", share_copy_link: "Copy link",
+        search_friends_placeholder: "Search a friend...", cover_picker_title: "Choose a cover",
+        close: "Close", invite_title: "Invite members",
+        invite_link_tab: "Links", invite_friends_tab: "Friends",
+        no_friends: "No friends", friend_label: "Friend",
+        invite_link_copy: "Copy invite link", invite_link_whatsapp: "Share via WhatsApp",
+        invite_link_sms: "Invite by SMS", invite_link_email: "Invite by Email", invite_link_linkedin: "Share on LinkedIn",
+        toast_liked: "❤️ Liked", toast_unliked: "💔 Like removed",
+        toast_cover_updated: "✅ Cover updated!", toast_avatar_updated: "✅ Avatar updated",
+        toast_published: "✅ Published to group and feed!", toast_empty_post: "Write something",
+        toast_link_copied: "🔗 Link copied!", toast_shared: "📤 Shared via", toast_shared_with: "📤 Shared with",
+        toast_invite_sent: "📨 Invitation sent to", toast_manage: "⚙️ Group management (coming soon)",
+        confirm_leave: "Leave", time_just_now: "Just now", time_min: "X min ago", time_hour: "X h ago", time_day: "X d ago",
+        modify_cover: "Edit",
+        notif_group_created: "👥 New group created",
+        notif_group_joined: "👥 Joined a group",
+        notif_group_left: "👋 Left a group",
+        notif_group_post: "📝 New post in a group",
+        notif_group_comment: "💬 Comment in a group",
+        notif_group_invite: "📨 Group invitation"
+    },
+    sw: {
+        page_title: "ESTRA LINK | Mapendekezo na Vikundi",
+        offline_mode: "Hali ya nje ya mtandao",
+        posts: "Machapisho", friends_label: "Marafiki", groups_label: "Vikundi",
+        home: "Nyumbani", saved: "Yaliyohifadhiwa", courses: "Kozi",
+        jobs: "Kazi", events: "Matukio", marketplace: "Soko", my_profile: "Wasifu Wangu",
+        settings: "Mipangilio", logout: "Kutoka",
+        create_group_btn: "Unda",
+        search_placeholder: "🔍 Tafuta kikundi...",
+        filter_all: "Zote", filter_my_groups: "Vikundi vyangu",
+        filter_business: "Biashara", filter_shopping: "Manunuzi",
+        filter_school: "Shule", filter_university: "Chuo kikuu",
+        groups_count: "kikundi",
+        my_groups_section: "Vikundi vyako", suggestions_section: "Mapendekezo kwako",
+        create_group_modal_title: "Unda kikundi",
+        group_photo_label: "Picha ya kikundi",
+        choose_photo: "Chagua",
+        group_name_label: "Jina la kikundi *",
+        group_name_placeholder: "Mf: Maendeleo ya Wavuti",
+        group_description_label: "Maelezo",
+        group_description_placeholder: "Eleza madhumuni ya kikundi hiki...",
+        category_label: "Aina *",
+        cat_business: "Biashara", cat_shopping: "Manunuzi",
+        cat_school: "Shule", cat_university: "Chuo kikuu",
+        cat_company: "Kampuni", cat_other: "Nyingine",
+        group_type_label: "Aina",
+        type_public: "Umma", type_private: "Binafsi",
+        cancel: "Ghairi", create_group_submit: "Unda kikundi",
+        no_groups: "Hakuna vikundi",
+        no_groups_desc: "Unda cha kwanza!",
+        members_label: "wanachama",
+        join: "Jiunge", leave: "Ondoka",
+        toast_joined: "✅ Umejiunga",
+        toast_left: "👋 Umeondoka",
+        toast_created: "🎉 imeundwa na kuchapishwa kwenye mpasho!",
+        toast_name_required: "Jina linahitajika",
+        toast_online: "🟢 Muunganisho umerejeshwa",
+        toast_offline: "🔴 Hali ya nje ya mtandao",
+        time_today: "Leo", time_days: "Siku X zilizopita", time_weeks: "Wiki X zilizopita",
+        notif_group_created: "👥 Kikundi kipya kimeundwa",
+        notif_group_joined: "👥 Amejiunga na kikundi",
+        notif_group_left: "👋 Ameondoka kwenye kikundi",
+        notif_group_post: "📝 Chapisho jipya kwenye kikundi",
+        notif_group_comment: "💬 Maoni kwenye kikundi",
+        notif_group_invite: "📨 Mwaliko wa kikundi"
+    },
+    ln: {
+        page_title: "ESTRA LINK | Mapendekezo na Mampingá",
+        offline_mode: "Mode hors-connexion",
+        posts: "Masolo", friends_label: "Baníngá", groups_label: "Mampingá",
+        home: "Ebandeli", saved: "Ebabómí", courses: "Mateya",
+        jobs: "Misálá", events: "Makámá", marketplace: "Zándo", my_profile: "Profil na ngáí",
+        settings: "Paramɛ́tɛ", logout: "Kobíma",
+        create_group_btn: "Kokela",
+        search_placeholder: "🔍 Koluka groupe...",
+        filter_all: "Nyɔ́nsɔ", filter_my_groups: "Ba groupes na ngáí",
+        filter_business: "Business", filter_shopping: "Shopping",
+        filter_school: "École", filter_university: "Université",
+        groups_count: "groupe(s)",
+        my_groups_section: "Mampingá na yɔ̌", suggestions_section: "Mampingá mpo na yɔ̌",
+        create_group_modal_title: "Kokela groupe",
+        group_photo_label: "Fɔtɔ́ ya groupe",
+        choose_photo: "Kopɔ́nɔ",
+        group_name_label: "Nkómbó ya groupe *",
+        group_name_placeholder: "Ex: Développement Web",
+        group_description_label: "Description",
+        group_description_placeholder: "Décrivez but ya groupe oyo...",
+        category_label: "Catégorie *",
+        cat_business: "Business", cat_shopping: "Shopping",
+        cat_school: "École", cat_university: "Université",
+        cat_company: "Entreprise", cat_other: "Mosusu",
+        group_type_label: "Type",
+        type_public: "Public", type_private: "Privé",
+        cancel: "Annuler", create_group_submit: "Kokela groupe",
+        no_groups: "Groupe moko te",
+        no_groups_desc: "Kela ya liboso !",
+        members_label: "bakambi",
+        join: "Kokɔta", leave: "Kobíma",
+        toast_joined: "✅ Okɔ́tí",
+        toast_left: "👋 Obímí",
+        toast_created: "🎉 ekelámí mpe epublier na accueil !",
+        toast_name_required: "Nkómbó esɛngɛ́lɛ",
+        toast_online: "🟢 Connexion ezóngí",
+        toast_offline: "🔴 Mode hors-connexion",
+        time_today: "Lɛlɔ́", time_days: "Il y a X j", time_weeks: "Il y a X sem",
+        notif_group_created: "👥 Groupe ya sika ekelámí",
+        notif_group_joined: "👥 Akɔ́tí na groupe",
+        notif_group_left: "👋 Abímí na groupe",
+        notif_group_post: "📝 Publication ya sika na groupe",
+        notif_group_comment: "💬 Commentaire na groupe",
+        notif_group_invite: "📨 Invitation ya groupe"
+    }
+};
+
+let currentLang = localStorage.getItem('estra_language') || 'fr';
+
+function t(key) { return translations[currentLang]?.[key] || translations['fr']?.[key] || key; }
+
+function applyTranslations() {
+    currentLang = localStorage.getItem('estra_language') || 'fr';
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        const translation = t(key);
+        if (translation) el.textContent = translation;
+    });
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+        const key = el.getAttribute('data-i18n-placeholder');
+        el.placeholder = t(key);
+    });
+    document.title = t('page_title');
+}
+
+// ============ SYSTÈME DE NOTIFICATIONS EN TEMPS RÉEL ============
+function addNotification(type, title, message, metadata = {}) {
+    const notifications = JSON.parse(localStorage.getItem('estra_notifications') || '[]');
+    const newNotif = {
+        id: Date.now(),
+        type: type,
+        title: title,
+        message: message,
+        read: false,
+        timestamp: Date.now(),
+        metadata: metadata
+    };
+    notifications.unshift(newNotif);
+    if (notifications.length > 50) notifications.length = 50;
+    localStorage.setItem('estra_notifications', JSON.stringify(notifications));
+    updateBadges();
+    window.dispatchEvent(new CustomEvent('estra_notification_updated', { 
+        detail: { notifications: notifications, newNotification: newNotif }
+    }));
+    localStorage.setItem('estra_notification_trigger', Date.now().toString());
+    return newNotif;
+}
+
+// ============ MODE ECO DATA ============
+let ecoMode = localStorage.getItem('estra_eco_mode') === 'true';
+function initEcoMode() {
+    const btn = document.getElementById('ecoBtn');
+    if (btn) {
+        document.body.classList.toggle('eco-mode-active', ecoMode);
+        if (ecoMode) btn.classList.add('active');
+    }
+}
+function toggleEcoMode() {
+    ecoMode = !ecoMode;
+    localStorage.setItem('estra_eco_mode', ecoMode);
+    initEcoMode();
+    showToast(ecoMode ? "Mode Éco Activé (Économie 50% data)" : "Mode Éco Désactivé (Haute Qualité)");
+}
+
+// ============ INITIALISATION VARIABLES GLOBALES ============
+if (!window.estraEvents) window.estraEvents = [];
+if (!window.estraPosts) window.estraPosts = [];
+if (!window.estraJobs) window.estraJobs = [];
+if (!window.estraGroups) window.estraGroups = [];
+if (!window.estraUserGroups) window.estraUserGroups = [];
+if (!window.estraFriends) window.estraFriends = [];
+
+let currentUser = { name: 'Rashidi', avatar: 'https://ui-avatars.com/api/?background=1d9bf0&color=fff&name=Rashidi&size=40' };
+let groups = [], currentFilter = 'all', toastTimeout = null;
+let currentGroupAvatarData = null;
+
+// Variables pour le mode Desktop (Detail)
+let groupPosts = {}, friendsList = [], currentGroupId = null, currentGroup = null;
+let currentImageData = null, currentSharePostId = null, currentShareTab = 'social', userLikes = {};
+const presetCovers = [
+    'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=600',
+    'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=600',
+    'https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=600',
+    'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=600'
+];
+
+const shoppingTypes = [
+    'Mode & Vêtements', 'Chaussures', 'Accessoires', 'Électronique', 'Téléphones & Tablettes',
+    'Informatique', 'Électroménager', 'Meubles & Déco', 'Alimentation', 'Boissons',
+    'Cosmétiques & Beauté', 'Sport & Loisirs', 'Livres & Papeterie', 'Jouets & Jeux',
+    'Automobile & Moto', 'Bricolage & Jardinage', 'Animaux', 'Bijoux & Montres', 'Services'
+];
+
+function $(id) { return document.getElementById(id); }
+
+function checkOnlineStatus() { const banner = $('offlineBanner'); if(banner) banner.style.display = navigator.onLine ? 'none' : 'block'; }
+function updateBadges() {
+    const notifs = JSON.parse(localStorage.getItem('estra_notifications') || '[]');
+    const unreadNotifs = notifs.filter(n => !n.read).length;
+    const notifBadge = $('notifBadge');
+    if (notifBadge) { notifBadge.style.display = unreadNotifs > 0 ? 'block' : 'none'; if (unreadNotifs > 0) notifBadge.textContent = unreadNotifs > 99 ? '99+' : unreadNotifs; }
+    
+    const conversations = JSON.parse(localStorage.getItem('estra_conversations') || '[]');
+    const totalUnread = conversations.reduce((sum, conv) => sum + (conv.unread || 0), 0);
+    const msgBadge = $('msgBadge');
+    if (msgBadge) { msgBadge.style.display = totalUnread > 0 ? 'block' : 'none'; if (totalUnread > 0) msgBadge.textContent = totalUnread > 99 ? '99+' : totalUnread; }
+}
+
+function loadData() {
+    var savedTheme = 'light'; // Force le thème clair
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    window.estraTheme = savedTheme;
+    
+    applyTranslations();
+    initEcoMode();
+    
+    var sp = localStorage.getItem('estra_profile'); 
+    if (sp) { try { var p = JSON.parse(sp); currentUser.name = p.fullName || currentUser.name; currentUser.avatar = p.avatar || currentUser.avatar; } catch(e) {} }
+    
+    groups = window.estraGroups && window.estraGroups.length > 0 ? window.estraGroups : JSON.parse(localStorage.getItem('estra_groups') || '[]');
+    
+    if (!groups.length) { 
+        groups = [
+            { id: 1, name: 'Développement Web', description: 'Communauté des développeurs web passionnés, partage de ressources et entraide.', category: 'business', type: 'public', members: 156, joined: true, createdBy: 'Marie Claire', createdAt: Date.now() - 86400000, icon: 'fa-code', avatar: "https://ui-avatars.com/api/?name=DevWeb&background=1d9bf0&color=fff", unreadCount: 3 }, 
+            { id: 2, name: 'Marketplace Lubumbashi', description: 'Achetez, vendez et échangez en toute sécurité dans la région de Lubumbashi.', category: 'shopping', type: 'public', shoppingType: 'Mode & Vêtements', address: 'Lubumbashi, RDC', members: 89, joined: false, createdBy: 'David Mwamba', createdAt: Date.now() - 172800000, icon: 'fa-shopping-bag', avatar: "https://ui-avatars.com/api/?name=Market&background=f59e0b&color=fff", unreadCount: 0 },
+            { id: 3, name: 'Étudiants UNILU', description: 'Groupe de suggestions pour les étudiants de l\'Université de Lubumbashi.', category: 'university', type: 'public', university: 'UNILU', members: 1042, joined: false, createdBy: 'Admin ESTRA', createdAt: Date.now() - 500000000, icon: 'fa-university', avatar: "https://ui-avatars.com/api/?name=UNILU&background=ef4444&color=fff", unreadCount: 12 }
+        ]; 
+        window.estraGroups = groups;
+        localStorage.setItem('estra_groups', JSON.stringify(groups)); 
+    }
+
+    groupPosts = JSON.parse(localStorage.getItem('estra_group_posts') || '{}');
+    friendsList = window.estraFriends && window.estraFriends.length > 0 ? window.estraFriends : JSON.parse(localStorage.getItem('estra_friends') || '[]');
+    userLikes = JSON.parse(localStorage.getItem('estra_group_likes') || '{}');
+    
+    checkOnlineStatus(); updateSidebar(); updateBadges();
+
+    if (window.innerWidth >= 1024 && groups.length > 0) {
+        let savedId = localStorage.getItem('estra_current_group');
+        if(!savedId || !groups.find(g => g.id == savedId)) savedId = groups[0].id;
+        viewGroup(savedId);
+    }
+}
+
+function saveGroups() { window.estraGroups = groups; localStorage.setItem('estra_groups', JSON.stringify(groups)); }
+function saveGroupPosts() { localStorage.setItem('estra_group_posts', JSON.stringify(groupPosts)); }
+function saveLikes() { localStorage.setItem('estra_group_likes', JSON.stringify(userLikes)); }
+
+function updateSidebar() {
+    var nameEl = $('sidebarName'), avatarEl = $('sidebarAvatar'), navEl = $('navAvatar');
+    if(nameEl) nameEl.textContent = currentUser.name; 
+    if(avatarEl) avatarEl.src = currentUser.avatar; 
+    if(navEl) navEl.src = currentUser.avatar;
+    
+    var posts = window.estraPosts || [], jobs = window.estraJobs || [], friends = window.estraFriends || [];
+    var sp = $('sidebarPosts'); if(sp) sp.textContent = (posts.filter(p => p.author === currentUser.name).length + jobs.filter(j => j.author === currentUser.name).length) || 4;
+    var sf = $('sidebarFriends'); if(sf) sf.textContent = friends.length || 3;
+    var sg = $('sidebarGroups'); if(sg) sg.textContent = groups.filter(g => g.joined).length || 2;
+}
+
+function showToast(msg) { 
+    var te = $('toastMsg'); if(!te) return;
+    if (toastTimeout) clearTimeout(toastTimeout); 
+    te.textContent = msg; te.classList.remove('show'); void te.offsetWidth; te.classList.add('show'); 
+    toastTimeout = setTimeout(() => te.classList.remove('show'), 3000); 
+}
+
+function escapeHtml(str) { if (!str) return ''; var d = document.createElement('div'); d.textContent = str; return d.innerHTML; }
+function getTimeAgo(ts) { var d = Math.floor((Date.now() - ts) / 86400000); return d < 1 ? t('time_today') : d < 7 ? t('time_days').replace('X', d) : t('time_weeks').replace('X', Math.floor(d/7)); }
+function getRelativeTime(ts) { if (!ts) return t('time_just_now'); const m = Math.floor((Date.now() - new Date(ts).getTime()) / 60000); return m < 1 ? t('time_just_now') : m < 60 ? t('time_min').replace('X', m) : m < 1440 ? t('time_hour').replace('X', Math.floor(m / 60)) : t('time_day').replace('X', Math.floor(m / 1440)); }
+function getCategoryLabel(c) { return (translations[currentLang] && translations[currentLang].category_labels && translations[currentLang].category_labels[c]) || translations['fr'].category_labels[c] || c; }
+
+function handleGroupAvatarSelect(event) {
+    var file = event.target.files[0];
+    if (!file) return;
+    var reader = new FileReader();
+    reader.onload = e => {
+        currentGroupAvatarData = e.target.result;
+        var preview = $('groupAvatarPreview');
+        if(preview) preview.style.backgroundImage = "url('" + currentGroupAvatarData + "')";
+    };
+    reader.readAsDataURL(file);
+}
+
+function handleCategoryChange() {
+    var cat = ($('groupCategory') || {}).value;
+    var container = $('dynamicCategoryFields'); if(!container) return;
+    var html = '';
+    if (cat === 'university') {
+        html = '<div class="form-row"><div class="form-group"><label>'+t('university_label')+'</label><input type="text" id="groupUniversity" placeholder="Ex: UNILU, UNIKIN..."></div><div class="form-group"><label>'+t('promotion_label')+'</label><select id="groupPromotion"><option value="L1">L1</option><option value="L2">L2</option><option value="L3">L3</option><option value="M1">M1</option><option value="M2">M2</option></select></div></div><div class="form-group"><label>'+t('faculty_label')+'</label><input type="text" id="groupFaculty" placeholder="Ex: Informatique, Droit..."></div>';
+    } else if (cat === 'shopping') {
+        html = '<div class="form-group"><label>'+t('shopping_type_label')+'</label><select id="groupShoppingType">' + shoppingTypes.map(t => '<option value="' + t + '">' + t + '</option>').join('') + '</select></div><div class="form-row"><div class="form-group"><label>'+t('address_label')+'</label><input type="text" id="groupAddress" placeholder="Ex: Lubumbashi, RDC..."></div><div class="form-group"><label>'+t('place_label')+'</label><input type="text" id="groupPlace" placeholder="Ex: Marché central..."></div></div>';
+    } else if (cat === 'school') {
+        html = '<div class="form-group"><label>'+t('school_label')+'</label><input type="text" id="groupSchool" placeholder="Nom de l\'école..."></div><div class="form-row"><div class="form-group"><label>'+t('school_level_label')+'</label><select id="groupSchoolLevel"><option value="Primaire">Primaire</option><option value="Secondaire">Secondaire</option><option value="Lycée">Lycée</option></select></div><div class="form-group"><label>'+t('school_city_label')+'</label><input type="text" id="groupSchoolCity" placeholder="Ville..."></div></div>';
+    } else if (cat === 'business') {
+        html = '<div class="form-group"><label>'+t('business_sector_label')+'</label><input type="text" id="groupBusinessSector" placeholder="Ex: Tech, Finance, Santé..."></div><div class="form-row"><div class="form-group"><label>'+t('business_city_label')+'</label><input type="text" id="groupBusinessCity" placeholder="Ville..."></div><div class="form-group"><label>'+t('business_country_label')+'</label><input type="text" id="groupBusinessCountry" placeholder="Pays..."></div></div>';
+    } else if (cat === 'company') {
+        html = '<div class="form-group"><label>'+t('company_name_label')+'</label><input type="text" id="groupCompanyName" placeholder="Nom de l\'entreprise..."></div><div class="form-row"><div class="form-group"><label>'+t('company_dept_label')+'</label><input type="text" id="groupCompanyDept" placeholder="Département..."></div><div class="form-group"><label>'+t('company_city_label')+'</label><input type="text" id="groupCompanyCity" placeholder="Ville..."></div></div>';
+    }
+    container.innerHTML = html;
+}
+
+// LOGIQUE DES SUGGESTIONS & GROUPES 
+function renderGroups() {
+    var container = $('groupsContainer'); if(!container) return;
+    var query = ($('groupSearchInput') ? $('groupSearchInput').value : '').toLowerCase();
+    
+    var filtered = groups.filter(g => g.name.toLowerCase().indexOf(query) !== -1 || (g.description||'').toLowerCase().indexOf(query) !== -1);
+    if (currentFilter === 'joined') filtered = filtered.filter(g => g.joined); 
+    else if (currentFilter !== 'all') filtered = filtered.filter(g => g.category === currentFilter);
+    
+    if (!filtered.length) { 
+        container.innerHTML = '<div class="empty-state"><i class="fas fa-users-slash" style="font-size:3rem;margin-bottom:16px;"></i><p>'+t('no_groups')+'</p></div>'; 
+        var countEl = $('groupsCount'); if(countEl) countEl.textContent = '0 ' + t('groups_count'); 
+        return; 
+    }
+    
+    var myGroups = filtered.filter(g => g.joined);
+    var suggestedGroups = filtered.filter(g => !g.joined);
+    
+    var html = '';
+
+    function createGroupHtml(g) {
+        var avatarHtml = '';
+        if (g.avatarImage) avatarHtml = '<div class="group-avatar-img" style="background-image:url(\'' + escapeHtml(g.avatarImage) + '\')"></div>';
+        else if (g.avatar) avatarHtml = '<div class="group-avatar-img" style="background-image:url(\'' + escapeHtml(g.avatar) + '\')"></div>';
+        else avatarHtml = '<div class="group-icon"><i class="fas ' + (g.icon||'fa-users') + '"></i></div>';
+        
+        var lockIcon = g.type === 'private' ? '<i class="fas fa-lock" style="font-size:0.7rem;color:var(--estra-warning);"></i>' : '';
+        var desc = (g.description||'').substring(0,80) + ((g.description||'').length > 80 ? '...' : '');
+        
+        var metaHtml = '<span><i class="fas fa-user"></i> ' + g.members + ' ' + t('members_label') + '</span>';
+        metaHtml += '<span><i class="fas fa-tag"></i> ' + getCategoryLabel(g.category) + '</span>';
+        if (g.shoppingType) metaHtml += '<span><i class="fas fa-shopping-bag"></i> ' + escapeHtml(g.shoppingType) + '</span>';
+        if (g.university) metaHtml += '<span><i class="fas fa-university"></i> ' + escapeHtml(g.university) + '</span>';
+        metaHtml += '<span><i class="far fa-clock"></i> ' + getTimeAgo(g.createdAt) + '</span>';
+        
+        var btnHtml = g.joined ? '<button class="leave-btn" onclick="event.stopPropagation();leaveGroup(' + g.id + ')">' + t('leave') + '</button>' : '<button class="join-btn" onclick="event.stopPropagation();joinGroup(' + g.id + ')">' + t('join') + '</button>';
+        
+        const isSelected = (window.innerWidth >= 1024 && g.id == currentGroupId) ? 'border-left-color: var(--estra-cyan);' : '';
+        
+        // Logique de badge pour afficher les nouvelles notifications / notes
+        var badgeHtml = '';
+        if (g.unreadCount && g.unreadCount > 0) {
+            badgeHtml = '<div class="group-badge" title="Nouvelles publications/notes">' + g.unreadCount + '</div>';
+        }
+
+        return '<div class="group-card" id="group-card-' + g.id + '" style="'+isSelected+'" onclick="viewGroup(' + g.id + ')">' + avatarHtml + '<div class="group-info"><h3>' + escapeHtml(g.name) + ' ' + lockIcon + badgeHtml + '</h3><p>' + escapeHtml(desc) + '</p><div class="group-meta">' + metaHtml + '</div></div>' + btnHtml + '</div>';
+    }
+
+    if (myGroups.length > 0) {
+        if(currentFilter === 'all') html += '<div class="section-separator"><span>' + t('my_groups_section') + '</span></div>';
+        html += myGroups.map(createGroupHtml).join('');
+    }
+
+    if (suggestedGroups.length > 0) {
+        if(currentFilter === 'all') html += '<div class="section-separator"><span>' + t('suggestions_section') + '</span></div>';
+        html += suggestedGroups.map(createGroupHtml).join('');
+    }
+    
+    container.innerHTML = html;
+    var countEl = $('groupsCount'); if(countEl) countEl.textContent = filtered.length + ' ' + t('groups_count');
+}
+
+function viewGroup(id) { 
+    // Réinitialise les notifications du groupe à sa consultation
+    var g = groups.find(x => x.id == id);
+    if (g && g.unreadCount > 0) {
+        g.unreadCount = 0;
+        saveGroups();
+        if(window.innerWidth < 1024) renderGroups();
+    }
+
+    localStorage.setItem('estra_current_group', id); 
+    if(window.innerWidth >= 1024) {
+        currentGroupId = id;
+        currentGroup = g;
+        renderGroups(); // Met à jour le UI pour retirer le badge et styliser la sélection
+        renderGroupDetailDesktop();
+    } else {
+        window.location.href = 'group-detail.html'; 
+    }
+}
+
+function filterGroups(f, btn) { 
+    currentFilter = f; 
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active')); 
+    if (btn) btn.classList.add('active'); 
+    renderGroups(); 
+}
+
+function openCreateGroupModal() { 
+    var modal = $('createGroupModal'); if(modal) modal.classList.add('active'); 
+    currentGroupAvatarData = null;
+    var preview = $('groupAvatarPreview'); if(preview) preview.style.backgroundImage = "url('https://ui-avatars.com/api/?background=38bdf8&color=fff&name=GR&size=60')";
+    var dynamicFields = $('dynamicCategoryFields'); if(dynamicFields) dynamicFields.innerHTML = '';
+    var catSelect = $('groupCategory'); if(catSelect) catSelect.value = 'business';
+    if($('groupName')) $('groupName').value = ''; if($('groupDescription')) $('groupDescription').value = '';
+    applyTranslations();
+}
+
+function closeCreateGroupModal() { 
+    var modal = $('createGroupModal'); if(modal) modal.classList.remove('active'); 
+    currentGroupAvatarData = null;
+}
+
+function createGroup() {
+    var nameEl = $('groupName'); var name = nameEl ? nameEl.value.trim() : ''; 
+    if (!name) { showToast(t('toast_name_required')); return; }
+    
+    var category = ($('groupCategory') || {}).value || 'other';
+    var iconMap = { business: 'fa-briefcase', shopping: 'fa-shopping-bag', school: 'fa-school', university: 'fa-university', company: 'fa-building', other: 'fa-users' };
+    
+    var ng = { 
+        id: Date.now(), name: name, 
+        description: (($('groupDescription') || {}).value || '').trim() || 'Aucune description', 
+        category: category, type: ($('groupType') || {}).value || 'public',
+        avatarImage: currentGroupAvatarData || null, icon: iconMap[category] || 'fa-users',
+        members: 1, joined: true, createdBy: currentUser.name, createdAt: Date.now(),
+        unreadCount: 0 // Pas de badge car vient d'être créé
+    };
+    
+    if (category === 'university') {
+        ng.university = (($('groupUniversity') || {}).value || '').trim(); ng.promotion = ($('groupPromotion') || {}).value || 'L1'; ng.faculty = (($('groupFaculty') || {}).value || '').trim();
+    } else if (category === 'shopping') {
+        ng.shoppingType = ($('groupShoppingType') || {}).value || ''; ng.address = (($('groupAddress') || {}).value || '').trim(); ng.place = (($('groupPlace') || {}).value || '').trim();
+    } else if (category === 'school') {
+        ng.school = (($('groupSchool') || {}).value || '').trim(); ng.schoolLevel = ($('groupSchoolLevel') || {}).value || ''; ng.schoolCity = (($('groupSchoolCity') || {}).value || '').trim();
+    } else if (category === 'business') {
+        ng.businessSector = (($('groupBusinessSector') || {}).value || '').trim(); ng.businessCity = (($('groupBusinessCity') || {}).value || '').trim(); ng.businessCountry = (($('groupBusinessCountry') || {}).value || '').trim();
+    } else if (category === 'company') {
+        ng.companyName = (($('groupCompanyName') || {}).value || '').trim(); ng.companyDept = (($('groupCompanyDept') || {}).value || '').trim(); ng.companyCity = (($('groupCompanyCity') || {}).value || '').trim();
+    }
+    
+    groups.unshift(ng); saveGroups(); 
+    
+    if (!window.estraUserGroups) window.estraUserGroups = [];
+    window.estraUserGroups.push({ id: ng.id, name: ng.name, avatar: ng.avatarImage, icon: ng.icon });
+    localStorage.setItem('estra_userGroups', JSON.stringify(window.estraUserGroups));
+    
+    var groupPost = {
+        id: Date.now() + 1, author: currentUser.name, authorAvatar: currentUser.avatar,
+        content: '🎉 Nouveau groupe créé : "' + name + '" !\n📝 ' + ng.description + '\n🏷️ ' + getCategoryLabel(category) + '\n🔗 Rejoignez-nous !',
+        isGroupAnnouncement: true, groupId: ng.id, groupName: name, likes: 0, liked: false, saved: false, comments: [], timestamp: Date.now()
+    };
+    
+    if (!window.estraPosts) window.estraPosts = []; window.estraPosts.unshift(groupPost); localStorage.setItem('estra_posts', JSON.stringify(window.estraPosts));
+    
+    addNotification('group_created', t('notif_group_created'), `Groupe "${name}" créé avec succès`, { groupId: ng.id });
+    
+    window.dispatchEvent(new CustomEvent('estraNewGroup', { detail: ng }));
+    window.dispatchEvent(new CustomEvent('estraNewGroupPost', { detail: groupPost }));
+    
+    renderGroups(); closeCreateGroupModal(); updateSidebar(); updateBadges();
+    showToast(t('toast_created') + ' "' + name + '"');
+    
+    setTimeout(() => viewGroup(ng.id), 500);
+}
+
+// ============ LOGIQUE DES DÉTAILS DU GROUPE (DESKTOP) ============
+function renderGroupDetailDesktop() {
+    const c = $('groupDetailContainerDesktop'); if (!c) return;
+    if (!currentGroup) { c.innerHTML = `<div class="empty-state" style="margin-top:50px;"><i class="fas fa-users" style="font-size:3rem;margin-bottom:16px;color:var(--text-secondary)"></i><p>${t('select_group_desktop')}</p></div>`; return; }
+    
+    const posts = groupPosts[currentGroupId] || [], isAdmin = currentGroup.createdBy === currentUser.name, joined = currentGroup.joined === true;
+    const cover = currentGroup.coverImage || presetCovers[0], av = currentGroup.avatarImage || currentGroup.avatar || `https://ui-avatars.com/api/?background=1d9bf0&color=fff&name=${encodeURIComponent(currentGroup.name)}&size=100`;
+    
+    let h = `<div class="group-cover" style="background-image:url('${cover}');">${isAdmin ? `<button class="cover-edit-btn" onclick="openCoverPicker()"><i class="fas fa-camera"></i> ${t('modify_cover')}</button>` : ''}</div>`;
+    h += `<div style="position:relative;"><img src="${av}" class="group-avatar-detail" alt="Avatar">${isAdmin ? `<button class="avatar-edit-btn" onclick="editAvatar()"><i class="fas fa-camera" style="font-size:12px;"></i></button>` : ''}</div>`;
+    
+    h += `<div class="group-detail-info"><h2>${escapeHtml(currentGroup.name)} ${currentGroup.type === 'private' ? '<i class="fas fa-lock" style="font-size:1rem;color:var(--estra-warning);"></i>' : ''}</h2><p>${escapeHtml(currentGroup.description || t('no_description'))}</p><div class="group-detail-meta"><span><i class="fas fa-user"></i> ${currentGroup.members || 0} ${t('members_label')}</span><span><i class="fas fa-user-circle"></i> ${t('created_by')} ${escapeHtml(currentGroup.createdBy || 'Inconnu')}</span><span><i class="fas fa-tag"></i> ${escapeHtml(currentGroup.category || 'Général')}</span>${isAdmin ? `<span><i class="fas fa-crown" style="color:var(--estra-warning);"></i> ${t('admin_label')}</span>` : ''}</div><div class="group-actions-detail">${joined ? `<button class="btn-leave" onclick="leaveGroup(${currentGroup.id})">${t('leave')}</button>` : `<button class="btn-join" onclick="joinGroup(${currentGroup.id})">${t('join')}</button>`}${joined ? `<button class="btn-invite" onclick="openInviteModal()"><i class="fas fa-user-plus"></i> ${t('invite')}</button>` : ''}${isAdmin ? `<button class="btn-manage" onclick="manageGroup()"><i class="fas fa-cog"></i> ${t('manage')}</button>` : ''}</div></div>`;
+    
+    if (joined) h += `<div class="create-post"><div class="create-post-header"><img src="${currentUser.avatar}" class="post-avatar" alt="Avatar"><div class="create-post-input" onclick="openPostModal()">${t('post_placeholder')}</div></div></div>`;
+    
+    if (!posts.length) h += `<div class="empty-state"><i class="fas fa-newspaper" style="font-size:3rem;margin-bottom:16px;"></i><p>${t('no_posts')}</p></div>`;
+    else { 
+        posts.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp)); 
+        h += posts.map(p => { 
+            const liked = userLikes[p.id] || false; 
+            return `<div class="post-card" id="groupPost-${p.id}"><div class="post-header"><img src="${p.authorAvatar || 'https://ui-avatars.com/api/?background=1d9bf0&color=fff&name=User&size=44'}" class="post-avatar" alt="Avatar"><div class="post-info"><div class="post-name">${escapeHtml(p.author || 'Inconnu')}</div><div class="post-time">${getRelativeTime(p.timestamp)}</div></div></div><div class="post-text">${escapeHtml(p.content || '')}</div>${p.image ? `<div class="post-media"><img src="${p.image}" onclick="viewImage('${p.image}')" alt="Image"></div>` : ''}<div class="post-stats"><span><i class="fas fa-heart" style="color:var(--estra-danger);"></i> <span id="likesCount-${p.id}">${p.likes || 0}</span></span><span><i class="fas fa-comment"></i> ${(p.comments || []).length} ${t('comments_label')}</span></div><div class="post-actions"><button class="post-action-btn ${liked ? 'liked' : ''}" onclick="toggleLikeGroupPost('${p.id}')"><svg viewBox="0 0 24 24" fill="${liked ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg> ${t('like')}</button><button class="post-action-btn" onclick="toggleCommentsSection('${p.id}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> ${t('comment')}</button><button class="post-action-btn" onclick="openShareModal('${p.id}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg> ${t('share')}</button></div><div class="comments-section" id="comments-section-${p.id}"><div id="comments-list-${p.id}">${(p.comments || []).map(c => `<div class="comment-item"><div class="comment-bubble"><div class="comment-author">${escapeHtml(c.author || '')}</div><div class="comment-text">${escapeHtml(c.text || '')}</div></div></div>`).join('')}</div><div class="comment-input-area"><input type="text" id="commentInput-${p.id}" class="comment-input" placeholder="${t('comment_placeholder')}" onkeypress="if(event.key==='Enter')addGroupComment('${p.id}')"><button class="btn-create" style="padding:6px 14px;" onclick="addGroupComment('${p.id}')">${t('send')}</button></div></div></div>`; 
+        }).join(''); 
+    }
+    c.innerHTML = h;
+}
+
+// POST ACTIONS (Partagés entre list et desktop)
+function toggleLikeGroupPost(pid) { const posts = groupPosts[currentGroupId] || [], p = posts.find(x => x.id === pid); if (!p) return; const liked = userLikes[pid] || false; if (liked) { userLikes[pid] = false; p.likes = Math.max(0, (p.likes || 0) - 1); showToast(t('toast_unliked')); } else { userLikes[pid] = true; p.likes = (p.likes || 0) + 1; showToast(t('toast_liked')); } saveLikes(); saveGroupPosts(); renderGroupDetailDesktop(); }
+function toggleCommentsSection(pid) { const s = $(`comments-section-${pid}`); if (s) s.classList.toggle('show'); }
+function addGroupComment(pid) { const inp = $(`commentInput-${pid}`), txt = inp ? inp.value.trim() : ''; if (!txt) return; const posts = groupPosts[currentGroupId] || [], p = posts.find(x => x.id === pid); if (p) { p.comments = p.comments || []; p.comments.push({ author: currentUser.name, avatar: currentUser.avatar, text: txt, time: new Date().toISOString() }); saveGroupPosts(); renderGroupDetailDesktop(); setTimeout(() => { const s = $(`comments-section-${pid}`); if (s) s.classList.add('show'); }, 100); addNotification('group_comment', t('notif_group_comment'), `Commentaire dans "${currentGroup?.name || 'le groupe'}"`, {}); } }
+
+function openShareModal(pid) { currentSharePostId = pid; currentShareTab = 'social'; const m = $('shareModal'); if (m) m.classList.add('active'); const st = $('shareSocialTab'), ft = $('shareFriendsTab'); if (st) st.style.display = 'block'; if (ft) ft.style.display = 'none'; document.querySelectorAll('#shareModal .invite-tab').forEach((ti, i) => ti.classList.toggle('active', i === 0)); }
+function closeShareModal() { const m = $('shareModal'); if (m) m.classList.remove('active'); }
+function switchShareTab(tab, el) { currentShareTab = tab; document.querySelectorAll('#shareModal .invite-tab').forEach(ti => ti.classList.remove('active')); if (el) el.classList.add('active'); const st = $('shareSocialTab'), ft = $('shareFriendsTab'); if (st) st.style.display = tab === 'social' ? 'block' : 'none'; if (ft) ft.style.display = tab === 'friends' ? 'block' : 'none'; if (tab === 'friends') renderShareFriendsList(); }
+function renderShareFriendsList() { const c = $('shareFriendsListContainer'); if (!c) return; const q = ($('searchShareFriend')?.value || '').toLowerCase(); const f = friendsList.filter(x => (x.name || '').toLowerCase().includes(q)); if (!f.length) { c.innerHTML = `<div style="text-align:center;padding:40px;">👥 ${t('no_friends')}</div>`; return; } c.innerHTML = f.map(x => `<div class="invite-item" onclick="sharePostToFriend('${x.id}','${escapeHtml(x.name)}')"><img src="${x.avatar || 'https://ui-avatars.com/api/?background=1d9bf0&color=fff&name=' + encodeURIComponent(x.name || 'User')}" class="invite-avatar" style="width:40px;height:40px;border-radius:50%;object-fit:cover;" alt="Avatar"><div><strong>${escapeHtml(x.name || 'Inconnu')}</strong></div></div>`).join(''); }
+function sharePostVia(platform) { const link = encodeURIComponent(`${window.location.origin}/group-detail.html`); const txt = encodeURIComponent(`Découvrez cette publication sur ESTRA LINK !`); let url = ''; switch (platform) { case 'whatsapp': url = `https://wa.me/?text=${txt}%20${link}`; break; case 'facebook': url = `https://www.facebook.com/sharer/sharer.php?u=${link}`; break; case 'twitter': url = `https://twitter.com/intent/tweet?text=${txt}&url=${link}`; break; case 'linkedin': url = `https://www.linkedin.com/sharing/share-offsite/?url=${link}`; break; case 'telegram': url = `https://t.me/share/url?url=${link}&text=${txt}`; break; case 'sms': url = `sms:?body=${txt}%20${link}`; break; case 'email': url = `mailto:?subject=Publication%20ESTRA%20LINK&body=${txt}%20${link}`; break; case 'copy': navigator.clipboard?.writeText(`${window.location.origin}/group-detail.html`).then(() => showToast(t('toast_link_copied'))); closeShareModal(); return; } if (url) window.open(url, '_blank'); showToast(`${t('toast_shared')} ${platform}`); closeShareModal(); }
+function sharePostToFriend(fid, fname) { showToast(`${t('toast_shared_with')} ${fname}`); closeShareModal(); }
+
+function openCoverPicker() { const ex = document.querySelector('.modal-overlay.active'); if (ex && ex.id !== 'postModal' && ex.id !== 'shareModal' && ex.id !== 'createGroupModal') ex.remove(); const m = document.createElement('div'); m.className = 'modal-overlay active'; m.innerHTML = `<div class="modal-content"><div class="modal-header"><h3><i class="fas fa-images"></i> ${t('cover_picker_title')}</h3><button class="modal-close" onclick="this.closest('.modal-overlay').remove()">&times;</button></div><div class="cover-grid">${presetCovers.map(url => `<div class="cover-option" style="background-image:url('${url}');" onclick="selectCover('${url}',this)"></div>`).join('')}</div><div style="margin-top:16px;text-align:right;"><button class="btn-cancel" onclick="this.closest('.modal-overlay').remove()">${t('close')}</button></div></div>`; m.addEventListener('click', e => { if (e.target === m) m.remove(); }); document.body.appendChild(m); }
+function selectCover(url, el) { document.querySelectorAll('.cover-option').forEach(o => o.classList.remove('selected')); if (el) el.classList.add('selected'); if (currentGroup) { currentGroup.coverImage = url; saveGroups(); renderGroupDetailDesktop(); showToast(t('toast_cover_updated')); } const m = document.querySelector('.modal-overlay.active'); if (m) setTimeout(() => m.remove(), 300); }
+function editAvatar() { const i = document.createElement('input'); i.type = 'file'; i.accept = 'image/*'; i.onchange = e => { if (e.target.files[0]) { const r = new FileReader(); r.onload = ev => { if (currentGroup) { currentGroup.avatarImage = ev.target.result; saveGroups(); renderGroupDetailDesktop(); renderGroups(); showToast(t('toast_avatar_updated')); } }; r.readAsDataURL(e.target.files[0]); } }; i.click(); }
+
+function joinGroup(id) { 
+    id = id || currentGroupId; var g = groups.find(x => x.id == id); 
+    if (g && !g.joined) { 
+        g.joined = true; g.members = (g.members||0) + 1; 
+        saveGroups(); renderGroups(); updateSidebar(); 
+        if (!window.estraUserGroups) window.estraUserGroups = [];
+        if (!window.estraUserGroups.find(ug => ug.id === g.id)) { window.estraUserGroups.push({ id: g.id, name: g.name, avatar: g.avatarImage||g.avatar, icon: g.icon }); localStorage.setItem('estra_userGroups', JSON.stringify(window.estraUserGroups)); }
+        if (window.innerWidth >= 1024) renderGroupDetailDesktop();
+        showToast(t('toast_joined') + ' ' + g.name); 
+        addNotification('group_joined', t('notif_group_joined'), `Vous avez rejoint "${g.name}"`, { groupId: id });
+    } 
+}
+function leaveGroup(id) { 
+    id = id || currentGroupId; var g = groups.find(x => x.id == id); 
+    if (g && g.joined) { 
+        g.joined = false; g.members = Math.max(0, (g.members||1) - 1); 
+        saveGroups(); renderGroups(); updateSidebar(); 
+        if (window.estraUserGroups) { window.estraUserGroups = window.estraUserGroups.filter(ug => ug.id !== id); localStorage.setItem('estra_userGroups', JSON.stringify(window.estraUserGroups)); }
+        if (window.innerWidth >= 1024) renderGroupDetailDesktop();
+        showToast(t('toast_left') + ' ' + g.name); 
+        addNotification('group_left', t('notif_group_left'), `Vous avez quitté "${g.name}"`, { groupId: id });
+    } 
+}
+function manageGroup() { showToast(t('toast_manage')); }
+
+function openPostModal() { const m = $('postModal'); if (m) m.classList.add('active'); }
+function closePostModal() { const m = $('postModal'); if (m) m.classList.remove('active'); const ta = $('postContent'); if (ta) ta.value = ''; const mp = $('mediaPreview'); if (mp) mp.innerHTML = ''; currentImageData = null; }
+function clearMedia() { const mp = $('mediaPreview'); if (mp) mp.innerHTML = ''; currentImageData = null; }
+function initPostListeners() {
+    $('addImageBtn')?.addEventListener('click', () => { const i = document.createElement('input'); i.type = 'file'; i.accept = 'image/*'; i.onchange = e => { if (e.target.files[0]) { const r = new FileReader(); r.onload = ev => { currentImageData = ev.target.result; const mp = $('mediaPreview'); if (mp) mp.innerHTML = `<div style="position:relative;margin-top:10px;"><img src="${currentImageData}" style="width:100%;max-height:200px;object-fit:cover;border-radius:12px;" alt="Aperçu"><div style="position:absolute;top:5px;right:5px;background:rgba(0,0,0,0.6);color:#fff;width:24px;height:24px;border-radius:50%;text-align:center;cursor:pointer;" onclick="clearMedia()">×</div></div>`; }; r.readAsDataURL(e.target.files[0]); } }; i.click(); });
+    $('submitPostBtn')?.addEventListener('click', () => { 
+        const ta = $('postContent'); const txt = ta ? ta.value.trim() : ''; 
+        if (!txt && !currentImageData) { showToast(t('toast_empty_post')); return; } 
+        if (!groupPosts[currentGroupId]) groupPosts[currentGroupId] = []; 
+        const np = { id: 'p_' + Date.now(), author: currentUser.name, authorAvatar: currentUser.avatar, content: txt, likes: 0, comments: [], image: currentImageData || null, timestamp: new Date().toISOString() }; 
+        groupPosts[currentGroupId].unshift(np); saveGroupPosts(); 
+        
+        const fp = { id: Date.now() + 1, type: 'group', author: currentUser.name, authorAvatar: currentUser.avatar, content: txt, groupId: currentGroup.id, groupName: currentGroup.name, image: currentImageData || null, likes: 0, liked: false, saved: false, comments: [], timestamp: Date.now() }; 
+        if (!window.estraPosts) window.estraPosts = []; window.estraPosts.unshift(fp); localStorage.setItem('estra_posts', JSON.stringify(window.estraPosts)); 
+        
+        addNotification('group_post', t('notif_group_post'), `Publication dans "${currentGroup?.name || 'le groupe'}"`, { groupId: currentGroupId });
+        
+        closePostModal(); renderGroupDetailDesktop(); showToast(t('toast_published')); 
+    });
+}
+
+function openInviteModal() { 
+    const ex = document.querySelector('.modal-overlay.active'); if (ex && ex.id !== 'postModal' && ex.id !== 'shareModal' && ex.id !== 'createGroupModal') ex.remove(); 
+    const m = document.createElement('div'); m.className = 'modal-overlay active'; m.id = 'inviteModal'; 
+    m.innerHTML = `<div class="modal-content"><div class="modal-header"><h3><i class="fas fa-user-plus"></i> ${t('invite_title')}</h3><button class="modal-close" onclick="this.closest('.modal-overlay').remove()">&times;</button></div><div class="invite-tabs"><div class="invite-tab active" onclick="switchInviteTab('friends',this)"><i class="fas fa-user-friends"></i> ${t('invite_friends_tab')}</div><div class="invite-tab" onclick="switchInviteTab('links',this)"><i class="fas fa-link"></i> ${t('invite_link_tab')}</div></div><div id="inviteFriendsTab"><input type="text" id="searchFriendInput" placeholder="${t('search_friends_placeholder')}" class="form-group input" style="width:100%;margin-bottom:16px;" oninput="renderFriendsList()"><div id="friendsListContainer" class="invite-list" style="max-height:300px;overflow-y:auto;"></div></div><div id="inviteLinksTab" style="display:none;"><div class="invite-link-methods"><div class="invite-link-method" onclick="copyInviteLink()"><i class="fas fa-copy"></i><span>${t('invite_link_copy')}</span></div><div class="invite-link-method" onclick="shareVia('whatsapp')"><i class="fab fa-whatsapp" style="color:#25D366;"></i><span>${t('invite_link_whatsapp')}</span></div><div class="invite-link-method" onclick="shareVia('sms')"><i class="fas fa-sms"></i><span>${t('invite_link_sms')}</span></div><div class="invite-link-method" onclick="shareVia('email')"><i class="fas fa-envelope"></i><span>${t('invite_link_email')}</span></div><div class="invite-link-method" onclick="shareVia('linkedin')"><i class="fab fa-linkedin" style="color:#0077B5;"></i><span>${t('invite_link_linkedin')}</span></div></div></div></div>`; 
+    m.addEventListener('click', e => { if (e.target === m) m.remove(); }); document.body.appendChild(m); renderFriendsList(); 
+}
+function switchInviteTab(tab, el) { document.querySelectorAll('#inviteModal .invite-tab').forEach(ti => ti.classList.remove('active')); if (el) el.classList.add('active'); const ft = $('inviteFriendsTab'), lt = $('inviteLinksTab'); if (ft) ft.style.display = tab === 'friends' ? 'block' : 'none'; if (lt) lt.style.display = tab === 'links' ? 'block' : 'none'; }
+function renderFriendsList() { const c = $('friendsListContainer'); if (!c) return; const q = ($('searchFriendInput')?.value || '').toLowerCase(); const f = friendsList.filter(x => (x.name || '').toLowerCase().includes(q)); if (!f.length) { c.innerHTML = `<div style="text-align:center;padding:40px;">👥 ${t('no_friends')}</div>`; return; } c.innerHTML = f.map(x => `<div class="invite-item" onclick="sendInvite('${x.id}','${escapeHtml(x.name)}')"><img src="${x.avatar || 'https://ui-avatars.com/api/?background=1d9bf0&color=fff&name=' + encodeURIComponent(x.name || 'User')}" style="width:40px;height:40px;border-radius:50%;object-fit:cover;"><div><strong>${escapeHtml(x.name || 'Inconnu')}</strong><br><span style="font-size:0.7rem;color:var(--text-secondary);">${t('friend_label')}</span></div></div>`).join(''); }
+function sendInvite(fid, fname) { showToast(`${t('toast_invite_sent')} ${fname}`); const m = $('inviteModal'); if (m) m.remove(); addNotification('group_invite', t('notif_group_invite'), `Invitation envoyée à ${fname}`, {}); }
+function copyInviteLink() { navigator.clipboard?.writeText(`${window.location.origin}/groups.html?id=${currentGroupId}`).then(() => showToast(t('toast_link_copied'))); }
+function shareVia(platform) { const link = encodeURIComponent(`${window.location.origin}/groups.html?id=${currentGroupId}`); const txt = encodeURIComponent(`Rejoins le groupe "${currentGroup?.name || ''}" sur ESTRA LINK !`); let url = ''; switch (platform) { case 'whatsapp': url = `https://wa.me/?text=${txt}%20${link}`; break; case 'sms': url = `sms:?body=${txt}%20${link}`; break; case 'email': url = `mailto:?subject=Invitation%20${encodeURIComponent(currentGroup?.name || 'groupe')}&body=${txt}%20${link}`; break; case 'linkedin': url = `https://www.linkedin.com/sharing/share-offsite/?url=${link}`; break; } if (url) window.open(url, '_blank'); showToast(`${t('toast_shared')} ${platform}`); }
+
+function viewImage(src) { const v = document.createElement('div'); v.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.95);z-index:10000;display:flex;align-items:center;justify-content:center;cursor:pointer;'; v.innerHTML = `<img src="${src}" style="max-width:90%;max-height:90%;border-radius:12px;" alt="Image">`; v.onclick = () => v.remove(); document.body.appendChild(v); }
+function toggleSidebar() { const s = $('sidebar'), o = $('sidebarOverlay'); if (s) s.classList.toggle('open'); if (o) o.classList.toggle('active'); }
+function closeSidebar() { const s = $('sidebar'), o = $('sidebarOverlay'); if (s) s.classList.remove('open'); if (o) o.classList.remove('active'); }
+function logout() { localStorage.clear(); window.location.href = 'login.html'; }
+
+document.addEventListener('DOMContentLoaded', function() { 
+    loadData(); renderGroups(); initPostListeners();
+    var overlay = $('sidebarOverlay'); if(overlay) overlay.addEventListener('click', closeSidebar); 
+    var modal = $('createGroupModal'); if(modal) modal.addEventListener('click', e => { if (e.target === modal) closeCreateGroupModal(); }); 
+    document.addEventListener('click', e => { const sidebar = $('sidebar'), menuToggle = document.querySelector('.menu-toggle'); if (sidebar && sidebar.classList.contains('open') && !sidebar.contains(e.target) && e.target !== menuToggle && !(menuToggle && menuToggle.contains(e.target))) closeSidebar(); });
+    window.addEventListener('online', () => { var banner = $('offlineBanner'); if(banner) banner.style.display = 'none'; showToast(t('toast_online')); });
+    window.addEventListener('offline', () => { var banner = $('offlineBanner'); if(banner) banner.style.display = 'block'; showToast(t('toast_offline')); });
+    
+    // Communication inter-pages
+    window.addEventListener('storage', e => { 
+        if (e.key === 'estra_notification_trigger') { updateBadges(); }
+        if (e.key === 'estra_theme' && e.newValue) { document.documentElement.setAttribute('data-theme', e.newValue); window.estraTheme = e.newValue; }
+        if (e.key === 'estra_language' && e.newValue) { applyTranslations(); renderGroups(); renderGroupDetailDesktop(); }
+        if (e.key === 'estra_groups') { groups = JSON.parse(e.newValue || '[]'); window.estraGroups = groups; renderGroups(); updateSidebar(); } 
+        if (e.key === 'estra_profile') loadData(); 
+        if (e.key === 'estra_conversations') updateBadges(); 
+        if (e.key === 'estra_userGroups') { window.estraUserGroups = JSON.parse(e.newValue || '[]'); updateSidebar(); }
+    });
+    
+    window.addEventListener('estra_notification_updated', function(e) { updateBadges(); });
+    
+    setInterval(updateBadges, 3000);
+});
+
+// Exposer globalement
+window.filterGroups = filterGroups; window.joinGroup = joinGroup; window.leaveGroup = leaveGroup; 
+window.viewGroup = viewGroup; window.openCreateGroupModal = openCreateGroupModal; 
+window.closeCreateGroupModal = closeCreateGroupModal; window.createGroup = createGroup;
+window.handleCategoryChange = handleCategoryChange; window.handleGroupAvatarSelect = handleGroupAvatarSelect;
+window.toggleSidebar = toggleSidebar; window.closeSidebar = closeSidebar; window.logout = logout; window.showToast = showToast;
+window.updateBadges = updateBadges; window.checkOnlineStatus = checkOnlineStatus;
+window.t = t; window.applyTranslations = applyTranslations; window.renderGroupDetailDesktop = renderGroupDetailDesktop;
+window.toggleLikeGroupPost = toggleLikeGroupPost; window.toggleCommentsSection = toggleCommentsSection;
+window.addGroupComment = addGroupComment; window.openShareModal = openShareModal;
+window.closeShareModal = closeShareModal; window.switchShareTab = switchShareTab;
+window.renderShareFriendsList = renderShareFriendsList; window.sharePostVia = sharePostVia;
+window.sharePostToFriend = sharePostToFriend; window.openCoverPicker = openCoverPicker;
+window.selectCover = selectCover; window.openPostModal = openPostModal;
+window.closePostModal = closePostModal; window.openInviteModal = openInviteModal;
+window.switchInviteTab = switchInviteTab; window.copyInviteLink = copyInviteLink;
+window.shareVia = shareVia; window.manageGroup = manageGroup; window.editAvatar = editAvatar; window.viewImage = viewImage;
+window.clearMedia = clearMedia; window.renderFriendsList = renderFriendsList; window.sendInvite = sendInvite;
+window.addNotification = addNotification; window.toggleEcoMode = toggleEcoMode;
+</script>
+<script src="i18n.js"></script>
+<script src="pwa-init.js"></script>
+<script src="sync.js"></script>
+</body>
+</html>

@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, maximum-scale=1.0, viewport-fit=cover">
+    <title>ESTRA LINK • Choisissez votre profil</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#0284c7">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="ESTRA LINK">
+    <link rel="apple-touch-icon" href="https://ui-avatars.com/api/?background=0284c7&color=fff&name=E&size=152">
+    <style>
+        :root {
+            --bg: whitesmoke;
+            --card-bg: white;
+            --border: rgba(0,0,0,0.1);
+            --text: #0f172a;
+            --text-secondary: #475569;
+            --cyan: #0284c7;
+            --purple: #7c3aed;
+            --success: #059669;
+            --danger: #dc2626;
+            --warning: #d97706;
+            --input-bg: #f1f5f9;
+            --hover-bg: rgba(2,132,199,0.03);
+            --shadow: 0 4px 20px rgba(0,0,0,0.08);
+            --shadow-lg: 0 15px 35px rgba(0,0,0,0.1);
+            --transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+        }
+        * { margin:0; padding:0; box-sizing:border-box }
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: var(--bg);
+            min-height: 100vh;
+            color: var(--text);
+            overflow-x: hidden;
+            background-image: radial-gradient(at 0% 0%, rgba(2,132,199,0.05) 0px, transparent 50%),
+                              radial-gradient(at 100% 100%, rgba(124,58,237,0.05) 0px, transparent 50%);
+        }
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .header h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: var(--text);
+        }
+        .header h1 span {
+            color: var(--cyan);
+        }
+        .header p {
+            font-size: 1rem;
+            color: var(--text-secondary);
+        }
+        .logout-link {
+            background: none;
+            border: none;
+            color: var(--danger);
+            cursor: pointer;
+            font-size: 0.9rem;
+            margin-top: 15px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-family: inherit;
+            transition: var(--transition);
+        }
+        .logout-link:hover {
+            opacity: 0.8;
+        }
+
+        /* GRILLE DE CARTES */
+        .choice-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        .choice-card {
+            background: var(--card-bg);
+            border: 2px solid var(--border);
+            border-radius: 24px;
+            padding: 30px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .choice-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-lg);
+        }
+        .card-student:hover { border-color: var(--cyan); }
+        .card-pupil:hover { border-color: var(--success); }
+        .card-prof:hover { border-color: var(--purple); }
+        .card-teacher:hover { border-color: var(--warning); }
+        .card-simple:hover { border-color: #64748b; }
+
+        .card-icon {
+            font-size: 3.5rem;
+            margin-bottom: 15px;
+            transition: transform 0.3s;
+        }
+        .choice-card:hover .card-icon {
+            transform: scale(1.1);
+        }
+        .card-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.65rem;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+        .badge-free { background: var(--success); color: white; }
+        .badge-premium { background: var(--warning); color: black; }
+        .badge-pro { background: var(--purple); color: white; }
+        .card-title {
+            font-size: 1.2rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+        .card-desc {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        /* CARTES VERROUILLÉES */
+        .locked-card {
+            cursor: not-allowed;
+            overflow: hidden;
+        }
+        .locked-card:hover {
+            transform: none;
+            box-shadow: none;
+            border-color: var(--border);
+        }
+        .locked-card:hover .card-icon {
+            transform: none;
+        }
+        .card-content-blur {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            filter: blur(4px);
+            opacity: 0.6;
+            transition: var(--transition);
+        }
+        .locked-overlay {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            color: var(--text);
+        }
+        .locked-overlay i {
+            font-size: 2.8rem;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+        }
+        .locked-overlay span {
+            font-weight: 800;
+            font-size: 0.95rem;
+            background: var(--card-bg);
+            padding: 6px 16px;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        /* TITRE DE SECTION */
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: -20px;
+        }
+        .section-title i {
+            color: var(--cyan);
+        }
+
+        /* CARTES SIMPLES */
+        .simple-access {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .simple-card {
+            background: var(--card-bg);
+            border: 2px solid var(--border);
+            border-radius: 20px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .simple-card:hover {
+            border-color: var(--cyan);
+            background: var(--hover-bg);
+        }
+        .simple-icon {
+            font-size: 2rem;
+        }
+        .simple-info h4 {
+            font-size: 1rem;
+            margin-bottom: 2px;
+        }
+        .simple-info p {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        /* TRANSITION DE PAGE */
+        .page-transition {
+            position: fixed;
+            inset: 0;
+            background: var(--cyan);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transform: translateY(100%);
+            transition: transform 0.5s ease-in-out;
+            color: white;
+            text-align: center;
+        }
+        .page-transition.active {
+            transform: translateY(0);
+        }
+        .page-transition h2 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            font-weight: 800;
+        }
+        .page-transition p {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        /* TOAST */
+        .toast-custom {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--text);
+            color: var(--bg);
+            padding: 12px 24px;
+            z-index: 1100;
+            font-size: 0.85rem;
+            font-weight: 600;
+            border-radius: 30px;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+        .toast-custom.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* FOOTER */
+        .footer-note {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+        }
+
+        @media (max-width: 768px) {
+            .choice-cards { grid-template-columns: 1fr; }
+            .simple-access { grid-template-columns: 1fr; }
+            .header h1 { font-size: 1.6rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Toast notifications -->
+    <div class="toast-custom" id="toastMsg"></div>
+
+    <!-- Transition de page -->
+    <div class="page-transition" id="pageTransition">
+        <div>
+            <i class="fas fa-spinner fa-spin fa-3x" style="margin-bottom:20px"></i>
+            <h2>ESTRA LINK</h2>
+            <p>Configuration de votre profil intelligent...</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- En-tête -->
+        <div class="header">
+            <h1>Bienvenue, <span id="userName">utilisateurs</span> 👋</h1>
+            <p>Sélectionnez votre profil pour accéder à votre interface personnalisée</p>
+            <button class="logout-link" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Déconnexion</button>
+        </div>
+
+        <!-- SECTION : Profils Académiques -->
+        <div class="section-title">
+            <i class="fas fa-graduation-cap"></i> Profils Académiques
+        </div>
+
+        <div class="choice-cards">
+            <!-- ÉTUDIANT (Université) -->
+            <a href="#" onclick="selectProfile(event, 'student', 'forms/student-form.html')" class="choice-card card-student">
+                <div class="card-badge badge-free">GRATUIT</div>
+                <div class="card-icon">🎓</div>
+                <div class="card-title">Étudiant (Université)</div>
+                <div class="card-desc">Portfolio pro, CV dynamique, binôme, mentorat par des professeurs et accès au réseau étudiant.</div>
+            </a>
+
+            <!-- ÉLÈVE (Secondaire) -->
+            <a href="#" onclick="selectProfile(event, 'pupil', 'forms/pupil-form.html')" class="choice-card card-pupil">
+                <div class="card-badge badge-free">GRATUIT</div>
+                <div class="card-icon">🎒</div>
+                <div class="card-title">Élève (Secondaire)</div>
+                <div class="card-desc">Interface simplifiée, orientation scolaire, mentorat par des enseignants et badges de soutien.</div>
+            </a>
+
+            <!-- PROFESSEUR (Université) -->
+            <a href="#" onclick="selectProfile(event, 'prof', 'forms/prof-form.html')" class="choice-card card-prof">
+                <div class="card-badge badge-pro">UNIVERSITAIRE</div>
+                <div class="card-icon">👨‍🏫</div>
+                <div class="card-title">Professeur</div>
+                <div class="card-desc">Encadrez des étudiants, recevez des demandes de mentorat et publiez des cours universitaires.</div>
+            </a>
+
+            <!-- ENSEIGNANT (Secondaire) -->
+            <a href="#" onclick="selectProfile(event, 'teacher', 'forms/teacher-form.html')" class="choice-card card-teacher">
+                <div class="card-badge badge-pro">SECONDAIRE</div>
+                <div class="card-icon">👩‍🏫</div>
+                <div class="card-title">Enseignant</div>
+                <div class="card-desc">Encadrez des élèves, recevez des demandes de mentorat et partagez des ressources pédagogiques.</div>
+            </a>
+        </div>
+
+        <!-- SECTION : Profils Complémentaires -->
+        <div class="section-title">
+            <i class="fas fa-user-friends"></i> Profils Accès Rapide
+        </div>
+
+        <div class="choice-cards">
+                        <a href="#" onclick="selectProfile(event, 'simple', 'home.html')" class="choice-card card-simple">
+                <div class="card-badge badge-free">Accès rapide</div>
+                <div class="card-icon">🚀</div>
+                <div class="card-title">Visiteur / Membre</div>
+                <div class="card-desc">Accès direct au réseau social sans profil académique. Publiez, interagissez et développez votre réseau.</div>
+            </a>
+            <!-- ADMINISTRATEUR (Verrouillé) -->
+            <a href="#" onclick="showComingSoon(event)" class="choice-card locked-card">
+                <div class="locked-overlay">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>Sur invitation</span>
+                </div>
+                <div class="card-content-blur">
+                    <div class="card-badge badge-premium">ADMIN</div>
+                    <div class="card-icon">🛡️</div>
+                    <div class="card-title">Administrateur</div>
+                    <div class="card-desc">Gestion complète de la plateforme, attribution des badges, modération et statistiques globales.</div>
+                </div>
+            </a>
+
+            <!-- VISITEUR / MEMBRE -->
+        </div>
+
+
+        <div class="footer-note">
+            © 2026 ESTRA LINK • Système de gestion polymorphe v2.0
+        </div>
+    </div>
+
+    <script>
+        let toastTimeout;
+
+        function showToast(msg) {
+            const te = document.getElementById('toastMsg');
+            if (toastTimeout) clearTimeout(toastTimeout);
+            te.innerHTML = msg;
+            te.classList.remove('show');
+            void te.offsetWidth;
+            te.classList.add('show');
+            toastTimeout = setTimeout(() => te.classList.remove('show'), 3000);
+        }
+
+        function showComingSoon(e) {
+            e.preventDefault();
+            showToast('<i class="fas fa-lock" style="margin-right:8px;"></i> Fonctionnalité sur invitation uniquement');
+        }
+
+        function selectProfile(e, role, url) {
+            if (e) e.preventDefault();
+
+            // Stocker le rôle choisi
+            localStorage.setItem('user_role', role);
+            localStorage.setItem('estra_session_active', 'true');
+
+            // Animation de transition
+            document.getElementById('pageTransition').classList.add('active');
+
+            // Redirection après l'animation
+            setTimeout(() => {
+                window.location.href = url;
+            }, 1200);
+        }
+
+        function logout() {
+            if (confirm('Se déconnecter d\'ESTRA LINK ?')) {
+                localStorage.removeItem('estra_session_active');
+                localStorage.removeItem('access_token');
+                localStorage.removeItem('user_role');
+                window.location.href = 'login.html';
+            }
+        }
+
+        // Charger le nom d'utilisateur
+        window.onload = () => {
+            const profile = JSON.parse(localStorage.getItem('estra_profile') || '{}');
+            const userName = profile.fullName || profile.full_name || 'Biladi';
+            document.getElementById('userName').textContent = userName;
+        };
+    </script>
+</body>
+</html>

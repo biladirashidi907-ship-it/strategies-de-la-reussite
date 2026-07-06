@@ -1,0 +1,1303 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title data-i18n="page_title">ESTRA LINK | Événements</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    
+    <!-- LEAFLET CSS (Pour la carte interactive de création) -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+    <!-- PWA -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#38bdf8">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="ESTRA LINK">
+    <link rel="apple-touch-icon" href="https://ui-avatars.com/api/?background=38bdf8&color=fff&name=E&size=152">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        :root {
+    --estra-cyan: #38bdf8;
+    --estra-bg-dark: #f8fafc;
+    --estra-card-bg: #ffffff;
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --estra-border: rgba(0, 0, 0, 0.08);
+    --estra-purple: #a78bfa;
+    --estra-success: #10b981;
+    --estra-danger: #ef4444;
+    --estra-warning: #f59e0b;
+    --estra-gold: #fbbf24;
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --bg-primary: #f8fafc;
+    --scrollbar-track: #e2e8f0;
+    --sidebar-bg: #ffffff;
+    --border-light: rgba(0, 0, 0, 0.1);
+    --border-color: rgba(0, 0, 0, 0.1);
+    --active-bg: rgba(2, 132, 199, 0.08);
+    --navbar-bg: rgba(255, 255, 255, 0.9);
+    --theme-bg: #ffffff;
+}
+     
+        [data-theme="light"] {
+            --estra-bg-dark: #f8fafc;
+            --estra-card-bg: #ffffff;
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --estra-border: rgba(0,0,0,0.08);
+        }
+
+        /* ============ SIDEBAR & NAVBAR ============ */
+        [data-theme="light"] .sidebar { background: #ffffff; border-right: 1px solid rgba(0,0,0,0.1); }
+        [data-theme="light"] .sidebar .profile-section { border-bottom-color: rgba(0,0,0,0.1); }
+        [data-theme="light"] .sidebar .sidebar-link { color: #475569; }
+        [data-theme="light"] .sidebar .sidebar-link:hover, [data-theme="light"] .sidebar .sidebar-link.active { background: rgba(2,132,199,0.08); color: #0284c7; }
+        [data-theme="light"] .sidebar .profile-stats span { color: #475569; }
+        [data-theme="light"] .sidebar h3 { color: #0f172a !important; }
+        [data-theme="light"] .navbar { background: rgba(255,255,255,0.9); border-bottom-color: rgba(0,0,0,0.1); }
+        [data-theme="light"] .main-content { background: #f8fafc; border-color: rgba(0,0,0,0.08); }
+
+
+
+
+        *{margin:0;padding:0;box-sizing:border-box}
+    body{
+      background-color:var(--bg-primary);
+      background-image:radial-gradient(at 0% 0%,rgba(56,189,248,0.08) 0px,transparent 50%),radial-gradient(at 100% 100%,rgba(56,189,248,0.08) 0px,transparent 50%);
+      color:var(--text-primary); font-family:'Inter', 'Segoe UI', system-ui, sans-serif;
+      padding-bottom:80px; min-height:100vh; overflow-x:hidden;
+      transition:background-color 0.4s ease,color 0.4s ease;
+    }
+    body.modal-open { overflow: hidden; }
+    ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:var(--scrollbar-track);border-radius:10px}::-webkit-scrollbar-thumb{background:var(--cyan);border-radius:10px}
+
+    .offline-banner{position:fixed;top:0;left:0;right:0;background:#f59e0b;color:#000;text-align:center;padding:6px;z-index:9999;font-size:0.8rem;font-weight:600;display:none}
+
+    /* SIDEBAR (Original Restauration Complète) */
+    .sidebar-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(4px);z-index:1050;opacity:0;visibility:hidden;transition:var(--transition)}
+    .sidebar-overlay.active{opacity:1;visibility:visible}
+    .sidebar{position:fixed;top:0;left:-280px;width:220px;height:100vh;background:var(--sidebar-bg);border-right:1px solid var(--border-light);z-index:1060;padding:30px 15px;overflow-y:auto;transition:left 0.3s ease,background-color 0.4s ease}
+    .sidebar.open{left:0}
+    .profile-section{text-align:center;padding-bottom:25px;border-bottom:1px solid var(--border-color);margin-bottom:20px;position:relative}
+    .profile-img-sidebar{width:65px;height:65px;border-radius:50%;border:2px solid var(--cyan);margin-bottom:10px;object-fit:cover}
+    .online-indicator{position:absolute;top:50px;right:50px;width:16px;height:16px;border-radius:50%;background:#10b981;border:2px solid var(--sidebar-bg)}
+    .profile-stats{display:flex;justify-content:center;gap:20px;margin-top:12px}
+    .profile-stats div{text-align:center}.profile-stats strong{display:block;font-size:0.95rem;color:var(--cyan)}.profile-stats span{font-size:0.65rem;color:var(--text-secondary)}
+    .sidebar-nav{display:flex;flex-direction:column;gap:4px}
+    .sidebar-link{display:flex;align-items:center;gap:12px;padding:12px 15px;border-radius:10px;color:var(--text-secondary);text-decoration:none;font-size:0.9rem;transition:var(--transition);cursor:pointer;background:none;border:none;width:100%;font-family:inherit}
+    .sidebar-link svg{width:20px;height:20px;stroke-width:2;flex-shrink:0}
+    .sidebar-link:hover,.sidebar-link.active{background:var(--active-bg);color:var(--cyan);transform:translateX(5px);border-right:2px solid var(--cyan)}
+    .sidebar-link.logout-link{color:var(--danger)}.sidebar-link.logout-link:hover{background:rgba(239,68,68,0.1);color:var(--danger);border-right-color:var(--danger)}
+
+    /* NAVBAR */
+    .navbar{padding:10px 15px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border-color);background:var(--navbar-bg);backdrop-filter:blur(12px);position:sticky;top:0;z-index:100;transition:background-color 0.4s ease,border-color 0.4s ease}
+    .nav-left,.nav-right{display:flex;align-items:center;gap:12px}
+    .navbar-brand{font-weight:800;color:coral;letter-spacing:1.5px;font-size:1.1rem;text-decoration:none}
+
+
+
+
+        .menu-toggle{background:0 0;border:0;cursor:pointer;padding:8px;display:flex;align-items:center;color:var(--text-secondary);transition:var(--transition)}
+        .menu-toggle:hover{color:var(--estra-cyan)}
+        .avatar-nav{width:34px;height:34px;border-radius:50%;border:1.5px solid var(--estra-cyan);object-fit:cover;box-shadow:0 0 10px rgba(56,189,248,.2);cursor:pointer}
+
+        .main-content { max-width: 1100px; margin: 0 auto; padding: 0 16px; min-height:calc(100vh - 60px); }
+        
+        /* ============ PAGE HEADER ============ */
+        .page-header {
+            display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;
+            margin: 16px 0; padding: 28px 24px;
+            background: linear-gradient(135deg, var(--estra-cyan) 0%, var(--estra-purple) 100%);
+            border-radius: 20px; color: #fff; box-shadow: 0 10px 30px rgba(56,189,248,0.2);
+            position: relative; overflow: hidden;
+        }
+        .page-header::after { content: ''; position: absolute; inset:0; background: url('/vous pouvez /20260427_112132.jpg') no-repeat center bottom; background-size: cover; pointer-events: none; }
+        .page-header h2 { display:flex; align-items:center; gap:10px; font-size:1.6rem; font-weight: 900; z-index: 1; text-shadow: 0 2px 4px rgba(0,0,0,0.2); margin:0; color: coral;}
+        .create-btn { background: rgba(255,255,255,0.2); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.4); padding: 12px 24px; border-radius: 30px; color: #fff; cursor: pointer; font-weight: 700; display: flex; align-items: center; gap: 8px; transition: var(--transition); font-family: inherit; font-size: .9rem; z-index: 1; }
+        .create-btn:hover { background: #fff; color: var(--estra-cyan); transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.15); }
+
+        /* ============ FILTERS & VIEW TOGGLE ============ */
+        .events-filters { display:flex; gap:12px; padding: 0 0 20px 0; overflow-x:auto; margin-top: 8px; scrollbar-width: none; }
+        .events-filters::-webkit-scrollbar { display: none; }
+        .filter-chip { padding:10px 24px; background:var(--estra-card-bg); border:1px solid var(--estra-border); border-radius:30px; color:var(--text-secondary); cursor:pointer; font-size:.85rem; font-weight:600; transition:var(--transition); white-space:nowrap; flex-shrink:0; }
+        .filter-chip.active { background:var(--estra-cyan); color:#fff; border-color:transparent; box-shadow: 0 6px 16px rgba(56,189,248,0.3); }
+        [data-theme="light"] .filter-chip { background: #fff; border-color: rgba(0,0,0,0.1); color: #475569; }
+        [data-theme="light"] .filter-chip.active { background: #0284c7; color: #fff; }
+
+        .view-toggle { display:flex; gap:8px; padding:0 0 20px 0; }
+        .view-btn { padding:8px 20px; background:var(--estra-card-bg); border:1px solid var(--estra-border); border-radius:20px; cursor:pointer; font-size:.85rem; font-weight:600; color:var(--text-secondary); transition:var(--transition); }
+        .view-btn.active { background:var(--text-primary); color:var(--estra-bg-dark); border-color:transparent; }
+        [data-theme="light"] .view-btn { background: #fff; border-color: rgba(0,0,0,0.1); color: #475569; }
+        [data-theme="light"] .view-btn.active { background: #0f172a; color: #fff; }
+
+        /* ============ EVENT CARD ============ */
+        .list-view { display: grid; grid-template-columns: 1fr; gap: 24px; }
+        @media(min-width: 768px) { .list-view { grid-template-columns: repeat(2, 1fr); } }
+
+        .event-card {
+            border-radius: 24px; overflow: hidden; transition: var(--transition);
+            position: relative; border: none; box-shadow: 0 10px 25px rgba(0,0,0,0.15); 
+            display: flex; flex-direction: column; background: var(--theme-bg, #1e293b); color: #fff;
+        }
+        .event-card:hover { transform: translateY(-5px); box-shadow: 0 15px 35px rgba(0,0,0,0.3); }
+        [data-theme="light"] .event-card { box-shadow: 0 10px 20px rgba(0,0,0,0.06); }
+        [data-theme="light"] .event-card:hover { box-shadow: 0 15px 30px rgba(0,0,0,0.12); }
+
+        .event-image { height: 200px; background-size: cover; background-position: center; position: relative; }
+        .event-image::after { content: ''; position: absolute; bottom: -1px; left: 0; right: 0; height: 120px; background: linear-gradient(to top, var(--theme-bg, #1e293b) 0%, transparent 100%); }
+        .event-image-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.3); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; opacity: 0; transition: var(--transition); z-index: 2; cursor: pointer; }
+        .event-card:hover .event-image-overlay { opacity: 1; }
+        .event-image-overlay span { background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.4); padding: 10px 20px; border-radius: 30px; font-weight: 600; color: #fff; display: flex; align-items: center; gap: 8px; }
+
+        .event-price-badge { position:absolute; top:16px; left:16px; background:rgba(0,0,0,0.6); backdrop-filter:blur(5px); padding:6px 14px; border-radius:20px; font-size:.75rem; font-weight:800; color:#fff; border: 1px solid rgba(255,255,255,0.2); z-index:3; }
+        .event-date-badge { position:absolute; top:16px; right:16px; background:rgba(255,255,255,0.95); backdrop-filter:blur(8px); padding:8px 14px; border-radius:14px; text-align:center; color:#0f172a; box-shadow: 0 4px 10px rgba(0,0,0,0.15); min-width: 60px; z-index:3;}
+        .event-date-day { font-size:1.4rem; font-weight:800; line-height: 1; color: var(--theme-color, #38bdf8); }
+        .event-date-month { font-size:.75rem; text-transform:uppercase; font-weight: 700; margin-top: 4px; }
+
+        .event-info { padding: 0 24px 24px 24px; position: relative; z-index: 2; flex-grow: 1; display: flex; flex-direction: column; }
+        .event-title { font-size: 1.4rem; font-weight: 800; margin-bottom: 8px; line-height: 1.2; color: #fff; }
+        .event-subtitle { font-size: 0.9rem; color: rgba(255,255,255,0.7); margin-bottom: 16px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;}
+        .event-details-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; font-size: 0.85rem; color: #fff; font-weight: 500;}
+        .event-footer { display: flex; align-items: center; justify-content: space-between; margin-top: auto; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 16px;}
+        .social-stats { display: flex; align-items: center; gap: 16px; font-size: 0.85rem; font-weight: 600; color: rgba(255,255,255,0.9); }
+        .social-stats i { color: var(--theme-color, #38bdf8); font-size: 1rem; }
+        .btn-save-floating { position: absolute; bottom: 20px; right: 20px; z-index: 10; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); backdrop-filter: blur(10px); width: 44px; height: 44px; border-radius: 14px; display: flex; align-items: center; justify-content: center; color: #fff; cursor: pointer; transition: var(--transition); font-size: 1.1rem; }
+        .btn-save-floating.saved { background: var(--estra-gold); border-color: var(--estra-gold); color: #000; }
+
+        /* ============ MODAL CREATION (SLIDING) ============ */
+        .modal-backdrop-desk { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); backdrop-filter:blur(4px); z-index:1999; opacity:0; visibility:hidden; transition:var(--transition); }
+        .modal-backdrop-desk.active { opacity:1; visibility:visible; }
+        
+        .modal-fullscreen { position:fixed; inset:0; background:var(--estra-bg-dark); z-index:2000; overflow-y:auto; opacity:0; visibility:hidden; transition:var(--transition); display:flex; flex-direction:column; }
+        .modal-fullscreen.active { opacity:1; visibility:visible; }
+        [data-theme="light"] .modal-fullscreen { background: #ffffff; }
+
+        .modal-header { display:flex; align-items:center; justify-content:space-between; padding:16px 20px; border-bottom:1px solid var(--estra-border); position:sticky; top:0; background:var(--estra-bg-dark); z-index:10; }
+        [data-theme="light"] .modal-header { background: #ffffff; }
+        .modal-header h3 { font-size:1.2rem; display:flex; align-items:center; gap:10px; font-weight:800; color:var(--text-primary); margin:0; }
+        [data-theme="light"] .modal-header h3 { color:#0f172a; }
+        .modal-close { background:none; border:none; font-size:1.8rem; color:var(--text-secondary); cursor:pointer; padding:8px; border-radius:50%; line-height:1; transition:var(--transition); }
+        .modal-close:hover { color:var(--estra-danger); }
+        
+        .modal-body { padding:24px; flex:1; max-width:800px; margin:0 auto; width:100%; }
+        .form-group { margin-bottom:20px; }
+        .form-group label { display:block; font-size:0.85rem; color:var(--text-primary); margin-bottom:8px; font-weight:600; }
+        [data-theme="light"] .form-group label { color:#0f172a; }
+        .form-group input, .form-group select, .form-group textarea { width:100%; padding:14px 18px; background:rgba(15,23,42,0.5); border:1px solid var(--estra-border); border-radius:16px; color:var(--text-primary); font-family:inherit; font-size:0.95rem; outline:none; transition:var(--transition); }
+        [data-theme="light"] .form-group input, [data-theme="light"] .form-group select, [data-theme="light"] .form-group textarea { background:#f1f5f9; border-color:rgba(0,0,0,0.1); color:#0f172a; }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color:var(--estra-cyan); box-shadow:0 0 0 3px rgba(56,189,248,0.1); }
+        .form-row { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+
+        .modal-footer { padding:16px 20px; border-top:1px solid var(--estra-border); display:flex; gap:12px; justify-content:flex-end; position:sticky; bottom:0; background:var(--estra-bg-dark); max-width:800px; margin:0 auto; width:100%; }
+        [data-theme="light"] .modal-footer { background: #ffffff; }
+        .btn-primary { background:var(--estra-cyan); border:none; padding:12px 24px; border-radius:30px; color:#0f172a; font-weight:700; cursor:pointer; font-family:inherit; box-shadow: 0 4px 15px rgba(56,189,248,0.3); transition:var(--transition); }
+        .btn-cancel { background:transparent; border:1px solid var(--estra-border); color:var(--text-primary); padding:12px 24px; border-radius:30px; font-weight:600; cursor:pointer; transition:var(--transition); }
+        [data-theme="light"] .btn-cancel { color: #475569; border-color:rgba(0,0,0,0.2); }
+
+        .image-upload-area{border:2px dashed var(--estra-cyan);border-radius:16px;padding:30px;text-align:center;cursor:pointer;transition:var(--transition);margin-top:8px;background:rgba(56,189,248,.05);}
+        .image-preview{margin-top:12px;position:relative}.image-preview img{width:100%;max-height:200px;object-fit:cover;border-radius:14px}
+        .remove-image-btn{position:absolute;top:8px;right:8px;background:rgba(239,68,68,.9);color:#fff;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;border:0;}
+        
+        /* Map Styles Leaflet Overrides */
+        .leaflet-container { font-family: inherit; z-index: 1; }
+
+        /* ============ MODAL DETAIL (3E COLONNE ORIGINAL) ============ */
+        .modal-overlay { position:fixed; inset:0; background:rgba(15,23,42,.8); backdrop-filter:blur(10px); z-index:200; display:none; align-items:center; justify-content:center; padding:20px; }
+        .modal-overlay.active { display:flex; }
+        .modal-content { background:var(--estra-card-bg); width:100%; max-width:550px; max-height:90vh; overflow-y:auto; border-radius:24px; border:1px solid var(--estra-border); box-shadow: 0 20px 40px rgba(0,0,0,0.3); position:relative; }
+        [data-theme="light"] .modal-content { background: #ffffff; border-color: rgba(0,0,0,0.1); }
+        .modal-content::-webkit-scrollbar { display: none; }
+
+        .event-detail-header { padding: 0; position: relative; }
+        .event-detail-image{height:220px;background-size:cover;background-position:center;border-radius:24px 24px 0 0;position: relative;}
+        .event-detail-image::after { content:''; position:absolute; inset:0; background: linear-gradient(to top, var(--estra-card-bg) 0%, transparent 100%); }
+        [data-theme="light"] .event-detail-image::after { background: linear-gradient(to top, #ffffff 0%, transparent 100%); }
+        .event-detail-close { position: absolute; top: 16px; right: 16px; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); color: #fff; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; cursor: pointer; border: 0; z-index: 10; }
+        .event-detail-body { padding: 24px; margin-top: -40px; position: relative; z-index: 2; }
+        .event-detail-title{font-size:1.6rem;font-weight:800;margin-bottom:16px; line-height: 1.2;}
+        [data-theme="light"] .event-detail-title { color: #0f172a; }
+        .event-organizer { display:flex; align-items:center; gap:10px; margin-bottom:16px; color:var(--text-secondary); font-size:.9rem; font-weight: 500;}
+        .event-organizer img { width:32px; height:32px; border-radius:50%; object-fit:cover; border: 2px solid var(--estra-cyan); }
+        .event-organizer span.org-name { color: var(--estra-cyan); font-weight: 600; }
+        
+        .event-details-row { display: flex; align-items: center; gap: 8px; margin-bottom:10px; font-size:.9rem; color:var(--text-secondary); font-weight: 500; }
+        .event-details-icon { width: 32px; height: 32px; background: rgba(56,189,248,0.1); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: var(--estra-cyan); flex-shrink:0;}
+        .event-description { color:var(--text-secondary); font-size:.95rem; line-height:1.6; margin-bottom:0; }
+        
+        .ticket-divider { position: relative; border-top: 2px dashed var(--estra-border); margin: 24px 0 20px; }
+        .ticket-divider::before, .ticket-divider::after { content: ''; position: absolute; top: -12px; width: 24px; height: 24px; background: var(--estra-bg-dark); border-radius: 50%; }
+        .ticket-divider::before { left: -36px; border-right: 1px solid var(--estra-border); box-shadow: inset -3px 0 5px rgba(0,0,0,0.05); }
+        .ticket-divider::after { right: -36px; border-left: 1px solid var(--estra-border); box-shadow: inset 3px 0 5px rgba(0,0,0,0.05); }
+        [data-theme="light"] .ticket-divider::before, [data-theme="light"] .ticket-divider::after { background: #f8fafc; }
+        
+        .event-stats { display:flex; gap:20px; margin-bottom:16px; justify-content:center; font-size:.8rem; font-weight:600; color:var(--text-secondary); }
+        .event-actions { display:flex; gap:12px; flex-wrap:wrap; }
+        .event-btn { padding:12px 20px; border-radius:14px; font-weight:700; font-size:.9rem; cursor:pointer; border:0; transition:var(--transition); display:flex; align-items:center; justify-content: center; gap:8px; font-family:inherit; flex: 1; min-width: 120px; }
+        .btn-interested { background:rgba(56,189,248,0.1); color:var(--estra-cyan); border: 1px solid var(--estra-cyan); }
+        .btn-going { background:var(--estra-cyan); color:#0f172a; box-shadow: 0 4px 12px rgba(56,189,248,0.3); }
+        .btn-share { background:var(--estra-card-bg); color:var(--text-primary); border:1px solid var(--estra-border); flex: 0 0 auto; width: 44px; padding: 0; }
+        .ticket-barcode { text-align: center; margin-top: 20px; opacity: 0.5; }
+        .ticket-barcode-img { height: 40px; width: 80%; background: repeating-linear-gradient(90deg, var(--text-primary) 0, var(--text-primary) 2px, transparent 2px, transparent 4px, var(--text-primary) 4px, var(--text-primary) 5px, transparent 5px, transparent 8px); margin: 0 auto 8px; }
+        [data-theme="light"] .ticket-barcode-img { background: repeating-linear-gradient(90deg, #0f172a 0, #0f172a 2px, transparent 2px, transparent 4px, #0f172a 4px, #0f172a 5px, transparent 5px, transparent 8px); }
+
+        /* ============ VIP TICKET MODAL ============ */
+        .vip-ticket-modal { position:fixed; inset:0; background:rgba(0,0,0,0.9); z-index:3000; display:none; align-items:center; justify-content:center; padding:20px; flex-direction: column; backdrop-filter: blur(10px); }
+        .vip-ticket-modal.active { display:flex; animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+        .vip-ticket-card { width: 100%; max-width: 400px; border-radius: 24px; overflow: hidden; position: relative; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5); border: 1px solid rgba(255,255,255,0.2); }
+        .vip-ticket-header { padding: 24px; text-align: center; color: #fff; position: relative; overflow: hidden; }
+        .vip-ticket-header::after { content: ''; position: absolute; bottom: -20px; left: 0; width: 100%; height: 40px; background: #111; transform: skewY(-5deg); }
+        .vip-ticket-body { padding: 40px 20px 30px; background: #111; color: #fff; text-align: center; position: relative;}
+        .vip-ticket-body::before, .vip-ticket-body::after { content: ''; position: absolute; top: -10px; width: 20px; height: 20px; border-radius: 50%; background: rgba(0,0,0,0.9); z-index: 5;}
+        .vip-ticket-body::before { left:-10px; } .vip-ticket-body::after { right:-10px; }
+        .vip-qr-container { background: #fff; padding: 10px; border-radius: 12px; display: inline-block; margin: 15px 0; }
+        .vip-ticket-actions { display: flex; gap: 10px; margin-top: 20px; width: 100%; max-width: 400px; }
+        .vip-btn { flex: 1; padding: 14px; border-radius: 16px; border: none; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 0.95rem; }
+        .vip-btn-primary { background: #fff; color: #000; } .vip-btn-secondary { background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.3); }
+
+        /* ============ CALENDAR ============ */
+        .calendar-view{padding:0 16px 20px;display:none}.calendar-view.active{display:block}
+        .calendar-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px; background: var(--estra-card-bg); padding: 12px 20px; border-radius: 16px; border: 1px solid var(--estra-border);}
+        .calendar-month{font-size:1.2rem;font-weight:700}
+        .calendar-nav-btn{background:rgba(56,189,248,.1);border:none;width:36px;height:36px;border-radius:50%;cursor:pointer;color:var(--estra-cyan);transition:var(--transition);display:flex;align-items:center;justify-content:center;font-family:inherit}
+        .calendar-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}
+        .calendar-weekday{text-align:center;font-weight:700;font-size:.8rem;padding:8px;color:var(--estra-cyan)}
+        .calendar-day{aspect-ratio:1;border:1px solid var(--estra-border);background: var(--estra-card-bg);border-radius:12px;padding:8px;cursor:pointer;transition:var(--transition);position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+        .calendar-day.has-event{background:var(--estra-cyan);border-color:var(--estra-cyan); color:#0f172a;}
+        .calendar-day-number{font-size:1rem;font-weight:600}
+        .event-dot{position:absolute;bottom:6px;width:6px;height:6px;background:#0f172a;border-radius:50%}
+
+
+
+        /* =====================================================================
+           RESPONSIVE DESKTOP (Mappé sur 3 colonnes)
+           ===================================================================== */
+        .detail-sidebar { display: none; } /* Caché sur mobile */
+
+        @media (min-width: 1280px) {
+            .menu-toggle { display: none; }
+            
+            /* 2. Contenu Principal */
+            .main-content { 
+                margin-left: 260px; 
+                margin-right: 610px; /* Laisse de la place pour la 3e colonne */
+                max-width: none; 
+            }
+            .list-view { grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
+            
+            /* 3. Colonne de Détails (Fixe à droite) */
+            .detail-sidebar {
+                display: flex; flex-direction: column; justify-content: flex-start; align-items: center;
+                position: fixed; top: 0; right: 50px; width: 480px; height: 100vh;
+                border-left: 1px solid var(--estra-border); border-right: 1px solid var(--estra-border);
+                background: var(--estra-bg-dark); z-index: 80; padding: 80px 20px 20px 20px;
+                text-align: center; color: var(--text-secondary);
+            }
+            [data-theme="light"] .detail-sidebar { background: #f8fafc; }
+            
+            /* 4. Comportement du Modal Détail dans la 3e colonne */
+            .modal-overlay#eventDetailModal {
+                position: fixed; top: 60px; right: 80px; left: auto; bottom: auto;
+                width: 420px; height: calc(100vh - 60px);
+                background: var(--estra-bg-dark) !important; backdrop-filter: none;
+                z-index: 100; padding: 60px 0 0 0;
+                border-left: 1px solid var(--estra-border); border-right: 1px solid var(--estra-border);
+                align-items: flex-start; justify-content: flex-start;
+            }
+            [data-theme="light"] .modal-overlay#eventDetailModal { background: #f8fafc !important; }
+            #eventDetailModal .modal-content {
+                border-radius: 0; border: none; box-shadow: none;
+                width: 100%; height: 100%; max-height: none; background: transparent;
+            }
+            #eventDetailContent { border-radius: 0 !important; border: none !important; box-shadow: none !important; min-height: 100%; }
+            
+            /* 5. Comportement du Modal Création (Sliding Panel) */
+            .modal-backdrop-desk { display:block; z-index:1900; }
+            .modal-fullscreen#createEventModal { 
+                left: auto; right: 0; width: 500px; z-index:2000;
+                border-left: 1px solid var(--estra-border); 
+                box-shadow: -10px 0 50px rgba(0,0,0,0.5); 
+                transform: translateX(100%); 
+            }
+            .modal-fullscreen#createEventModal.active { transform: translateX(0); }
+        }
+    </style>
+</head>
+<body>
+<div class="offline-banner" id="offlineBanner"> <span data-i18n="offline_mode">Mode hors-ligne</span></div>
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
+<!-- 1. SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+    <div class="profile-section">
+        <div style="position:relative;display:inline-block"><img src="" class="profile-img-sidebar" id="sidebarAvatar" alt="Avatar"><div class="online-indicator" id="userOnlineIndicator"></div></div>
+        <h3 style="margin:0;font-size:1.05rem;color:var(--text-primary)" id="sidebarName">Rashidi</h3>
+        <div class="profile-stats"><div><strong id="sidebarPosts">0</strong><span data-i18n="posts">Posts</span></div><div><strong id="sidebarFriends">0</strong><span data-i18n="friends_label">Amis</span></div><div><strong id="sidebarGroups">0</strong><span data-i18n="groups_label">Groupes</span></div></div>
+    </div>
+    <nav class="sidebar-nav">
+        <a href="home.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg> <span data-i18n="home">Accueil</span></a>
+        <a href="saved.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg> <span data-i18n="saved">Enregistrés</span></a>
+        <a href="friends.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg> <span data-i18n="friends_label">Amis</span></a>
+        <a href="courses.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg> <span data-i18n="courses">Cours</span></a>
+        <a href="events.html" class="sidebar-link active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> <span data-i18n="events">Événements</span></a>
+        <a href="groups.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> <span data-i18n="groups_label">Groupes</span></a>
+        <a href="mentorship.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg> <span data-i18n="Mentorat">Mentorat</span></a>
+        <a href="profile.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> <span data-i18n="my_profile">Mon Profil</span></a>
+        <hr style="margin:10px 0;border-color:var(--estra-border)">
+        <a href="settings.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg> <span data-i18n="settings">Paramètres</span></a>
+        <hr style="margin:10px 0;border-color:var(--estra-border)">
+        <button class="sidebar-link logout-link" onclick="logout()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg> <span data-i18n="logout">Déconnexion</span></button>
+    </nav>
+</aside>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+    <div class="nav-left">
+        <button class="menu-toggle" onclick="toggleSidebar()" aria-label="Menu"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="7" x2="16" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="12" y2="17"/><circle cx="18" cy="17" r="2"/></svg></button>
+        <a href="home.html" class="navbar-brand">ESTRA LINK</a>
+    </div>
+    <div class="nav-right">
+
+        <img src="" class="avatar-nav" id="navAvatar" onclick="window.location.href='profile.html'" alt="Avatar">
+    </div>
+</nav>
+
+<!-- 2. MAIN CONTENT -->
+<main class="main-content">
+    <div class="page-header">
+        <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> <span data-i18n="events">Événements</span></h2>
+        <button class="create-btn" onclick="openCreateEventModal()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> <span data-i18n="create_event">Créer</span></button>
+    </div>
+    
+    <div class="events-filters" id="eventsFilters"></div>
+    
+    <div class="view-toggle">
+        <button class="view-btn active" onclick="toggleView('list')"><i class="fas fa-th-large"></i> <span data-i18n="view_list">Grille</span></button>
+        <button class="view-btn" onclick="toggleView('calendar')"><i class="fas fa-calendar-alt"></i> <span data-i18n="view_calendar">Calendrier</span></button>
+    </div>
+    
+    <div id="listView" class="list-view"></div>
+    
+    <div id="calendarView" class="calendar-view">
+        <div class="calendar-header">
+            <button class="calendar-nav-btn" onclick="prevMonth()"><i class="fas fa-chevron-left"></i></button>
+            <span class="calendar-month" id="currentMonth">Avril 2026</span>
+            <button class="calendar-nav-btn" onclick="nextMonth()"><i class="fas fa-chevron-right"></i></button>
+        </div>
+        <div class="calendar-grid" id="calendarGrid"></div>
+    </div>
+</main>
+
+<!-- 3. DETAIL SIDEBAR (Placeholder pour Desktop - 3e colonne fixe) -->
+<aside class="detail-sidebar">
+    <div class="empty-state">
+        <i class="fas fa-calendar-check pulsing-icon" style="font-size: 3.5rem; opacity: 0.6; margin-bottom: 20px;"></i>
+        <h3 style="font-size: 1.2rem; margin-bottom: 10px;">Détails de l'événement</h3>
+        <p style="font-size: 0.9rem; line-height: 1.5;">Sélectionnez un événement dans la grille pour l'afficher ici.</p>
+    </div>
+</aside>
+
+<!-- 5. BOTTOM NAV / VERTICAL NAV -->
+<div class="bottom-nav">
+    <a href="home.html" class="bottom-nav-item" title="Accueil"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></a>
+
+    <a href="notifications.html" class="bottom-nav-item" title="Notifications" style="position:relative"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg><span class="badge-count" id="notifBadge" style="display:none;">0</span></a>
+    <a href="messages.html" class="bottom-nav-item" style="position:relative"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg><span class="badge-count" id="msgBadge" style="display:none">0</span></a>
+    <a href="courses.html" class="bottom-nav-item" style="position:relative"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg><span class="badge-count" id="msgBadge" style="display:none">0</span></a>
+
+    <a href="profile.html" class="bottom-nav-item" title="Profil"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></a>
+</div>
+
+<!-- BACKDROP POUR DESKTOP (MODAL CREATION) -->
+<div class="modal-backdrop-desk" id="desktopModalBackdrop" onclick="closeCreateEventModal()"></div>
+
+<!-- MODAL CRÉER (Sliding Panel sur Desktop / Plein écran Mobile) -->
+<div class="modal-fullscreen" id="createEventModal">
+    <div class="modal-header">
+        <h3><i class="fas fa-calendar-plus" style="color:var(--estra-cyan)"></i> <span data-i18n="create_event">Créer un événement</span></h3>
+        <button class="modal-close" onclick="closeCreateEventModal()">&times;</button>
+    </div>
+    <div class="modal-body">
+        <div class="form-group"><label data-i18n="form_title">Titre *</label><input type="text" id="eventTitle" data-i18n-placeholder="placeholder_title" placeholder="Ex: Conférence Tech 2026"></div>
+        
+        <div class="form-group">
+            <label>Type de Carte / Thème *</label>
+            <select id="eventCategory">
+                <option value="conference">📢 Conférence (Bleu Cyan)</option>
+                <option value="workshop">🔧 Atelier (Émeraude)</option>
+                <option value="meetup">🤝 Meetup (Ambre)</option>
+                <option value="seminar">📚 Séminaire (Violet)</option>
+                <option value="social">🎉 Social (Rose)</option>
+                <option value="business">💼 Business (Or/Bronze)</option>
+                <option value="corporate">🏢 Corporate (Bleu Marine)</option>
+                <option value="marketplace">🛒 Marketplace (Menthe)</option>
+                <option value="hiring">👔 Emploi / Recrutement (Indigo)</option>
+                <option value="vip">⭐ VIP / Exclusif (Noir & Or)</option>
+            </select>
+        </div>
+        
+        <div class="form-row">
+            <div class="form-group"><label data-i18n="form_date">Date *</label><input type="date" id="eventDate"></div>
+            <div class="form-group"><label data-i18n="form_time">Heure *</label><input type="time" id="eventTime"></div>
+        </div>
+        
+        <div class="form-row">
+            <div class="form-group"><label>Ville *</label><input type="text" id="eventCity" placeholder="Ex: Lubumbashi"></div>
+            <div class="form-group"><label>Commune *</label><input type="text" id="eventCommune" placeholder="Ex: Kamalondo"></div>
+        </div>
+        <div class="form-group">
+            <label>Adresse exacte *</label>
+            <input type="text" id="eventAddress" placeholder="Ex: 15, Avenue des Chutes, Hôtel X">
+        </div>
+        
+        <div class="form-group">
+            <label style="display:flex; align-items:center; gap:6px;">
+                <i class="fas fa-map-marked-alt" style="color:var(--estra-cyan)"></i> Position GPS (Pointez sur la carte)
+            </label>
+            <!-- CONTENEUR CARTE -->
+            <div id="eventCreateMap" style="height:200px; width:100%; border-radius:14px; margin-top:5px; border:1px solid var(--estra-border); z-index:1;"></div>
+        </div>
+        
+        <div class="form-group"><label data-i18n="form_description">Description *</label><textarea id="eventDescription" data-i18n-placeholder="placeholder_description" placeholder="Décrivez l'événement..."></textarea></div>
+        
+        <div class="form-group">
+            <label data-i18n="form_image">Image / Bannière</label>
+            <input type="file" id="eventImageInput" accept="image/*" style="display:none" onchange="handleEventImageSelect(event)">
+            <div class="image-upload-area" onclick="document.getElementById('eventImageInput').click()" id="imageUploadArea">
+                <i class="fas fa-cloud-upload-alt"></i><p style="color:var(--text-secondary); margin-top:8px;" data-i18n="upload_image">Cliquez pour sélectionner une image</p>
+            </div>
+            <div id="eventImagePreview"></div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn-cancel" onclick="closeCreateEventModal()" data-i18n="cancel">Annuler</button>
+        <button class="btn-primary" onclick="window.createNewEvent()"><i class="fas fa-check"></i> <span data-i18n="create">Créer</span></button>
+    </div>
+</div>
+
+<!-- MODAL DETAIL EVENT (Mappée sur la 3e Colonne Originale) -->
+<div class="modal-overlay" id="eventDetailModal">
+    <div class="modal-content" style="padding:0; overflow: hidden; background: transparent; border: none; box-shadow: none;">
+        <div id="eventDetailContent" style="background: var(--estra-card-bg); border-radius: 24px; border: 1px solid var(--estra-border); box-shadow: 0 20px 40px rgba(0,0,0,0.3); overflow: hidden; position: relative;">
+            <!-- Contenu injecté via JavaScript -->
+        </div>
+    </div>
+</div>
+
+<!-- VIP TICKET MODAL DYNAMIQUE -->
+<div class="vip-ticket-modal" id="vipTicketModal">
+    <div class="vip-ticket-card" id="vipTicketCard">
+        <div class="vip-ticket-header" id="vipTicketHeader">
+            <h2 style="font-weight: 900; margin: 0; font-size: 1.5rem; letter-spacing: 2px;">ESTRA TICKET</h2>
+            <p style="margin: 0; font-size: 0.8rem; opacity: 0.8; font-weight: 600;" id="vipTicketCat">PASS PARTICIPANT</p>
+        </div>
+        <div class="vip-ticket-body" id="vipTicketBody">
+            <h3 id="vipEventTitle" style="font-size: 1.4rem; font-weight: 800; margin-bottom: 10px; color: var(--estra-gold);">Événement</h3>
+            <p style="font-size: 0.9rem; opacity: 0.8; margin-bottom: 20px;">Admis: <strong id="vipUserName" style="color: #fff;"></strong></p>
+            <div class="vip-qr-container"><img id="vipQrCode" src="" alt="QR Code"></div>
+            <p style="font-size: 0.8rem; margin-top: 15px; opacity: 0.7;"><i class="fas fa-info-circle"></i> Présentez ce code à l'entrée</p>
+        </div>
+    </div>
+    <div class="vip-ticket-actions">
+        <button class="vip-btn vip-btn-secondary" onclick="closeVipTicket()"><i class="fas fa-times"></i> Fermer</button>
+        <button class="vip-btn vip-btn-primary" id="vipShareBtn" onclick="captureTicket()"><i class="fas fa-camera"></i> Screenshot / Story</button>
+    </div>
+</div>
+
+<div id="toastMsg" class="toast-custom"></div>
+
+<!-- LEAFLET JS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script>
+// ============ 10 THÈMES & COULEURS ============
+const themes = {
+    conference: { color: '#06b6d4', bg: '#164e63', label: 'Conférence', label_en: 'Conference', label_sw: 'Mkutano', label_ln: 'Conférence' },
+    workshop:   { color: '#10b981', bg: '#064e3b', label: 'Atelier', label_en: 'Workshop', label_sw: 'Warsha', label_ln: 'Atelier' },
+    meetup:     { color: '#f59e0b', bg: '#78350f', label: 'Meetup', label_en: 'Meetup', label_sw: 'Mkutano', label_ln: 'Meetup' },
+    seminar:    { color: '#a78bfa', bg: '#4c1d95', label: 'Séminaire', label_en: 'Seminar', label_sw: 'Semina', label_ln: 'Séminaire' },
+    social:     { color: '#fb7185', bg: '#881337', label: 'Social', label_en: 'Social', label_sw: 'Kijamii', label_ln: 'Social' },
+    business:   { color: '#eab308', bg: '#713f12', label: 'Business', label_en: 'Business', label_sw: 'Biashara', label_ln: 'Business' },
+    corporate:  { color: '#3b82f6', bg: '#1e3a8a', label: 'Corporate', label_en: 'Corporate', label_sw: 'Kampuni', label_ln: 'Corporate' },
+    marketplace:{ color: '#14b8a6', bg: '#134e4a', label: 'Marketplace', label_en: 'Marketplace', label_sw: 'Soko', label_ln: 'Zándo' },
+    hiring:     { color: '#6366f1', bg: '#312e81', label: 'Emploi', label_en: 'Hiring', label_sw: 'Ajira', label_ln: 'Mosálá' },
+    vip:        { color: '#fbbf24', bg: '#18181b', label: 'VIP', label_en: 'VIP', label_sw: 'VIP', label_ln: 'VIP' }
+};
+
+// ============ TRADUCTIONS MULTILINGUES COMPLÈTES ============
+const translations = {
+    fr: {
+        page_title: "ESTRA LINK | Événements", offline_mode: "Mode hors-ligne", posts: "Posts", friends_label: "Amis", groups_label: "Groupes",
+        home: "Accueil", saved: "Enregistrés", courses: "Cours", jobs: "Emplois", events: "Événements",
+        my_profile: "Mon Profil", settings: "Paramètres", logout: "Déconnexion",
+        create_event: "Créer un événement", filter_all: "Tous", filter_conference: "Conférences",
+        filter_workshop: "Ateliers", filter_meetup: "Meetups", filter_seminar: "Séminaires",
+        filter_social: "Sociaux", view_list: "Grille", view_calendar: "Calendrier",
+        form_title: "Titre *", form_category: "Catégorie *", form_date: "Date *", form_time: "Heure *",
+        form_description: "Description *", form_image: "Image (Optionnelle)",
+        placeholder_title: "Ex: Conférence Tech 2026", placeholder_description: "Décrivez l'événement...",
+        upload_image: "Cliquez pour sélectionner une image", cancel: "Annuler", create: "Créer",
+        no_events: "Aucun événement", no_events_desc: "Soyez le premier à en créer un !",
+        event_passed: "Terminé", interested_label: "intéressés", participants_label: "participants",
+        toast_event_created: "✅ Événement créé et publié !", toast_link_copied: "🔗 Lien copié",
+        toast_image_too_large: "❌ Image trop volumineuse (Max 10MB)",
+        toast_fields_required: "Veuillez remplir les champs obligatoires (*)",
+        toast_saved: "🔖 Enregistré", toast_removed: "Retiré",
+        toast_interested: "❤️ Intéressé(e)", toast_going: "✅ Participation confirmée",
+        toast_online: "🟢 Connexion rétablie", toast_offline: "🔴 Mode hors-ligne",
+        organizer_label: "Organisateur",
+        notif_event_created: "📅 Nouvel événement créé",
+        notif_event_interested: "❤️ Intérêt pour un événement",
+        notif_event_going: "✅ Participation à un événement",
+        notif_event_saved: "🔖 Événement enregistré",
+        months: ["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"],
+        weekdays: ["Lun","Mar","Mer","Jeu","Ven","Sam","Dim"]
+    },
+    en: {
+        page_title: "ESTRA LINK | Events", offline_mode: "Offline Mode", posts: "Posts", friends_label: "Friends", groups_label: "Groups",
+        home: "Home", saved: "Saved", courses: "Courses", jobs: "Jobs", events: "Events",
+        my_profile: "My Profile", settings: "Settings", logout: "Logout",
+        create_event: "Create Event", filter_all: "All", filter_conference: "Conferences",
+        filter_workshop: "Workshops", filter_meetup: "Meetups", filter_seminar: "Seminars",
+        filter_social: "Social", view_list: "Grid", view_calendar: "Calendar",
+        form_title: "Title *", form_category: "Category *", form_date: "Date *", form_time: "Time *",
+        form_description: "Description *", form_image: "Image (Optional)",
+        placeholder_title: "Ex: Tech Conference 2026", placeholder_description: "Describe the event...",
+        upload_image: "Click to select an image", cancel: "Cancel", create: "Create",
+        no_events: "No events", no_events_desc: "Be the first to create one!",
+        event_passed: "Ended", interested_label: "interested", participants_label: "participants",
+        toast_event_created: "✅ Event created and published!", toast_link_copied: "🔗 Link copied",
+        toast_image_too_large: "❌ Image too large (Max 10MB)",
+        toast_fields_required: "Please fill in required fields (*)",
+        toast_saved: "🔖 Saved", toast_removed: "Removed",
+        toast_interested: "❤️ Interested", toast_going: "✅ Attendance confirmed",
+        toast_online: "🟢 Connection restored", toast_offline: "🔴 Offline mode",
+        organizer_label: "Organizer",
+        notif_event_created: "📅 New event created",
+        notif_event_interested: "❤️ Interest in an event",
+        notif_event_going: "✅ Attendance to an event",
+        notif_event_saved: "🔖 Event saved",
+        months: ["January","February","March","April","May","June","July","August","September","October","November","December"],
+        weekdays: ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"]
+    },
+    sw: {
+        page_title: "ESTRA LINK | Matukio", offline_mode: "Hali ya nje ya mtandao", posts: "Machapisho", friends_label: "Marafiki", groups_label: "Vikundi",
+        home: "Nyumbani", saved: "Yaliyohifadhiwa", courses: "Kozi", jobs: "Kazi", events: "Matukio",
+        my_profile: "Wasifu Wangu", settings: "Mipangilio", logout: "Kutoka",
+        create_event: "Unda Tukio", filter_all: "Yote", filter_conference: "Mikutano",
+        filter_workshop: "Warsha", filter_meetup: "Mikutano", filter_seminar: "Semina",
+        filter_social: "Kijamii", view_list: "Gridi", view_calendar: "Kalenda",
+        form_title: "Kichwa *", form_category: "Aina *", form_date: "Tarehe *", form_time: "Saa *",
+        form_description: "Maelezo *", form_image: "Picha (Hiari)",
+        placeholder_title: "Mfano: Mkutano wa Teknolojia 2026", placeholder_description: "Eleza tukio...",
+        upload_image: "Bofya kuchagua picha", cancel: "Ghairi", create: "Unda",
+        no_events: "Hakuna matukio", no_events_desc: "Kuwa wa kwanza kuunda moja!",
+        event_passed: "Imemalizika", interested_label: "wanavutiwa", participants_label: "washiriki",
+        toast_event_created: "✅ Tukio limeundwa na kuchapishwa!", toast_link_copied: "🔗 Kiungo kimenakiliwa",
+        toast_image_too_large: "❌ Picha kubwa sana (Upeo 10MB)",
+        toast_fields_required: "Tafadhali jaza sehemu zinazohitajika (*)",
+        toast_saved: "🔖 Imehifadhiwa", toast_removed: "Imeondolewa",
+        toast_interested: "❤️ Nimevutiwa", toast_going: "✅ Hudhurio limethibitishwa",
+        toast_online: "🟢 Muunganisho umerejeshwa", toast_offline: "🔴 Hali ya nje ya mtandao",
+        organizer_label: "Mratibu",
+        notif_event_created: "📅 Tukio jipya limeundwa",
+        notif_event_interested: "❤️ Kuvutiwa na tukio",
+        notif_event_going: "✅ Hudhurio kwenye tukio",
+        notif_event_saved: "🔖 Tukio limehifadhiwa",
+        months: ["Januari","Februari","Machi","Aprili","Mei","Juni","Julai","Agosti","Septemba","Oktoba","Novemba","Desemba"],
+        weekdays: ["J2","J3","J4","J5","J6","J7","J1"]
+    },
+    ln: {
+        page_title: "ESTRA LINK | Makámá", offline_mode: "Mode hors-connexion", posts: "Masolo", friends_label: "Baníngá", groups_label: "Mampingá",
+        home: "Ebandeli", saved: "Ebabómí", courses: "Mateya", jobs: "Misálá", events: "Makámá",
+        my_profile: "Profil na ngáí", settings: "Paramɛ́tɛ", logout: "Kobíma",
+        create_event: "Kokela likámá", filter_all: "Nyɔ́nsɔ", filter_conference: "Ba conférence",
+        filter_workshop: "Ba atelier", filter_meetup: "Ba meetup", filter_seminar: "Ba séminaire",
+        filter_social: "Social", view_list: "Grille", view_calendar: "Calendrier",
+        form_title: "Titre *", form_category: "Catégorie *", form_date: "Mokɔlɔ *", form_time: "Ntángo *",
+        form_description: "Description *", form_image: "Fɔtɔ́ (Optionnel)",
+        placeholder_title: "Ex: Conférence Tech 2026", placeholder_description: "Décrivez likámá...",
+        upload_image: "Cliquez pona ko choisir fɔtɔ́", cancel: "Annuler", create: "Kokela",
+        no_events: "Likámá moko te", no_events_desc: "Zala ya liboso ya kokela moko!",
+        event_passed: "Esilá", interested_label: "bazali na mposa", participants_label: "bakambi",
+        toast_event_created: "✅ Likámá likelami mpe epublier!", toast_link_copied: "🔗 Lien ekopi",
+        toast_image_too_large: "❌ Fɔtɔ́ ekómi monene trop (Max 10MB)",
+        toast_fields_required: "Kotondisa ba champs obligatoires (*)",
+        toast_saved: "🔖 Ebómámí", toast_removed: "Elongólámí",
+        toast_interested: "❤️ Nazali na mposa", toast_going: "✅ Participation confirmée",
+        toast_online: "🟢 Connexion ezóngí", toast_offline: "🔴 Mode hors-connexion",
+        organizer_label: "Organisateur",
+        notif_event_created: "📅 Likámá ya sika likelami",
+        notif_event_interested: "❤️ Mposa ya likámá",
+        notif_event_going: "✅ Participation na likámá",
+        notif_event_saved: "🔖 Likámá ebómámí",
+        months: ["Sánzá ya yambo","Sánzá ya míbalé","Sánzá ya mísáto","Sánzá ya mínei","Sánzá ya mítáno","Sánzá ya motóbá","Sánzá ya nsambo","Sánzá ya mwambe","Sánzá ya libwa","Sánzá ya zómi","Sánzá ya zómi na mɔ̌kɔ́","Sánzá ya zómi na míbalé"],
+        weekdays: ["L1","L2","L3","L4","L5","L6","L7"]
+    }
+};
+
+let currentLang = localStorage.getItem('estra_language') || 'fr';
+
+function t(key) {
+    if (translations[currentLang] && translations[currentLang][key]) return translations[currentLang][key];
+    if (translations['fr'] && translations['fr'][key]) return translations['fr'][key];
+    return key;
+}
+
+function applyTranslations() {
+    currentLang = localStorage.getItem('estra_language') || 'fr';
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        const translation = t(key);
+        if (translation && !el.hasAttribute('data-i18n-html')) {
+            if (el.tagName === 'OPTION') {
+                const icon = el.textContent.trim().split(' ')[0];
+                el.textContent = icon + ' ' + translation;
+            } else {
+                el.textContent = translation;
+            }
+        }
+    });
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+        const key = el.getAttribute('data-i18n-placeholder');
+        el.placeholder = t(key);
+    });
+    document.title = t('page_title');
+}
+
+// ============ SYSTÈME DE NOTIFICATIONS EN TEMPS RÉEL ============
+function addNotification(type, title, message, metadata = {}) {
+    const notifications = JSON.parse(localStorage.getItem('estra_notifications') || '[]');
+    const newNotif = {
+        id: Date.now(),
+        type: type,
+        title: title,
+        message: message,
+        read: false,
+        timestamp: Date.now(),
+        metadata: metadata
+    };
+    notifications.unshift(newNotif);
+    if (notifications.length > 50) notifications.length = 50;
+    localStorage.setItem('estra_notifications', JSON.stringify(notifications));
+    
+    // Mettre à jour les badges sur toutes les pages
+    updateBadges();
+    
+    // Déclencher un événement personnalisé pour la synchronisation entre pages
+    window.dispatchEvent(new CustomEvent('estra_notification_updated', { 
+        detail: { notifications: notifications, newNotification: newNotif }
+    }));
+    
+    // Émettre un événement storage pour les autres onglets
+    localStorage.setItem('estra_notification_trigger', Date.now().toString());
+    
+    return newNotif;
+}
+
+// ============ MODE ECO DATA ============
+let ecoMode = localStorage.getItem('estra_eco_mode') === 'true';
+function initEcoMode() {
+    const btn = document.getElementById('ecoBtn');
+    if (btn) {
+        document.body.classList.toggle('eco-mode-active', ecoMode);
+        if (ecoMode) btn.classList.add('active');
+    }
+}
+function toggleEcoMode() {
+    ecoMode = !ecoMode;
+    localStorage.setItem('estra_eco_mode', ecoMode);
+    initEcoMode();
+    showToast(ecoMode ? "Mode Éco Activé" : "Mode Éco Désactivé");
+}
+
+// ============ DONNÉES GLOBALES ============
+var currentUser={name:'Rashidi',avatar:'https://ui-avatars.com/api/?background=38bdf8&color=fff&name=Rashidi&size=40'};
+var events=[],savedEventsIds=[],userInterests={},currentFilter='all',currentView='list';
+var currentMonth=new Date().getMonth(),currentYear=new Date().getFullYear();
+var toastTimeout=null,currentEventImageData=null;
+var months=["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"];
+var weekdays=["Lun","Mar","Mer","Jeu","Ven","Sam","Dim"];
+
+// MAP GLOBALS
+var createMap = null;
+var createMarker = null;
+var currentLatLng = null;
+
+if (!window.estraEvents) window.estraEvents = [];
+
+function checkOnlineStatus(){var b=document.getElementById('offlineBanner');if(b)b.style.display=navigator.onLine?'none':'block'}
+function escapeHtml(txt){if(!txt)return'';var d=document.createElement('div');d.textContent=txt;return d.innerHTML}
+function showToast(msg){var tEl=document.getElementById('toastMsg');if(!tEl)return;if(toastTimeout)clearTimeout(toastTimeout);tEl.textContent=msg;tEl.classList.remove('show');void tEl.offsetWidth;tEl.classList.add('show');toastTimeout=setTimeout(function(){tEl.classList.remove('show')},3000)}
+function formatDate(ds){if(!ds)return'';var d=new Date(ds);return d.toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'})}
+function getDayMonth(ds){if(!ds)return{day:'?',month:'???'};var d=new Date(ds);return{day:d.getDate(),month:d.toLocaleDateString('fr-FR',{month:'short'})}}
+function isEventPassed(ds){if(!ds)return false;var t=new Date();t.setHours(0,0,0,0);return new Date(ds)<t}
+
+function getThemeLabel(cat) {
+    const th = themes[cat];
+    if (!th) return cat;
+    const langKey = 'label_' + currentLang;
+    return th[langKey] || th.label || cat;
+}
+
+function updateBadges() {
+    // Badge de notifications
+    const notifs = JSON.parse(localStorage.getItem('estra_notifications') || '[]');
+    const unreadNotifs = notifs.filter(n => !n.read).length;
+    const notifBadge = document.getElementById('notifBadge');
+    if (notifBadge) {
+        notifBadge.style.display = unreadNotifs > 0 ? 'block' : 'none';
+        if (unreadNotifs > 0) notifBadge.textContent = unreadNotifs > 99 ? '99+' : unreadNotifs;
+    }
+    
+    // Badge de messages
+    const msgBadge = document.getElementById('msgBadge');
+    if (msgBadge) {
+        const conversations = JSON.parse(localStorage.getItem('estra_conversations') || '[]');
+        const totalUnread = conversations.reduce((sum, conv) => sum + (conv.unread || 0), 0);
+        msgBadge.style.display = totalUnread > 0 ? 'block' : 'none';
+        if (totalUnread > 0) msgBadge.textContent = totalUnread > 99 ? '99+' : totalUnread;
+    }
+}
+
+function updateSidebar() {
+    const profile = JSON.parse(localStorage.getItem('estra_profile') || '{}');
+    currentUser.name = profile.fullName || 'Rashidi';
+    currentUser.avatar = profile.avatar || `https://ui-avatars.com/api/?name=${currentUser.name}&background=38bdf8&color=fff`;
+    
+    const sidebarName = document.getElementById('sidebarName');
+    const sidebarAvatar = document.getElementById('sidebarAvatar');
+    const navAvatar = document.getElementById('navAvatar');
+    
+    if (sidebarName) sidebarName.textContent = currentUser.name;
+    if (sidebarAvatar) sidebarAvatar.src = currentUser.avatar;
+    if (navAvatar) navAvatar.src = currentUser.avatar;
+    
+    const posts = JSON.parse(localStorage.getItem('estra_posts') || '[]');
+    const friends = JSON.parse(localStorage.getItem('estra_friends') || '[]');
+    const userGroups = JSON.parse(localStorage.getItem('estra_userGroups') || '[]');
+    
+    const sidebarPosts = document.getElementById('sidebarPosts');
+    const sidebarFriends = document.getElementById('sidebarFriends');
+    const sidebarGroups = document.getElementById('sidebarGroups');
+    
+    if (sidebarPosts) sidebarPosts.textContent = posts.filter(p => p.author === currentUser.name).length;
+    if (sidebarFriends) sidebarFriends.textContent = friends.length;
+    if (sidebarGroups) sidebarGroups.textContent = userGroups.length;
+}
+
+function renderFilters() {
+    let fHtml = `<button class="filter-chip ${currentFilter==='all'?'active':''}" onclick="filterEvents('all',this)">${t('filter_all')}</button>`;
+    for(let key in themes) {
+        const label = getThemeLabel(key);
+        fHtml += `<button class="filter-chip ${currentFilter===key?'active':''}" onclick="filterEvents('${key}',this)">${label}</button>`;
+    }
+    document.getElementById('eventsFilters').innerHTML = fHtml;
+}
+
+function loadData(){
+    var savedTheme = 'light'; // Force le thème clair
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    applyTranslations();
+    renderFilters();
+    updateSidebar();
+    
+    events = window.estraEvents || [];
+    if(!events.length){
+        events = [
+    { id: 201, title: "Scale or Crash : The Truth", category: "corporate", date: "2026-05-25", time: "14:00", location: "Hôtel Karavia, Kamalondo, Lubumbashi", lat: -11.666, lng: 27.464, description: "Microservices look perfect in diagrams. Discover the hidden chaos behind infinite scalability.", image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=800", organizer: "Pr. Kabengele", organizerUsername: "prof_kabengele", organizerAvatar: "https://ui-avatars.com/api/?name=PrK&background=7c3aed&color=fff", interested: 364, going: 45, createdAt: Date.now() - 86400000 },
+    { id: 202, title: "ESTRA Business Gala", category: "vip", date: "2026-06-10", time: "19:00", location: "Pullman, Gombe, Kinshasa", lat: -4.303, lng: 15.286, description: "Une soirée exclusive réservée à l'élite entrepreneuriale. Réseautage et dîner de gala.", image: "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&q=80&w=800", organizer: "Marie Claire", organizerUsername: "marie_claire", organizerAvatar: "https://ui-avatars.com/api/?name=Marie&background=10b981&color=fff", interested: 120, going: 50, createdAt: Date.now() - 172800000 }
+];
+        window.estraEvents = events;
+    }
+    
+    savedEventsIds=JSON.parse(localStorage.getItem('estra_saved_events')||'[]');
+    userInterests=JSON.parse(localStorage.getItem('estra_event_interests')||'{}');
+}
+
+function saveEvents(){ window.estraEvents = events; localStorage.setItem('estra_events',JSON.stringify(events)); }
+
+function handleEventImageSelect(event){var file=event.target.files[0];if(!file)return;if(file.size>10*1024*1024){showToast(t('toast_image_too_large'));return}var reader=new FileReader();reader.onload=function(e){currentEventImageData=e.target.result;var p=document.getElementById('eventImagePreview');var u=document.getElementById('imageUploadArea');if(p)p.innerHTML='<div class="image-preview"><img src="'+currentEventImageData+'" alt="Aperçu"><button class="remove-image-btn" onclick="removeEventImage()"><i class="fas fa-times"></i></button></div>';if(u)u.style.display='none'};reader.readAsDataURL(file)}
+function removeEventImage(){currentEventImageData=null;var p=document.getElementById('eventImagePreview');var u=document.getElementById('imageUploadArea');if(p)p.innerHTML='';if(u)u.style.display='block';var i=document.getElementById('eventImageInput');if(i)i.value=''}
+
+function renderEvents(){
+    var container=document.getElementById('listView'); if(!container)return;
+    var filtered=currentFilter==='all'?events.slice():events.filter(function(e){return e.category===currentFilter});
+    filtered.sort(function(a,b){return new Date(a.date)-new Date(b.date)});
+    if(!filtered.length){container.innerHTML='<div class="empty-state" style="text-align:center;padding:40px;"><i class="fas fa-calendar-times" style="font-size:3rem;opacity:0.5;margin-bottom:16px;"></i><h3>'+t('no_events')+'</h3><p>'+t('no_events_desc')+'</p></div>';return}
+    
+    container.innerHTML=filtered.map(function(e){
+        var dm=getDayMonth(e.date);
+        var th = themes[e.category] || themes.conference;
+        var themeLabel = getThemeLabel(e.category);
+        var savedClass = savedEventsIds.indexOf(e.id)!==-1 ? 'saved' : '';
+        var heartIcon = userInterests[e.id]==='interested' ? 'fas fa-heart' : 'far fa-heart';
+        var isGoing = userInterests[e.id]==='going';
+
+        return `
+        <div class="event-card" style="--theme-color: ${th.color}; --theme-bg: ${th.bg};">
+            <div class="event-image" style="background-image:url('${e.image||'https://picsum.photos/600/300?random='+e.id}')">
+                <div class="event-image-overlay" onclick="openEventDetail(${e.id})"><span><i class="fas fa-eye"></i> Voir le détail</span></div>
+                <span class="event-price-badge" style="background:var(--theme-color); color:#fff; border:none;">${themeLabel}</span>
+                <div class="event-date-badge">
+                    <div class="event-date-day">${dm.day}</div>
+                    <div class="event-date-month">${dm.month}</div>
+                </div>
+            </div>
+            
+            <div class="event-info">
+                <h3 class="event-title">${escapeHtml(e.title)}</h3>
+                <p class="event-subtitle">${escapeHtml(e.description)}</p>
+                <div class="event-details-grid">
+                    <span><i class="fas fa-calendar-day" style="color:var(--theme-color)"></i> ${formatDate(e.date)}</span>
+                    <span><i class="fas fa-clock" style="color:var(--theme-color)"></i> ${e.time||'TBA'}</span>
+                    <span style="grid-column: 1 / -1"><i class="fas fa-map-marker-alt" style="color:var(--theme-color)"></i> ${escapeHtml(e.location)}</span>
+                </div>
+                <div class="event-footer">
+                    <div class="social-stats">
+                        <span onclick="setInterest(${e.id},'interested')" style="color:${userInterests[e.id]==='interested'?'var(--theme-color)':'inherit'}"><i class="${heartIcon}"></i> ${e.interested||0}</span>
+                        <span onclick="setInterest(${e.id},'going')" style="color:${isGoing?'var(--theme-color)':'inherit'}"><i class="fas fa-ticket-alt"></i> Billet</span>
+                        <span onclick="shareEventNatif(${e.id})" title="Partager"><i class="fas fa-share-nodes"></i></span>
+                    </div>
+                </div>
+            </div>
+            <button class="btn-save-floating ${savedClass}" onclick="saveEvent(${e.id})" title="Enregistrer"><i class="fas fa-bookmark"></i></button>
+        </div>`;
+    }).join('');
+}
+
+function filterEvents(f,btn){currentFilter=f;document.querySelectorAll('.filter-chip').forEach(function(b){b.classList.remove('active')});if(btn)btn.classList.add('active');renderEvents();renderCalendar()}
+function toggleView(v){currentView=v;var lv=document.getElementById('listView');var cv=document.getElementById('calendarView');if(lv)lv.style.display=v==='list'?'grid':'none';if(cv)cv.classList.toggle('active',v==='calendar');document.querySelectorAll('.view-btn').forEach(function(b,i){b.classList.toggle('active',(i===0&&v==='list')||(i===1&&v==='calendar'))});if(v==='calendar')renderCalendar()}
+function renderCalendar(){
+    var fd=new Date(currentYear,currentMonth,1),ld=new Date(currentYear,currentMonth+1,0);
+    var sd=fd.getDay();var dim=ld.getDate();
+    var cm=document.getElementById('currentMonth');if(cm)cm.textContent=t('months')[currentMonth]+' '+currentYear;
+    var gh=weekdays.map(function(w){return'<div class="calendar-weekday">'+w+'</div>'}).join('');
+    var asd=sd===0?6:sd-1;
+    for(var i=0;i<asd;i++)gh+='<div class="calendar-day" style="visibility:hidden"></div>';
+    for(var d=1;d<=dim;d++){var ds=currentYear+'-'+String(currentMonth+1).padStart(2,'0')+'-'+String(d).padStart(2,'0');var he=events.some(function(e){return e.date===ds});gh+='<div class="calendar-day '+(he?'has-event':'')+'" onclick="showDayEvents(\''+ds+'\')"><div class="calendar-day-number">'+d+'</div>'+(he?'<div class="event-dot"></div>':'')+'</div>'}
+    var cg=document.getElementById('calendarGrid');if(cg)cg.innerHTML=gh
+}
+function prevMonth(){if(currentMonth===0){currentMonth=11;currentYear--}else currentMonth--;renderCalendar()}
+function nextMonth(){if(currentMonth===11){currentMonth=0;currentYear++}else currentMonth++;renderCalendar()}
+function showDayEvents(ds){var de=events.filter(function(e){return e.date===ds});if(!de.length){showToast(formatDate(ds)+' - '+t('no_events'));return}var allBtn=document.querySelector('.filter-chip[data-filter="all"]');if(allBtn)filterEvents('all',allBtn);toggleView('list');showToast(de.length+' événement(s) le '+formatDate(ds))}
+
+/* ==================== GESTION CARTE CREATION ==================== */
+function initCreateMap() {
+    var mapEl = document.getElementById('eventCreateMap');
+    if(!mapEl) return;
+    
+    if(createMap) {
+        createMap.invalidateSize();
+        return;
+    }
+    createMap = L.map('eventCreateMap').setView([-11.66089, 27.47938], 13);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19, attribution: '© OSM'
+    }).addTo(createMap);
+
+    createMap.on('click', function(e) {
+        if(createMarker) createMap.removeLayer(createMarker);
+        createMarker = L.marker(e.latlng).addTo(createMap);
+        currentLatLng = e.latlng;
+        
+        fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${e.latlng.lat}&lon=${e.latlng.lng}`)
+        .then(res => res.json())
+        .then(data => {
+            if(data && data.address) {
+                var city = data.address.city || data.address.town || data.address.village || '';
+                var commune = data.address.suburb || data.address.neighbourhood || data.address.county || '';
+                var road = data.address.road || '';
+                var house = data.address.house_number || '';
+                var addr = (house + ' ' + road).trim();
+                
+                if(city) document.getElementById('eventCity').value = city;
+                if(commune) document.getElementById('eventCommune').value = commune;
+                if(addr) document.getElementById('eventAddress').value = addr;
+            }
+        }).catch(err => console.log('Erreur geocoding', err));
+    });
+}
+
+function openCreateEventModal(){
+    var m=document.getElementById('createEventModal');
+    var bd=document.getElementById('desktopModalBackdrop');
+    if(m)m.classList.add('active');
+    if(bd)bd.classList.add('active');
+    document.body.style.overflow = 'hidden';
+    
+    currentEventImageData=null; currentLatLng=null;
+    if(createMarker && createMap) createMap.removeLayer(createMarker);
+    var p=document.getElementById('eventImagePreview');
+    var u=document.getElementById('imageUploadArea');
+    if(p)p.innerHTML='';if(u)u.style.display='block';
+    
+    setTimeout(initCreateMap, 350);
+}
+
+function closeCreateEventModal(){
+    var m=document.getElementById('createEventModal');
+    if(m)m.classList.remove('active');
+    var bd=document.getElementById('desktopModalBackdrop');
+    if(bd) bd.classList.remove('active');
+    document.body.style.overflow = '';
+    ['eventTitle','eventDate','eventTime','eventCity','eventCommune','eventAddress','eventDescription'].forEach(function(id){var el=document.getElementById(id);if(el)el.value=''});
+}
+
+function createEvent() {
+    var ti = document.getElementById('eventTitle').value.trim(),
+        c = document.getElementById('eventCategory').value;
+    var d = document.getElementById('eventDate').value,
+        tm = document.getElementById('eventTime').value;
+    var city = document.getElementById('eventCity').value.trim();
+    var commune = document.getElementById('eventCommune').value.trim();
+    var addr = document.getElementById('eventAddress').value.trim();
+    var desc = document.getElementById('eventDescription').value.trim();
+    
+    // 🆕 Validation plus souple : si la carte n'a pas été cliquée, permettre la saisie manuelle
+    if (!ti || !d || !desc) {
+        showToast(t('toast_fields_required'));
+        return;
+    }
+    
+    // 🆕 Si pas de ville saisie, mettre une valeur par défaut
+    if (!city) city = "Lubumbashi";
+    if (!commune) commune = "";
+    if (!addr) addr = city;
+    
+    var fullLoc = addr;
+    if (commune) fullLoc += ", " + commune;
+    fullLoc += ", " + city;
+    
+    var ne = {
+        id: Date.now(),
+        title: ti,
+        category: c || 'conference',
+        date: d,
+        time: tm || '12:00',
+        location: fullLoc,
+        lat: currentLatLng ? currentLatLng.lat : null,
+        lng: currentLatLng ? currentLatLng.lng : null,
+        description: desc,
+        image: currentEventImageData || null,
+        organizer: currentUser.name,
+        organizerAvatar: currentUser.avatar,
+        organizerUsername: localStorage.getItem('estra_current_username') || currentUser.name.toLowerCase().replace(/\s+/g, '_'),
+        interested: 0,
+        going: 0,
+        createdAt: Date.now()
+    };
+    
+    // ✅ 1. SAUVEGARDER DANS LES ÉVÉNEMENTS
+    events.unshift(ne);
+    saveEvents();
+    renderEvents();
+    renderCalendar();
+    closeCreateEventModal();
+    showToast(t('toast_event_created'));
+    
+    // ✅ 2. CRÉER UN POST DANS LE FIL D'ACTUALITÉ
+    createPostFromEvent(ne);
+    
+    // ✅ 3. NOTIFIER LES AUTRES PAGES
+    localStorage.setItem('estra_event_published', JSON.stringify({
+        event: ne,
+        timestamp: Date.now()
+    }));
+    localStorage.setItem('estra_event_trigger', Date.now().toString());
+    
+    addNotification('event_created', t('notif_event_created'), `L'événement "${ti}" a été créé avec succès`, { eventId: ne.id });
+}
+
+// ✅ FONCTION : Créer un post à partir d'un événement
+function createPostFromEvent(event) {
+    const posts = JSON.parse(localStorage.getItem('estra_posts') || '[]');
+    
+    // Vérifier si le post existe déjà
+    const exists = posts.some(p => p.eventData && p.eventData.id === event.id);
+    if (exists) return;
+    
+    const th = themes[event.category] || themes.conference;
+    const dateObj = new Date(event.date);
+    const day = dateObj.getDate();
+    const month = dateObj.toLocaleDateString('fr-FR', { month: 'short' }).toUpperCase();
+    
+    const newPost = {
+        id: Date.now() + 1,
+        author: event.organizer || 'Utilisateur',
+        authorUsername: event.organizerUsername || event.organizer?.toLowerCase().replace(/\s+/g, '_') || 'user',
+        authorAvatar: event.organizerAvatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(event.organizer || 'User')}&background=38bdf8&color=fff`,
+        content: `📅 ${event.title}\n${event.description || ''}`,
+        isEvent: true,
+        eventData: {
+            id: event.id,
+            title: event.title,
+            date: event.date,
+            time: event.time || 'TBA',
+            location: event.location,
+            description: event.description || '',
+            category: event.category || 'conference',
+            image: event.image || null
+        },
+        images: event.image ? [event.image] : [],
+        image: event.image || null,
+        likes: 0,
+        liked: false,
+        saved: false,
+        comments: [],
+        timestamp: Date.now()
+    };
+    
+    posts.unshift(newPost);
+    localStorage.setItem('estra_posts', JSON.stringify(posts));
+    
+    console.log('✅ Événement publié dans le fil d\'actualité:', event.title);
+}
+/* ==================== OUVERTURE DETAIL (Original 3e Colonne) ==================== */
+function openEventDetail(id){
+    var e=events.find(function(x){return x.id===id});if(!e)return;
+    var dc=document.getElementById('eventDetailContent');if(!dc)return;
+    
+    var interestBtn = userInterests[e.id]==='interested' ? '✓ Intéressé' : '❤️ Intéressé';
+    var goingBtn = userInterests[e.id]==='going' ? '✓ Participe' : '✅ Obtenir Billet';
+    var th = themes[e.category] || themes.conference;
+    var themeLabel = getThemeLabel(e.category);
+    
+    dc.innerHTML = `
+        <div class="event-detail-header">
+            <button class="event-detail-close" onclick="closeEventDetailModal()"><i class="fas fa-arrow-left"></i></button>
+            <div class="event-detail-image" style="background-image:url('${e.image||'https://picsum.photos/600/300?random='+e.id}')"></div>
+        </div>
+        <div class="event-detail-body">
+            <h2 class="event-detail-title">${escapeHtml(e.title)}</h2>
+            <div class="event-organizer" style="cursor:pointer" onclick="viewProfile('${escapeHtml(e.organizer||'')}')">
+                <img src="${e.organizerAvatar||''}" alt="Avatar"> <span class="org-name" style="color:${th.color}">${escapeHtml(e.organizer||t('organizer_label'))}</span>
+            </div>
+            
+            <div class="event-details-row"><div class="event-details-icon" style="color:${th.color}"><i class="fas fa-calendar-alt"></i></div><span>${formatDate(e.date)} à ${e.time||''}</span></div>
+            
+            <div class="location-box" style="display:flex; justify-content:space-between; align-items:center; background:rgba(0,0,0,0.2); padding:16px; border-radius:16px; margin-bottom:20px;">
+                <div style="font-size:0.9rem; color:var(--text-secondary); max-width:65%;">
+                    <i class="fas fa-map-marker-alt" style="color:${th.color}"></i> 
+                    <span>${escapeHtml(e.location||'')}</span>
+                </div>
+                ${e.lat && e.lng ? `<a href="https://maps.google.com/?q=${e.lat},${e.lng}" target="_blank" style="background:rgba(56,189,248,0.1); color:var(--estra-cyan); padding:8px 16px; border-radius:20px; text-decoration:none; font-size:0.85rem; font-weight:700;"><i class="fas fa-map-marked-alt"></i> Voir la carte</a>` : ''}
+            </div>
+
+            <h4 style="margin-bottom:8px; font-size:1rem;">À propos</h4>
+            <div class="event-description">${escapeHtml(e.description||'')}</div>
+            
+            <div class="ticket-divider"></div>
+            <div class="event-stats">
+                <span><i class="fas fa-heart" style="color:var(--estra-danger)"></i> ${e.interested||0} ${t('interested_label')}</span>
+                <span><i class="fas fa-check-circle" style="color:var(--estra-success)"></i> ${e.going||0} ${t('participants_label')}</span>
+            </div>
+            
+            ${!isEventPassed(e.date) ? `
+            <div class="event-actions">
+                <button class="event-btn btn-interested" onclick="setInterest(${e.id},'interested');">${interestBtn}</button>
+                <button class="event-btn btn-going" onclick="setInterest(${e.id},'going');">${goingBtn}</button>
+                <button class="event-btn btn-share" onclick="shareEventNatif(${e.id})" title="Partager"><i class="fas fa-share-nodes"></i></button>
+            </div>` : ''}
+            
+            <div class="ticket-barcode">
+                <div class="ticket-barcode-img"></div>
+                <div style="font-size: 0.65rem; font-family: monospace; letter-spacing: 2px;">ESTRA-${e.id}-TKT</div>
+            </div>
+        </div>
+    `;
+    
+    var m=document.getElementById('eventDetailModal');
+    if(m)m.classList.add('active');
+    if (window.innerWidth < 1280) document.body.style.overflow = 'hidden';
+}
+
+function closeEventDetailModal(){
+    var m=document.getElementById('eventDetailModal');
+    if(m)m.classList.remove('active');
+    document.body.style.overflow = '';
+}
+
+function setInterest(eid,s){
+    var e=events.find(function(x){return x.id===eid});if(!e)return;
+    var cs=userInterests[eid];
+    
+    if(cs===s){
+        delete userInterests[eid];
+        if(s==='interested')e.interested=Math.max(0,(e.interested||0)-1);
+        else e.going=Math.max(0,(e.going||0)-1);
+        showToast(t('toast_removed'));
+    }else{
+        if(cs==='interested')e.interested=Math.max(0,(e.interested||0)-1);
+        if(cs==='going')e.going=Math.max(0,(e.going||0)-1);
+        userInterests[eid]=s;
+        if(s==='interested'){
+            e.interested=(e.interested||0)+1;
+            showToast(t('toast_interested'));
+            addNotification('event_interested', t('notif_event_interested'), `Vous êtes intéressé(e) par "${e.title}"`, { eventId: eid });
+        } else {
+            e.going=(e.going||0)+1;
+            showToast(t('toast_going'));
+            addNotification('event_going', t('notif_event_going'), `Vous participez à "${e.title}"`, { eventId: eid });
+        }
+        
+        if(s==='going'){
+            var th = themes[e.category] || themes.conference;
+            var vipModal = document.getElementById('vipTicketModal');
+            document.getElementById('vipTicketHeader').style.background = `linear-gradient(135deg, ${th.color}, #111)`;
+            document.getElementById('vipTicketBody').style.background = th.bg;
+            document.getElementById('vipTicketCat').textContent = "PASS : " + getThemeLabel(e.category).toUpperCase();
+            var vipTitle = document.getElementById('vipEventTitle'); if(vipTitle) { vipTitle.textContent = e.title; vipTitle.style.color = th.color; }
+            var vipUser = document.getElementById('vipUserName'); if(vipUser) vipUser.textContent = currentUser.name;
+            var qrData = encodeURIComponent(`ESTRA|ID:${e.id}|USER:${currentUser.name}`);
+            var vipQr = document.getElementById('vipQrCode'); if(vipQr) vipQr.src = `https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=${qrData}&color=${th.bg.replace('#','')}&bgcolor=ffffff`;
+            if(vipModal) { vipModal.classList.add('active'); document.body.style.overflow = 'hidden'; }
+        }
+    }
+    localStorage.setItem('estra_event_interests',JSON.stringify(userInterests));saveEvents();renderEvents();
+    
+    if(document.getElementById('eventDetailModal').classList.contains('active')) openEventDetail(eid);
+}
+
+function saveEvent(id){
+    if(savedEventsIds.indexOf(id)!==-1){
+        savedEventsIds=savedEventsIds.filter(function(x){return x!==id});
+        showToast(t('toast_removed'));
+    } else {
+        savedEventsIds.push(id);
+        showToast(t('toast_saved'));
+        const e = events.find(function(x){return x.id===id});
+        if (e) addNotification('event_saved', t('notif_event_saved'), `Événement "${e.title}" enregistré`, { eventId: id });
+    }
+    localStorage.setItem('estra_saved_events',JSON.stringify(savedEventsIds));renderEvents();
+}
+
+function closeVipTicket(){ var m = document.getElementById('vipTicketModal'); if(m) { m.classList.remove('active'); document.body.style.overflow = ''; } }
+function captureTicket(){ showToast("📸 Capturez pour votre Story !"); setTimeout(function(){ closeVipTicket(); }, 3000); }
+function shareEventNatif(id){
+    var e=events.find(function(x){return x.id===id});if(!e)return;
+    var shareText = "Salut ! 👋 Je participe à \""+e.title+"\" le "+formatDate(e.date)+"\n📍 "+e.location;
+    if (navigator.share) { navigator.share({ title: e.title, text: shareText, url: window.location.href }).catch(function(){}); } 
+    else { window.open("https://wa.me/?text="+encodeURIComponent(shareText), '_blank'); }
+}
+
+function toggleSidebar(){var s=document.getElementById('sidebar');var o=document.getElementById('sidebarOverlay');if(s)s.classList.toggle('open');if(o)o.classList.toggle('active'); document.body.style.overflow = s.classList.contains('open') ? 'hidden' : '';}
+function closeSidebar(){var s=document.getElementById('sidebar');var o=document.getElementById('sidebarOverlay');if(s)s.classList.remove('open');if(o)o.classList.remove('active'); document.body.style.overflow = '';}
+function logout(){localStorage.clear();window.location.href='login.html'}
+// 🆕 Base de données des utilisateurs pour les liens de profil
+const allPeopleSuggestions = [
+    {name:"Rashidi", username:"rashidi", role:"Étudiant", avatar:"https://ui-avatars.com/api/?name=Rashidi&background=38bdf8&color=fff"},
+    {name:"Marie Claire", username:"marie_claire", role:"Enseignante", avatar:"https://ui-avatars.com/api/?name=Marie&background=10b981&color=fff"},
+    {name:"David Mwamba", username:"david_mwamba", role:"Chercheur", avatar:"https://ui-avatars.com/api/?name=David&background=8b5cf6&color=fff"},
+    {name:"Pr. Kabengele", username:"prof_kabengele", role:"Professeur", avatar:"https://ui-avatars.com/api/?name=PrK&background=7c3aed&color=fff"},
+    {name:"Mr. Muteba", username:"mr_muteba", role:"Enseignant", avatar:"https://ui-avatars.com/api/?name=MrM&background=d97706&color=fff"},
+    {name:"Alice Mwila", username:"alice_mwila", role:"Élève", avatar:"https://ui-avatars.com/api/?name=Alice&background=059669&color=fff"},
+    {name:"Sophie Mukendi", username:"sophie_mukendi", role:"Étudiante", avatar:"https://ui-avatars.com/api/?name=Sophie&background=ec4899&color=fff"},
+    {name:"Admin ESTRA", username:"admin_estra", role:"Administrateur", avatar:"https://ui-avatars.com/api/?name=Admin&background=dc2626&color=fff"}
+];
+
+function viewProfile(nameOrUsername) {
+    if (!nameOrUsername) return;
+    const person = allPeopleSuggestions.find(p => 
+        p.name === nameOrUsername || p.username === nameOrUsername
+    );
+    if (person && person.username) {
+        window.location.href = 'profile.html?user=' + encodeURIComponent(person.username);
+    } else {
+        const fallback = nameOrUsername.toLowerCase().replace(/\s+/g, '_');
+        window.location.href = 'profile.html?user=' + encodeURIComponent(fallback);
+    }
+}
+document.addEventListener('DOMContentLoaded',function(){
+    loadData();
+    initEcoMode();
+    renderEvents();renderCalendar();
+    updateBadges();
+    
+    var lv=document.getElementById('listView');if(lv)lv.style.display='grid';
+    var cv=document.getElementById('calendarView');if(cv)cv.classList.remove('active');
+    
+    var so=document.getElementById('sidebarOverlay');if(so)so.addEventListener('click',closeSidebar);
+    
+    var edm=document.getElementById('eventDetailModal');
+    if(edm)edm.addEventListener('click',function(e){if(e.target===edm)closeEventDetailModal()});
+
+    window.addEventListener('online',function(){var b=document.getElementById('offlineBanner');if(b)b.style.display='none';showToast(t('toast_online'))});
+    window.addEventListener('offline',function(){var b=document.getElementById('offlineBanner');if(b)b.style.display='block';showToast(t('toast_offline'))});
+    
+    // Synchronisation inter-pages
+    window.addEventListener('storage', function(e) {
+        if (e.key === 'estra_notification_trigger') {
+            updateBadges();
+        }
+        if (e.key === 'estra_theme' && e.newValue) {
+            document.documentElement.setAttribute('data-theme', e.newValue);
+        }
+        if (e.key === 'estra_language' && e.newValue) {
+            currentLang = e.newValue;
+            applyTranslations();
+            renderFilters();
+            renderEvents();
+            renderCalendar();
+        }
+        if (e.key === 'estra_events') {
+            events = JSON.parse(e.newValue || '[]');
+            window.estraEvents = events;
+            renderEvents();
+            renderCalendar();
+        }
+        if (['estra_profile','estra_posts','estra_friends','estra_userGroups'].includes(e.key)) {
+            updateSidebar();
+        }
+        if (e.key === 'estra_conversations') {
+            updateBadges();
+        }
+        // 🆕 Synchronisation avatar
+if (e.key === 'estra_avatar_updated') {
+    try {
+        const data = JSON.parse(e.newValue || '{}');
+        if (data.username && data.avatar) {
+            // Mettre à jour les avatars dans les événements
+            events.forEach(ev => {
+                if (ev.organizer === data.username || ev.organizer === data.fullName) {
+                    ev.organizerAvatar = data.avatar;
+                }
+            });
+            saveEvents();
+            renderEvents();
+            updateSidebar();
+        }
+    } catch(err) {}
+}
+    });
+    
+    window.addEventListener('estra_notification_updated', function(e) {
+        updateBadges();
+    });
+    
+    setInterval(updateBadges, 3000);
+});
+// Juste après ta fonction createEvent, ajoute :
+window.createNewEvent = createEvent;
+window.filterEvents=filterEvents;window.toggleView=toggleView;
+window.openCreateEventModal=openCreateEventModal;window.closeCreateEventModal=closeCreateEventModal;
+window.createEvent=createEvent;window.openEventDetail=openEventDetail;
+window.closeEventDetailModal=closeEventDetailModal;window.setInterest=setInterest;
+window.saveEvent=saveEvent;window.shareEventNatif=shareEventNatif;
+window.prevMonth=prevMonth;window.nextMonth=nextMonth;
+window.showDayEvents=showDayEvents;window.toggleSidebar=toggleSidebar;
+window.closeSidebar=closeSidebar;window.logout=logout;window.showToast=showToast;
+window.handleEventImageSelect=handleEventImageSelect;window.removeEventImage=removeEventImage;
+window.closeVipTicket=closeVipTicket;window.captureTicket=captureTicket;
+window.addNotification=addNotification;window.updateBadges=updateBadges;
+window.t = t; window.applyTranslations = applyTranslations;
+window.translations = translations; window.currentLang = currentLang;
+window.toggleEcoMode = toggleEcoMode;
+window.viewProfile = viewProfile;
+</script>
+<script src="i18n.js"></script>
+<script src="pwa-init.js"></script>
+</body>
+</html>

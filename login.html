@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, maximum-scale=1.0, viewport-fit=cover">
+    <title data-i18n="page_title">ESTRA LINK • Connect | Connexion</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#0284c7">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="ESTRA LINK">
+    <link rel="apple-touch-icon" href="https://ui-avatars.com/api/?background=38bdf8&color=fff&name=E&size=152">
+    <style>
+    
+        :root, [data-theme="light"] {
+            --cyan: #0284c7; --bg: #f8fafc; --card-bg: rgba(255,255,255,0.95);
+            --border: rgba(0,0,0,0.1); --text: #0f172a; --text-secondary: #475569;
+            --purple: #7c3aed; --success: #059669; --danger: #dc2626; --warning: #d97706;
+            --input-bg: #f1f5f9; --modal-bg: #ffffff; --toast-bg: #1e293b;
+            --strength-bg: #e2e8f0; --transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+        }
+        [data-theme="dark"] {
+            --cyan: #38bdf8; --bg: #0f172a; --card-bg: rgba(30,41,59,0.6);
+            --border: rgba(56,189,248,0.2); --text: #e2e8f0; --text-secondary: #94a3b8;
+            --purple: #a78bfa; --success: #10b981; --danger: #ef4444; --warning: #f59e0b;
+            --input-bg: rgba(30,41,59,0.8); --modal-bg: #1e293b; --toast-bg: #1e293b;
+            --strength-bg: rgba(30,41,59,0.8);
+        }
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);background-image:radial-gradient(at 0% 0%,rgba(56,189,248,0.08) 0px,transparent 50%),radial-gradient(at 100% 100%,rgba(56,189,248,0.08) 0px,transparent 50%);min-height:100vh;color:var(--text);display:flex;align-items:center;justify-content:center;padding:16px;transition:background 0.4s,color 0.4s}
+        ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--cyan);border-radius:10px}
+
+        .theme-btn{position:fixed;top:16px;right:16px;z-index:50;background:var(--input-bg);border:1px solid var(--border);width:40px;height:40px;border-radius:50%;cursor:pointer;font-size:1.2rem;display:flex;align-items:center;justify-content:center;color:var(--text-secondary);transition:var(--transition)}
+        .theme-btn:hover{background:var(--cyan);color:#fff;border-color:transparent}
+
+        .page-transition{position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,var(--cyan),var(--purple));z-index:10000;display:flex;align-items:center;justify-content:center;transform:translateY(100%);transition:transform 0.5s cubic-bezier(0.4,0,0.2,1);pointer-events:none}
+        .page-transition.active{transform:translateY(0)}
+        .transition-content{text-align:center;color:white;animation:fadeInUp 0.6s ease}
+        .transition-content svg{width:64px;height:64px;margin-bottom:20px;animation:pulse 1s infinite}
+        .transition-content h2{font-size:1.5rem;margin-bottom:10px}
+        @keyframes fadeInUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+        @keyframes pulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.1);opacity:0.8}}
+
+        .toast-custom{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--toast-bg);color:#fff;padding:10px 24px;z-index:1100;font-size:0.8rem;border-radius:25px;border:1px solid var(--cyan);white-space:nowrap;opacity:0;visibility:hidden;transition:opacity 0.3s,visibility 0.3s}
+        .toast-custom.show{opacity:1;visibility:visible}
+
+        .auth-container{width:100%;max-width:950px;background:var(--card-bg);border:1px solid var(--border);border-radius:24px;padding:32px;display:grid;grid-template-columns:1fr 1.2fr;gap:32px;backdrop-filter:blur(8px);box-shadow:0 25px 50px -12px rgba(0,0,0,0.15);transition:background 0.4s}
+        .auth-info{display:flex;flex-direction:column;justify-content:center}
+        .logo-area{text-align:center;margin-bottom:20px}
+        .logo-icon{width:64px;height:64px;background:linear-gradient(135deg,var(--cyan),var(--purple));border-radius:16px;display:inline-flex;align-items:center;justify-content:center;font-size:1.8rem;color:white;margin-bottom:12px;box-shadow:0 8px 24px rgba(56,189,248,0.3); overflow: hidden;}
+        .logo-icon img { width: 100%; height: 100%; border-radius: 16px; object-fit: cover;}
+        .logo-text{font-weight:800;font-size:1.6rem;background:coral;-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:1px}
+        .info-card{background:var(--input-bg);border-radius:16px;padding:16px;border:1px solid var(--border);margin-top:12px;transition:background 0.4s}
+        .info-title{font-size:0.9rem;font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:6px;color:var(--text)}
+        .info-list{display:flex;flex-direction:column;gap:8px}
+        .info-item{display:flex;align-items:center;gap:8px;font-size:0.8rem;color:var(--text-secondary)}
+        .info-item svg{width:16px;height:16px;color:var(--cyan);flex-shrink:0}
+
+        .auth-form-container{display:flex;flex-direction:column}
+        .auth-tabs{display:flex;gap:4px;margin-bottom:20px;background:var(--input-bg);padding:4px;border-radius:50px;transition:background 0.4s}
+        .auth-tab{flex:1;padding:10px 16px;border:none;background:transparent;color:var(--text-secondary);font-weight:600;cursor:pointer;border-radius:50px;transition:var(--transition);font-size:0.85rem;font-family:inherit}
+        .auth-tab.active{background:var(--cyan);color:#fff}
+        .auth-form{display:block}.auth-form.hidden{display:none}
+
+        .form-group{margin-bottom:14px}
+        .form-group label{display:block;margin-bottom:5px;font-weight:600;font-size:0.8rem;color:var(--text-secondary);display:flex;align-items:center;gap:6px}
+        .form-group input,.form-group select{width:100%;padding:12px 14px;border-radius:12px;border:1px solid var(--border);background:var(--input-bg);color:var(--text);font-size:0.9rem;outline:none;transition:var(--transition);font-family:inherit}
+        .form-group input:focus,.form-group select:focus{border-color:var(--cyan);box-shadow:0 0 0 3px rgba(56,189,248,0.15)}
+        .password-input{position:relative}.password-input input{padding-right:40px}
+        .password-toggle{position:absolute;right:14px;top:50%;transform:translateY(-50%);cursor:pointer;color:var(--text-secondary);transition:var(--transition)}
+        .password-toggle:hover{color:var(--cyan)}
+
+        .strength-bar{height:4px;background:var(--strength-bg);border-radius:2px;margin-top:8px;overflow:hidden}
+        .strength-fill{height:100%;border-radius:2px;transition:width 0.3s;width:0%;background:var(--danger)}
+
+        .btn{padding:12px 20px;border-radius:12px;border:none;font-weight:600;font-size:0.9rem;cursor:pointer;transition:var(--transition);display:inline-flex;align-items:center;justify-content:center;gap:8px;width:100%;font-family:inherit}
+        .btn-primary{background:var(--cyan);color:#fff}
+        .btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(56,189,248,0.3);opacity:0.95}
+        .btn-primary:disabled{opacity:0.5;cursor:not-allowed;transform:none}
+
+        .checkbox-label{display:flex;align-items:center;gap:8px;font-size:0.75rem;color:var(--text-secondary)}
+        .checkbox-label input[type="checkbox"]{width:16px;height:16px;cursor:pointer;accent-color:var(--cyan)}
+        .auth-footer{text-align:center;margin-top:16px;color:var(--text-secondary);font-size:0.75rem}
+        .auth-footer a{color:var(--cyan);text-decoration:none}.auth-footer a:hover{text-decoration:underline}
+        .security-badge{display:flex;align-items:center;gap:6px;justify-content:center;margin-top:16px;padding:10px;background:rgba(16,185,129,0.1);border-radius:12px;color:var(--success);font-size:0.75rem}
+        .error-message{color:var(--danger);font-size:0.7rem;margin-top:4px;display:none}.error-message.show{display:block}
+        .form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+
+        .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);backdrop-filter:blur(8px);z-index:300;display:none;align-items:center;justify-content:center}
+        [data-theme="dark"] .modal-overlay{background:rgba(0,0,0,0.85)}
+        .modal-overlay.active{display:flex}
+        .modal-content{background:var(--modal-bg);width:90%;max-width:420px;border-radius:20px;padding:28px;border:1px solid var(--border);max-height:90vh;overflow-y:auto;transition:background 0.4s}
+        .modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
+        .modal-header h3{font-size:1.1rem;display:flex;align-items:center;gap:8px;color:var(--text)}
+        .modal-close{background:none;border:none;color:var(--text-secondary);font-size:24px;cursor:pointer}.modal-close:hover{color:var(--danger)}
+
+        @media(max-width:767px){.auth-container{grid-template-columns:1fr;padding:20px}.form-row{grid-template-columns:1fr}}
+    </style>
+</head>
+<body>
+
+    <button class="theme-btn" onclick="toggleTheme()" id="themeToggleBtn" title="Changer le thème"><i class="fas fa-moon"></i></button>
+
+    <div class="toast-custom" id="toastMsg"></div>
+    <div class="page-transition" id="pageTransition">
+        <div class="transition-content">
+            <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M15.59 14.37a6 6 0 01-5.84 7.38v-4.8m5.84-2.58a14.98 14.98 0 006.16-12.12A14.98 14.98 0 009.631 8.41m5.96 5.96a14.926 14.926 0 01-5.841 2.58m-.119-8.54a6 6 0 00-7.381 5.84h4.8m2.581-5.84a14.927 14.927 0 00-2.58 5.84m2.699 2.7c-.103.021-.207.041-.311.06a15.09 15.09 0 01-2.448-2.448 14.9 14.9 0 01.06-.312m-2.24 2.39a4.493 4.493 0 00-1.757 4.306 4.493 4.493 0 004.306-1.758M16.5 9a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z"/></svg>
+            <h2 data-i18n="transition_title">Bienvenue sur ESTRA LINK</h2>
+            <p style="opacity:0.8" data-i18n="transition_subtitle">Préparation de votre espace...</p>
+        </div>
+    </div>
+
+    <!-- CONTENEUR PRINCIPAL CORRIGÉ -->
+    <div class="auth-container">
+        <!-- Colonne Gauche : Informations & Branding -->
+        <div class="auth-info">
+            <div class="logo-area">
+                <div class="logo-icon"><img src="/Levieux/markup_1000079414.png" alt="Logo ESTRA LINK"></div>
+                <div class="logo-text">ESTRA LINK</div>
+                <p style="color:var(--text-secondary);font-size:0.85rem"><i class="fas fa-graduation-cap"></i> <span data-i18n="logo_subtitle">Réseau social éducatif</span></p>
+            </div>
+            <div class="info-card">
+                <div class="info-title"><i class="fas fa-users"></i> <span data-i18n="community_title">Communauté</span></div>
+                <p style="font-size:0.8rem;color:var(--text-secondary)" data-i18n="community_desc">Rejoignez des milliers d'étudiants et professionnels à travers la RDC.</p>
+            </div>
+        </div>
+
+        <!-- Colonne Droite : Formulaires -->
+        <div class="auth-form-container">
+            <div class="auth-tabs">
+                <button class="auth-tab active" onclick="switchTab('login')"><i class="fas fa-sign-in-alt"></i> <span data-i18n="tab_login">Connexion</span></button>
+                <button class="auth-tab" onclick="switchTab('register')"><i class="fas fa-user-plus"></i> <span data-i18n="tab_register">Inscription</span></button>
+            </div>
+            
+            <!-- FORMULAIRE CONNEXION -->
+            <form id="loginForm" class="auth-form" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label><i class="fas fa-envelope"></i> <span data-i18n="label_identifier">Email ou nom d'utilisateur</span></label>
+                    <input type="text" id="loginIdentifier" data-i18n-placeholder="placeholder_email" required autocomplete="username">
+                    <span class="error-message" id="loginError" data-i18n="error_login">Identifiants incorrects</span>
+                </div>
+                <div class="form-group" id="passwordGroup">
+                    <label><i class="fas fa-lock"></i> <span data-i18n="label_password">Mot de passe</span></label>
+                    <div class="password-input">
+                        <input type="password" id="loginPassword" data-i18n-placeholder="placeholder_password" required minlength="6" autocomplete="current-password">
+                        <i class="fas fa-eye password-toggle" onclick="togglePassword('loginPassword', this)"></i>
+                    </div>
+                </div>
+                <p style="text-align:center;margin:8px 0 14px 0"><a href="#" onclick="openForgotPasswordModal()" style="color:var(--cyan);font-size:0.8rem"><i class="fas fa-question-circle"></i> <span data-i18n="link_forgot_password">Mot de passe oublié ?</span></a></p>
+                <button type="submit" class="btn btn-primary"><i class="fas fa-sign-in-alt"></i> <span data-i18n="btn_login">Se connecter</span></button>
+                <div style="text-align:center;margin:12px 0">
+                    <span style="color:var(--text-secondary);font-size:0.8rem" data-i18n="or_label">ou</span>
+                </div>
+                <button type="button" class="btn btn-primary" style="background:#4285F4"><i class="fab fa-google"></i> <span data-i18n="btn_google">Se connecter avec Google</span></button>
+            </form>
+
+            <!-- FORMULAIRE INSCRIPTION -->
+            <form id="registerForm" class="auth-form hidden" onsubmit="handleRegister(event)">
+                <div class="form-group">
+                    <label><i class="fas fa-user"></i> <span data-i18n="label_fullname">Nom complet</span></label>
+                    <input type="text" id="fullName" data-i18n-placeholder="placeholder_fullname" required minlength="3" autocomplete="name">
+                    <span class="error-message" id="nameError" data-i18n="error_name">Nom requis (min 3)</span>
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-at"></i> <span data-i18n="label_username">Nom d'utilisateur</span></label>
+                    <input type="text" id="regUsername" data-i18n-placeholder="placeholder_username" required minlength="3" autocomplete="username">
+                    <span class="error-message" id="usernameError" data-i18n="error_username">Pseudo requis (min 3)</span>
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-envelope"></i> <span data-i18n="label_email">Email</span></label>
+                    <input type="email" id="regEmail" data-i18n-placeholder="placeholder_reg_email" required autocomplete="email">
+                    <span class="error-message" id="emailError" data-i18n="error_email">Email valide requis</span>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label><i class="fas fa-lock"></i> <span data-i18n="label_password">Mot de passe</span></label>
+                        <div class="password-input">
+                            <input type="password" id="regPassword" data-i18n-placeholder="placeholder_reg_password" required minlength="6" oninput="checkPasswordStrength()" autocomplete="new-password">
+                            <i class="fas fa-eye password-toggle" onclick="togglePassword('regPassword', this)"></i>
+                        </div>
+                        <div class="strength-bar"><div class="strength-fill" id="strengthFill"></div></div>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-lock"></i> <span data-i18n="label_confirm_password">Confirmation</span></label>
+                        <input type="password" id="regConfirmPassword" data-i18n-placeholder="placeholder_confirm_password" required minlength="6" autocomplete="new-password">
+                        <span class="error-message" id="confirmError" data-i18n="error_confirm_password">Mots de passe différents</span>
+                    </div>
+                </div>
+                <div style="margin:14px 0">
+                    <label class="checkbox-label"><input type="checkbox" id="regTerms" required> <span data-i18n="label_terms">J'accepte les conditions d'utilisation</span></label>
+                </div>
+                <button type="submit" class="btn btn-primary" id="registerBtn"><i class="fas fa-user-plus"></i> <span data-i18n="btn_register">Créer mon compte</span></button>
+            </form>
+            
+            <div class="security-badge"><i class="fas fa-shield-alt"></i> <span data-i18n="security_badge">Connexion sécurisée • Mode Test</span></div>
+            <div class="auth-footer"><p>© 2026 ESTRA Link • <a href="aide.html" data-i18n="link_help">Aide</a></p></div>
+        </div>
+    </div>
+
+    <!-- MODAL MOT DE PASSE OUBLIÉ -->
+    <div class="modal-overlay" id="forgotPasswordModal">
+        <div class="modal-content">
+            <div class="modal-header"><h3><i class="fas fa-key"></i> <span data-i18n="modal_forgot_title">Mot de passe oublié</span></h3><button class="modal-close" onclick="closeForgotPasswordModal()">&times;</button></div>
+            <div id="forgotStep1">
+                <p style="color:var(--text-secondary);margin-bottom:16px;font-size:0.85rem" data-i18n="forgot_step1_desc">Entrez votre adresse email pour recevoir un code.</p>
+                <div class="form-group"><label><i class="fas fa-envelope"></i> <span data-i18n="label_email">Email</span></label><input type="email" id="forgotEmail" data-i18n-placeholder="placeholder_email" required autocomplete="email"><span class="error-message" id="forgotEmailError" data-i18n="error_email">Email valide requis</span></div>
+                <button class="btn btn-primary" onclick="sendResetCode()"><i class="fas fa-paper-plane"></i> <span data-i18n="btn_send_code">Envoyer le code</span></button>
+            </div>
+            <div id="forgotStep2" style="display:none">
+                <p style="color:var(--success);margin-bottom:16px;font-size:0.85rem" id="codeSentMessage">✅ <span data-i18n="forgot_step2_code_sent">Code envoyé</span></p>
+                <div class="form-group"><label><i class="fas fa-hashtag"></i> <span data-i18n="label_reset_code">Code de vérification</span></label><input type="text" id="resetCode" data-i18n-placeholder="placeholder_reset_code" maxlength="6" required autocomplete="one-time-code"><span class="error-message" id="resetCodeError" data-i18n="error_reset_code">Code invalide</span></div>
+                <button class="btn btn-primary" onclick="verifyResetCode()"><i class="fas fa-check"></i> <span data-i18n="btn_verify">Vérifier</span></button>
+                <p style="text-align:center;margin-top:12px"><a href="#" onclick="sendResetCode()" style="color:var(--cyan);font-size:0.8rem" data-i18n="link_resend_code">Renvoyer le code</a></p>
+            </div>
+            <div id="forgotStep3" style="display:none">
+                <p style="color:var(--success);margin-bottom:16px;font-size:0.85rem">✅ <span data-i18n="forgot_step3_code_verified">Code vérifié</span></p>
+                <div class="form-group"><label><i class="fas fa-lock"></i> <span data-i18n="label_new_password">Nouveau mot de passe</span></label><div class="password-input"><input type="password" id="newPassword" data-i18n-placeholder="placeholder_password" required minlength="6" autocomplete="new-password"><i class="fas fa-eye password-toggle" onclick="togglePassword('newPassword', this)"></i></div></div>
+                <div class="form-group"><label><i class="fas fa-lock"></i> <span data-i18n="label_confirm_password">Confirmer</span></label><input type="password" id="confirmNewPassword" data-i18n-placeholder="placeholder_confirm_password" required minlength="6" autocomplete="new-password"><span class="error-message" id="newPasswordError" data-i18n="error_confirm_password">Mots de passe différents</span></div>
+                <button class="btn btn-primary" onclick="resetPassword()"><i class="fas fa-save"></i> <span data-i18n="btn_reset_password">Réinitialiser</span></button>
+            </div>
+            <div id="forgotStep4" style="display:none;text-align:center">
+                <i class="fas fa-check-circle" style="font-size:3rem;color:var(--success);margin-bottom:16px"></i>
+                <h3 data-i18n="forgot_step4_success_title">Mot de passe réinitialisé !</h3>
+                <p style="color:var(--text-secondary);margin:12px 0" data-i18n="forgot_step4_success_desc">Connectez-vous avec votre nouveau mot de passe.</p>
+                <button class="btn btn-primary" onclick="closeForgotPasswordModal();switchTab('login')"><i class="fas fa-sign-in-alt"></i> <span data-i18n="btn_login">Se connecter</span></button>
+            </div>
+        </div>
+    </div>
+
+<script>
+// ================= INTERCOMMUNICATION (ESTRA CORE MOCK) =================
+if(typeof window.ESTRA === 'undefined') {
+    window.ESTRA = {
+        isLoggedIn: () => localStorage.getItem('estra_logged_in') === 'true',
+        getProfile: () => {
+    const profile = JSON.parse(localStorage.getItem('estra_profile') || 'null');
+    if (profile && profile.accountType) return profile;
+    // Vérifier si l'utilisateur existe dans estra_all_users
+    const allUsers = JSON.parse(localStorage.getItem('estra_all_users') || '[]');
+    const rememberedEmail = localStorage.getItem('estra_remembered_email');
+    if (rememberedEmail) {
+        const found = allUsers.find(u => u.email === rememberedEmail);
+        if (found) return found;
+    }
+    return null;
+},
+
+</script>
+
+<script>
+let toastTimeout=null,userEmailForReset=null,demoResetCode=null;
+
+const tr = (typeof t === 'function') ? t : (k) => k; 
+
+function sanitizeInput(s){return s?String(s).trim():''}
+function isValidEmail(e){return /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(e)}
+
+function showToast(msg,isErr=false){
+    const te=document.getElementById('toastMsg');if(toastTimeout)clearTimeout(toastTimeout);
+    te.textContent=msg;te.style.borderColor=isErr?'#ef4444':'#38bdf8';
+    te.style.background=isErr?'linear-gradient(135deg,#dc2626,#991b1b)':'var(--toast-bg)';
+    te.classList.remove('show');void te.offsetWidth;te.classList.add('show');
+    toastTimeout=setTimeout(()=>te.classList.remove('show'),3000)
+}
+
+function navigateTo(url){
+    document.getElementById('pageTransition').classList.add('active');
+    setTimeout(()=>{window.location.href=url},1500)
+}
+
+function togglePassword(id,icon){
+    const inp=document.getElementById(id);
+    if(inp.type==='password'){inp.type='text';icon.classList.replace('fa-eye','fa-eye-slash')}
+    else{inp.type='password';icon.classList.replace('fa-eye-slash','fa-eye')}
+}
+
+function switchTab(tab){
+    document.querySelectorAll('.auth-tab').forEach((ta,i)=>ta.classList.toggle('active',(i===0&&tab==='login')||(i===1&&tab==='register')));
+    document.getElementById('loginForm').classList.toggle('hidden',tab!=='login');
+    document.getElementById('registerForm').classList.toggle('hidden',tab!=='register');
+    document.querySelectorAll('.error-message').forEach(e=>e.classList.remove('show'))
+}
+
+function checkPasswordStrength(){
+    const pwd=document.getElementById('regPassword').value;const fill=document.getElementById('strengthFill');
+    let score=pwd.length>=6?1:0;if(pwd.length>=8)score++;if(/[A-Z]/.test(pwd))score++;
+    if(/[0-9]/.test(pwd))score++;if(/[^A-Za-z0-9]/.test(pwd))score++;
+    const colors=['#e2e8f0','#ef4444','#f59e0b','#fbbf24','#10b981','#10b981'];
+    fill.style.width=['0%','20%','40%','60%','80%','100%'][Math.min(score,5)];
+    fill.style.background=colors[Math.min(score,5)]
+}
+
+function toggleTheme(){
+    const cur=document.documentElement.getAttribute('data-theme');const next=cur==='light'?'dark':'light';
+    document.documentElement.setAttribute('data-theme',next);localStorage.setItem('estra_theme',next);window.estraTheme=next;
+    const btn=document.getElementById('themeToggleBtn');const icon=btn.querySelector('i');
+    if(next==='dark'){icon.classList.replace('fa-moon','fa-sun');btn.title='Mode clair'}
+    else{icon.classList.replace('fa-sun','fa-moon');btn.title='Mode sombre'}
+}
+
+function initTheme(){
+    const saved=localStorage.getItem('estra_theme')||'light';
+    document.documentElement.setAttribute('data-theme',saved);window.estraTheme=saved;
+    const btn=document.getElementById('themeToggleBtn');const icon=btn.querySelector('i');
+    if(saved==='dark'){icon.classList.replace('fa-moon','fa-sun');btn.title='Mode clair'}
+}
+
+// ============ CONNEXION (INTERCOMMUNICATION) ============
+async function handleLogin(e){
+    e.preventDefault();
+    document.getElementById('loginError').classList.remove('show');
+    
+    const identifier = sanitizeInput(document.getElementById('loginIdentifier').value);
+    const password = document.getElementById('loginPassword').value;
+    
+    const isQuickLogin = localStorage.getItem('estra_remembered_email') === identifier && document.getElementById('loginIdentifier').readOnly === true;
+
+    if(!identifier || (!password && !isQuickLogin)){showToast(tr('toast_fields_required') || 'Champs requis', true);return}
+
+    const btn = e.target.querySelector('button[type="submit"]');
+    const originalText = btn.innerHTML;
+    if(btn){btn.disabled=true;btn.innerHTML='<i class="fas fa-spinner fa-spin"></i> Connexion...'}
+
+    setTimeout(() => {
+        if(btn){btn.disabled=false;btn.innerHTML=originalText}
+        
+        localStorage.setItem('estra_logged_in', 'true');
+        
+        const profile = window.ESTRA.getProfile();
+        if (profile && profile.accountType) {
+            showToast(`Bon retour, ${profile.fullName || identifier} ! 🙃`);
+            navigateTo('index.html');
+        } else {
+            showToast(`Bienvenue ! Finalisons votre compte.`);
+            navigateTo('account-select.html');
+        }
+    }, 800);
+}
+
+// ============ INSCRIPTION (INTERCOMMUNICATION) ============
+async function handleRegister(e){
+    e.preventDefault();
+    document.querySelectorAll('#registerForm .error-message').forEach(el=>el.classList.remove('show'));
+    
+    const fullName = sanitizeInput(document.getElementById('fullName').value);
+    const username = sanitizeInput(document.getElementById('regUsername').value.replace('@',''));
+    const email = sanitizeInput(document.getElementById('regEmail').value);
+    const password = document.getElementById('regPassword').value;
+    const confirmPassword = document.getElementById('regConfirmPassword').value;
+    const terms = document.getElementById('regTerms').checked;
+    
+    if(fullName.length<3){document.getElementById('nameError').classList.add('show');return}
+    if(username.length<3){document.getElementById('usernameError').classList.add('show');return}
+    if(!isValidEmail(email)){document.getElementById('emailError').classList.add('show');return}
+    if(password.length<6){showToast('Mot de passe trop court',true);return}
+    if(password!==confirmPassword){document.getElementById('confirmError').classList.add('show');return}
+    if(!terms){showToast('Veuillez accepter les conditions',true);return}
+
+    const btn = document.getElementById('registerBtn');
+    if(btn){btn.disabled=true;btn.innerHTML='<i class="fas fa-spinner fa-spin"></i> Création...'}
+
+    setTimeout(() => {
+        if(btn){btn.disabled=false;btn.innerHTML=`<i class="fas fa-user-plus"></i> Inscription`}
+        
+        localStorage.setItem('estra_logged_in', 'true');
+        window.ESTRA.updateProfile({ 
+            email: email, 
+            fullName: fullName,
+            username: username
+        });
+        
+        showToast('Compte créé avec succès ! 🚀');
+        navigateTo('account-select.html'); 
+    }, 800);
+}
+
+// ============ MOT DE PASSE OUBLIÉ (TEST MODE) ============
+function openForgotPasswordModal(){
+    document.getElementById('forgotPasswordModal').classList.add('active');
+    ['forgotStep1','forgotStep2','forgotStep3','forgotStep4'].forEach((id,i)=>document.getElementById(id).style.display=i===0?'block':'none');
+    ['forgotEmail','resetCode','newPassword','confirmNewPassword'].forEach(id=>document.getElementById(id).value='');
+    userEmailForReset=null;demoResetCode=null;
+}
+function closeForgotPasswordModal(){document.getElementById('forgotPasswordModal').classList.remove('active')}
+
+function sendResetCode(){
+    const email=sanitizeInput(document.getElementById('forgotEmail').value);
+    if(!email||!isValidEmail(email)){document.getElementById('forgotEmailError').classList.add('show');return}
+    document.getElementById('forgotEmailError').classList.remove('show');
+    userEmailForReset=email;
+
+    demoResetCode = Math.floor(100000+Math.random()*900000).toString();
+    alert(`🔑 Code de test : ${demoResetCode}`);
+
+    document.getElementById('codeSentMessage').textContent=`✅ Code envoyé à ${email}`;
+    document.getElementById('forgotStep1').style.display='none';
+    document.getElementById('forgotStep2').style.display='block';
+    showToast('Code envoyé (Mode Test)');
+}
+
+function verifyResetCode(){
+    const code=sanitizeInput(document.getElementById('resetCode').value);
+    if(!code||code.length!==6){document.getElementById('resetCodeError').classList.add('show');return}
+    document.getElementById('resetCodeError').classList.remove('show');
+    
+    if(code===demoResetCode){
+        document.getElementById('forgotStep2').style.display='none';
+        document.getElementById('forgotStep3').style.display='block';
+        showToast('Code vérifié');
+    }else{
+        document.getElementById('resetCodeError').classList.add('show');
+        showToast('Code incorrect',true);
+    }
+}
+
+function resetPassword(){
+    const np=document.getElementById('newPassword').value;
+    const cp=document.getElementById('confirmNewPassword').value;
+    if(np.length<6){showToast('Mot de passe trop court',true);return}
+    if(np!==cp){document.getElementById('newPasswordError').classList.add('show');return}
+    document.getElementById('newPasswordError').classList.remove('show');
+
+    document.getElementById('forgotStep3').style.display='none';
+    document.getElementById('forgotStep4').style.display='block';
+    showToast('Mot de passe réinitialisé');
+}
+
+document.addEventListener('DOMContentLoaded',()=>{
+    initTheme();
+    if(typeof applyTranslations === 'function') applyTranslations();
+
+    const rememberedEmail = localStorage.getItem('estra_remembered_email');
+    if (rememberedEmail && !window.ESTRA.isLoggedIn()) {
+        const emailInput = document.getElementById('loginIdentifier');
+        emailInput.value = rememberedEmail;
+        emailInput.readOnly = true;
+        emailInput.style.opacity = '0.7'; 
+        
+        const pwdGroup = document.getElementById('passwordGroup');
+        if(pwdGroup) pwdGroup.style.display = 'none';
+        
+        const btn = document.querySelector('#loginForm button[type="submit"]');
+        if(btn) {
+            btn.innerHTML = `<i class="fas fa-bolt"></i> Continuer en tant que ${rememberedEmail.split('@')[0]}`;
+        }
+        
+        showToast("Rebonjour ! Cliquez pour continuer. 🙃");
+    }
+    
+    document.getElementById('forgotPasswordModal').addEventListener('click', e => { if (e.target === document.getElementById('forgotPasswordModal')) closeForgotPasswordModal() });
+    window.addEventListener('storage', e => { if (e.key === 'estra_language' && e.newValue && typeof applyTranslations === 'function') applyTranslations() })
+});
+</script>
+</body>
+</html>

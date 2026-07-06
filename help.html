@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title data-i18n="page_title">ESTRA LINK | Centre d'aide</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+<!-- PWA -->
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#38bdf8">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="ESTRA LINK">
+<link rel="apple-touch-icon" href="https://ui-avatars.com/api/?background=38bdf8&color=fff&name=E&size=152">
+    <style>
+        :root {
+            --estra-cyan: #38bdf8;
+            --estra-bg-dark: #0f172a;
+            --estra-card-bg: rgba(30, 41, 59, 0.6);
+            --estra-border: rgba(56, 189, 248, 0.2);
+            --text-primary: #e2e8f0;
+            --text-secondary: #94a3b8;
+            --estra-purple: #a78bfa;
+            --estra-success: #10b981;
+            --estra-danger: #ef4444;
+            --estra-warning: #f59e0b;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        [data-theme="light"] {
+            --estra-bg-dark: #f8fafc;
+            --estra-card-bg: rgba(255,255,255,0.95);
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --estra-border: rgba(0,0,0,0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--estra-bg-dark);
+            background-image: radial-gradient(at 0% 0%, rgba(56,189,248,0.08) 0px, transparent 50%), radial-gradient(at 100% 100%, rgba(56,189,248,0.08) 0px, transparent 50%);
+            color: var(--text-primary);
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+            transition: background-color 0.4s ease, color 0.4s ease;
+        }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: var(--estra-bg-dark); border-radius: 10px; }
+        [data-theme="light"] ::-webkit-scrollbar-track { background: #e2e8f0; }
+        ::-webkit-scrollbar-thumb { background: var(--estra-cyan); border-radius: 10px; }
+
+        .offline-banner { position: fixed; top: 0; left: 0; right: 0; background: #f59e0b; color: #000; text-align: center; padding: 6px; z-index: 9999; font-size: 0.8rem; font-weight: 600; display: none; }
+
+        .sidebar-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px); z-index: 1050; opacity: 0; visibility: hidden; transition: var(--transition); }
+        .sidebar-overlay.active { opacity: 1; visibility: visible; }
+
+        .sidebar { position: fixed; top: 0; left: -280px; width: 220px; height: 100vh; background: var(--estra-bg-dark); border-right: 1px solid var(--estra-border); z-index: 1060; transition: left 0.3s ease, background-color 0.4s ease; padding: 30px 15px; overflow-y: auto; }
+        [data-theme="light"] .sidebar { background: #fff; }
+        .sidebar.open { left: 0; }
+        .profile-section { text-align: center; padding-bottom: 25px; border-bottom: 1px solid var(--estra-border); margin-bottom: 20px; position: relative; }
+        .profile-img-sidebar { width: 65px; height: 65px; border-radius: 50%; border: 2px solid var(--estra-cyan); margin-bottom: 10px; object-fit: cover; }
+        .online-indicator { position: absolute; top: 50px; right: 50px; width: 16px; height: 16px; border-radius: 50%; background: #10b981; border: 2px solid var(--estra-bg-dark); }
+        .profile-stats { display: flex; justify-content: center; gap: 20px; margin-top: 12px; }
+        .profile-stats div { text-align: center; }
+        .profile-stats strong { display: block; font-size: 0.95rem; color: var(--estra-cyan); }
+        .profile-stats span { font-size: 0.65rem; color: var(--text-secondary); }
+        .sidebar-nav { display: flex; flex-direction: column; gap: 4px; }
+        .sidebar-link { display: flex; align-items: center; gap: 12px; padding: 12px 15px; border-radius: 10px; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: var(--transition); cursor: pointer; background: none; border: none; width: 100%; font-family: inherit; }
+        .sidebar-link svg { width: 20px; height: 20px; stroke-width: 2; flex-shrink: 0; }
+        .sidebar-link:hover, .sidebar-link.active { background: rgba(56,189,248,0.1); color: var(--estra-cyan); transform: translateX(5px); border-right: 2px solid var(--estra-cyan); }
+        .sidebar-link.logout-link { color: var(--estra-danger); }
+        .sidebar-link.logout-link:hover { background: rgba(239,68,68,0.1); color: var(--estra-danger); border-right-color: var(--estra-danger); }
+
+        .navbar { padding: 10px 15px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--estra-border); background: rgba(15,23,42,0.85); backdrop-filter: blur(12px); position: sticky; top: 0; z-index: 100; transition: background-color 0.4s ease; }
+        [data-theme="light"] .navbar { background: rgba(255,255,255,0.9); }
+        .nav-left, .nav-right { display: flex; align-items: center; gap: 12px; }
+        .navbar-brand { font-weight: 800; color: coral; letter-spacing: 1.5px; font-size: 1.1rem; text-decoration: none; }
+        .menu-toggle { background: none; border: none; cursor: pointer; padding: 8px; display: flex; align-items: center; color: var(--text-secondary); transition: var(--transition); }
+        .menu-toggle:hover { color: var(--estra-cyan); }
+        .avatar-nav { width: 34px; height: 34px; border-radius: 50%; border: 1.5px solid var(--estra-cyan); object-fit: cover; box-shadow: 0 0 10px rgba(56,189,248,0.2); cursor: pointer; }
+
+        .main-content { max-width: 680px; margin: 0 auto; background: var(--estra-card-bg); border-left: 1px solid var(--estra-border); border-right: 1px solid var(--estra-border); min-height: calc(100vh - 60px); backdrop-filter: blur(8px); transition: background-color 0.4s ease; }
+
+        .back-btn { display: inline-flex; align-items: center; gap: 8px; padding: 16px 20px; color: var(--estra-cyan); text-decoration: none; font-weight: 500; transition: var(--transition); font-size: 0.9rem; }
+        .back-btn:hover { opacity: 0.8; transform: translateX(-3px); }
+        .back-btn svg { width: 18px; height: 18px; }
+
+        .help-header { padding: 8px 20px 20px; border-bottom: 1px solid var(--estra-border); }
+        .help-header h1 { font-size: 2rem; font-weight: 700; display: flex; align-items: center; gap: 12px; }
+        .help-header h1 svg { color: var(--estra-cyan); width: 28px; height: 28px; }
+        .help-header p { color: var(--text-secondary); margin-top: 8px; font-size: 0.85rem; }
+
+        .help-section { padding: 20px; border-bottom: 1px solid var(--estra-border); transition: var(--transition); }
+        .help-section:hover { background: rgba(56,189,248,0.02); }
+        .help-section h2 { display: flex; align-items: center; gap: 10px; font-size: 1.2rem; margin-bottom: 20px; color: var(--text-primary); }
+        .help-section h2 svg { color: var(--estra-cyan); width: 20px; height: 20px; flex-shrink: 0; }
+
+        .quick-start-list { color: var(--text-secondary); padding-left: 20px; line-height: 1.9; }
+        .quick-start-list li { margin-bottom: 10px; font-size: 0.9rem; }
+        .quick-start-list strong { color: var(--text-primary); }
+
+        .faq-item { border-bottom: 1px solid var(--estra-border); }
+        .faq-item:last-child { border-bottom: none; }
+        .faq-question { display: flex; justify-content: space-between; align-items: center; padding: 16px 0; font-weight: 600; cursor: pointer; font-size: 0.95rem; color: var(--text-primary); }
+        .faq-question svg { color: var(--text-secondary); transition: transform 0.3s; width: 16px; height: 16px; flex-shrink: 0; }
+        .faq-item.active .faq-question svg { transform: rotate(180deg); color: var(--estra-cyan); }
+        .faq-answer { padding: 0 0 16px 0; color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6; display: none; }
+        .faq-item.active .faq-answer { display: block; }
+
+        .tutorial-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-top: 16px; }
+        .tutorial-card { background: rgba(30,41,59,0.8); padding: 20px 16px; border-radius: 16px; text-align: center; border: 1px solid var(--estra-border); cursor: pointer; transition: var(--transition); }
+        [data-theme="light"] .tutorial-card { background: #f1f5f9; }
+        .tutorial-card:hover { border-color: var(--estra-cyan); transform: translateY(-2px); box-shadow: 0 8px 20px rgba(56,189,248,0.1); }
+        .tutorial-card svg { width: 36px; height: 36px; color: var(--estra-cyan); margin-bottom: 12px; }
+        .tutorial-card h4 { margin-bottom: 4px; font-size: 0.95rem; color: var(--text-primary); }
+        .tutorial-card p { color: var(--text-secondary); font-size: 0.8rem; }
+
+        .contact-methods { display: flex; flex-direction: column; gap: 12px; }
+        .contact-item { display: flex; align-items: center; gap: 14px; padding: 14px 16px; background: rgba(30,41,59,0.8); border-radius: 12px; border: 1px solid var(--estra-border); transition: var(--transition); }
+        [data-theme="light"] .contact-item { background: #f1f5f9; }
+        .contact-item:hover { border-color: var(--estra-cyan); }
+        .contact-item svg { width: 22px; height: 22px; color: var(--estra-cyan); flex-shrink: 0; }
+        .contact-item small { color: var(--text-secondary); font-size: 0.8rem; display: block; }
+
+        .social-links { display: flex; gap: 16px; margin-top: 16px; flex-wrap: wrap; }
+        .social-links a { width: 48px; height: 48px; background: rgba(30,41,59,0.8); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--estra-cyan); text-decoration: none; border: 1px solid var(--estra-border); transition: var(--transition); }
+        [data-theme="light"] .social-links a { background: #f1f5f9; }
+        .social-links a svg { width: 20px; height: 20px; }
+        .social-links a:hover { background: var(--estra-cyan); color: #0f172a; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(56,189,248,0.2); }
+
+        .help-footer { text-align: center; padding: 24px 20px; color: var(--text-secondary); font-size: 0.8rem; border-top: 1px solid var(--estra-border); }
+
+        .toast-custom { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #1e293b; color: white; padding: 10px 20px; z-index: 1100; font-size: 0.8rem; border-radius: 25px; border: 1px solid var(--estra-cyan); white-space: nowrap; opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s ease; }
+        .toast-custom.show { opacity: 1; visibility: visible; }
+        .d-flex { display: flex; } .align-items-center { align-items: center; } .gap-2 { gap: 8px; }
+
+        @media (max-width: 768px) {
+            .help-header h1 { font-size: 1.5rem; }
+            .tutorial-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        
+
+    </style>
+    
+</head>
+<body>
+    <div class="offline-banner" id="offlineBanner">📴 <span data-i18n="offline_mode">Mode hors-ligne</span></div>
+
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+    <main class="main-content">
+        <a href="settings.html" class="back-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg> <span data-i18n="back_to_settings">Retour aux paramètres</span></a>
+        
+        <div class="help-header">
+            <h1><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> <span data-i18n="help_title">Centre d'aide</span></h1>
+            <p data-i18n="help_subtitle">Toute l'assistance pour maîtriser ESTRA LINK</p>
+        </div>
+
+        <div class="help-section">
+            <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15.59 14.37a6 6 0 0 1-5.84 7.38v-4.8m5.84-2.58a14.98 14.98 0 0 0 6.16-12.12A14.98 14.98 0 0 0 9.631 8.41m5.96 5.96a14.926 14.926 0 0 1-5.841 2.58m-.119-8.54a6 6 0 0 0-7.381 5.84h4.8m2.581-5.84a14.927 14.927 0 0 0-2.58 5.84m2.699 2.7c-.103.021-.207.041-.311.06a15.09 15.09 0 0 1-2.448-2.448 14.9 14.9 0 0 1 .06-.312m-2.24 2.39a4.493 4.493 0 0 0-1.757 4.306 4.493 4.493 0 0 0 4.306-1.758M16.5 9a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/></svg> <span data-i18n="quick_start_title">Démarrage rapide</span></h2>
+            <ul class="quick-start-list">
+                <li data-i18n="qs_li1"><strong>Créez votre profil</strong> - Ajoutez une photo, une bio et vos centres d'intérêt</li>
+                <li data-i18n="qs_li2"><strong>Publiez du contenu</strong> - Utilisez le bouton + pour partager</li>
+                <li data-i18n="qs_li3"><strong>Ajoutez des amis</strong> - Allez dans "Amis" et envoyez des invitations</li>
+                <li data-i18n="qs_li4"><strong>Rejoignez des groupes</strong> - Participez à des discussions par centre d'intérêt</li>
+                <li data-i18n="qs_li5"><strong>Suivez des cours</strong> - Accédez à du contenu éducatif gratuit</li>
+            </ul>
+        </div>
+
+        <div class="help-section">
+            <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> <span data-i18n="faq_title">Questions fréquentes</span></h2>
+            <div class="faq-item" onclick="toggleFaq(this)"><div class="faq-question"><span data-i18n="faq1_q">Comment créer une publication ?</span> <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div><div class="faq-answer" data-i18n="faq1_a">Cliquez sur le bouton <strong>+</strong> en bas de l'écran. Rédigez votre message, ajoutez une image ou un document, choisissez la visibilité (Public, Groupe, Emploi) puis cliquez sur "Publier". Votre publication apparaîtra immédiatement dans le fil d'actualité.</div></div>
+            <div class="faq-item" onclick="toggleFaq(this)"><div class="faq-question"><span data-i18n="faq2_q">Comment changer le thème (clair/sombre) ?</span> <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div><div class="faq-answer" data-i18n="faq2_a">Allez dans "Paramètres" > "Préférences" > "Thème". Choisissez entre le mode Sombre et le mode Clair. Votre préférence est sauvegardée et s'appliquera à toutes les pages.</div></div>
+            <div class="faq-item" onclick="toggleFaq(this)"><div class="faq-question"><span data-i18n="faq3_q">Comment rechercher des personnes ou du contenu ?</span> <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div><div class="faq-answer" data-i18n="faq3_a">Utilisez la barre de recherche en haut de l'écran. Tapez un nom, un mot-clé ou un sujet. Vous pouvez filtrer les résultats par "Personnes", "Publications" ou "Groupes".</div></div>
+            <div class="faq-item" onclick="toggleFaq(this)"><div class="faq-question"><span data-i18n="faq4_q">Comment signaler un contenu inapproprié ?</span> <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div><div class="faq-answer" data-i18n="faq4_a">Sur chaque publication, cliquez sur les trois points puis sélectionnez "Signaler". Notre équipe de modération examinera le signalement sous 24h.</div></div>
+            <div class="faq-item" onclick="toggleFaq(this)"><div class="faq-question"><span data-i18n="faq5_q">Comment gérer mes notifications ?</span> <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div><div class="faq-answer" data-i18n="faq5_a">Allez dans "Notifications". Vous pouvez filtrer par type, marquer comme lu, ou supprimer. Dans les paramètres, vous pouvez choisir quelles notifications recevoir.</div></div>
+            <div class="faq-item" onclick="toggleFaq(this)"><div class="faq-question"><span data-i18n="faq6_q">Comment supprimer mon compte ?</span> <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div><div class="faq-answer" data-i18n="faq6_a">Allez dans "Paramètres" > "Zone de danger" > "Supprimer le compte". Attention, cette action est irréversible et toutes vos données seront effacées.</div></div>
+            <div class="faq-item" onclick="toggleFaq(this)"><div class="faq-question"><span data-i18n="faq7_q">Comment modifier mon mot de passe ?</span> <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div><div class="faq-answer" data-i18n="faq7_a">Allez dans "Paramètres" > "Compte" > "Sécurité". Vous pourrez y changer votre mot de passe et activer la double authentification.</div></div>
+        </div>
+
+        <div class="help-section">
+            <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg> <span data-i18n="tutorials_title">Tutoriels vidéo</span></h2>
+            <div class="tutorial-grid">
+                <div class="tutorial-card" onclick="showToast(t('toast_tutorial1'))"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg><h4 data-i18n="tuto1_title">Premiers pas</h4><p data-i18n="tuto1_desc">Créer son profil et naviguer</p></div>
+                <div class="tutorial-card" onclick="showToast(t('toast_tutorial2'))"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg><h4 data-i18n="tuto2_title">Publier</h4><p data-i18n="tuto2_desc">Partager et interagir</p></div>
+                <div class="tutorial-card" onclick="showToast(t('toast_tutorial3'))"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg><h4 data-i18n="tuto3_title">Groupes</h4><p data-i18n="tuto3_desc">Rejoindre et participer</p></div>
+                <div class="tutorial-card" onclick="showToast(t('toast_tutorial4'))"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg><h4 data-i18n="tuto4_title">Cours</h4><p data-i18n="tuto4_desc">Suivre sa progression</p></div>
+                <div class="tutorial-card" onclick="showToast(t('toast_tutorial5'))"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg><h4 data-i18n="tuto5_title">Paramètres</h4><p data-i18n="tuto5_desc">Personnaliser son expérience</p></div>
+                <div class="tutorial-card" onclick="showToast(t('toast_tutorial6'))"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg><h4 data-i18n="tuto6_title">Messages</h4><p data-i18n="tuto6_desc">Discuter en privé</p></div>
+            </div>
+        </div>
+
+        <div class="help-section">
+            <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg> <span data-i18n="contact_title">Nous contacter</span></h2>
+            <div class="contact-methods">
+                <div class="contact-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg><div><strong data-i18n="contact_email_label">Email</strong><small>support@estralink.com</small></div></div>
+                <div class="contact-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg><div><strong data-i18n="contact_phone_label">Téléphone</strong><small>+243 812 345 678</small></div></div>
+                <div class="contact-item"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg><div><strong data-i18n="contact_whatsapp_label">WhatsApp</strong><small>+243 812 345 678 (<span data-i18n="contact_whatsapp_small">réponse rapide</span>)</small></div></div>
+                <div class="contact-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg><div><strong data-i18n="contact_address_label">Adresse</strong><small data-i18n="contact_address">Lubumbashi, République Démocratique du Congo</small></div></div>
+            </div>
+            <div class="social-links">
+                <a href="#" onclick="showToast('📱 Facebook - ' + t('toast_soon'))" title="Facebook"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a>
+                <a href="#" onclick="showToast('🐦 Twitter - ' + t('toast_soon'))" title="Twitter"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/></svg></a>
+                <a href="#" onclick="showToast('📸 Instagram - ' + t('toast_soon'))" title="Instagram"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C8.74 0 8.333.015 7.053.072 5.775.132 4.905.333 4.14.63c-.789.306-1.459.717-2.126 1.384S.935 3.35.63 4.14C.333 4.905.131 5.775.072 7.053.012 8.333 0 8.74 0 12s.015 3.667.072 4.947c.06 1.277.261 2.148.558 2.913.306.788.717 1.459 1.384 2.126.667.666 1.336 1.079 2.126 1.384.766.296 1.636.499 2.913.558C8.333 23.988 8.74 24 12 24s3.667-.015 4.947-.072c1.277-.06 2.148-.262 2.913-.558.788-.306 1.459-.718 2.126-1.384.666-.667 1.079-1.335 1.384-2.126.296-.765.499-1.636.558-2.913.06-1.28.072-1.687.072-4.947s-.015-3.667-.072-4.947c-.06-1.277-.262-2.149-.558-2.913-.306-.789-.718-1.459-1.384-2.126C21.319 1.347 20.651.935 19.86.63c-.765-.297-1.636-.499-2.913-.558C15.667.012 15.26 0 12 0zm0 2.16c3.203 0 3.585.016 4.85.071 1.17.055 1.805.249 2.227.415.562.217.96.477 1.382.896.419.42.679.819.896 1.381.164.422.36 1.057.413 2.227.057 1.266.07 1.646.07 4.85s-.015 3.585-.074 4.85c-.061 1.17-.256 1.805-.421 2.227-.224.562-.479.96-.899 1.382-.419.419-.824.679-1.38.896-.42.164-1.065.36-2.235.413-1.274.057-1.649.07-4.859.07-3.211 0-3.586-.015-4.859-.074-1.171-.061-1.816-.256-2.236-.421-.569-.224-.96-.479-1.379-.899-.421-.419-.69-.824-.9-1.38-.165-.42-.359-1.065-.42-2.235-.045-1.26-.061-1.649-.061-4.844 0-3.196.016-3.586.061-4.861.061-1.17.255-1.814.42-2.234.21-.57.479-.96.9-1.381.419-.419.81-.689 1.379-.898.42-.166 1.051-.361 2.221-.421 1.275-.045 1.65-.06 4.859-.06l.045.03zm0 3.678a6.162 6.162 0 100 12.324 6.162 6.162 0 100-12.324zM12 16c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zm7.846-10.405a1.441 1.441 0 11-2.882 0 1.441 1.441 0 012.882 0z"/></svg></a>
+                <a href="#" onclick="showToast('💼 LinkedIn - ' + t('toast_soon'))" title="LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a>
+                <a href="#" onclick="showToast('📱 Telegram - ' + t('toast_soon'))" title="Telegram"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.161c-.18.717-.962 4.084-1.362 5.465-.168.588-.35 1.207-.524 1.626-.236.545-.73.433-.73.433-2.017-1.369-3.96-2.778-5.4-4.038-.375-.322-.495-.71-.097-1.134.681-.72 1.56-1.561 2.34-2.402 1.08-1.11 2.16-2.22 3.24-3.33.298-.307.59-.7.98-.46.39.24.31.61.25.79-.03.09-.06.18-.09.27l-.03.04z"/></svg></a>
+            </div>
+            <p style="color:var(--text-secondary); margin-top:16px; font-size:0.85rem; display:flex; align-items:center; gap:8px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> <span data-i18n="support_hours">Support disponible 24h/24, 7j/7. Délai de réponse moyen : 2 heures.</span></p>
+        </div>
+
+        <div class="help-footer"><p>© 2026 <span data-i18n="footer_rights">ESTRA LINK • Tous droits réservés</span></p><p style="margin-top:8px;"><span data-i18n="footer_version">Version 3.0.0</span></p></div>
+    </main>
+<a href="estrabot.html" target="_blank" class="help-floating-btn" title="Aide Estra-Bot">
+    <i class="fas fa-robot"></i>
+</a>
+    <div class="toast-custom" id="toastMsg"></div>
+
+    <script>
+        var currentUser = { name: 'Rashidi', avatar: 'https://ui-avatars.com/api/?background=38bdf8&color=fff&name=Rashidi&size=40' };
+        var toastTimeout = null;
+
+        // ============ MOTEUR DE TRADUCTION (i18n) ============
+        const translations = {
+            fr: {
+                page_title: "ESTRA LINK | Centre d'aide",
+                offline_mode: "Mode hors-ligne",
+                posts: "Posts",
+                friends_label: "Amis",
+                groups_label: "Groupes",
+                home: "Accueil",
+                saved: "Enregistrés",
+                courses: "Cours",
+                jobs: "Emplois",
+                events: "Événements",
+                my_profile: "Mon Profil",
+                settings: "Paramètres",
+                logout: "Déconnexion",
+                back_to_settings: "Retour aux paramètres",
+                help_title: "Centre d'aide",
+                help_subtitle: "Toute l'assistance pour maîtriser ESTRA LINK",
+                quick_start_title: "Démarrage rapide",
+                qs_li1: "Créez votre profil - Ajoutez une photo, une bio et vos centres d'intérêt",
+                qs_li2: "Publiez du contenu - Utilisez le bouton + pour partager",
+                qs_li3: "Ajoutez des amis - Allez dans \"Amis\" et envoyez des invitations",
+                qs_li4: "Rejoignez des groupes - Participez à des discussions par centre d'intérêt",
+                qs_li5: "Suivez des cours - Accédez à du contenu éducatif gratuit",
+                faq_title: "Questions fréquentes",
+                faq1_q: "Comment créer une publication ?",
+                faq1_a: "Cliquez sur le bouton + en bas de l'écran. Rédigez votre message, ajoutez une image ou un document, choisissez la visibilité (Public, Groupe, Emploi) puis cliquez sur \"Publier\". Votre publication apparaîtra immédiatement dans le fil d'actualité.",
+                faq2_q: "Comment changer le thème (clair/sombre) ?",
+                faq2_a: "Allez dans \"Paramètres\" > \"Préférences\" > \"Thème\". Choisissez entre le mode Sombre et le mode Clair. Votre préférence est sauvegardée et s'appliquera à toutes les pages.",
+                faq3_q: "Comment rechercher des personnes ou du contenu ?",
+                faq3_a: "Utilisez la barre de recherche en haut de l'écran. Tapez un nom, un mot-clé ou un sujet. Vous pouvez filtrer les résultats par \"Personnes\", \"Publications\" ou \"Groupes\".",
+                faq4_q: "Comment signaler un contenu inapproprié ?",
+                faq4_a: "Sur chaque publication, cliquez sur les trois points puis sélectionnez \"Signaler\". Notre équipe de modération examinera le signalement sous 24h.",
+                faq5_q: "Comment gérer mes notifications ?",
+                faq5_a: "Allez dans \"Notifications\". Vous pouvez filtrer par type, marquer comme lu, ou supprimer. Dans les paramètres, vous pouvez choisir quelles notifications recevoir.",
+                faq6_q: "Comment supprimer mon compte ?",
+                faq6_a: "Allez dans \"Paramètres\" > \"Zone de danger\" > \"Supprimer le compte\". Attention, cette action est irréversible et toutes vos données seront effacées.",
+                faq7_q: "Comment modifier mon mot de passe ?",
+                faq7_a: "Allez dans \"Paramètres\" > \"Compte\" > \"Sécurité\". Vous pourrez y changer votre mot de passe et activer la double authentification.",
+                tutorials_title: "Tutoriels vidéo",
+                tuto1_title: "Premiers pas",
+                tuto1_desc: "Créer son profil et naviguer",
+                tuto2_title: "Publier",
+                tuto2_desc: "Partager et interagir",
+                tuto3_title: "Groupes",
+                tuto3_desc: "Rejoindre et participer",
+                tuto4_title: "Cours",
+                tuto4_desc: "Suivre sa progression",
+                tuto5_title: "Paramètres",
+                tuto5_desc: "Personnaliser son expérience",
+                tuto6_title: "Messages",
+                tuto6_desc: "Discuter en privé",
+                contact_title: "Nous contacter",
+                contact_email_label: "Email",
+                contact_phone_label: "Téléphone",
+                contact_whatsapp_label: "WhatsApp",
+                contact_whatsapp_small: "réponse rapide",
+                contact_address_label: "Adresse",
+                contact_address: "Lubumbashi, République Démocratique du Congo",
+                support_hours: "Support disponible 24h/24, 7j/7. Délai de réponse moyen : 2 heures.",
+                footer_rights: "ESTRA LINK • Tous droits réservés",
+                footer_version: "Version 3.0.0",
+                toast_soon: "bientôt disponible",
+                toast_tutorial1: "🎬 Tutoriel : Premiers pas - Disponible prochainement",
+                toast_tutorial2: "🎬 Tutoriel : Publication - Disponible prochainement",
+                toast_tutorial3: "🎬 Tutoriel : Groupes - Disponible prochainement",
+                toast_tutorial4: "🎬 Tutoriel : Cours - Disponible prochainement",
+                toast_tutorial5: "🎬 Tutoriel : Paramètres - Disponible prochainement",
+                toast_tutorial6: "🎬 Tutoriel : Messages - Disponible prochainement"
+            },
+            en: {
+                page_title: "ESTRA LINK | Help Center",
+                offline_mode: "Offline mode",
+                posts: "Posts",
+                friends_label: "Friends",
+                groups_label: "Groups",
+                home: "Home",
+                saved: "Saved",
+                courses: "Courses",
+                jobs: "Jobs",
+                events: "Events",
+                my_profile: "My Profile",
+                settings: "Settings",
+                logout: "Logout",
+                back_to_settings: "Back to Settings",
+                help_title: "Help Center",
+                help_subtitle: "All the assistance to master ESTRA LINK",
+                quick_start_title: "Quick Start",
+                qs_li1: "Create your profile - Add a photo, bio, and interests",
+                qs_li2: "Publish content - Use the + button to share",
+                qs_li3: "Add friends - Go to \"Friends\" and send invitations",
+                qs_li4: "Join groups - Participate in discussions by interest",
+                qs_li5: "Follow courses - Access free educational content",
+                faq_title: "Frequently Asked Questions",
+                faq1_q: "How to create a post?",
+                faq1_a: "Click the + button at the bottom of the screen. Write your message, add an image or document, choose visibility (Public, Group, Job) then click \"Publish\". Your post will appear immediately in the news feed.",
+                faq2_q: "How to change the theme (light/dark)?",
+                faq2_a: "Go to \"Settings\" > \"Preferences\" > \"Theme\". Choose between Dark mode and Light mode. Your preference is saved and will apply to all pages.",
+                faq3_q: "How to search for people or content?",
+                faq3_a: "Use the search bar at the top of the screen. Type a name, keyword, or topic. You can filter results by \"People\", \"Posts\", or \"Groups\".",
+                faq4_q: "How to report inappropriate content?",
+                faq4_a: "On each post, click the three dots then select \"Report\". Our moderation team will review the report within 24 hours.",
+                faq5_q: "How to manage my notifications?",
+                faq5_a: "Go to \"Notifications\". You can filter by type, mark as read, or delete. In settings, you can choose which notifications to receive.",
+                faq6_q: "How to delete my account?",
+                faq6_a: "Go to \"Settings\" > \"Danger Zone\" > \"Delete Account\". Warning, this action is irreversible and all your data will be erased.",
+                faq7_q: "How to change my password?",
+                faq7_a: "Go to \"Settings\" > \"Account\" > \"Security\". You can change your password and enable two-factor authentication there.",
+                tutorials_title: "Video Tutorials",
+                tuto1_title: "Getting Started",
+                tuto1_desc: "Create your profile and navigate",
+                tuto2_title: "Publishing",
+                tuto2_desc: "Share and interact",
+                tuto3_title: "Groups",
+                tuto3_desc: "Join and participate",
+                tuto4_title: "Courses",
+                tuto4_desc: "Track your progress",
+                tuto5_title: "Settings",
+                tuto5_desc: "Customize your experience",
+                tuto6_title: "Messages",
+                tuto6_desc: "Chat privately",
+                contact_title: "Contact Us",
+                contact_email_label: "Email",
+                contact_phone_label: "Phone",
+                contact_whatsapp_label: "WhatsApp",
+                contact_whatsapp_small: "quick response",
+                contact_address_label: "Address",
+                contact_address: "Lubumbashi, Democratic Republic of Congo",
+                support_hours: "Support available 24/7. Average response time: 2 hours.",
+                footer_rights: "ESTRA LINK • All rights reserved",
+                footer_version: "Version 3.0.0",
+                toast_soon: "coming soon",
+                toast_tutorial1: "🎬 Tutorial: Getting Started - Coming soon",
+                toast_tutorial2: "🎬 Tutorial: Publishing - Coming soon",
+                toast_tutorial3: "🎬 Tutorial: Groups - Coming soon",
+                toast_tutorial4: "🎬 Tutorial: Courses - Coming soon",
+                toast_tutorial5: "🎬 Tutorial: Settings - Coming soon",
+                toast_tutorial6: "🎬 Tutorial: Messages - Coming soon"
+            },
+            ln: {
+                page_title: "ESTRA LINK | Centre d'aide",
+                offline_mode: "Mode hors-connexion",
+                posts: "Masolo",
+                friends_label: "Baníngá",
+                groups_label: "Mampingá",
+                home: "Ebandeli",
+                saved: "Ebabómí",
+                courses: "Mateya",
+                jobs: "Misálá",
+                events: "Makámá",
+                my_profile: "Profil na ngáí",
+                settings: "Paramɛ́tɛ",
+                logout: "Kobíma",
+                back_to_settings: "Kozónga na Paramɛ́tɛ",
+                help_title: "Centre d'aide",
+                help_subtitle: "Assistance nyɔ́nsɔ mpɔ̂ koyéba ESTRA LINK",
+                quick_start_title: "Démarrage rapide",
+                qs_li1: "Créez profil na yo - Ajoutez fɔtɔ́, bio mpe centres d'intérêt",
+                qs_li2: "Bimisa contenu - Salelá bouton + mpɔ̂ kosangana",
+                qs_li3: "Ajoutez ba amis - Kende na \"Amis\" mpe tínda ba invitations",
+                qs_li4: "Rejoignez ba groupes - Participez na ba discussions par centre d'intérêt",
+                qs_li5: "Suivez ba cours - Accédez na contenu éducatif gratuit",
+                faq_title: "Questions fréquentes",
+                faq1_q: "Comment créer publication ?",
+                faq1_a: "Cliquez na bouton + na bas ya écran. Koma message na yo, ajoutez image tǒ document, choisissez visibilité (Public, Groupe, Emploi) puis cliquez na \"Publier\". Publication na yo ekomonana immédiatement na fil d'actualité.",
+                faq2_q: "Comment changer thème (clair/sombre) ?",
+                faq2_a: "Kende na \"Paramètres\" > \"Préférences\" > \"Thème\". Choisissez entre mode Sombre mpe mode Clair. Préférence na yo ebómámí mpe ekosálela pages nyɔ́nsɔ.",
+                faq3_q: "Comment rechercher personnes tǒ contenu ?",
+                faq3_a: "Salelá barre ya recherche na likoló ya écran. Koma nkómbó, mot-clé tǒ sujet. Okokí kofiltrer résultats par \"Personnes\", \"Publications\" tǒ \"Groupes\".",
+                faq4_q: "Comment signaler contenu inapproprié ?",
+                faq4_a: "Na publication nyɔ́nsɔ, cliquez na ba points misáto puis sélectionnez \"Signaler\". Équipe na bísó ya modération ekoexaminer signalement na káti ya 24h.",
+                faq5_q: "Comment gérer notifications na ngáí ?",
+                faq5_a: "Kende na \"Notifications\". Okokí kofiltrer par type, marquer comme lu, tǒ kolóngola. Na paramètres, okokí kochoisir notifications nini kozwa.",
+                faq6_q: "Comment kolóngola kɔ́nti na ngáí ?",
+                faq6_a: "Kende na \"Paramètres\" > \"Zone ya likámbá\" > \"Supprimer le compte\". Attention, action óyo ekokí kolóngwama tɛ̂ mpe données na yo nyɔ́nsɔ ekolóngwama.",
+                faq7_q: "Comment modifier mot de passe na ngáí ?",
+                faq7_a: "Kende na \"Paramètres\" > \"Compte\" > \"Sécurité\". Okokí kochanger mot de passe na yo mpe koactiver double authentification.",
+                tutorials_title: "Tutoriels vidéo",
+                tuto1_title: "Premiers pas",
+                tuto1_desc: "Créer profil na yo mpe naviguer",
+                tuto2_title: "Kobimisa",
+                tuto2_desc: "Kosangana mpe kointeragir",
+                tuto3_title: "Ba groupes",
+                tuto3_desc: "Kokóta mpe koparticiper",
+                tuto4_title: "Ba cours",
+                tuto4_desc: "Kolanda progression na yo",
+                tuto5_title: "Paramètres",
+                tuto5_desc: "Personnaliser expérience na yo",
+                tuto6_title: "Messages",
+                tuto6_desc: "Kosolola na privé",
+                contact_title: "Kozwa bísó",
+                contact_email_label: "Email",
+                contact_phone_label: "Téléphone",
+                contact_whatsapp_label: "WhatsApp",
+                contact_whatsapp_small: "réponse rapide",
+                contact_address_label: "Adresse",
+                contact_address: "Lubumbashi, République Démocratique du Congo",
+                support_hours: "Support disponible 24h/24, 7j/7. Délai ya réponse moyen : 2 heures.",
+                footer_rights: "ESTRA LINK • Ba droits nyɔ́nsɔ babómámí",
+                footer_version: "Version 3.0.0",
+                toast_soon: "ekoyâ kala mingi tɛ̂",
+                toast_tutorial1: "🎬 Tutoriel : Premiers pas - Disponible prochainement",
+                toast_tutorial2: "🎬 Tutoriel : Publication - Disponible prochainement",
+                toast_tutorial3: "🎬 Tutoriel : Groupes - Disponible prochainement",
+                toast_tutorial4: "🎬 Tutoriel : Cours - Disponible prochainement",
+                toast_tutorial5: "🎬 Tutoriel : Paramètres - Disponible prochainement",
+                toast_tutorial6: "🎬 Tutoriel : Messages - Disponible prochainement"
+            },
+            sw: {
+                page_title: "ESTRA LINK | Kituo cha Msaada",
+                offline_mode: "Hali ya nje ya mtandao",
+                posts: "Machapisho",
+                friends_label: "Marafiki",
+                groups_label: "Vikundi",
+                home: "Nyumbani",
+                saved: "Yaliyohifadhiwa",
+                courses: "Kozi",
+                jobs: "Kazi",
+                events: "Matukio",
+                my_profile: "Wasifu Wangu",
+                settings: "Mipangilio",
+                logout: "Kutoka",
+                back_to_settings: "Rudi kwenye Mipangilio",
+                help_title: "Kituo cha Msaada",
+                help_subtitle: "Msaada wote wa kumudu ESTRA LINK",
+                quick_start_title: "Kuanza Haraka",
+                qs_li1: "Unda wasifu wako - Ongeza picha, wasifu, na maslahi",
+                qs_li2: "Chapisha maudhui - Tumia kitufe cha + kushiriki",
+                qs_li3: "Ongeza marafiki - Nenda kwa \"Marafiki\" na tuma mialiko",
+                qs_li4: "Jiunge na vikundi - Shiriki katika majadiliano kwa maslahi",
+                qs_li5: "Fuata kozi - Fikia maudhui ya elimu bila malipo",
+                faq_title: "Maswali Yanayoulizwa Mara kwa Mara",
+                faq1_q: "Jinsi ya kuunda chapisho?",
+                faq1_a: "Bonyeza kitufe cha + chini ya skrini. Andika ujumbe wako, ongeza picha au hati, chagua mwonekano (Umma, Kikundi, Kazi) kisha bonyeza \"Chapisha\". Chapisho lako litaonekana mara moja kwenye mpasho wa habari.",
+                faq2_q: "Jinsi ya kubadilisha mandhari (mwanga/giza)?",
+                faq2_a: "Nenda kwenye \"Mipangilio\" > \"Mapendeleo\" > \"Mandhari\". Chagua kati ya hali ya Giza na hali ya Mwanga. Mapendeleo yako yamehifadhiwa na yatatumika kwa kurasa zote.",
+                faq3_q: "Jinsi ya kutafuta watu au maudhui?",
+                faq3_a: "Tumia upau wa utafutaji juu ya skrini. Andika jina, neno muhimu, au mada. Unaweza kuchuja matokeo kwa \"Watu\", \"Machapisho\", au \"Vikundi\".",
+                faq4_q: "Jinsi ya kuripoti maudhui yasiyofaa?",
+                faq4_a: "Kwenye kila chapisho, bonyeza nukta tatu kisha uchague \"Ripoti\". Timu yetu ya udhibiti itakagua ripoti ndani ya masaa 24.",
+                faq5_q: "Jinsi ya kudhibiti arifa zangu?",
+                faq5_a: "Nenda kwenye \"Arifa\". Unaweza kuchuja kwa aina, kuweka alama kama imesomwa, au kufuta. Katika mipangilio, unaweza kuchagua arifa zipi za kupokea.",
+                faq6_q: "Jinsi ya kufuta akaunti yangu?",
+                faq6_a: "Nenda kwenye \"Mipangilio\" > \"Eneo la Hatari\" > \"Futa Akaunti\". Onyo, kitendo hiki hakiwezi kutenduliwa na data zako zote zitafutwa.",
+                faq7_q: "Jinsi ya kubadilisha nywila yangu?",
+                faq7_a: "Nenda kwenye \"Mipangilio\" > \"Akaunti\" > \"Usalama\". Unaweza kubadilisha nywila yako na kuwezesha uthibitishaji wa hatua mbili huko.",
+                tutorials_title: "Mafunzo ya Video",
+                tuto1_title: "Kuanza",
+                tuto1_desc: "Unda wasifu wako na urambaze",
+                tuto2_title: "Kuchapisha",
+                tuto2_desc: "Shiriki na wasiliana",
+                tuto3_title: "Vikundi",
+                tuto3_desc: "Jiunge na ushiriki",
+                tuto4_title: "Kozi",
+                tuto4_desc: "Fuatilia maendeleo yako",
+                tuto5_title: "Mipangilio",
+                tuto5_desc: "Binafsisha matumizi yako",
+                tuto6_title: "Ujumbe",
+                tuto6_desc: "Ongea kwa faragha",
+                contact_title: "Wasiliana Nasi",
+                contact_email_label: "Barua Pepe",
+                contact_phone_label: "Simu",
+                contact_whatsapp_label: "WhatsApp",
+                contact_whatsapp_small: "majibu ya haraka",
+                contact_address_label: "Anwani",
+                contact_address: "Lubumbashi, Jamhuri ya Kidemokrasia ya Kongo",
+                support_hours: "Msaada unapatikana 24/7. Muda wa wastani wa kujibu: masaa 2.",
+                footer_rights: "ESTRA LINK • Haki zote zimehifadhiwa",
+                footer_version: "Toleo 3.0.0",
+                toast_soon: "inakuja hivi karibuni",
+                toast_tutorial1: "🎬 Mafunzo: Kuanza - Inakuja hivi karibuni",
+                toast_tutorial2: "🎬 Mafunzo: Kuchapisha - Inakuja hivi karibuni",
+                toast_tutorial3: "🎬 Mafunzo: Vikundi - Inakuja hivi karibuni",
+                toast_tutorial4: "🎬 Mafunzo: Kozi - Inakuja hivi karibuni",
+                toast_tutorial5: "🎬 Mafunzo: Mipangilio - Inakuja hivi karibuni",
+                toast_tutorial6: "🎬 Mafunzo: Ujumbe - Inakuja hivi karibuni"
+            }
+        };
+
+        let currentLang = localStorage.getItem('estra_language') || 'fr';
+
+        function t(key) {
+            if (translations[currentLang] && translations[currentLang][key]) {
+                return translations[currentLang][key];
+            }
+            if (translations['fr'] && translations['fr'][key]) {
+                return translations['fr'][key];
+            }
+            return key;
+        }
+
+        function applyTranslations() {
+            currentLang = localStorage.getItem('estra_language') || 'fr';
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                const translation = t(key);
+                if (translation) {
+                    if (key.startsWith('faq') && key.endsWith('_a')) {
+                        el.innerHTML = translation;
+                    } else if (key.startsWith('qs_')) {
+                        el.innerHTML = translation;
+                    } else {
+                        el.textContent = translation;
+                    }
+                }
+            });
+            document.title = t('page_title');
+        }
+
+        // APPLIQUER LE THÈME
+        (function(){
+            var savedTheme = localStorage.getItem('estra_theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            window.estraTheme = savedTheme;
+        })();
+
+        function checkOnlineStatus() { var b = document.getElementById('offlineBanner'); if(b) b.style.display = navigator.onLine ? 'none' : 'block'; }
+
+        function showToast(msg) { 
+            var t = document.getElementById('toastMsg'); 
+            if (toastTimeout) clearTimeout(toastTimeout);
+            t.textContent = msg; t.classList.remove('show'); void t.offsetWidth; t.classList.add('show'); 
+            toastTimeout = setTimeout(function(){ t.classList.remove('show'); }, 3000); 
+        }
+
+        function toggleFaq(element) { element.classList.toggle('active'); }
+
+        function updateSidebar() {
+            var sp = localStorage.getItem('estra_profile');
+            if (sp) { try { var p = JSON.parse(sp); currentUser.name = p.fullName || currentUser.name; currentUser.avatar = p.avatar || currentUser.avatar; } catch(e) {} }
+            var sn = document.getElementById('sidebarName'); if(sn) sn.textContent = currentUser.name;
+            var sa = document.getElementById('sidebarAvatar'); if(sa) sa.src = currentUser.avatar;
+            var na = document.getElementById('navAvatar'); if(na) na.src = currentUser.avatar;
+            var posts = JSON.parse(localStorage.getItem('estra_posts') || '[]');
+            var jobs = JSON.parse(localStorage.getItem('estra_jobs') || '[]');
+            var spEl = document.getElementById('sidebarPosts');
+            if(spEl) spEl.textContent = posts.filter(function(p){ return p.author === currentUser.name; }).length + jobs.filter(function(j){ return j.author === currentUser.name; }).length;
+            var sf = document.getElementById('sidebarFriends');
+            if(sf) sf.textContent = (JSON.parse(localStorage.getItem('estra_friends') || '[]')).length;
+            var sg = document.getElementById('sidebarGroups');
+            if(sg) sg.textContent = (JSON.parse(localStorage.getItem('estra_userGroups') || '[]')).length;
+        }
+
+        function toggleSidebar() { var s = document.getElementById('sidebar'); var o = document.getElementById('sidebarOverlay'); if(s) s.classList.toggle('open'); if(o) o.classList.toggle('active'); }
+        function closeSidebar() { var s = document.getElementById('sidebar'); var o = document.getElementById('sidebarOverlay'); if(s) s.classList.remove('open'); if(o) o.classList.remove('active'); }
+        function logout() { localStorage.clear(); window.location.href = 'login.html'; }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            applyTranslations();
+            updateSidebar();
+            checkOnlineStatus();
+            var so = document.getElementById('sidebarOverlay');
+            if(so) so.addEventListener('click', toggleSidebar);
+            document.addEventListener('click', function(e) {
+                var sidebar = document.getElementById('sidebar');
+                var menuToggle = document.querySelector('.menu-toggle');
+                if (sidebar && sidebar.classList.contains('open') && !sidebar.contains(e.target) && e.target !== menuToggle && !menuToggle.contains(e.target)) { closeSidebar(); }
+            });
+            window.addEventListener('online', function() { var b = document.getElementById('offlineBanner'); if(b) b.style.display = 'none'; });
+            window.addEventListener('offline', function() { var b = document.getElementById('offlineBanner'); if(b) b.style.display = 'block'; });
+            window.addEventListener('storage', function(e) {
+                if (e.key === 'estra_theme' && e.newValue) { document.documentElement.setAttribute('data-theme', e.newValue); window.estraTheme = e.newValue; }
+                if (e.key === 'estra_language' && e.newValue) { applyTranslations(); }
+                if (['estra_profile','estra_posts','estra_friends','estra_userGroups'].indexOf(e.key) !== -1) updateSidebar();
+            });
+        });
+
+        window.toggleSidebar = toggleSidebar;
+        window.closeSidebar = closeSidebar;
+        window.logout = logout;
+        window.showToast = showToast;
+        window.toggleFaq = toggleFaq;
+        window.t = t;
+        window.applyTranslations = applyTranslations;
+    </script>
+<!-- FICHIERS EXTERNES -->
+<script src="i18n.js"></script>
+<script src="pwa-init.js"></script>
+</body>
+</html>
+

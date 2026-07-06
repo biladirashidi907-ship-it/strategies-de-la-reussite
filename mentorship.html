@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title data-i18n="page_title">ESTRA LINK | Mentorat</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#38bdf8">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="ESTRA LINK">
+    <link rel="apple-touch-icon" href="https://ui-avatars.com/api/?background=38bdf8&color=fff&name=E&size=152">
+    <style>
+        :root, [data-theme="dark"] {
+            --bg-primary: #0f172a; --bg-secondary: #1e293b; --bg-tertiary: #0f172a;
+            --text-primary: #e2e8f0; --text-secondary: #94a3b8;
+            --card-bg: rgba(30, 41, 59, 0.6); --hover-bg: rgba(56, 189, 248, 0.03);
+            --active-bg: rgba(56, 189, 248, 0.1); --border-color: rgba(51, 65, 85, 0.5);
+            --border-light: rgba(56, 189, 248, 0.2); --sidebar-bg: #0f172a;
+            --navbar-bg: rgba(15, 23, 42, 0.85); --modal-bg: #1e293b;
+            --modal-full-bg: #0f172a; --modal-overlay: rgba(0, 0, 0, 0.9);
+            --toast-bg: #1e293b; --input-bg: #1e293b;
+            --chip-bg: rgba(30, 41, 59, 0.8); --stat-bg: rgba(30, 41, 59, 0.4);
+            --cyan: #38bdf8; --purple: #a78bfa; --success: #10b981;
+            --danger: #ef4444; --warning: #f59e0b;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        [data-theme="light"] {
+            --bg-primary: #f8fafc; --bg-secondary: #ffffff; --bg-tertiary: #f1f5f9;
+            --text-primary: #0f172a; --text-secondary: #475569;
+            --card-bg: rgba(255, 255, 255, 0.95); --hover-bg: rgba(2, 132, 199, 0.03);
+            --active-bg: rgba(2, 132, 199, 0.1); --border-color: rgba(226, 232, 240, 0.8);
+            --border-light: rgba(2, 132, 199, 0.2); --sidebar-bg: #ffffff;
+            --navbar-bg: rgba(255, 255, 255, 0.85); --modal-bg: #ffffff;
+            --modal-full-bg: #f8fafc; --modal-overlay: rgba(0, 0, 0, 0.5);
+            --toast-bg: #1e293b; --input-bg: #f1f5f9;
+            --chip-bg: #f1f5f9; --stat-bg: rgba(241, 245, 249, 0.8);
+            --cyan: #0284c7; --purple: #7c3aed; --success: #059669;
+            --danger: #dc2626; --warning: #d97706;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background-color: var(--bg-primary); background-image: radial-gradient(at 0% 0%, rgba(56,189,248,0.08) 0px, transparent 50%), radial-gradient(at 100% 100%, rgba(56,189,248,0.08) 0px, transparent 50%); color: var(--text-primary); font-family: 'Segoe UI', system-ui, sans-serif; padding-bottom: 80px; min-height: 100vh; overflow-x: hidden; transition: background-color 0.4s ease, color 0.4s ease; }
+        ::-webkit-scrollbar { width: 6px; } ::-webkit-scrollbar-track { background: #e2e8f0; border-radius: 10px; } ::-webkit-scrollbar-thumb { background: var(--cyan); border-radius: 10px; }
+        .offline-banner { position: fixed; top: 0; left: 0; right: 0; background: #f59e0b; color: #000; text-align: center; padding: 6px; z-index: 9999; font-size: 0.8rem; font-weight: 600; display: none; }
+        .sidebar-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px); z-index: 1050; opacity: 0; visibility: hidden; transition: var(--transition); }
+        .sidebar-overlay.active { opacity: 1; visibility: visible; }
+        .sidebar { position: fixed; top: 0; left: -280px; width: 220px; height: 100vh; background: var(--sidebar-bg); border-right: 1px solid var(--border-light); z-index: 1060; padding: 30px 15px; overflow-y: auto; transition: left 0.3s ease, background-color 0.4s ease; }
+        .sidebar.open { left: 0; }
+        .profile-section { text-align: center; padding-bottom: 25px; border-bottom: 1px solid var(--border-color); margin-bottom: 20px; position: relative; }
+        .profile-img-sidebar { width: 65px; height: 65px; border-radius: 50%; border: 2px solid var(--cyan); margin-bottom: 10px; object-fit: cover; }
+        .online-indicator { position: absolute; top: 50px; right: 50px; width: 16px; height: 16px; border-radius: 50%; background: #10b981; border: 2px solid var(--sidebar-bg); }
+        .profile-stats { display: flex; justify-content: center; gap: 20px; margin-top: 12px; } .profile-stats div { text-align: center; } .profile-stats strong { display: block; font-size: 0.95rem; color: var(--cyan); } .profile-stats span { font-size: 0.65rem; color: var(--text-secondary); }
+        .sidebar-nav { display: flex; flex-direction: column; gap: 4px; }
+        .sidebar-link { display: flex; align-items: center; gap: 12px; padding: 12px 15px; border-radius: 10px; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: var(--transition); cursor: pointer; background: none; border: none; width: 100%; font-family: inherit; }
+        .sidebar-link svg { width: 20px; height: 20px; stroke-width: 2; }
+        .sidebar-link:hover, .sidebar-link.active { background: var(--active-bg); color: var(--cyan); transform: translateX(5px); border-right: 2px solid var(--cyan); }
+        .sidebar-link.logout-link { color: var(--danger); } .sidebar-link.logout-link:hover { background: rgba(239,68,68,0.1); color: var(--danger); border-right-color: var(--danger); }
+        .navbar { padding: 10px 15px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border-color); background: var(--navbar-bg); backdrop-filter: blur(12px); position: fixed; top: 0; width: 100%; z-index: 1000; transition: background-color 0.4s ease, border-color 0.4s ease, width 0.3s ease, left 0.3s ease; }
+        .nav-left, .nav-right { display: flex; align-items: center; gap: 12px; } .navbar-brand { font-weight: 800; color: coral; letter-spacing: 1.5px; font-size: 1.1rem; text-decoration: none; } .menu-toggle { background: none; border: none; cursor: pointer; padding: 8px; display: flex; align-items: center; color: var(--text-secondary); transition: var(--transition); } .menu-toggle:hover { color: var(--cyan); } .avatar-nav { width: 34px; height: 34px; border-radius: 50%; border: 1.5px solid var(--cyan); object-fit: cover; box-shadow: 0 0 10px rgba(56,189,248,0.2); cursor: pointer; }
+        .main-content { margin: 60px auto 0; max-width: 800px; background: var(--card-bg); border-left: 1px solid var(--border-light); border-right: 1px solid var(--border-light); min-height: calc(100vh - 60px); backdrop-filter: blur(8px); transition: background-color 0.4s ease, border-color 0.4s ease, margin 0.3s ease; }
+        .page-header { display: flex; align-items: center; justify-content: space-between; padding: 20px 24px; border-bottom: 1px solid var(--border-light); flex-wrap: wrap; gap: 12px; } .page-header h2 { display: flex; align-items: center; gap: 10px; font-size: 1.3rem; color: var(--text-primary); } .page-header h2 svg { color: var(--cyan); }
+        .btn-primary { background: var(--cyan); border: 0; padding: 10px 24px; border-radius: 30px; color: #0f172a; cursor: pointer; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 8px; transition: var(--transition); font-family: inherit; font-size: 0.85rem; text-decoration: none; width: 100%; } .btn-primary:hover { transform: translateY(-2px); opacity: 0.9; }
+        .btn-cancel { background: var(--chip-bg); border: 1px solid var(--border-light); padding: 10px 24px; border-radius: 30px; color: var(--text-secondary); cursor: pointer; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 8px; transition: var(--transition); font-family: inherit; font-size: 0.85rem; text-decoration: none; width: auto; }
+.btn-cancel:hover { background: var(--hover-bg); color: var(--text-primary); border-color: var(--text-secondary); }
+.btn-sm { padding: 6px 14px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; cursor: pointer; font-family: inherit; border: 1px solid var(--border-light); background: var(--chip-bg); color: var(--text-secondary); transition: var(--transition); }
+.btn-sm:hover { background: var(--hover-bg); color: var(--cyan); border-color: var(--cyan); }
+.btn-chat { background: var(--cyan); border: none; padding: 6px 14px; border-radius: 20px; color: #0f172a; font-weight: 600; cursor: pointer; font-size: 0.75rem; display: flex; align-items: center; gap: 6px; font-family: inherit; transition: var(--transition); }
+.btn-chat:hover { opacity: 0.9; transform: scale(1.05); }
+        .btn-outline { background: transparent; border: 1px solid var(--cyan); padding: 10px 24px; border-radius: 30px; color: var(--cyan); cursor: pointer; font-weight: 600; display: flex; align-items: center; gap: 8px; font-family: inherit; font-size: 0.85rem; } .btn-outline:hover { background: var(--active-bg); }
+        .tabs { display: flex; gap: 0; border-bottom: 1px solid var(--border-light); padding: 0 24px; overflow-x: auto; } .tabs::-webkit-scrollbar { display: none; } .tab-btn { flex: 1; padding: 14px; text-align: center; background: none; border: 0; color: var(--text-secondary); cursor: pointer; font-size: 0.85rem; font-weight: 500; transition: var(--transition); font-family: inherit; border-bottom: 2px solid transparent; white-space: nowrap; } .tab-btn.active { color: var(--cyan); border-bottom-color: var(--cyan); }
+        .search-bar { padding: 12px 24px; border-bottom: 1px solid var(--border-light); } .search-input { width: 100%; padding: 12px 18px; background: var(--input-bg); border: 1px solid var(--border-color); border-radius: 30px; color: var(--text-primary); outline: 0; font-size: 0.9rem; font-family: inherit; transition: background-color 0.4s ease, border-color 0.4s ease; }
+        .filter-chips { display: flex; gap: 8px; padding: 12px 24px; border-bottom: 1px solid var(--border-light); overflow-x: auto; flex-wrap: wrap; } .filter-chip { padding: 6px 14px; background: var(--chip-bg); border: 1px solid var(--border-light); border-radius: 30px; color: var(--text-secondary); cursor: pointer; font-size: 0.75rem; white-space: nowrap; transition: var(--transition); font-family: inherit; } .filter-chip.active { background: var(--cyan); color: #0f172a; border-color: transparent; }
+        .mentor-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 16px; }
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .mentor-card-modern { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; text-align: center; transition: var(--transition); display: flex; flex-direction: column; align-items: center; position: relative; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 100%; padding: 20px 10px; animation: fadeUp 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards; opacity: 0; } .mentor-card-modern:hover { transform: translateY(-5px); border-color: var(--cyan); }
+        .mentor-avatar-container { position: relative; margin-bottom: 12px; display: flex; justify-content: center; align-items: center; } .mentor-avatar-large { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 3px solid transparent; background: var(--bg-primary); box-shadow: 0 4px 10px rgba(0,0,0,0.15); padding: 2px; cursor: pointer; } .mentor-status-badge { position: absolute; bottom: 5px; right: 5px; background: #10b981; width: 18px; height: 18px; border-radius: 50%; border: 3px solid var(--card-bg); }
+        .mentor-name-modern { font-size: 0.95rem; font-weight: 700; color: var(--text-primary); margin-bottom: 4px; display: flex; align-items: center; gap: 4px; justify-content: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; } .badge-verified { color: #1DA1F2; font-size: 0.85rem; }
+        .mentor-title-modern { font-size: 0.75rem; color: var(--text-secondary); font-weight: 500; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; text-align: center; }
+        .mentor-expertise { margin-top: 8px; margin-bottom: 16px; display: flex; flex-wrap: wrap; justify-content: center; gap: 4px; } .expertise-tag { background: var(--active-bg); padding: 3px 8px; border-radius: 10px; font-size: 0.65rem; color: var(--cyan); border: 1px solid var(--border-light); display: inline-flex; align-items: center; gap: 4px; }
+        .mentor-actions-grid { display: flex; flex-direction: column; gap: 8px; width: 100%; margin-top: auto; } .btn-action-outline { background: transparent; border: 1px solid var(--border-color); padding: 8px; border-radius: 20px; color: var(--text-secondary); font-weight: 600; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 6px; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); width: 100%; font-size: 0.75rem; } .btn-action-outline:hover { background: var(--hover-bg); transform: scale(1.02); } .btn-action-outline.liked { background: rgba(16,185,129,0.1); color: var(--success); border-color: var(--success); } .btn-action-outline.primary-action { background: rgba(56,189,248,0.05); color: var(--cyan); border-color: var(--cyan); }
+        .mentor-card { display: flex; align-items: flex-start; gap: 14px; padding: 16px 24px; border-bottom: 1px solid var(--border-color); cursor: pointer; transition: var(--transition); } .mentor-card:hover { background: var(--hover-bg); } .mentor-avatar { width: 56px; height: 56px; border-radius: 50%; object-fit: cover; border: 2px solid var(--cyan); flex-shrink: 0; } .mentor-info { flex: 1; min-width: 0; } .mentor-name { font-weight: 700; font-size: 0.95rem; display: flex; align-items: center; gap: 6px; } .badge-mentor { background: linear-gradient(135deg, #f59e0b, #ef4444); color: #fff; padding: 2px 8px; border-radius: 10px; font-size: 0.6rem; font-weight: 700; }
+        .modal-fullscreen { position: fixed; inset: 0; background: var(--modal-full-bg); z-index: 3000; display: none; flex-direction: column; overflow-y: auto; transition: background-color 0.4s ease; } .modal-fullscreen.active { display: flex; } .modal-fullscreen-header { display: flex; align-items: center; justify-content: space-between; padding: 20px 24px; border-bottom: 1px solid var(--border-light); background: var(--navbar-bg); position: sticky; top: 0; z-index: 10; } .modal-fullscreen-header h3 { font-size: 1.3rem; display: flex; align-items: center; gap: 10px; color: var(--cyan); } .modal-fullscreen-body { flex: 1; padding: 24px; max-width: 600px; margin: 0 auto; width: 100%; } .modal-fullscreen-footer { display: flex; justify-content: flex-end; gap: 12px; padding: 16px 24px; border-top: 1px solid var(--border-light); background: var(--navbar-bg); position: sticky; bottom: 0; }
+        .modal-overlay { position: fixed; inset: 0; background: var(--modal-overlay); backdrop-filter: blur(8px); z-index: 2000; display: none; align-items: center; justify-content: center; } .modal-overlay.active { display: flex; } .modal-content { background: var(--modal-bg); width: 90%; max-width: 550px; max-height: 90vh; overflow-y: auto; border-radius: 24px; padding: 24px; border: 1px solid var(--border-light); transition: background-color 0.4s ease; position: relative; } .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; } .modal-header h3 { font-size: 1.1rem; color: var(--cyan); } .modal-close { background: none; border: none; color: var(--text-secondary); font-size: 28px; cursor: pointer; }
+        .form-group { margin-bottom: 16px; } .form-group label { display: block; margin-bottom: 6px; font-weight: 500; font-size: 0.8rem; color: var(--text-primary); } .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 12px 16px; background: var(--input-bg); border: 1px solid var(--border-color); border-radius: 12px; color: var(--text-primary); outline: 0; font-size: 0.9rem; font-family: inherit; transition: background-color 0.4s ease, border-color 0.4s ease; } .form-group textarea { min-height: 80px; resize: vertical; } .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; } .checkbox-group { display: flex; flex-wrap: wrap; gap: 8px; } .checkbox-chip { padding: 6px 14px; background: var(--chip-bg); border: 1px solid var(--border-light); border-radius: 30px; color: var(--text-secondary); cursor: pointer; font-size: 0.75rem; transition: var(--transition); user-select: none; font-family: inherit; } .checkbox-chip.selected { background: var(--cyan); color: #0f172a; border-color: transparent; }
+        .empty-state { text-align: center; padding: 60px 20px; color: var(--text-secondary); }
+        .bottom-nav { position: fixed; bottom: 0; width: 100%; height: 60px; background: var(--navbar-bg); backdrop-filter: blur(15px); border-top: 1px solid var(--border-color); display: flex; justify-content: space-around; align-items: center; z-index: 1000; } .bottom-nav-item { color: var(--text-secondary); padding: 8px; cursor: pointer; transition: var(--transition); position: relative; text-decoration: none; display: flex; align-items: center; } .bottom-nav-item svg { width: 22px; height: 22px; } .bottom-nav-item:hover, .bottom-nav-item.active { color: var(--cyan); } .badge-count { position: absolute; top: 0; right: -2px; background: var(--danger); color: #fff; font-size: 0.55rem; padding: 2px 5px; border-radius: 10px; font-weight: 700; min-width: 16px; text-align: center; display: none; }
+        .toast-custom { position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%); background: var(--toast-bg); color: #fff; padding: 10px 20px; z-index: 9999; font-size: 0.8rem; border-radius: 25px; border: 1px solid var(--cyan); white-space: nowrap; opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s ease; } .toast-custom.show { opacity: 1; visibility: visible; }
+        .right-sidebar { display: none; }
+        @media (max-width: 768px) { .form-row { grid-template-columns: 1fr; } }
+        @media(min-width: 768px) { body { padding-bottom: 0; padding-left: 240px; } .bottom-nav { display: none !important; } .sidebar { left: 0 !important; width: 240px; } .sidebar-overlay { display: none !important; } .menu-toggle { display: none; } .navbar { left: 240px; width: calc(100% - 240px); } .main-content { margin: 80px auto 20px; max-width: 680px; border-radius: 16px; box-shadow: var(--shadow); } .toast-custom { bottom: 30px; } .mentor-grid { grid-template-columns: repeat(3, 1fr); gap: 16px; } }
+        @media(min-width: 1100px) { body { padding-right: 320px; } .navbar { width: calc(100% - 560px); } .main-content { margin-left: auto; margin-right: auto; max-width: 900px; } .mentor-grid { grid-template-columns: repeat(4, 1fr); } .right-sidebar { display: flex; flex-direction: column; gap: 20px; position: fixed; top: 80px; right: 20px; width: 300px; height: calc(100vh - 100px); overflow-y: auto; padding: 0 5px 20px; scrollbar-width: none; } .right-sidebar::-webkit-scrollbar { display: none; } .widget { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 20px; } .widget h4 { margin-bottom: 15px; font-size: 0.95rem; color: var(--text-primary); font-weight: 700; display: flex; align-items: center; gap: 8px; } .right-footer { font-size: 0.75rem; text-align: center; color: var(--text-secondary); margin-top: auto; padding-top: 10px; } .right-footer a { color: var(--text-secondary); text-decoration: none; margin: 0 4px; } .right-footer a:hover { color: var(--cyan); } }
+    </style>
+</head>
+<body>
+<div class="offline-banner" id="offlineBanner">Mode hors-ligne</div>
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
+<aside class="sidebar" id="sidebar">
+    <div class="profile-section"><div style="position:relative;display:inline-block"><img src="" class="profile-img-sidebar" id="sidebarAvatar" alt="Avatar"><div class="online-indicator"></div></div><h3 style="margin:0;font-size:1.05rem;" id="sidebarName">Rashidi</h3><div class="profile-stats"><div><strong id="sidebarPosts">0</strong><span>Posts</span></div><div><strong id="sidebarFriends">0</strong><span>Amis</span></div><div><strong id="sidebarGroups">0</strong><span>Groupes</span></div></div></div>
+    <nav class="sidebar-nav">
+        <a href="home.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg> Accueil</a>
+        <a href="saved.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg> Enregistrés</a>
+        <a href="friends.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg> Amis</a>
+        <a href="courses.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg> Cours</a>
+        <a href="events.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/></svg> Événements</a>
+        <a href="groups.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> Groupes</a>
+        <a href="mentorship.html" class="sidebar-link active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg> Mentorat</a>
+        <a href="profile.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> Mon Profil</a>
+        <hr style="margin:10px 0;border-color:var(--border-color);"><a href="settings.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg> Paramètres</a>
+        <hr style="margin:10px 0;border-color:var(--border-color);"><button class="sidebar-link logout-link" onclick="logout()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg> Déconnexion</button>
+    </nav>
+</aside>
+
+<nav class="navbar"><div class="nav-left"><button class="menu-toggle" onclick="toggleSidebar()"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2"><line x1="4" y1="7" x2="16" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="12" y2="17"/><circle cx="18" cy="17" r="2"/></svg></button><a href="home.html" class="navbar-brand">ESTRA LINK</a></div><div class="nav-right"><img src="" class="avatar-nav" id="navAvatar" alt="Avatar" onclick="viewOwnProfile()"></div></nav>
+
+<main class="main-content">
+    <div class="page-header">
+        <h2><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg> Mentorat</h2>
+        <div style="display:flex;gap:8px">
+            <button class="btn-outline" id="btnBecomeMentor" onclick="openBecomeMentorModal()"><i class="fas fa-graduation-cap"></i> Devenir Mentor</button>
+            <button class="btn-outline" id="btnMyWorkspace" onclick="switchTab('workspace', document.getElementById('tabWorkspace'))" style="display:none; background: var(--cyan); color: #0f172a;"><i class="fas fa-chart-line"></i> Mon Espace</button>
+            <a href="messages.html" class="btn-primary" style="width:auto;"><i class="fas fa-comment"></i> Mes conversations</a>
+        </div>
+    </div>
+    <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab('explore',this)">🔍 Explorer</button>
+        <button class="tab-btn" onclick="switchTab('myMentors',this)">👥 Mes Mentors</button>
+        <button class="tab-btn" onclick="switchTab('sessions',this)">📅 Sessions</button>
+        <button class="tab-btn" onclick="switchTab('requests',this)">📨 Demandes</button>
+        <button class="tab-btn" id="tabWorkspace" onclick="switchTab('workspace',this)" style="display:none;">📊 Espace Mentor</button>
+    </div>
+    <div class="search-bar"><input type="text" class="search-input" id="searchInput" placeholder="🔍 Rechercher un mentor..." oninput="performSearch()"></div>
+    <div class="filter-chips" id="filterChips"><button class="filter-chip active" data-filter="all" onclick="filterMentors('all',this)">Tous</button><button class="filter-chip" data-filter="Informatique" onclick="filterMentors('Informatique',this)">💻 Info</button><button class="filter-chip" data-filter="Mathématiques" onclick="filterMentors('Mathématiques',this)">📐 Maths</button><button class="filter-chip" data-filter="Physique" onclick="filterMentors('Physique',this)">⚡ Physique</button><button class="filter-chip" data-filter="Médecine" onclick="filterMentors('Médecine',this)">🏥 Médecine</button><button class="filter-chip" data-filter="Business" onclick="filterMentors('Business',this)">💼 Business</button></div>
+    <div id="contentContainer"></div>
+</main>
+
+<aside class="right-sidebar" id="rightSidebar">
+    <div class="widget info-widget"><h4>💡 Qu'est-ce qu'un Mentor ?</h4><p style="font-size:0.85rem;color:var(--text-secondary);line-height:1.5;">Un mentor est un guide bienveillant qui partage son expérience, ses compétences et ses conseils pour vous aider à atteindre vos objectifs.</p></div>
+    <div class="right-footer"><a href="about.html">À propos</a> · <a href="help.html">Aide</a> · <a href="terms.html">Conditions</a> · <a href="privacy.html">Confidentialité</a><div style="margin-top:8px;">© 2026 ESTRA LINK</div></div>
+</aside>
+
+<div class="bottom-nav">
+    <a href="home.html" class="bottom-nav-item"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></a>
+    <a href="notifications.html" class="bottom-nav-item" style="position:relative;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg><span class="badge-count" id="notifBadge" style="display:none;">0</span></a>
+    <a href="messages.html" class="bottom-nav-item" style="position:relative"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg><span class="badge-count" id="msgBadge" style="display:none">0</span></a>
+    <a href="courses.html" class="bottom-nav-item"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></a>
+    <a href="profile.html" class="bottom-nav-item"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></a>
+</div>
+
+<div class="modal-overlay" id="mentorDetailsModal"><div class="modal-content" style="max-width:450px;text-align:center;padding:30px 24px;border-radius:24px;"><button class="modal-close" style="position:absolute;top:15px;right:20px;" onclick="closeMentorDetails()">&times;</button><div id="mdlAvatarContainer" style="position:relative;display:inline-block;margin-bottom:15px;"><img id="mdlAvatar" src="" class="mentor-avatar-large" style="width:120px;height:120px;border-width:4px;"><div id="mdlStatus" class="mentor-status-badge" style="width:26px;height:26px;border-width:4px;bottom:8px;right:8px;"></div></div><h2 id="mdlName" style="font-size:1.4rem;color:var(--text-primary);margin-bottom:4px;">Nom</h2><div id="mdlTitle" style="color:var(--cyan);font-weight:600;font-size:0.95rem;margin-bottom:8px;">Titre</div><div id="mdlLocation" style="color:var(--text-secondary);font-size:0.85rem;margin-bottom:20px;"><i class="fas fa-map-marker-alt"></i> Localisation</div><div style="background:var(--bg-primary);border-radius:16px;padding:16px;margin-bottom:20px;text-align:left;font-size:0.9rem;"><div id="mdlBio" style="margin-bottom:12px;font-style:italic;">"Bio..."</div><div><strong>Domaines:</strong> <span id="mdlDomain"></span></div><div><strong>Niveau:</strong> <span id="mdlLevel"></span></div><div><strong>Expérience:</strong> <span id="mdlExp"></span> ans</div><div><strong>Compétences:</strong> <span id="mdlSkills"></span></div></div><div class="form-row"><button class="btn-action-outline" id="mdlBtnLike" onclick="toggleLikeFromModal()"><i class="fas fa-thumbs-up"></i> <span id="mdlLikeText">J'aime</span></button><button class="btn-action-outline primary-action" onclick="openRequestFromModal()"><i class="fas fa-envelope"></i> Écrire au mentor</button></div></div></div>
+
+<div class="modal-fullscreen" id="becomeMentorModal"><div class="modal-fullscreen-header"><h3>🏆 Devenir Mentor</h3><button class="modal-close" onclick="closeBecomeMentorModal()">&times;</button></div><div class="modal-fullscreen-body"><div class="form-row"><div class="form-group" style="display:flex;flex-direction:column;align-items:center;justify-content:center;"><img id="previewMentorAvatar" src="https://ui-avatars.com/api/?background=38bdf8&color=fff&name=Moi" style="width:90px;height:90px;border-radius:50%;object-fit:cover;margin-bottom:10px;border:3px solid var(--cyan);"><label class="btn-sm btn-outline" style="cursor:pointer;font-size:0.75rem;"><i class="fas fa-camera"></i> Photo de profil<input type="file" id="mentorAvatarFile" accept="image/*" style="display:none;" onchange="previewAvatar(this)"></label></div><div class="form-group"><label>Titre professionnel *</label><input type="text" id="mentorTitle" placeholder="Ex: Ingénieur Logiciel Senior"><label style="margin-top:12px;">Localisation</label><input type="text" id="mentorLocation" placeholder="Ex: Lubumbashi, RDC" value="Lubumbashi"></div></div><div class="form-group"><label>Domaines d'expertise *</label><div class="checkbox-group" id="expertiseCheckboxes"></div></div><div class="form-row"><div class="form-group"><label>Niveau</label><select id="mentorLevel"><option value="Licence">Licence</option><option value="Master">Master</option><option value="Doctorat">Doctorat</option><option value="Professionnel">Professionnel</option></select></div><div class="form-group"><label>Années d'expérience *</label><input type="number" id="mentorExperience" min="1" max="50" placeholder="Ex: 5"></div></div><div class="form-group"><label>Compétences clés *</label><input type="text" id="mentorSkills" placeholder="Ex: IA, React, Leadership"></div><div class="form-group"><label>Université/Entreprise</label><input type="text" id="mentorInstitution" placeholder="Ex: UNILU, Google..."></div><div class="form-group"><label style="display:flex;justify-content:space-between;align-items:center;"><span>Bio *</span><button type="button" class="btn-sm btn-outline" onclick="generateBio()" style="padding:4px 10px;font-size:0.75rem;border-color:var(--purple);color:var(--purple);"><i class="fas fa-magic"></i> Générer</button></label><textarea id="mentorBio" rows="4" placeholder="Votre parcours..."></textarea></div></div><div class="modal-fullscreen-footer"><button class="btn-cancel" onclick="closeBecomeMentorModal()">Annuler</button><button class="btn-primary" style="width:auto;" onclick="registerAsMentor()">🚀 S'inscrire</button></div></div>
+
+<div class="modal-fullscreen" id="requestModal"><div class="modal-fullscreen-header"><h3>📨 Demander un mentorat</h3><button class="modal-close" onclick="closeRequestModal()">&times;</button></div><div class="modal-fullscreen-body"><div id="requestMentorInfo" style="margin-bottom:24px;background:var(--bg-primary);padding:16px;border-radius:16px;border:1px solid var(--border-color);"></div><div class="form-group"><label>Objectifs *</label><textarea id="requestObjectives" rows="4" placeholder="Ce que vous souhaitez apprendre..."></textarea></div></div><div class="modal-fullscreen-footer"><button class="btn-cancel" style="width:auto" onclick="closeRequestModal()">Annuler</button><button class="btn-primary" style="width:auto" onclick="sendMentorshipRequest()">Envoyer</button></div></div>
+
+<div id="toastMsg" class="toast-custom"></div>
+
+<script>
+// ============ CANAL DE COMMUNICATION TEMPS RÉEL ============
+const ESTRA_CHANNEL = new BroadcastChannel('estra_network');
+
+ESTRA_CHANNEL.onmessage = (e) => {
+    const { type, data } = e.data;
+    if (type === 'profile_updated') loadData();
+    if (type === 'friends_updated') loadData();
+    if (type === 'notification_updated') updateAllBadges();
+    if (type === 'badges_updated') updateAllBadges();
+    if (type === 'new_mentor_request') {
+        if (data && data.to === currentUser.name) {
+            showToast('🔔 Nouvelle demande de mentorat de ' + data.from);
+            loadData();
+        }
+    }
+    if (type === 'mentor_accepted') {
+        if (data && (data.from === currentUser.name || data.to === currentUser.name)) {
+            loadData();
+            showToast('✅ Demande de mentorat acceptée !');
+        }
+    }
+};
+
+function estraEmit(type, data = {}) {
+    ESTRA_CHANNEL.postMessage({ type, data, timestamp: Date.now() });
+}
+
+// ============ BASE DE DONNÉES ============
+function getAllUsers() {
+    let users = JSON.parse(localStorage.getItem('estra_all_users') || '[]');
+    if (users.length === 0) {
+        users = [
+    { id: 'rashidi', username: 'rashidi', fullName: 'Rashidi', avatar: 'https://ui-avatars.com/api/?background=1d9bf0&color=fff&name=Rashidi&size=120', accountType: 'student', domain: 'Informatique', level: 'L2' },
+    { id: 'marie_claire', username: 'marie_claire', fullName: 'Marie Claire', avatar: 'https://ui-avatars.com/api/?name=Marie&background=10b981&color=fff', accountType: 'teacher', domain: 'Informatique', level: 'M2' },
+    { id: 'david_mwamba', username: 'david_mwamba', fullName: 'David Mwamba', avatar: 'https://ui-avatars.com/api/?name=David&background=8b5cf6&color=fff', accountType: 'student', domain: 'Informatique', level: 'M1' },
+    { id: 'prof_kabengele', username: 'prof_kabengele', fullName: 'Pr. Kabengele', avatar: 'https://ui-avatars.com/api/?name=PrK&background=7c3aed&color=fff', accountType: 'professor', domain: 'Informatique', level: 'Doctorat' },
+    { id: 'mr_muteba', username: 'mr_muteba', fullName: 'Mr. Muteba', avatar: 'https://ui-avatars.com/api/?name=MrM&background=d97706&color=fff', accountType: 'teacher', domain: 'Mathématiques', level: '4ème Humanité' },
+    { id: 'alice_mwila', username: 'alice_mwila', fullName: 'Alice Mwila', avatar: 'https://ui-avatars.com/api/?name=Alice&background=059669&color=fff', accountType: 'highschool', domain: 'Biologie-Chimie', level: '3ème Humanité' },
+    { id: 'sophie_mukendi', username: 'sophie_mukendi', fullName: 'Sophie Mukendi', avatar: 'https://ui-avatars.com/api/?name=Sophie&background=ec4899&color=fff', accountType: 'student', domain: 'Médecine', level: 'L3' },
+    { id: 'admin_estra', username: 'admin_estra', fullName: 'Admin ESTRA', avatar: 'https://ui-avatars.com/api/?name=Admin&background=dc2626&color=fff', accountType: 'admin', domain: 'Administration', level: 'N/A' }
+];
+        localStorage.setItem('estra_all_users', JSON.stringify(users));
+    }
+    return users;
+}
+
+// ============ TRADUCTIONS ============
+const translations = {
+    fr: {
+        page_title: "ESTRA LINK | Mentorat",
+        toast_request_sent: "📨 Demande envoyée à",
+        toast_congrats_mentor: "🏆 Félicitations ! Vous êtes Mentor !",
+        toast_select_domain: "Sélectionnez un domaine",
+        toast_describe_bio: "Décrivez votre parcours",
+        toast_experience: "Indiquez vos années d'expérience",
+        toast_title_missing: "Indiquez votre titre professionnel",
+        toast_skills: "Ajoutez au moins une compétence clé",
+        toast_objectives: "Décrivez vos objectifs",
+        toast_already_pending: "Déjà en attente",
+        like_btn: "J'aime", see_more_info: "Voir infos",
+        no_mentors: "Aucun mentor trouvé",
+        no_mentors_my: "Aucun mentor",
+        no_requests: "Aucune demande",
+        no_sessions: "Aucune session"
+    }
+};
+
+let currentLang = localStorage.getItem('estra_language') || 'fr';
+function t(key){ return (translations[currentLang]&&translations[currentLang][key])||(translations['fr']&&translations['fr'][key])||key; }
+function applyTranslations(){ currentLang=localStorage.getItem('estra_language')||'fr'; document.querySelectorAll('[data-i18n]').forEach(el=>{ el.textContent=t(el.getAttribute('data-i18n'))||el.textContent; }); document.title=t('page_title'); }
+
+// ============ VARIABLES ============
+let currentUser={name:'Rashidi',avatar:'https://ui-avatars.com/api/?background=1d9bf0&color=fff&name=Rashidi&size=40',username:'rashidi'};
+let mentors=[],mentorshipRequests=[],sessions=[],currentTab='explore',currentFilter='all',selectedMentorId=null,toastTimeout=null;
+let uploadedAvatarUrl=null,activeModalMentorId=null;
+const domains=['Informatique','Mathématiques','Physique','Médecine','Business','Droit','Économie','Langues','Art','Sport'];
+
+function $(id){return document.getElementById(id)}
+function checkOnlineStatus(){const b=$('offlineBanner');if(b)b.style.display=navigator.onLine?'none':'block'}
+
+function updateAllBadges(){
+    const notifs=JSON.parse(localStorage.getItem('estra_notifications')||'[]');
+    const unreadNotifs=notifs.filter(n=>!n.read).length;
+    const nb=$('notifBadge'); if(nb){nb.style.display=unreadNotifs>0?'block':'none';nb.textContent=unreadNotifs>99?'99+':unreadNotifs;}
+    const msgs=JSON.parse(localStorage.getItem('estra_messages_data')||'{}');
+    let unreadMsgs=0; Object.values(msgs).forEach(arr=>{if(Array.isArray(arr))unreadMsgs+=arr.filter(m=>m.sender==='them'&&m.status!=='read').length});
+    const mb=$('msgBadge'); if(mb){mb.style.display=unreadMsgs>0?'block':'none';mb.textContent=unreadMsgs>99?'99+':unreadMsgs;}
+}
+
+function sendNotification(type,title,message,metadata={}){
+    const notifs=JSON.parse(localStorage.getItem('estra_notifications')||'[]');
+    notifs.unshift({id:Date.now(),type,title,message,read:false,timestamp:Date.now(),metadata});
+    if(notifs.length>50)notifs.length=50;
+    localStorage.setItem('estra_notifications',JSON.stringify(notifs));
+    estraEmit('notification_updated', {});
+    updateAllBadges();
+}
+
+function showToast(msg,isError=false){const te=$('toastMsg');if(!te)return;if(toastTimeout)clearTimeout(toastTimeout);te.textContent=msg;te.style.borderColor=isError?'var(--danger)':'var(--cyan)';te.classList.remove('show');void te.offsetWidth;te.classList.add('show');toastTimeout=setTimeout(()=>te.classList.remove('show'),3000)}
+function escapeHtml(s){if(!s)return'';const d=document.createElement('div');d.textContent=s;return d.innerHTML}
+
+// ============ NAVIGATION PROFIL ============
+// 🆕 Base de données des utilisateurs pour les liens de profil
+const allPeopleSuggestions = [
+    { name: "Rashidi", username: "rashidi", avatar: "https://ui-avatars.com/api/?name=Rashidi&background=38bdf8&color=fff" },
+    { name: "Marie Claire", username: "marie_claire", avatar: "https://ui-avatars.com/api/?name=Marie&background=10b981&color=fff" },
+    { name: "David Mwamba", username: "david_mwamba", avatar: "https://ui-avatars.com/api/?name=David&background=8b5cf6&color=fff" },
+    { name: "Pr. Kabengele", username: "prof_kabengele", avatar: "https://ui-avatars.com/api/?name=PrK&background=7c3aed&color=fff" },
+    { name: "Mr. Muteba", username: "mr_muteba", avatar: "https://ui-avatars.com/api/?name=MrM&background=d97706&color=fff" },
+    { name: "Alice Mwila", username: "alice_mwila", avatar: "https://ui-avatars.com/api/?name=Alice&background=059669&color=fff" },
+    { name: "Sophie Mukendi", username: "sophie_mukendi", avatar: "https://ui-avatars.com/api/?name=Sophie&background=ec4899&color=fff" },
+    { name: "Admin ESTRA", username: "admin_estra", avatar: "https://ui-avatars.com/api/?name=Admin&background=dc2626&color=fff" }
+];
+
+function viewOwnProfile() { window.location.href = 'profile.html'; }
+
+function viewProfile(nameOrUsername) {
+    if (!nameOrUsername) return;
+    const person = allPeopleSuggestions.find(p => p.name === nameOrUsername || p.username === nameOrUsername);
+    if (person && person.username) {
+        window.location.href = 'profile.html?user=' + encodeURIComponent(person.username);
+    } else {
+        const fallback = nameOrUsername.toLowerCase().replace(/\s+/g, '_').replace(/[^a-z0-9_]/g, '');
+        window.location.href = 'profile.html?user=' + encodeURIComponent(fallback);
+    }
+}
+
+// ============ SYNC MENTORS VERS AMIS ============
+function syncMentorsToFriends(){
+    const storedMentors=JSON.parse(localStorage.getItem('estra_mentors')||'[]');
+    if(storedMentors.length>0){
+        const friends=JSON.parse(localStorage.getItem('estra_friends')||'[]');
+        let updated=false;
+        storedMentors.forEach(m=>{
+            if(!friends.find(f=>f.name===m.name)){
+                friends.push({id:'m_'+m.id,name:m.name,avatar:m.avatar,online:true,favorite:false,domain:m.domains?m.domains[0]:'',level:m.level||''});
+                updated=true;
+            }
+        });
+        if(updated){
+            localStorage.setItem('estra_friends',JSON.stringify(friends));
+            estraEmit('friends_updated', {});
+        }
+    }
+}
+
+function updateSidebar(){
+    const sn=$('sidebarName'),sa=$('sidebarAvatar'),na=$('navAvatar');
+    if(sn)sn.textContent=currentUser.name;
+    if(sa)sa.src=currentUser.avatar;
+    if(na)na.src=currentUser.avatar;
+    
+    // ✅ AJOUTER CES 3 LIGNES pour les compteurs
+    const friendsList = JSON.parse(localStorage.getItem('estra_friends') || '[]');
+    const mentorsList = JSON.parse(localStorage.getItem('estra_mentors') || '[]');
+    document.getElementById('sidebarFriends').textContent = friendsList.length;
+    document.getElementById('sidebarGroups').textContent = mentorsList.length;
+}
+
+function checkMentorStatus(){
+    const isMentor=mentors.some(m=>m.name===currentUser.name);
+    if($('btnBecomeMentor'))$('btnBecomeMentor').style.display=isMentor?'none':'flex';
+    if($('btnMyWorkspace'))$('btnMyWorkspace').style.display=isMentor?'flex':'none';
+    if($('tabWorkspace'))$('tabWorkspace').style.display=isMentor?'block':'none';
+}
+
+function loadData(){
+    const sp=localStorage.getItem('estra_profile');
+    if(sp){try{const p=JSON.parse(sp);currentUser.name=p.fullName||currentUser.name;currentUser.avatar=p.avatar||currentUser.avatar;currentUser.username=p.username||currentUser.username;}catch(e){}}
+    getAllUsers();
+    mentors=JSON.parse(localStorage.getItem('estra_mentors')||'[]');
+    if(!mentors.length){
+        mentors=[
+            {id:1,name:'Patricia Tenga',avatar:'https://ui-avatars.com/api/?background=10b981&color=fff&name=Patricia&size=150',domains:['Business','Informatique'],level:'Professionnel',experience:8,skills:['Marketing','Stratégie'],institution:'ABC inc',title:'Stratège web',bio:'Passionnée du marketing numérique.',rating:4.9,likes:12,likedByMe:false,location:'Montréal, CA',available:true,createdAt:Date.now()-172800000},
+            {id:2,name:'Olivier Zhang',avatar:'https://ui-avatars.com/api/?background=f59e0b&color=fff&name=Olivier&size=150',domains:['Informatique'],level:'Professionnel',experience:10,skills:['UI/UX','Figma'],institution:'Zenith',title:'Designer web',bio:"Créateur d'interfaces visuelles.",rating:4.8,likes:5,likedByMe:true,location:'Lubumbashi, RDC',available:true,createdAt:Date.now()-86400000},
+            {id:3,name:'David Mwamba',avatar:'https://ui-avatars.com/api/?background=8b5cf6&color=fff&name=David&size=150',domains:['Informatique','Mathématiques'],level:'Doctorat',experience:4,skills:['Python','ML','Data'],institution:'UNIKIN',title:'Data Scientist',bio:'Chercheur en IA.',rating:4.6,likes:2,likedByMe:false,location:'Kinshasa, RDC',available:true,createdAt:Date.now()-259200000}
+        ];
+        localStorage.setItem('estra_mentors',JSON.stringify(mentors));
+    }
+    mentorshipRequests=JSON.parse(localStorage.getItem('estra_mentorship_requests')||'[]');
+    sessions=JSON.parse(localStorage.getItem('estra_mentorship_sessions')||'[]');
+    document.documentElement.setAttribute('data-theme','light');
+    applyTranslations();updateSidebar();checkMentorStatus();syncMentorsToFriends();renderContent();updateAllBadges();
+}
+
+function saveData(){
+    localStorage.setItem('estra_mentors',JSON.stringify(mentors));
+    localStorage.setItem('estra_mentorship_requests',JSON.stringify(mentorshipRequests));
+    localStorage.setItem('estra_mentorship_sessions',JSON.stringify(sessions));
+    syncMentorsToFriends();
+    estraEmit('mentors_updated', { mentorName: currentUser.name });
+    estraEmit('badges_updated', {});
+}
+
+function switchTab(tab,btn){currentTab=tab;document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');performSearch()}
+function filterMentors(f,btn){currentFilter=f;document.querySelectorAll('#filterChips .filter-chip').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');performSearch()}
+
+function renderMentorCardModern(m,index=0){
+    const likes=m.likes||0;const isLiked=m.likedByMe?'liked':'';
+    const badgeVerified=m.rating>=4.5?'<i class="fas fa-check-circle badge-verified"></i>':'';
+    const delay=index*0.05;
+    return `<div class="mentor-card-modern" style="animation-delay:${delay}s;">
+        <div class="mentor-avatar-container"><img src="${m.avatar}" class="mentor-avatar-large" onclick="event.stopPropagation();viewProfile('${escapeHtml(m.name)}')" style="cursor:pointer;"><div class="mentor-status-badge"></div></div>
+        <div class="mentor-name-modern">
+    <span onclick="event.stopPropagation();viewProfile('${escapeHtml(m.name)}')" style="cursor:pointer;">${escapeHtml(m.name)}</span>
+    ${badgeVerified}
+    <button onclick="event.stopPropagation();openMentorDetails(${m.id})" style="background:none;border:none;color:var(--cyan);cursor:pointer;font-size:0.7rem;margin-left:4px;"><i class="fas fa-info-circle"></i></button>
+</div>
+        <div class="mentor-title-modern">${escapeHtml(m.title||'Mentor')}</div>
+        <div class="mentor-expertise"><span class="expertise-tag" style="border-color:var(--purple);color:var(--purple);"><i class="fas fa-graduation-cap"></i> ${escapeHtml(m.level||'Professionnel')}</span>${m.domains.slice(0,2).map(d=>`<span class="expertise-tag">${escapeHtml(d)}</span>`).join('')}${m.domains.length>2?`<span class="expertise-tag">+${m.domains.length-2}</span>`:''}</div>
+        <div class="mentor-actions-grid">
+            <button class="btn-action-outline ${isLiked}" onclick="toggleLike(${m.id},this,event)" style="cursor:pointer;"><i class="fas fa-thumbs-up"></i> <span class="like-count">${t('like_btn')} (${likes})</span></button>
+            <button class="btn-action-outline primary-action" onclick="openMentorDetails(${m.id})" style="cursor:pointer;">${t('see_more_info')}</button>
+        </div></div>`;
+}
+
+function performSearch(){
+    const search=($('searchInput')?.value||'').toLowerCase().trim(),c=$('contentContainer');if(!c)return;
+    if(currentTab==='explore'){
+        let f=mentors.filter(m=>m.available&&m.name!==currentUser.name);
+        if(currentFilter!=='all')f=f.filter(m=>m.domains.includes(currentFilter));
+        if(search)f=f.filter(m=>m.name.toLowerCase().includes(search)||m.domains.some(d=>d.toLowerCase().includes(search))||(m.title||'').toLowerCase().includes(search));
+        if(!f.length){c.innerHTML=`<div class="empty-state"><i class="fas fa-search" style="font-size:3rem;margin-bottom:16px"></i><h3>${t('no_mentors')}</h3></div>`;return}
+        c.innerHTML=`<div class="mentor-grid">${f.map((m,i)=>renderMentorCardModern(m,i)).join('')}</div>`;
+    }else if(currentTab==='workspace'){
+        const myMentorProfile=mentors.find(m=>m.name===currentUser.name);
+        if(!myMentorProfile){c.innerHTML=`<div class="empty-state">Vous n'êtes pas encore mentor.</div>`;return}
+        const myReqs=mentorshipRequests.filter(r=>r.mentorId===myMentorProfile.id);
+        const pendingReqs=myReqs.filter(r=>r.status==='pending');
+        c.innerHTML=`<div style="padding:24px;"><h4 style="margin-bottom:12px;color:var(--text-primary);"><i class="fas fa-eye" style="color:var(--cyan)"></i> Votre Profil Public</h4><div style="pointer-events:none;opacity:0.9;margin-bottom:24px;width:100%;">${renderMentorCardModern(myMentorProfile,0)}</div><h4 style="margin-bottom:12px;color:var(--text-primary);"><i class="fas fa-chart-pie" style="color:var(--cyan)"></i> Statistiques</h4><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;"><div style="background:var(--stat-bg);border:1px solid var(--border-light);border-radius:12px;padding:14px;text-align:center;"><div style="font-size:1.5rem;font-weight:700;color:var(--cyan);">${myMentorProfile.totalMentees||0}</div><div style="font-size:0.7rem;color:var(--text-secondary);">Mentorés</div></div><div style="background:var(--stat-bg);border:1px solid #10b981;border-radius:12px;padding:14px;text-align:center;"><div style="font-size:1.5rem;font-weight:700;color:#10b981;">${myMentorProfile.likes||0}</div><div style="font-size:0.7rem;color:var(--text-secondary);">J'aime</div></div><div style="background:var(--stat-bg);border:1px solid #f59e0b;border-radius:12px;padding:14px;text-align:center;"><div style="font-size:1.5rem;font-weight:700;color:#f59e0b;">${pendingReqs.length}</div><div style="font-size:0.7rem;color:var(--text-secondary);">En attente</div></div></div></div>`;
+    }else if(currentTab==='myMentors'){
+        let f=mentorshipRequests.filter(r=>r.from===currentUser.name&&r.status==='accepted');
+        if(!f.length){c.innerHTML=`<div class="empty-state"><h3>${t('no_mentors_my')}</h3></div>`;return}
+        c.innerHTML=f.map(r=>{const m=mentors.find(x=>x.id===r.mentorId);return m?`<div class="mentor-card"><img src="${m.avatar}" class="mentor-avatar" onclick="openMentorDetails(${m.id})" style="cursor:pointer;"><div class="mentor-info" onclick="openMentorDetails(${m.id})" style="cursor:pointer;"><div class="mentor-name">${escapeHtml(m.name)} <span class="badge-mentor">MENTOR</span></div><div style="font-size:0.8rem;font-weight:600;color:var(--cyan);">${escapeHtml(m.title||'')}</div></div><div class="mentor-actions" onclick="event.stopPropagation()"><button class="btn-sm btn-chat" onclick="openChat(${m.id})" style="cursor:pointer;"><i class="fas fa-comment"></i> Chat</button></div></div>`:''}).join('');
+    }else if(currentTab==='requests'){
+        const mySent=mentorshipRequests.filter(r=>r.from===currentUser.name);
+        c.innerHTML=mySent.length?mySent.map(r=>{const m=mentors.find(x=>x.id===r.mentorId);return`<div class="mentor-card" style="cursor:default"><img src="${m?m.avatar:''}" class="mentor-avatar"><div class="mentor-info"><div class="mentor-name">${m?escapeHtml(m.name):'Mentor'}</div><div>${r.status==='pending'?'⏳ En attente':r.status==='accepted'?'✅ Accepté':'❌ Refusé'}</div></div></div>`}).join(''):`<div class="empty-state"><h3>${t('no_requests')}</h3></div>`;
+    }else if(currentTab==='sessions'){
+        const mySessions=sessions.filter(s=>s.from===currentUser.name||s.mentorId===mentors.find(m=>m.name===currentUser.name)?.id);
+        c.innerHTML=mySessions.length?mySessions.map(s=>`<div class="mentor-card"><div><i class="fas fa-calendar-check" style="color:var(--cyan);font-size:2rem;"></i></div><div class="mentor-info"><div class="mentor-name">${escapeHtml(s.mentorName||'')}</div><div style="font-size:0.8rem;">${s.date} à ${s.time} (${s.duration}min) - ${s.format}</div></div></div>`).join(''):`<div class="empty-state"><h3>${t('no_sessions')}</h3></div>`;
+    }
+}
+
+function renderContent(){performSearch()}
+
+function toggleLike(id,btnElement,event){
+    if(event)event.stopPropagation();
+    const m=mentors.find(x=>x.id===id);
+    if(m){m.likedByMe=!m.likedByMe;m.likes=(m.likes||0)+(m.likedByMe?1:-1);if(m.likes<0)m.likes=0;saveData();
+        if(btnElement){const countSpan=btnElement.querySelector('.like-count');
+            if(m.likedByMe){btnElement.classList.add('liked');}else{btnElement.classList.remove('liked');}
+            if(countSpan)countSpan.textContent=`${t('like_btn')} (${m.likes})`;}else{performSearch();}}
+}
+
+function toggleLikeFromModal(){if(activeModalMentorId){toggleLike(activeModalMentorId,null,null);const m=mentors.find(x=>x.id===activeModalMentorId);const btn=$('mdlBtnLike');const textSpan=$('mdlLikeText');if(m.likedByMe){btn.classList.add('liked');}else{btn.classList.remove('liked');}textSpan.textContent=`${t('like_btn')} (${m.likes})`;}}
+
+function openMentorDetails(id){const m=mentors.find(x=>x.id===id);if(!m){showToast('Mentor non trouvé',true);return;}activeModalMentorId=id;$('mdlAvatar').src=m.avatar;$('mdlName').innerHTML=`${escapeHtml(m.name)} ${m.rating>=4.5?'<i class="fas fa-check-circle badge-verified"></i>':''}`;$('mdlTitle').textContent=`${escapeHtml(m.title||'Mentor')} @ ${escapeHtml(m.institution||'')}`;$('mdlLocation').innerHTML=`<i class="fas fa-map-marker-alt"></i> ${escapeHtml(m.location||'En ligne')}`;$('mdlBio').textContent=`"${escapeHtml(m.bio||'')}"`;$('mdlDomain').innerHTML=(m.domains||[]).map(d=>`<span class="expertise-tag">${escapeHtml(d)}</span>`).join('');$('mdlLevel').textContent=m.level||'Professionnel';$('mdlExp').textContent=m.experience||0;$('mdlSkills').innerHTML=(m.skills||[]).map(s=>`<span class="expertise-tag">${escapeHtml(s)}</span>`).join('');const btnLike=$('mdlBtnLike');const textSpan=$('mdlLikeText');textSpan.textContent=`${t('like_btn')} (${m.likes||0})`;if(m.likedByMe)btnLike.classList.add('liked');else btnLike.classList.remove('liked');$('mentorDetailsModal').classList.add('active');}
+function closeMentorDetails(){$('mentorDetailsModal').classList.remove('active');activeModalMentorId=null;}
+function openRequestFromModal(){if(activeModalMentorId){const id=activeModalMentorId;closeMentorDetails();openRequestModal(id);}}
+
+function openRequestModal(id){selectedMentorId=id;const m=mentors.find(x=>x.id===id);if(!m){showToast('Mentor non trouvé',true);return;}const info=$('requestMentorInfo');const loc=escapeHtml(m.location||'Lubumbashi');if(info){info.innerHTML=`<div style="display:flex;align-items:center;gap:15px;margin-bottom:15px;"><img src="${m.avatar}" style="width:60px;height:60px;border-radius:50%;border:2px solid var(--cyan);object-fit:cover;"><div style="text-align:left;"><strong style="font-size:1.1rem;color:var(--cyan);">${escapeHtml(m.name)}</strong><div style="font-size:0.8rem;color:var(--text-secondary);"><i class="fas fa-map-marker-alt"></i> ${loc}</div></div></div><div style="border-radius:12px;overflow:hidden;border:1px solid var(--border-color);height:150px;position:relative;"><iframe width="100%" height="100%" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?q=${encodeURIComponent(loc)}&t=&z=13&ie=UTF8&iwloc=&output=embed"></iframe></div>`;}$('requestModal').classList.add('active');}
+function closeRequestModal(){$('requestModal').classList.remove('active');selectedMentorId=null;}
+
+function sendMentorshipRequest(){
+    if(!selectedMentorId)return;const o=$('requestObjectives')?.value.trim();if(!o){showToast(t('toast_objectives'));return}
+    const m=mentors.find(x=>x.id===selectedMentorId);if(!m)return;
+    if(mentorshipRequests.find(r=>r.mentorId===selectedMentorId&&r.from===currentUser.name&&r.status==='pending')){showToast(t('toast_already_pending'));return}
+    mentorshipRequests.push({id:'mr_'+Date.now(),mentorId:selectedMentorId,from:currentUser.name,to:m.name,objectives:o,status:'pending',createdAt:Date.now()});
+    saveData();closeRequestModal();performSearch();
+    sendNotification('mentorship','Nouvelle demande','Demande de mentorat envoyée à '+m.name,{to:m.name});
+    estraEmit('new_mentor_request', {from:currentUser.name,to:m.name,avatar:currentUser.avatar,domain:m.domains?m.domains[0]:''});
+    showToast(`${t('toast_request_sent')} ${m.name}`);
+}
+
+function openBecomeMentorModal(){const e=$('expertiseCheckboxes');if(e)e.innerHTML=domains.map(d=>`<button class="checkbox-chip" onclick="this.classList.toggle('selected')">${d}</button>`).join('');$('becomeMentorModal').classList.add('active');}
+function closeBecomeMentorModal(){$('becomeMentorModal').classList.remove('active');uploadedAvatarUrl=null;}
+function previewAvatar(input){if(input.files&&input.files[0]){const reader=new FileReader();reader.onload=function(e){$('previewMentorAvatar').src=e.target.result;uploadedAvatarUrl=e.target.result;};reader.readAsDataURL(input.files[0]);}}
+function generateBio(){const title=$('mentorTitle').value.trim()||'Professionnel';const exp=$('mentorExperience').value||'plusieurs';const skills=$('mentorSkills').value.trim()||'divers domaines';$('mentorBio').value=`En tant que ${title} avec ${exp} années d'expérience, j'ai développé une expertise en ${skills}. Je suis là pour vous conseiller.`;showToast("Bio générée !");}
+
+function registerAsMentor(){
+    const sd=[...document.querySelectorAll('#expertiseCheckboxes .checkbox-chip.selected')].map(b=>b.textContent.trim());
+    const title=$('mentorTitle')?.value.trim();const loc=$('mentorLocation')?.value.trim();
+    const exp=parseInt($('mentorExperience')?.value)||0;const skillsRaw=$('mentorSkills')?.value.trim();
+    const b=$('mentorBio')?.value.trim();const l=$('mentorLevel')?.value;const i=$('mentorInstitution')?.value.trim();
+    const finalAvatar=uploadedAvatarUrl||currentUser.avatar;
+    if(!title){showToast(t('toast_title_missing'),true);return}
+    if(!sd.length){showToast(t('toast_select_domain'),true);return}
+    if(!exp){showToast(t('toast_experience'),true);return}
+    if(!skillsRaw){showToast(t('toast_skills'),true);return}
+    if(!b){showToast(t('toast_describe_bio'),true);return}
+    mentors.push({id:Date.now(),name:currentUser.name,avatar:finalAvatar,domains:sd,level:l,experience:exp,skills:skillsRaw.split(',').map(s=>s.trim()),institution:i,bio:b,title:title,location:loc,rating:5.0,likes:0,likedByMe:false,totalSessions:0,totalMentees:0,available:true,createdAt:Date.now()});
+    saveData();closeBecomeMentorModal();checkMentorStatus();switchTab('workspace',$('tabWorkspace'));
+    sendNotification('mentor','Félicitations !','Vous êtes maintenant mentor sur ESTRA LINK !');
+    estraEmit('mentors_updated', {mentorName: currentUser.name});
+    estraEmit('friends_updated', {});
+    showToast(t('toast_congrats_mentor'));
+}
+
+function openChat(id){const m=mentors.find(x=>x.id===id);if(m){window.location.href='messages.html?friend='+encodeURIComponent(m.name);}}
+
+function toggleSidebar(){const s=$('sidebar'),o=$('sidebarOverlay');if(s)s.classList.toggle('open');if(o)o.classList.toggle('active');}
+function closeSidebar(){const s=$('sidebar'),o=$('sidebarOverlay');if(s)s.classList.remove('open');if(o)o.classList.remove('active');}
+function logout(){localStorage.clear();window.location.href='login.html';}
+
+document.addEventListener('DOMContentLoaded',()=>{
+    loadData();
+    const so=$('sidebarOverlay');if(so)so.addEventListener('click',closeSidebar);
+    const rm=$('requestModal');if(rm)rm.addEventListener('click',e=>{if(e.target===rm)closeRequestModal();});
+    const dm=$('mentorDetailsModal');if(dm)dm.addEventListener('click',e=>{if(e.target===dm)closeMentorDetails();});
+    window.addEventListener('storage',(e)=>{if(e.key&&e.key.startsWith('estra_'))loadData();});
+    window.addEventListener('online',()=>{checkOnlineStatus();showToast('🟢 Connexion rétablie');});
+    window.addEventListener('offline',()=>{checkOnlineStatus();showToast('🔴 Mode hors-ligne');});
+    setInterval(updateAllBadges,5000);
+});
+
+// ============ EXPORTS GLOBAUX (TOUTES LES FONCTIONS) ============
+window.viewOwnProfile = viewOwnProfile;
+window.viewProfile = viewProfile;
+window.openMentorDetails = openMentorDetails;
+window.closeMentorDetails = closeMentorDetails;
+window.toggleLike = toggleLike;
+window.toggleLikeFromModal = toggleLikeFromModal;
+window.openRequestFromModal = openRequestFromModal;
+window.openRequestModal = openRequestModal;
+window.closeRequestModal = closeRequestModal;
+window.sendMentorshipRequest = sendMentorshipRequest;
+window.openBecomeMentorModal = openBecomeMentorModal;
+window.closeBecomeMentorModal = closeBecomeMentorModal;
+window.registerAsMentor = registerAsMentor;
+window.switchTab = switchTab;
+window.filterMentors = filterMentors;
+window.performSearch = performSearch;
+window.previewAvatar = previewAvatar;
+window.generateBio = generateBio;
+window.toggleSidebar = toggleSidebar;
+window.closeSidebar = closeSidebar;
+window.logout = logout;
+window.showToast = showToast;
+window.updateAllBadges = updateAllBadges;
+window.t = t;
+window.estraEmit = estraEmit;
+window.openChat = openChat;
+window.escapeHtml = escapeHtml;
+window.renderMentorCardModern = renderMentorCardModern;
+window.renderContent = renderContent;
+window.loadData = loadData;
+window.saveData = saveData;
+window.checkOnlineStatus = checkOnlineStatus;
+window.syncMentorsToFriends = syncMentorsToFriends;
+window.sendNotification = sendNotification;
+window.updateSidebar = updateSidebar;
+window.checkMentorStatus = checkMentorStatus;
+window.getAllUsers = getAllUsers;
+window.applyTranslations = applyTranslations;
+</script>
+<script src="i18n.js"></script>
+<script src="pwa-init.js"></script>
+</body>
+</html>

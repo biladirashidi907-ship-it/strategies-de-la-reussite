@@ -1,91 +1,190 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Accueil des Étudiants</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>ESTRA LINK - Ouverture</title>
+    <style>
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body, html {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #f5f5f5; /* Le fameux White Smoke propre et lumineux */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* CADRE GLOBAL DE LA PAGE D'OUVERTURE */
+        .opening-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* CONTENEUR DU LOGO ET DE L'ANNEAU D'ACTUALISATION */
+        .logo-loader-zone {
+            position: relative;
+            width: 160px;
+            height: 160px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* 🔄 L'ANNEAU DE CHARGEMENT TECHNIQUE QUI TOURNE */
+        .refresh-ring {
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 3px solid rgba(0, 166, 239, 0.1); /* Fond de l'anneau très discret */
+            border-top: 3px solid #00A6EF; /* La partie qui tourne (Bleu Tech) */
+            border-right: 3px solid #00A6EF;
+            animation: techSpinner 1s infinite linear;
+            z-index: 1;
+        }
+
+        /* 🎯 LE LOGO VECTORIEL "E + LINK" AU CENTRE (PUR CODE) */
+        .estra-logo-svg {
+            width: 100px;
+            height: 100px;
+            z-index: 5;
+            filter: drop-shadow(0 4px 10px rgba(0,0,0,0.05));
+            /* Légère pulsation pour montrer que l'application "réfléchit" */
+            animation: logoPulse 2s infinite ease-in-out;
+        }
+
+        /* INTERFACE NOM DE LA MARQUE */
+        .brand-text {
+            margin-top: 25px;
+            text-align: center;
+            z-index: 5;
+        }
+
+        .brand-text h1 {
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: 4px;
+            color: #1a2224; /* Un gris très foncé presque noir pour le contraste sur whitesmoke */
+            margin-bottom: 4px;
+        }
+
+        .brand-text h1 span {
+            color: #00A6EF; /* Touche bleue distinctive pour le LINK */
+        }
+
+        .brand-text p {
+            font-size: 0.55rem;
+            color: coral;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            font-weight: 600;
+        }
+
+        /* POSITIONNEMENT AJUSTÉ DE LA BANNIÈRE DES ÉTUDIANTS TOUT EN BAS */
+        .students-bottom-banner {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 500px; /* Évite que l'image s'étire trop sur grand écran */
+            height: auto;
+            max-height: 35vh; 
+            z-index: 2;
+            pointer-events: none; /* L'image ne bloque pas les clics */
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+        }
+
+        .students-bottom-banner img {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+            opacity: 0.3; /* Votre transparence préservée */
+        }
+
+        /* --- KEYFRAMES DES ANIMATIONS --- */
+        @keyframes techSpinner {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes logoPulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(0.96); opacity: 0.85; }
+        }
+    </style>
 </head>
 <body>
 
-    <header class="hero-section">
-        <h1>Bienvenue sur la plateforme interactive des questions aux cours</h1>
-        <p class="slogan">Votre futur commence ici - Explorez nos cours avec passion !</p>
-    </header>
+    <div class="opening-container">
+        
+        <!-- Zone centrale : Anneau tournant + Logo ESTRA -->
+        <div class="logo-loader-zone">
+            <!-- L'anneau qui tourne -->
+            <div class="refresh-ring"></div>
+            
+            <!-- Le Logo SVG épuré -->
+            <svg class="estra-logo-svg" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <!-- Maillon Supérieur (Le E stylisé) -->
+                <path d="M16 16H44C44 16 48 20 44 24H24V32H40V36H24V44H44C44 44 48 48 44 52H16V16Z" fill="#1a2224"/>
+                <!-- Liens du réseau intégrés -->
+              
+            </svg>
+        </div>
 
-    <main class="container">
+        <!-- Identité textuelle sous le loader -->
+        <div class="brand-text">
+            <h1>ESTRA <span>LINK</span></h1>
+            <p>Éducation</p>
+        </div>
+        
+        <!-- Bannière Étudiants en bas -->
+        <div class="students-bottom-banner">
+            <img src="/vous pouvez /wp10520580.png" alt="Communauté Étudiante ESTRA LINK">
+        </div>
 
-        <section class="course-list">
-            <h2>Nos Principaux Cours</h2>
-            <div class="course-grid">
-                <a href="info.html" class="course-button math-course">
-                    <i class="fas fa-users"></i>
-                    <span>Informatique et Société</span>
-                </a>
-                <a href="bereautique.html" class="course-button info-course">
-                    <i class="fas fa-file-word"></i>
-                    <span>Bureautique</span>
-                </a>
-                <a href="systeme.html" class="course-button info-course" style="background: rgb(197, 143, 143);">
-                    <i class="fas fa-laptop-code"></i>
-                    <span>Système d'exploitation</span>
-                </a>
-                <a href="Droitcivil.html" class="course-button info-course" style="background: rgb(163, 34, 180);">
-                    <i class="fas fa-house"></i>
-                    <span>Droit Civil</span>
-                </a>
-                <a href="Anglais.html" class="course-button info-course" style="background-color: aquamarine;">
-                    <i class="fas fa-flag-usa"></i>
-                    <span>English</span>
-                </a><a href="symbole.html" class="course-button info-course" style="background: blue;">
-                    <i class="fas fa-pen"></i>
-                    <span>Valeur et Symbole de la RD.Congo</span>
-                </a>
-                <a href="EOE.html" class="course-button info-course" style="background: rgb(79, 47, 153);">
-                    <i class="fas fa-solid fa-book"></i>
-                    <span>Expression Oral et Ecrite</span>
-                </a>
-                <a href="histoire.html" class="course-button info-course" style="background: rgb(114, 112, 77);">
-                    <i class="fas fa-solid fa-landmark"></i>
-                    <span>Histoire et Epistémologie de l'informatique</span>
-                </a>
-                <a href="Intro.html" class="course-button info-course" style="background: rgb(179, 218, 9);">
-                    <i class="fas fa-solid fa-magnifying-glass"></i>
-                    <span>Introduction à la recherche scientique et méthodologie du travail</span>
-                </a>
-                <a href="educatif.html" class="course-button gestion-course" style="background: rgb(77, 78, 76);">
-                    <i class="fas fa-child"></i>
-                    <span>Courant éducatif et modèle d'enseignement</span>
-                </a>
-                <a href="apropos.html" class="course-button gestion-course" style="background: rgb(105, 241, 51);">
-                    <i class="fas fa-box"></i>
-                    <span>A propos</span>
-                </a>
-                </div>
-                <a href="confidential.html" style="text-decoration: none; font-size: 20px; margin: 15px;">Politique de Confidentialité</a>
-        </section>
+    </div>
 
-        <section class="media-section">
-            <h2>Département d'informatique de gestion</h2>
+    <!-- ========================================== -->
+    <!-- SCRIPT DE VÉRIFICATION ET D'AIGUILLAGE    -->
+    <!-- ========================================== -->
+    <script>
+        // On attend que l'interface et l'image soient totalement chargées par le navigateur
+        window.addEventListener('load', () => {
+            
+            // 1. Vérification du statut de connexion dans la mémoire locale (localStorage)
+            const userIsConnected = localStorage.getItem('estra_session_active');
 
-            <div class="media-placeholder">
-                <div class="video-placeholder">
-                    <p class="placeholder-text">
-                        <i class="fas fa-video"></i>
-                        <br><img src="LOGO_SR_082048.jpg" alt="" width="250" style="border-radius: 20px;">
-                        <img src="isp (1).jpg" alt="" width="300">
-                        <img src="isp (2).jpg" alt="" width="300">
-                        <img src="isp (3).jpg" alt="" width="300"><br>
-                        Chaque ligne de code, chaque mot appris, chaque concept compris aujourd'hui, est une brique solide pour bâtir ton avenir.  Continue, même quand c'est dur, car demain te remerciera pour l'effort d'aujourd'hui.<img>
-                    </p>
-                    </div>
-            </div>
-        </section>
-    </main>
-    <footer>
-        <p>&copy; 2025 "Question pour un champion" pour tout les étudiants de L1 LMD IG</p>
-    </footer>
+            // 2. Temps d'attente (2.5 secondes) pour laisser l'anneau tourner de manière fluide
+            setTimeout(() => {
+                
+                if (userIsConnected === 'true') {
+                    // Si l'étudiant est déjà connecté : redirection immédiate vers la page d'accueil principale
+                    window.location.href = "home.html";
+                } else {
+                    // Si l'étudiant n'est pas connecté : redirection vers le formulaire d'identification
+                    window.location.href = "login.html";
+                }
+
+            }, 2500); // 2500 millisecondes = 2.5 secondes
+        });
+    </script>
 
 </body>
-</html>
+</html> 

@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title data-i18n="page_title">ESTRA LINK | Politique de Confidentialité</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+<!-- PWA -->
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#38bdf8">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="ESTRA LINK">
+<link rel="apple-touch-icon" href="https://ui-avatars.com/api/?background=38bdf8&color=fff&name=E&size=152">
+    <style>
+        :root {
+            --estra-cyan: #38bdf8;
+            --estra-bg-dark: #0f172a;
+            --estra-card-bg: rgba(30, 41, 59, 0.6);
+            --estra-border: rgba(56, 189, 248, 0.2);
+            --text-primary: #e2e8f0;
+            --text-secondary: #94a3b8;
+            --estra-purple: #a78bfa;
+            --estra-success: #10b981;
+            --estra-danger: #ef4444;
+            --estra-warning: #f59e0b;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        [data-theme="light"] {
+            --estra-bg-dark: #f8fafc;
+            --estra-card-bg: rgba(255,255,255,0.95);
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --estra-border: rgba(0,0,0,0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--estra-bg-dark);
+            background-image: radial-gradient(at 0% 0%, rgba(56,189,248,0.08) 0px, transparent 50%), radial-gradient(at 100% 100%, rgba(56,189,248,0.08) 0px, transparent 50%);
+            color: var(--text-primary);
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+            transition: background-color 0.4s ease, color 0.4s ease;
+        }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: var(--estra-bg-dark); border-radius: 10px; }
+        [data-theme="light"] ::-webkit-scrollbar-track { background: #e2e8f0; }
+        ::-webkit-scrollbar-thumb { background: var(--estra-cyan); border-radius: 10px; }
+
+        .offline-banner { position: fixed; top: 0; left: 0; right: 0; background: #f59e0b; color: #000; text-align: center; padding: 6px; z-index: 9999; font-size: 0.8rem; font-weight: 600; display: none; }
+
+        .sidebar-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px); z-index: 1050; opacity: 0; visibility: hidden; transition: var(--transition); }
+        .sidebar-overlay.active { opacity: 1; visibility: visible; }
+
+        .sidebar { position: fixed; top: 0; left: -280px; width: 220px; height: 100vh; background: var(--estra-bg-dark); border-right: 1px solid var(--estra-border); z-index: 1060; transition: left 0.3s ease, background-color 0.4s ease; padding: 30px 15px; overflow-y: auto; }
+        [data-theme="light"] .sidebar { background: #fff; }
+        .sidebar.open { left: 0; }
+        .profile-section { text-align: center; padding-bottom: 25px; border-bottom: 1px solid var(--estra-border); margin-bottom: 20px; position: relative; }
+        .profile-img-sidebar { width: 65px; height: 65px; border-radius: 50%; border: 2px solid var(--estra-cyan); margin-bottom: 10px; object-fit: cover; }
+        .online-indicator { position: absolute; top: 50px; right: 50px; width: 16px; height: 16px; border-radius: 50%; background: #10b981; border: 2px solid var(--estra-bg-dark); }
+        .profile-stats { display: flex; justify-content: center; gap: 20px; margin-top: 12px; }
+        .profile-stats div { text-align: center; }
+        .profile-stats strong { display: block; font-size: 0.95rem; color: var(--estra-cyan); }
+        .profile-stats span { font-size: 0.65rem; color: var(--text-secondary); }
+        .sidebar-nav { display: flex; flex-direction: column; gap: 4px; }
+        .sidebar-link { display: flex; align-items: center; gap: 12px; padding: 12px 15px; border-radius: 10px; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: var(--transition); cursor: pointer; background: none; border: none; width: 100%; font-family: inherit; }
+        .sidebar-link svg { width: 20px; height: 20px; stroke-width: 2; flex-shrink: 0; }
+        .sidebar-link:hover, .sidebar-link.active { background: rgba(56,189,248,0.1); color: var(--estra-cyan); transform: translateX(5px); border-right: 2px solid var(--estra-cyan); }
+        .sidebar-link.logout-link { color: var(--estra-danger); }
+        .sidebar-link.logout-link:hover { background: rgba(239,68,68,0.1); color: var(--estra-danger); border-right-color: var(--estra-danger); }
+
+        .navbar { padding: 10px 15px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--estra-border); background: rgba(15,23,42,0.85); backdrop-filter: blur(12px); position: sticky; top: 0; z-index: 100; transition: background-color 0.4s ease; }
+        [data-theme="light"] .navbar { background: rgba(255,255,255,0.9); }
+        .nav-left, .nav-right { display: flex; align-items: center; gap: 12px; }
+        .navbar-brand { font-weight: 800; color: coral; letter-spacing: 1.5px; font-size: 1.1rem; text-decoration: none; }
+        .menu-toggle { background: none; border: none; cursor: pointer; padding: 8px; display: flex; align-items: center; color: var(--text-secondary); transition: var(--transition); }
+        .menu-toggle:hover { color: var(--estra-cyan); }
+        .avatar-nav { width: 34px; height: 34px; border-radius: 50%; border: 1.5px solid var(--estra-cyan); object-fit: cover; box-shadow: 0 0 10px rgba(56,189,248,0.2); cursor: pointer; }
+
+        .main-content { max-width: 680px; margin: 0 auto; background: var(--estra-card-bg); border-left: 1px solid var(--estra-border); border-right: 1px solid var(--estra-border); min-height: calc(100vh - 60px); backdrop-filter: blur(8px); transition: background-color 0.4s ease; }
+
+        .back-btn { display: inline-flex; align-items: center; gap: 8px; padding: 16px 20px; color: var(--estra-cyan); text-decoration: none; font-weight: 500; transition: var(--transition); font-size: 0.9rem; }
+        .back-btn:hover { opacity: 0.8; transform: translateX(-3px); }
+        .back-btn svg { width: 18px; height: 18px; }
+
+        .legal-header { padding: 8px 20px 20px; border-bottom: 1px solid var(--estra-border); }
+        .legal-header h1 { font-size: 1.8rem; font-weight: 700; display: flex; align-items: center; gap: 12px; }
+        .legal-header h1 svg { color: var(--estra-cyan); width: 28px; height: 28px; }
+        .legal-header p { color: var(--text-secondary); margin-top: 8px; font-size: 0.85rem; }
+
+        .legal-section { padding: 20px; border-bottom: 1px solid var(--estra-border); transition: var(--transition); }
+        .legal-section:last-of-type { border-bottom: 1px solid var(--estra-border); }
+        .legal-section h2 { display: flex; align-items: center; gap: 10px; font-size: 1.2rem; margin-bottom: 16px; color: var(--text-primary); }
+        .legal-section h2 svg { color: var(--estra-cyan); width: 20px; height: 20px; flex-shrink: 0; }
+        .legal-section p { color: var(--text-secondary); line-height: 1.7; margin-bottom: 12px; font-size: 0.9rem; }
+        .legal-section ul { color: var(--text-secondary); padding-left: 24px; line-height: 1.9; margin-bottom: 12px; }
+        .legal-section li { margin-bottom: 8px; font-size: 0.9rem; }
+        .legal-section strong { color: var(--text-primary); }
+
+        .legal-footer { text-align: center; padding: 24px 20px; color: var(--text-secondary); font-size: 0.85rem; border-top: 1px solid var(--estra-border); }
+        .legal-footer a { color: var(--estra-cyan); text-decoration: none; margin: 0 8px; transition: var(--transition); }
+        .legal-footer a:hover { text-decoration: underline; opacity: 0.8; }
+
+        .toast-custom { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #1e293b; color: white; padding: 10px 20px; z-index: 1100; font-size: 0.8rem; border-radius: 25px; border: 1px solid var(--estra-cyan); white-space: nowrap; opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s ease; }
+        .toast-custom.show { opacity: 1; visibility: visible; }
+        .d-flex { display: flex; } .align-items-center { align-items: center; } .gap-2 { gap: 8px; }
+
+        @media (max-width: 768px) {
+            .legal-header h1 { font-size: 1.4rem; }
+            .legal-section { padding: 16px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="offline-banner" id="offlineBanner">📴 <span data-i18n="offline_mode">Mode hors-ligne</span></div>
+
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+
+    <main class="main-content">
+        <a href="settings.html" class="back-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg> <span data-i18n="back_to_settings">Retour aux paramètres</span></a>
+        
+        <div class="legal-header">
+            <h1><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> <span data-i18n="privacy_title">Politique de Confidentialité</span></h1>
+            <p data-i18n="last_updated">Dernière mise à jour : 19 avril 2026</p>
+        </div>
+
+        <div class="legal-section"><h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg> <span data-i18n="s1_title">Introduction</span></h2><p data-i18n="s1_text">Chez ESTRA LINK, la protection de vos données est notre priorité absolue. Nous créons un environnement sûr et transparent où chaque membre peut partager, apprendre et grandir en toute confiance. Cette politique explique comment nous collectons, utilisons et protégeons vos informations personnelles.</p></div>
+
+        <div class="legal-section"><h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg> <span data-i18n="s2_title">Données collectées</span></h2><p data-i18n="s2_intro">Nous collectons uniquement les informations nécessaires au bon fonctionnement du service :</p><ul><li data-i18n="s2_li1"><strong>Informations de profil :</strong> nom, email, photo de profil, bio</li><li data-i18n="s2_li2"><strong>Contenu partagé :</strong> publications, commentaires, messages</li><li data-i18n="s2_li3"><strong>Interactions :</strong> likes, partages, groupes rejoints</li><li data-i18n="s2_li4"><strong>Données techniques :</strong> adresse IP, type d'appareil, pages visitées</li></ul><p data-i18n="s2_outro">Toutes ces données sont collectées avec votre consentement explicite lors de votre inscription.</p></div>
+
+        <div class="legal-section"><h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> <span data-i18n="s3_title">Sécurité des données</span></h2><p data-i18n="s3_intro">Nous utilisons des mesures de sécurité avancées pour protéger vos informations :</p><ul><li data-i18n="s3_li1">Chiffrement des données en transit (HTTPS/TLS)</li><li data-i18n="s3_li2">Messages privés chiffrés de bout en bout</li><li data-i18n="s3_li3">Authentification sécurisée avec possibilité de 2FA</li><li data-i18n="s3_li4">Surveillance continue contre les accès non autorisés</li><li data-i18n="s3_li5">Stockage sécurisé des mots de passe (hachage + salage)</li></ul></div>
+
+        <div class="legal-section"><h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg> <span data-i18n="s4_title">Vos droits</span></h2><p data-i18n="s4_intro">Conformément au RGPD et aux réglementations en vigueur, vous disposez des droits suivants :</p><ul><li data-i18n="s4_li1"><strong>Droit d'accès :</strong> consultez vos données à tout moment</li><li data-i18n="s4_li2"><strong>Droit de rectification :</strong> modifiez vos informations dans les paramètres</li><li data-i18n="s4_li3"><strong>Droit à l'effacement :</strong> supprimez votre compte et toutes vos données</li><li data-i18n="s4_li4"><strong>Droit à la portabilité :</strong> exportez vos données dans un format lisible</li><li data-i18n="s4_li5"><strong>Droit d'opposition :</strong> refusez le traitement de vos données</li></ul><p data-i18n="s4_outro">Pour exercer ces droits, contactez-nous à : <strong>privacy@estralink.com</strong></p></div>
+
+        <div class="legal-section"><h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg> <span data-i18n="s5_title">Cookies</span></h2><p data-i18n="s5_intro">Nous utilisons des cookies essentiels pour le fonctionnement du site :</p><ul><li data-i18n="s5_li1"><strong>Cookies de session :</strong> maintien de votre connexion</li><li data-i18n="s5_li2"><strong>Cookies de préférences :</strong> mémorisation du thème, langue, taille de police</li><li data-i18n="s5_li3"><strong>Cookies techniques :</strong> sécurité et performance</li></ul><p data-i18n="s5_outro">Aucun cookie publicitaire ou de tracking tiers n'est utilisé sans votre consentement explicite.</p></div>
+
+        <div class="legal-section"><h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg> <span data-i18n="s6_title">Partage des données</span></h2><p data-i18n="s6_intro">Nous ne vendons jamais vos données personnelles. Vos informations ne sont partagées que dans les cas suivants :</p><ul><li data-i18n="s6_li1">Avec votre consentement explicite</li><li data-i18n="s6_li2">Pour respecter une obligation légale</li><li data-i18n="s6_li3">Pour protéger nos droits ou notre sécurité</li></ul></div>
+
+        <div class="legal-section"><h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> <span data-i18n="s7_title">Conservation des données</span></h2><p data-i18n="s7_text">Nous conservons vos données aussi longtemps que votre compte est actif. Après suppression de votre compte, vos données sont définitivement effacées dans un délai de 30 jours, sauf obligation légale de conservation.</p></div>
+
+        <div class="legal-section"><h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> <span data-i18n="s8_title">Protection des mineurs</span></h2><p data-i18n="s8_text">ESTRA LINK s'engage à protéger les mineurs. L'âge minimum requis pour utiliser la plateforme est de 13 ans. Les comptes de mineurs doivent être créés avec l'autorisation parentale. Nous ne collectons pas sciemment de données sur les enfants de moins de 13 ans.</p></div>
+
+        <div class="legal-footer"><p>© 2026 <span data-i18n="footer_rights">ESTRA LINK - Tous droits réservés</span></p><p><a href="privacy.html" data-i18n="footer_privacy">Confidentialité</a> | <a href="terms.html" data-i18n="footer_terms">Conditions</a> | <a href="about.html" data-i18n="footer_about">À propos</a></p></div>
+    </main>
+
+    <div class="toast-custom" id="toastMsg"></div>
+
+    <script>
+        var currentUser = { name: 'Rashidi', avatar: 'https://ui-avatars.com/api/?background=38bdf8&color=fff&name=Rashidi&size=40' };
+        var toastTimeout = null;
+
+        // ============ MOTEUR DE TRADUCTION (i18n) ============
+        const translations = {
+            fr: {
+                page_title: "ESTRA LINK | Politique de Confidentialité",
+                offline_mode: "Mode hors-ligne",
+                posts: "Posts",
+                friends_label: "Amis",
+                groups_label: "Groupes",
+                home: "Accueil",
+                saved: "Enregistrés",
+                courses: "Cours",
+                jobs: "Emplois",
+                events: "Événements",
+                my_profile: "Mon Profil",
+                settings: "Paramètres",
+                logout: "Déconnexion",
+                back_to_settings: "Retour aux paramètres",
+                privacy_title: "Politique de Confidentialité",
+                last_updated: "Dernière mise à jour : 19 avril 2026",
+                s1_title: "Introduction",
+                s1_text: "Chez ESTRA LINK, la protection de vos données est notre priorité absolue. Nous créons un environnement sûr et transparent où chaque membre peut partager, apprendre et grandir en toute confiance. Cette politique explique comment nous collectons, utilisons et protégeons vos informations personnelles.",
+                s2_title: "Données collectées",
+                s2_intro: "Nous collectons uniquement les informations nécessaires au bon fonctionnement du service :",
+                s2_li1: "Informations de profil : nom, email, photo de profil, bio",
+                s2_li2: "Contenu partagé : publications, commentaires, messages",
+                s2_li3: "Interactions : likes, partages, groupes rejoints",
+                s2_li4: "Données techniques : adresse IP, type d'appareil, pages visitées",
+                s2_outro: "Toutes ces données sont collectées avec votre consentement explicite lors de votre inscription.",
+                s3_title: "Sécurité des données",
+                s3_intro: "Nous utilisons des mesures de sécurité avancées pour protéger vos informations :",
+                s3_li1: "Chiffrement des données en transit (HTTPS/TLS)",
+                s3_li2: "Messages privés chiffrés de bout en bout",
+                s3_li3: "Authentification sécurisée avec possibilité de 2FA",
+                s3_li4: "Surveillance continue contre les accès non autorisés",
+                s3_li5: "Stockage sécurisé des mots de passe (hachage + salage)",
+                s4_title: "Vos droits",
+                s4_intro: "Conformément au RGPD et aux réglementations en vigueur, vous disposez des droits suivants :",
+                s4_li1: "Droit d'accès : consultez vos données à tout moment",
+                s4_li2: "Droit de rectification : modifiez vos informations dans les paramètres",
+                s4_li3: "Droit à l'effacement : supprimez votre compte et toutes vos données",
+                s4_li4: "Droit à la portabilité : exportez vos données dans un format lisible",
+                s4_li5: "Droit d'opposition : refusez le traitement de vos données",
+                s4_outro: "Pour exercer ces droits, contactez-nous à : privacy@estralink.com",
+                s5_title: "Cookies",
+                s5_intro: "Nous utilisons des cookies essentiels pour le fonctionnement du site :",
+                s5_li1: "Cookies de session : maintien de votre connexion",
+                s5_li2: "Cookies de préférences : mémorisation du thème, langue, taille de police",
+                s5_li3: "Cookies techniques : sécurité et performance",
+                s5_outro: "Aucun cookie publicitaire ou de tracking tiers n'est utilisé sans votre consentement explicite.",
+                s6_title: "Partage des données",
+                s6_intro: "Nous ne vendons jamais vos données personnelles. Vos informations ne sont partagées que dans les cas suivants :",
+                s6_li1: "Avec votre consentement explicite",
+                s6_li2: "Pour respecter une obligation légale",
+                s6_li3: "Pour protéger nos droits ou notre sécurité",
+                s7_title: "Conservation des données",
+                s7_text: "Nous conservons vos données aussi longtemps que votre compte est actif. Après suppression de votre compte, vos données sont définitivement effacées dans un délai de 30 jours, sauf obligation légale de conservation.",
+                s8_title: "Protection des mineurs",
+                s8_text: "ESTRA LINK s'engage à protéger les mineurs. L'âge minimum requis pour utiliser la plateforme est de 13 ans. Les comptes de mineurs doivent être créés avec l'autorisation parentale. Nous ne collectons pas sciemment de données sur les enfants de moins de 13 ans.",
+                footer_rights: "ESTRA LINK - Tous droits réservés",
+                footer_privacy: "Confidentialité",
+                footer_terms: "Conditions",
+                footer_about: "À propos"
+            },
+            en: {
+                page_title: "ESTRA LINK | Privacy Policy",
+                offline_mode: "Offline mode",
+                posts: "Posts",
+                friends_label: "Friends",
+                groups_label: "Groups",
+                home: "Home",
+                saved: "Saved",
+                courses: "Courses",
+                jobs: "Jobs",
+                events: "Events",
+                my_profile: "My Profile",
+                settings: "Settings",
+                logout: "Logout",
+                back_to_settings: "Back to Settings",
+                privacy_title: "Privacy Policy",
+                last_updated: "Last updated: April 19, 2026",
+                s1_title: "Introduction",
+                s1_text: "At ESTRA LINK, protecting your data is our highest priority. We create a safe and transparent environment where every member can share, learn, and grow with confidence. This policy explains how we collect, use, and protect your personal information.",
+                s2_title: "Data Collected",
+                s2_intro: "We only collect information necessary for the proper functioning of the service:",
+                s2_li1: "Profile information: name, email, profile photo, bio",
+                s2_li2: "Shared content: posts, comments, messages",
+                s2_li3: "Interactions: likes, shares, joined groups",
+                s2_li4: "Technical data: IP address, device type, pages visited",
+                s2_outro: "All this data is collected with your explicit consent upon registration.",
+                s3_title: "Data Security",
+                s3_intro: "We use advanced security measures to protect your information:",
+                s3_li1: "Data encryption in transit (HTTPS/TLS)",
+                s3_li2: "End-to-end encrypted private messages",
+                s3_li3: "Secure authentication with 2FA option",
+                s3_li4: "Continuous monitoring against unauthorized access",
+                s3_li5: "Secure password storage (hashing + salting)",
+                s4_title: "Your Rights",
+                s4_intro: "In accordance with GDPR and applicable regulations, you have the following rights:",
+                s4_li1: "Right of access: consult your data at any time",
+                s4_li2: "Right of rectification: modify your information in settings",
+                s4_li3: "Right to erasure: delete your account and all your data",
+                s4_li4: "Right to portability: export your data in a readable format",
+                s4_li5: "Right to object: refuse the processing of your data",
+                s4_outro: "To exercise these rights, contact us at: privacy@estralink.com",
+                s5_title: "Cookies",
+                s5_intro: "We use essential cookies for the website to function:",
+                s5_li1: "Session cookies: maintaining your connection",
+                s5_li2: "Preference cookies: remembering theme, language, font size",
+                s5_li3: "Technical cookies: security and performance",
+                s5_outro: "No advertising or third-party tracking cookies are used without your explicit consent.",
+                s6_title: "Data Sharing",
+                s6_intro: "We never sell your personal data. Your information is only shared in the following cases:",
+                s6_li1: "With your explicit consent",
+                s6_li2: "To comply with a legal obligation",
+                s6_li3: "To protect our rights or security",
+                s7_title: "Data Retention",
+                s7_text: "We retain your data as long as your account is active. After deleting your account, your data is permanently erased within 30 days, unless legal retention obligations apply.",
+                s8_title: "Protection of Minors",
+                s8_text: "ESTRA LINK is committed to protecting minors. The minimum age required to use the platform is 13. Minor accounts must be created with parental permission. We do not knowingly collect data on children under 13.",
+                footer_rights: "ESTRA LINK - All rights reserved",
+                footer_privacy: "Privacy",
+                footer_terms: "Terms",
+                footer_about: "About"
+            },
+            ln: {
+                page_title: "ESTRA LINK | Politique ya Confidentialité",
+                offline_mode: "Mode hors-connexion",
+                posts: "Masolo",
+                friends_label: "Baníngá",
+                groups_label: "Mampingá",
+                home: "Ebandeli",
+                saved: "Ebabómí",
+                courses: "Mateya",
+                jobs: "Misálá",
+                events: "Makámá",
+                my_profile: "Profil na ngáí",
+                settings: "Paramɛ́tɛ",
+                logout: "Kobíma",
+                back_to_settings: "Kozónga na Paramɛ́tɛ",
+                privacy_title: "Politique ya Confidentialité",
+                last_updated: "Mise à jour ya súka : 19 avril 2026",
+                s1_title: "Introduction",
+                s1_text: "Na ESTRA LINK, kobátela données na yo ezalí priorité na bísó ya libosó. Tozalí kosála environnement ya sûr mpe transparent epái chaque membre akokí kosangana, koyékola mpe kokóla na confiance. Politique óyo ezali kolímbola ndenge tozali kosángisa, kosálela mpe kobátela informations personnelles na yo.",
+                s2_title: "Données esangísámí",
+                s2_intro: "Tozali kosángisa sé informations esɛngɛ́lɛ mpɔ̂ service esála malamu :",
+                s2_li1: "Informations ya profil : nkómbó, email, fɔtɔ́ ya profil, bio",
+                s2_li2: "Contenu ekabólámí : publications, commentaires, messages",
+                s2_li3: "Interactions : likes, partages, groupes ekótámí",
+                s2_li4: "Données techniques : adresse IP, type d'appareil, pages etálámí",
+                s2_outro: "Données óyo nyɔ́nsɔ esangísámí na consentement na yo explicite ntángo ozali kos'inscrire.",
+                s3_title: "Sécurité ya données",
+                s3_intro: "Tozali kosálela mesures ya sécurité avancées mpɔ̂ kobátela informations na yo :",
+                s3_li1: "Chiffrement ya données na transit (HTTPS/TLS)",
+                s3_li2: "Messages privés chiffrés de bout en bout",
+                s3_li3: "Authentification sécurisée na possibilité ya 2FA",
+                s3_li4: "Surveillance continue contre ba accès non autorisés",
+                s3_li5: "Stockage sécurisé ya ba mots de passe (hachage + salage)",
+                s4_title: "Ba droits na yo",
+                s4_intro: "Conformément na RGPD mpe ba réglementations en vigueur, ozali na ba droits óyo :",
+                s4_li1: "Droit d'accès : tálá données na yo ntángo nyɔ́nsɔ",
+                s4_li2: "Droit de rectification : bóngólá informations na yo na ba paramètres",
+                s4_li3: "Droit à l'effacement : lóngólá kɔ́nti na yo mpe données nyɔ́nsɔ",
+                s4_li4: "Droit à la portabilité : export données na yo na format ekokí kotángama",
+                s4_li5: "Droit d'opposition : bóyá traitement ya données na yo",
+                s4_outro: "Mpɔ̂ kosálela ba droits óyo, contactez-nous na : privacy@estralink.com",
+                s5_title: "Cookies",
+                s5_intro: "Tozali kosálela cookies essentielles mpɔ̂ site esála :",
+                s5_li1: "Cookies ya session : kobómba connexion na yo",
+                s5_li2: "Cookies ya préférences : kobómba thème, lokótá, taille ya police",
+                s5_li3: "Cookies techniques : sécurité mpe performance",
+                s5_outro: "Aucun cookie publicitaire tǒ ya tracking tiers esalelámí sans consentement na yo explicite.",
+                s6_title: "Kokabola données",
+                s6_intro: "Tozali kotɛ́ka données personnelles na yo never. Informations na yo ekabolámí sé na ba cas óyo :",
+                s6_li1: "Na consentement na yo explicite",
+                s6_li2: "Mpɔ̂ kotósa obligation légale",
+                s6_li3: "Mpɔ̂ kobátela ba droits tǒ sécurité na bísó",
+                s7_title: "Conservation ya données",
+                s7_text: "Tozali kobómba données na yo ntángo kɔ́nti na yo ezalí actif. Après suppression ya kɔ́nti na yo, données na yo elongólámí définitivement na káti ya mikɔlɔ 30, sauf obligation légale ya conservation.",
+                s8_title: "Protection ya ba mineurs",
+                s8_text: "ESTRA LINK emitíká kobátela ba mineurs. Mbúla minimum esɛngɛ́lɛ mpɔ̂ kosálela plateforme ezalí 13 ans. Ba kɔ́nti ya ba mineurs esɛngɛ́lɛ kosálama na autorisation parentale. Tozali kosángisa données ya bǎna na nse ya mbúla 13 na koyéba tɛ̂.",
+                footer_rights: "ESTRA LINK - Ba droits nyɔ́nsɔ babómámí",
+                footer_privacy: "Confidentialité",
+                footer_terms: "Conditions",
+                footer_about: "Etáli"
+            },
+            sw: {
+                page_title: "ESTRA LINK | Sera ya Faragha",
+                offline_mode: "Hali ya nje ya mtandao",
+                posts: "Machapisho",
+                friends_label: "Marafiki",
+                groups_label: "Vikundi",
+                home: "Nyumbani",
+                saved: "Yaliyohifadhiwa",
+                courses: "Kozi",
+                jobs: "Kazi",
+                events: "Matukio",
+                my_profile: "Wasifu Wangu",
+                settings: "Mipangilio",
+                logout: "Kutoka",
+                back_to_settings: "Rudi kwenye Mipangilio",
+                privacy_title: "Sera ya Faragha",
+                last_updated: "Imesasishwa mwisho: Aprili 19, 2026",
+                s1_title: "Utangulizi",
+                s1_text: "Katika ESTRA LINK, kulinda data zako ni kipaumbele chetu kikuu. Tunaunda mazingira salama na ya uwazi ambapo kila mwanachama anaweza kushiriki, kujifunza, na kukua kwa ujasiri. Sera hii inaeleza jinsi tunavyokusanya, kutumia, na kulinda taarifa zako binafsi.",
+                s2_title: "Data Zinazokusanywa",
+                s2_intro: "Tunakusanya tu taarifa zinazohitajika kwa utendaji mzuri wa huduma:",
+                s2_li1: "Taarifa za wasifu: jina, barua pepe, picha ya wasifu, wasifu",
+                s2_li2: "Maudhui yaliyoshirikiwa: machapisho, maoni, ujumbe",
+                s2_li3: "Mwingiliano: kupenda, kushiriki, vikundi vilivyojiunga",
+                s2_li4: "Data za kiufundi: anwani ya IP, aina ya kifaa, kurasa zilizotembelewa",
+                s2_outro: "Data hizi zote hukusanywa kwa idhini yako ya wazi wakati wa usajili.",
+                s3_title: "Usalama wa Data",
+                s3_intro: "Tunatumia hatua za usalama za hali ya juu kulinda taarifa zako:",
+                s3_li1: "Usimbaji fiche wa data katika usafirishaji (HTTPS/TLS)",
+                s3_li2: "Ujumbe wa faragha uliosimbwa mwisho hadi mwisho",
+                s3_li3: "Uthibitisho salama na uwezekano wa 2FA",
+                s3_li4: "Ufuatiliaji endelevu dhidi ya ufikiaji usioidhinishwa",
+                s3_li5: "Uhifadhi salama wa nywila (hashing + salting)",
+                s4_title: "Haki Zako",
+                s4_intro: "Kwa mujibu wa GDPR na kanuni zinazotumika, una haki zifuatazo:",
+                s4_li1: "Haki ya kufikia: angalia data zako wakati wowote",
+                s4_li2: "Haki ya kurekebisha: rekebisha taarifa zako kwenye mipangilio",
+                s4_li3: "Haki ya kufuta: futa akaunti yako na data zako zote",
+                s4_li4: "Haki ya kubebeka: hamisha data zako katika muundo unaosomeka",
+                s4_li5: "Haki ya kukataa: kataa usindikaji wa data zako",
+                s4_outro: "Kutumia haki hizi, wasiliana nasi kupitia: privacy@estralink.com",
+                s5_title: "Vidakuzi",
+                s5_intro: "Tunatumia vidakuzi muhimu kwa utendaji wa tovuti:",
+                s5_li1: "Vidakuzi vya kikao: kudumisha muunganisho wako",
+                s5_li2: "Vidakuzi vya mapendeleo: kukumbuka mandhari, lugha, ukubwa wa herufi",
+                s5_li3: "Vidakuzi vya kiufundi: usalama na utendaji",
+                s5_outro: "Hakuna vidakuzi vya matangazo au ufuatiliaji wa watu wengine vinavyotumika bila idhini yako ya wazi.",
+                s6_title: "Kushiriki Data",
+                s6_intro: "Hatujawahi kuuza data zako binafsi. Taarifa zako zinashirikiwa tu katika kesi zifuatazo:",
+                s6_li1: "Kwa idhini yako ya wazi",
+                s6_li2: "Kutii wajibu wa kisheria",
+                s6_li3: "Kulinda haki au usalama wetu",
+                s7_title: "Uhifadhi wa Data",
+                s7_text: "Tunahifadhi data zako kwa muda mrefu kama akaunti yako inatumika. Baada ya kufuta akaunti yako, data zako zinafutwa kabisa ndani ya siku 30, isipokuwa kama kuna wajibu wa kisheria wa kuhifadhi.",
+                s8_title: "Ulinzi wa Watoto",
+                s8_text: "ESTRA LINK imejitolea kulinda watoto. Umri wa chini unaohitajika kutumia jukwaa ni miaka 13. Akaunti za watoto zinapaswa kuundwa kwa ruhusa ya wazazi. Hatukusanyi data za watoto chini ya miaka 13 kwa kujua.",
+                footer_rights: "ESTRA LINK - Haki zote zimehifadhiwa",
+                footer_privacy: "Faragha",
+                footer_terms: "Masharti",
+                footer_about: "Kuhusu"
+            }
+        };
+
+        let currentLang = localStorage.getItem('estra_language') || 'fr';
+
+        function t(key) {
+            if (translations[currentLang] && translations[currentLang][key]) {
+                return translations[currentLang][key];
+            }
+            if (translations['fr'] && translations['fr'][key]) {
+                return translations['fr'][key];
+            }
+            return key;
+        }
+
+        function applyTranslations() {
+            currentLang = localStorage.getItem('estra_language') || 'fr';
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                const translation = t(key);
+                if (translation) {
+                    el.textContent = translation;
+                }
+            });
+            document.title = t('page_title');
+        }
+
+        (function(){
+            var savedTheme = localStorage.getItem('estra_theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            window.estraTheme = savedTheme;
+        })();
+
+        function checkOnlineStatus() { var b = document.getElementById('offlineBanner'); if(b) b.style.display = navigator.onLine ? 'none' : 'block'; }
+        function showToast(msg) { var t = document.getElementById('toastMsg'); if (toastTimeout) clearTimeout(toastTimeout); t.textContent = msg; t.classList.remove('show'); void t.offsetWidth; t.classList.add('show'); toastTimeout = setTimeout(function(){ t.classList.remove('show'); }, 3000); }
+
+        function updateSidebar() {
+            var sp = localStorage.getItem('estra_profile');
+            if (sp) { try { var p = JSON.parse(sp); currentUser.name = p.fullName || currentUser.name; currentUser.avatar = p.avatar || currentUser.avatar; } catch(e) {} }
+            var sn = document.getElementById('sidebarName'); if(sn) sn.textContent = currentUser.name;
+            var sa = document.getElementById('sidebarAvatar'); if(sa) sa.src = currentUser.avatar;
+            var na = document.getElementById('navAvatar'); if(na) na.src = currentUser.avatar;
+            var posts = JSON.parse(localStorage.getItem('estra_posts') || '[]');
+            var jobs = JSON.parse(localStorage.getItem('estra_jobs') || '[]');
+            var spEl = document.getElementById('sidebarPosts');
+            if(spEl) spEl.textContent = posts.filter(function(p){ return p.author === currentUser.name; }).length + jobs.filter(function(j){ return j.author === currentUser.name; }).length;
+            var sf = document.getElementById('sidebarFriends'); if(sf) sf.textContent = (JSON.parse(localStorage.getItem('estra_friends') || '[]')).length;
+            var sg = document.getElementById('sidebarGroups'); if(sg) sg.textContent = (JSON.parse(localStorage.getItem('estra_userGroups') || '[]')).length;
+        }
+
+        function toggleSidebar() { var s = document.getElementById('sidebar'); var o = document.getElementById('sidebarOverlay'); if(s) s.classList.toggle('open'); if(o) o.classList.toggle('active'); }
+        function closeSidebar() { var s = document.getElementById('sidebar'); var o = document.getElementById('sidebarOverlay'); if(s) s.classList.remove('open'); if(o) o.classList.remove('active'); }
+        function logout() { localStorage.clear(); window.location.href = 'login.html'; }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            applyTranslations();
+            updateSidebar(); checkOnlineStatus();
+            var so = document.getElementById('sidebarOverlay'); if(so) so.addEventListener('click', toggleSidebar);
+            document.addEventListener('click', function(e) {
+                var sidebar = document.getElementById('sidebar'); var menuToggle = document.querySelector('.menu-toggle');
+                if (sidebar && sidebar.classList.contains('open') && !sidebar.contains(e.target) && e.target !== menuToggle && !menuToggle.contains(e.target)) { closeSidebar(); }
+            });
+            window.addEventListener('online', function() { var b = document.getElementById('offlineBanner'); if(b) b.style.display = 'none'; });
+            window.addEventListener('offline', function() { var b = document.getElementById('offlineBanner'); if(b) b.style.display = 'block'; });
+            window.addEventListener('storage', function(e) {
+                if (e.key === 'estra_theme' && e.newValue) { document.documentElement.setAttribute('data-theme', e.newValue); window.estraTheme = e.newValue; }
+                if (e.key === 'estra_language' && e.newValue) { applyTranslations(); }
+                if (['estra_profile','estra_posts','estra_friends','estra_userGroups'].indexOf(e.key) !== -1) updateSidebar();
+            });
+        });
+
+        window.toggleSidebar = toggleSidebar; window.closeSidebar = closeSidebar; window.logout = logout; window.showToast = showToast;
+        window.t = t; window.applyTranslations = applyTranslations;
+    </script>
+<!-- FICHIERS EXTERNES -->
+<script src="i18n.js"></script>
+<script src="pwa-init.js"></script>
+</body>
+</html>

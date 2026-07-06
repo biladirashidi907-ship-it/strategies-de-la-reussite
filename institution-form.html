@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, maximum-scale=1.0, viewport-fit=cover">
+    <title>ESTRA LINK • Profil Institution</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#0284c7">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="ESTRA LINK">
+    <link rel="apple-touch-icon" href="https://ui-avatars.com/api/?background=38bdf8&color=fff&name=E&size=152">
+    <style>
+        :root, [data-theme="light"] {
+            --cyan: #0284c7; --bg: #f8fafc; --card-bg: rgba(255,255,255,0.95);
+            --border: rgba(0,0,0,0.1); --text: #0f172a; --text-secondary: #475569;
+            --purple: #7c3aed; --success: #059669; --danger: #dc2626; --warning: #d97706;
+            --input-bg: #f1f5f9; --active-bg: rgba(2,132,199,0.08); --shadow: 0 4px 20px rgba(0,0,0,0.08);
+            --inst-color: #0891b2; --transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+        }
+        [data-theme="dark"] {
+            --cyan: #38bdf8; --bg: #0f172a; --card-bg: rgba(30,41,59,0.6);
+            --border: rgba(56,189,248,0.2); --text: #e2e8f0; --text-secondary: #94a3b8;
+            --purple: #a78bfa; --success: #10b981; --danger: #ef4444; --warning: #f59e0b;
+            --input-bg: rgba(30,41,59,0.8); --active-bg: rgba(56,189,248,0.08); --shadow: 0 4px 20px rgba(0,0,0,0.3);
+            --inst-color: #22d3ee;
+        }
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);background-image:radial-gradient(at 0% 0%,rgba(56,189,248,0.08) 0px,transparent 50%),radial-gradient(at 100% 100%,rgba(56,189,248,0.08) 0px,transparent 50%);min-height:100vh;color:var(--text);transition:background 0.4s,color 0.4s}
+        ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--cyan);border-radius:10px}
+
+        .theme-btn{position:fixed;top:16px;right:16px;z-index:50;background:var(--input-bg);border:1px solid var(--border);width:40px;height:40px;border-radius:50%;cursor:pointer;font-size:1.2rem;display:flex;align-items:center;justify-content:center;color:var(--text-secondary);transition:var(--transition)}
+        .theme-btn:hover{background:var(--cyan);color:#fff;border-color:transparent}
+
+        .page-transition{position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,var(--inst-color),var(--cyan));z-index:10000;display:flex;align-items:center;justify-content:center;transform:translateY(100%);transition:transform 0.5s cubic-bezier(0.4,0,0.2,1);pointer-events:none}
+        .page-transition.active{transform:translateY(0)}
+        .transition-content{text-align:center;color:white;animation:fadeInUp 0.6s ease}
+        .transition-content svg{width:64px;height:64px;margin-bottom:20px;animation:pulse 1s infinite}
+        .transition-content h2{font-size:1.5rem;margin-bottom:10px}
+        @keyframes fadeInUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+        @keyframes pulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.1);opacity:0.8}}
+
+        .toast-custom{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1e293b;color:#fff;padding:10px 24px;z-index:1100;font-size:0.8rem;border-radius:25px;border:1px solid var(--cyan);white-space:nowrap;opacity:0;visibility:hidden;transition:opacity 0.3s,visibility 0.3s}
+        .toast-custom.show{opacity:1;visibility:visible}
+
+        .container{max-width:700px;margin:0 auto;padding:20px;min-height:100vh;display:flex;flex-direction:column}
+
+        .header{text-align:center;padding:20px;background:var(--card-bg);border:1px solid var(--border);border-radius:20px;margin-bottom:20px;box-shadow:var(--shadow)}
+        .header .inst-badge{display:inline-block;background:var(--inst-color);color:#fff;padding:6px 16px;border-radius:20px;font-size:0.8rem;font-weight:700;margin-bottom:12px}
+        .header h1{font-size:1.4rem;font-weight:700;margin-bottom:4px;display:flex;align-items:center;justify-content:center;gap:8px}
+        .header p{color:var(--text-secondary);font-size:0.85rem;line-height:1.5}
+
+        .premium-alert{background:rgba(245,158,11,0.1);border:2px solid var(--warning);border-radius:16px;padding:18px;margin-bottom:20px;text-align:center}
+        .premium-alert h3{color:var(--warning);font-size:1rem;margin-bottom:6px}
+        .premium-alert p{color:var(--text-secondary);font-size:0.8rem;line-height:1.5}
+
+        .form-card{background:var(--card-bg);border:1px solid var(--border);border-radius:20px;padding:24px;margin-bottom:16px;box-shadow:var(--shadow)}
+        .form-card h3{font-size:1rem;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:8px;color:var(--text);padding-bottom:12px;border-bottom:1px solid var(--border)}
+        .form-card h3 i{color:var(--inst-color)}
+
+        .form-group{margin-bottom:16px}
+        .form-group label{display:block;margin-bottom:6px;font-weight:600;font-size:0.82rem;color:var(--text);display:flex;align-items:center;gap:6px}
+        .form-group input,.form-group select,.form-group textarea{width:100%;padding:12px 14px;border-radius:12px;border:1px solid var(--border);background:var(--input-bg);color:var(--text);font-size:0.85rem;outline:none;transition:var(--transition);font-family:inherit}
+        .form-group textarea{resize:vertical;min-height:80px}
+        .form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--inst-color);box-shadow:0 0 0 3px rgba(8,145,178,0.15)}
+        .form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+
+        .toggle-option{display:flex;align-items:center;justify-content:space-between;padding:14px;background:var(--input-bg);border:1px solid var(--border);border-radius:12px;margin-bottom:8px}
+        .toggle-option .toggle-info{flex:1}
+        .toggle-option .toggle-info strong{display:block;font-size:0.85rem;margin-bottom:2px}
+        .toggle-option .toggle-info span{font-size:0.7rem;color:var(--text-secondary)}
+        .toggle-switch{position:relative;width:48px;height:26px}
+        .toggle-switch input{opacity:0;width:0;height:0}
+        .toggle-slider{position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background:var(--border);transition:0.3s;border-radius:26px}
+        .toggle-slider:before{position:absolute;content:"";height:20px;width:20px;left:3px;bottom:3px;background:white;transition:0.3s;border-radius:50%}
+        input:checked+.toggle-slider{background:var(--success)}
+        input:checked+.toggle-slider:before{transform:translateX(22px)}
+
+        .btn{padding:12px 24px;border-radius:12px;border:none;font-weight:600;font-size:0.9rem;cursor:pointer;transition:var(--transition);display:inline-flex;align-items:center;justify-content:center;gap:8px;width:100%;font-family:inherit}
+        .btn-primary{background:var(--inst-color);color:#fff}
+        .btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(8,145,178,0.3)}
+        .btn-outline{background:transparent;border:2px solid var(--inst-color);color:var(--inst-color)}
+        .btn-outline:hover{background:var(--inst-color);color:#fff}
+        .btn-success{background:var(--success);color:#fff}
+        .btn-success:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(16,185,129,0.3)}
+
+        .action-buttons{display:flex;gap:12px;margin-top:20px}
+        .action-buttons .btn{flex:1}
+
+        .footer-note{text-align:center;padding:16px;color:var(--text-secondary);font-size:0.75rem;margin-top:auto}
+
+        @media(max-width:768px){.form-row{grid-template-columns:1fr}.container{padding:12px}.action-buttons{flex-direction:column}}
+    </style>
+</head>
+<body>
+
+    <button class="theme-btn" onclick="toggleTheme()" id="themeToggleBtn" title="Changer le thème"><i class="fas fa-moon"></i></button>
+
+    <div class="toast-custom" id="toastMsg"></div>
+    <div class="page-transition" id="pageTransition">
+        <div class="transition-content">
+            <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M3 21h18"/><path d="M5 21V7l8-4v18"/><path d="M19 21V11l-6-4"/></svg>
+            <h2 id="transitionTitle">Création de votre profil</h2>
+            <p style="opacity:0.8">Configuration de votre espace institutionnel</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <div class="inst-badge" id="headerBadge"><i class="fas fa-hospital"></i> PROFIL HÔPITAL</div>
+            <h1 id="headerTitle">🏥 Complétez votre profil d'hôpital</h1>
+            <p id="headerDesc">Rejoignez ESTRA LINK pour <strong>recruter des étudiants en médecine</strong>, proposer des stages et publier vos offres.</p>
+        </div>
+
+        <div class="premium-alert"><h3>⭐ 2 mois gratuits • Puis Premium</h3><p>Profitez gratuitement de toutes les fonctionnalités pendant 2 mois. Ensuite, un abonnement sera requis.</p></div>
+
+        <form id="institutionForm" onsubmit="submitInstitutionProfile(event)">
+            <div class="form-card">
+                <h3><i class="fas fa-info-circle"></i> Informations générales</h3>
+                <div class="form-row">
+                    <div class="form-group"><label id="labelName">🏥 Nom de l'hôpital *</label><input type="text" id="instName" placeholder="Nom officiel" required></div>
+                    <div class="form-group"><label>📂 Type d'institution *</label><select id="instType" onchange="updateInstType()"><option value="hospital">🏥 Hôpital / Clinique</option><option value="institution">🏛️ Établissement Public</option></select></div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group"><label>📍 Adresse *</label><input type="text" id="address" placeholder="Adresse complète" required></div>
+                    <div class="form-group"><label>📞 Contact *</label><input type="text" id="contact" placeholder="+243 ... ou email" required></div>
+                </div>
+                <div class="form-group" id="specialtyGroup"><label>🏥 Spécialités médicales</label><input type="text" id="specialties" placeholder="Ex: Cardiologie, Pédiatrie, Chirurgie..."></div>
+            </div>
+
+            <div class="form-card">
+                <h3><i class="fas fa-hand-holding-heart"></i> Besoins & Recrutement</h3>
+                <div class="toggle-option"><div class="toggle-info"><strong id="needStudentsTitle">🎓 Nous recherchons des étudiants en médecine</strong><span id="needStudentsDesc">Votre établissement apparaîtra dans les suggestions pour les étudiants</span></div><label class="toggle-switch"><input type="checkbox" id="needStudents" checked><span class="toggle-slider"></span></label></div>
+                <div class="toggle-option"><div class="toggle-info"><strong>📋 Nous proposons des stages</strong><span>Les étudiants pourront postuler à vos offres de stage</span></div><label class="toggle-switch"><input type="checkbox" id="offerInternships" checked><span class="toggle-slider"></span></label></div>
+                <div class="toggle-option"><div class="toggle-info"><strong>💼 Nous publions des offres d'emploi</strong><span>Recrutez du personnel soignant et administratif</span></div><label class="toggle-switch"><input type="checkbox" id="publishJobs"><span class="toggle-slider"></span></label></div>
+            </div>
+
+            <div class="form-card">
+                <h3><i class="fas fa-pen"></i> Description</h3>
+                <div class="form-group"><label>📝 À propos de l'établissement *</label><textarea id="description" placeholder="Décrivez votre établissement, sa mission, ses valeurs..." rows="4" required></textarea></div>
+                <div class="form-group"><label>🌐 Site web</label><input type="url" id="website" placeholder="https://..."></div>
+            </div>
+
+            <div class="action-buttons">
+                <button type="button" class="btn btn-outline" onclick="goBack()"><i class="fas fa-arrow-left"></i> Retour</button>
+                <button type="submit" class="btn btn-success" id="submitBtn"><i class="fas fa-check-circle"></i> Créer mon profil</button>
+            </div>
+        </form>
+
+        <div class="footer-note"><i class="fas fa-shield-alt"></i> 2 mois gratuits • Premium ensuite • Modifiable à tout moment</div>
+    </div>
+
+<script src="../estra-core.js"></script>
+<script>
+let institutionType = 'hospital';
+let toastTimeout = null;
+
+function showToast(msg, isErr = false) {
+    const te = document.getElementById('toastMsg');
+    if (toastTimeout) clearTimeout(toastTimeout);
+    te.textContent = msg;
+    te.style.borderColor = isErr ? '#ef4444' : '#38bdf8';
+    te.style.background = isErr ? 'linear-gradient(135deg, #dc2626, #991b1b)' : '#1e293b';
+    te.classList.remove('show'); void te.offsetWidth; te.classList.add('show');
+    toastTimeout = setTimeout(() => te.classList.remove('show'), 3000);
+}
+
+function navigateTo(url) {
+    document.getElementById('pageTransition').classList.add('active');
+    setTimeout(() => { window.location.href = url; }, 1500);
+}
+
+function goBack() {
+    if (document.getElementById('instName').value) {
+        if (!confirm('Vous avez des informations non sauvegardées. Voulez-vous vraiment quitter ?')) return;
+    }
+    window.location.href = '../account-select.html';
+}
+
+function updateInstType() {
+    institutionType = document.getElementById('instType').value;
+    const isHospital = institutionType === 'hospital';
+    document.getElementById('headerBadge').innerHTML = isHospital ? '<i class="fas fa-hospital"></i> PROFIL HÔPITAL' : '<i class="fas fa-landmark"></i> PROFIL ÉTABLISSEMENT';
+    document.getElementById('headerTitle').innerHTML = isHospital ? '🏥 Complétez votre profil d\'hôpital' : '🏛️ Complétez votre profil d\'établissement';
+    document.getElementById('headerDesc').innerHTML = isHospital ? 'Rejoignez ESTRA LINK pour <strong>recruter des étudiants en médecine</strong>, proposer des stages et publier vos offres.' : 'Rejoignez ESTRA LINK pour <strong>recruter des talents</strong>, proposer des stages et publier vos offres.';
+    document.getElementById('labelName').textContent = isHospital ? '🏥 Nom de l\'hôpital *' : '🏛️ Nom de l\'établissement *';
+    document.getElementById('needStudentsTitle').textContent = isHospital ? '🎓 Nous recherchons des étudiants en médecine' : '🎓 Nous recherchons des étudiants/stagiaires';
+    document.getElementById('needStudentsDesc').textContent = isHospital ? 'Votre établissement apparaîtra dans les suggestions pour les étudiants en médecine' : 'Votre établissement apparaîtra dans les suggestions pour les étudiants';
+    document.getElementById('specialtyGroup').style.display = isHospital ? 'block' : 'none';
+    document.getElementById('transitionTitle').textContent = isHospital ? 'Création de votre profil Hôpital' : 'Création de votre profil Établissement';
+}
+
+function toggleTheme() {
+    const cur = document.documentElement.getAttribute('data-theme');
+    const next = cur === 'light' ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem('estra_theme', next);
+    window.estraTheme = next;
+    const btn = document.getElementById('themeToggleBtn');
+    const icon = btn.querySelector('i');
+    if (next === 'dark') { icon.classList.replace('fa-moon', 'fa-sun'); btn.title = 'Mode clair'; }
+    else { icon.classList.replace('fa-sun', 'fa-moon'); btn.title = 'Mode sombre'; }
+}
+
+function initTheme() {
+    const saved = localStorage.getItem('estra_theme') || 'light';
+    document.documentElement.setAttribute('data-theme', saved);
+    window.estraTheme = saved;
+    const btn = document.getElementById('themeToggleBtn');
+    const icon = btn.querySelector('i');
+    if (saved === 'dark') { icon.classList.replace('fa-moon', 'fa-sun'); btn.title = 'Mode clair'; }
+}
+
+function sanitize(s) { return s ? String(s).replace(/[<>"'`]/g, '').trim() : ''; }
+
+async function submitInstitutionProfile(e) {
+    e.preventDefault();
+    const instName = sanitize(document.getElementById('instName').value);
+    const address = sanitize(document.getElementById('address').value);
+    const contact = sanitize(document.getElementById('contact').value);
+    const specialties = sanitize(document.getElementById('specialties').value);
+    const description = sanitize(document.getElementById('description').value);
+    const website = sanitize(document.getElementById('website').value);
+    const isHospital = institutionType === 'hospital';
+
+    if (!instName || !address || !contact || !description) { showToast('❌ Veuillez remplir tous les champs obligatoires (*)', true); return; }
+
+    const btn = document.getElementById('submitBtn');
+    if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enregistrement...'; }
+
+    const profileData = {
+        accountType: institutionType, badge: isHospital ? '🏥 Hôpital' : '🏛️ Établissement', role: institutionType,
+        institutionName: instName, institutionType, location: address, contact, specialties, bio: description, website,
+        needStudents: document.getElementById('needStudents').checked,
+        offerInternships: document.getElementById('offerInternships').checked,
+        publishJobs: document.getElementById('publishJobs').checked,
+        premiumStart: new Date().toISOString(), premiumExpiry: new Date(Date.now() + 60 * 24 * 60 * 60 * 1000).toISOString(),
+        profileCompleted: true, profileCompletedAt: new Date().toISOString()
+    };
+
+    try { await ESTRA.apiCall('/user/profile', 'PUT', profileData); } catch (err) { console.log('⚠️ API non disponible, sauvegarde locale'); }
+    ESTRA.updateProfile(profileData);
+
+    const notifs = JSON.parse(localStorage.getItem('estra_notifications') || '[]');
+    const profile = ESTRA.getProfile();
+    notifs.unshift({ id: Date.now(), type: 'profile', user: profile.fullName, userAvatar: profile.avatar, content: (isHospital ? '🏥' : '🏛️') + ' a créé son profil : ' + instName, time: Date.now(), read: false });
+    localStorage.setItem('estra_notifications', JSON.stringify(notifs.slice(0, 50)));
+
+    if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-check-circle"></i> Créer mon profil'; }
+    showToast('✅ Profil créé avec succès !');
+    navigateTo('../index.html');
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    if (!ESTRA.isLoggedIn()) { window.location.href = '../login.html'; return; }
+    initTheme();
+
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('type') === 'institution') document.getElementById('instType').value = 'institution';
+    updateInstType();
+
+    const profile = ESTRA.getProfile();
+    if (profile && (profile.accountType === 'hospital' || profile.accountType === 'institution') && profile.profileCompleted) {
+        document.getElementById('instName').value = profile.institutionName || '';
+        document.getElementById('instType').value = profile.institutionType || 'hospital';
+        document.getElementById('address').value = profile.location || '';
+        document.getElementById('contact').value = profile.contact || '';
+        document.getElementById('specialties').value = profile.specialties || '';
+        document.getElementById('description').value = profile.bio || '';
+        document.getElementById('website').value = profile.website || '';
+        document.getElementById('needStudents').checked = profile.needStudents !== false;
+        document.getElementById('offerInternships').checked = profile.offerInternships !== false;
+        document.getElementById('publishJobs').checked = profile.publishJobs === true;
+        updateInstType();
+    }
+
+    window.addEventListener('storage', (e) => { if (e.key === 'estra_theme' && e.newValue) { document.documentElement.setAttribute('data-theme', e.newValue); window.estraTheme = e.newValue; } });
+});
+</script>
+</body>
+</html>

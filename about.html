@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title data-i18n="page_title">ESTRA LINK | À propos</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+<!-- PWA -->
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#38bdf8">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="ESTRA LINK">
+<link rel="apple-touch-icon" href="https://ui-avatars.com/api/?background=38bdf8&color=fff&name=E&size=152">
+    <style>
+        :root {
+            --estra-cyan: #38bdf8;
+            --estra-bg-dark: #0f172a;
+            --estra-card-bg: rgba(30, 41, 59, 0.6);
+            --estra-border: rgba(56, 189, 248, 0.2);
+            --text-primary: #e2e8f0;
+            --text-secondary: #94a3b8;
+            --estra-purple: #a78bfa;
+            --estra-success: #10b981;
+            --estra-danger: #ef4444;
+            --estra-warning: #f59e0b;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        [data-theme="light"] {
+            --estra-bg-dark: #f8fafc;
+            --estra-card-bg: rgba(255,255,255,0.95);
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --estra-border: rgba(0,0,0,0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--estra-bg-dark);
+            background-image: radial-gradient(at 0% 0%, rgba(56,189,248,0.08) 0px, transparent 50%), radial-gradient(at 100% 100%, rgba(56,189,248,0.08) 0px, transparent 50%);
+            color: var(--text-primary);
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+            transition: background-color 0.4s ease, color 0.4s ease;
+        }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: var(--estra-bg-dark); border-radius: 10px; }
+        [data-theme="light"] ::-webkit-scrollbar-track { background: #e2e8f0; }
+        ::-webkit-scrollbar-thumb { background: var(--estra-cyan); border-radius: 10px; }
+
+        .offline-banner { position: fixed; top: 0; left: 0; right: 0; background: #f59e0b; color: #000; text-align: center; padding: 6px; z-index: 9999; font-size: 0.8rem; font-weight: 600; display: none; }
+
+        .sidebar-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px); z-index: 1050; opacity: 0; visibility: hidden; transition: var(--transition); }
+        .sidebar-overlay.active { opacity: 1; visibility: visible; }
+
+        .sidebar { position: fixed; top: 0; left: -280px; width: 220px; height: 100vh; background: var(--estra-bg-dark); border-right: 1px solid var(--estra-border); z-index: 1060; transition: left 0.3s ease, background-color 0.4s ease; padding: 30px 15px; overflow-y: auto; }
+        [data-theme="light"] .sidebar { background: #fff; }
+        .sidebar.open { left: 0; }
+        .profile-section { text-align: center; padding-bottom: 25px; border-bottom: 1px solid var(--estra-border); margin-bottom: 20px; position: relative; }
+        .profile-img-sidebar { width: 65px; height: 65px; border-radius: 50%; border: 2px solid var(--estra-cyan); margin-bottom: 10px; object-fit: cover; }
+        .online-indicator { position: absolute; top: 50px; right: 50px; width: 14px; height: 14px; border-radius: 50%; background: #10b981; border: 2px solid var(--estra-bg-dark); }
+        .profile-stats { display: flex; justify-content: center; gap: 20px; margin-top: 12px; }
+        .profile-stats div { text-align: center; }
+        .profile-stats strong { display: block; font-size: 0.95rem; color: var(--estra-cyan); }
+        .profile-stats span { font-size: 0.65rem; color: var(--text-secondary); }
+        .sidebar-nav { display: flex; flex-direction: column; gap: 4px; }
+        .sidebar-link { display: flex; align-items: center; gap: 12px; padding: 12px 15px; border-radius: 10px; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: var(--transition); cursor: pointer; background: none; border: none; width: 100%; font-family: inherit; }
+        .sidebar-link svg { width: 20px; height: 20px; stroke-width: 2; flex-shrink: 0; }
+        .sidebar-link:hover, .sidebar-link.active { background: rgba(56,189,248,0.1); color: var(--estra-cyan); transform: translateX(5px); border-right: 2px solid var(--estra-cyan); }
+        .sidebar-link.logout-link { color: var(--estra-danger); }
+        .sidebar-link.logout-link:hover { background: rgba(239,68,68,0.1); color: var(--estra-danger); border-right-color: var(--estra-danger); }
+
+        .navbar { padding: 10px 15px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--estra-border); background: rgba(15,23,42,0.85); backdrop-filter: blur(12px); position: sticky; top: 0; z-index: 100; transition: background-color 0.4s ease; }
+        [data-theme="light"] .navbar { background: rgba(255,255,255,0.9); }
+        .nav-left, .nav-right { display: flex; align-items: center; gap: 12px; }
+        .navbar-brand { font-weight: 800; color: coral; letter-spacing: 1.5px; font-size: 1.1rem; text-decoration: none; }
+        .menu-toggle { background: none; border: none; cursor: pointer; padding: 8px; display: flex; align-items: center; color: var(--text-secondary); transition: var(--transition); }
+        .menu-toggle:hover { color: var(--estra-cyan); }
+        .avatar-nav { width: 34px; height: 34px; border-radius: 50%; border: 1.5px solid var(--estra-cyan); object-fit: cover; box-shadow: 0 0 10px rgba(56,189,248,0.2); cursor: pointer; }
+
+        .main-content { max-width: 680px; margin: 0 auto; background: var(--estra-card-bg); border-left: 1px solid var(--estra-border); border-right: 1px solid var(--estra-border); min-height: calc(100vh - 60px); backdrop-filter: blur(8px); transition: background-color 0.4s ease; }
+
+        .back-btn { display: inline-flex; align-items: center; gap: 8px; padding: 16px 20px; color: var(--estra-cyan); text-decoration: none; font-weight: 500; transition: var(--transition); font-size: 0.9rem; }
+        .back-btn:hover { opacity: 0.8; transform: translateX(-3px); }
+        .back-btn svg { width: 18px; height: 18px; }
+
+        .about-header { padding: 8px 20px 20px; border-bottom: 1px solid var(--estra-border); }
+        .about-header h1 { font-size: 2rem; font-weight: 700; display: flex; align-items: center; gap: 12px; }
+        .about-header h1 svg { color: var(--estra-cyan); width: 28px; height: 28px; }
+        .about-header p { color: var(--text-secondary); margin-top: 8px; font-size: 1.1rem; }
+
+        .about-section { padding: 20px; border-bottom: 1px solid var(--estra-border); transition: var(--transition); }
+        .about-section h2 { display: flex; align-items: center; gap: 10px; font-size: 1.2rem; margin-bottom: 16px; color: var(--text-primary); }
+        .about-section h2 svg { color: var(--estra-cyan); width: 20px; height: 20px; flex-shrink: 0; }
+        .about-section p { color: var(--text-secondary); line-height: 1.7; margin-bottom: 12px; font-size: 0.9rem; }
+        .about-section strong { color: var(--text-primary); }
+
+        .values-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 16px; }
+        .value-card { background: rgba(30,41,59,0.8); padding: 20px 16px; border-radius: 16px; text-align: center; border: 1px solid var(--estra-border); transition: var(--transition); }
+        [data-theme="light"] .value-card { background: #f1f5f9; }
+        .value-card:hover { border-color: var(--estra-cyan); transform: translateY(-2px); box-shadow: 0 8px 20px rgba(56,189,248,0.1); }
+        .value-card svg { width: 32px; height: 32px; color: var(--estra-cyan); margin-bottom: 12px; }
+        .value-card h4 { margin-bottom: 4px; font-size: 0.95rem; color: var(--text-primary); }
+        .value-card p { color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 0; }
+
+        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 16px; }
+        .stat-card { background: rgba(30,41,59,0.8); padding: 20px 16px; border-radius: 16px; text-align: center; border: 1px solid var(--estra-border); }
+        [data-theme="light"] .stat-card { background: #f1f5f9; }
+        .stat-number { font-size: 2rem; font-weight: 700; color: var(--estra-cyan); }
+        .stat-label { color: var(--text-secondary); font-size: 0.85rem; }
+
+        .team-section { background: linear-gradient(135deg, rgba(56,189,248,0.1), rgba(167,139,250,0.1)); border-radius: 16px; padding: 24px; text-align: center; border: 1px solid var(--estra-border); margin-top: 16px; }
+        .team-section svg { width: 40px; height: 40px; color: var(--estra-cyan); margin-bottom: 16px; }
+        .team-section h3 { font-size: 1.3rem; margin-bottom: 12px; color: var(--estra-cyan); }
+        .team-section p { color: var(--text-secondary); line-height: 1.6; font-size: 0.95rem; }
+        .team-section .highlight { color: var(--estra-cyan); font-weight: 600; }
+
+        .contact-info { display: flex; flex-direction: column; gap: 12px; }
+        .contact-item { display: flex; align-items: center; gap: 14px; padding: 14px 16px; background: rgba(30,41,59,0.8); border-radius: 12px; border: 1px solid var(--estra-border); transition: var(--transition); }
+        [data-theme="light"] .contact-item { background: #f1f5f9; }
+        .contact-item:hover { border-color: var(--estra-cyan); }
+        .contact-item svg { width: 22px; height: 22px; color: var(--estra-cyan); flex-shrink: 0; }
+
+        .social-links { display: flex; gap: 16px; margin-top: 16px; flex-wrap: wrap; }
+        .social-links a { width: 44px; height: 44px; background: rgba(30,41,59,0.8); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--estra-cyan); text-decoration: none; border: 1px solid var(--estra-border); transition: var(--transition); }
+        [data-theme="light"] .social-links a { background: #f1f5f9; }
+        .social-links a svg { width: 18px; height: 18px; }
+        .social-links a:hover { background: var(--estra-cyan); color: #0f172a; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(56,189,248,0.2); }
+
+        .about-footer { text-align: center; padding: 24px 20px; color: var(--text-secondary); font-size: 0.85rem; border-top: 1px solid var(--estra-border); }
+
+        .toast-custom { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #1e293b; color: white; padding: 10px 20px; z-index: 1100; font-size: 0.8rem; border-radius: 25px; border: 1px solid var(--estra-cyan); white-space: nowrap; opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s ease; }
+        .toast-custom.show { opacity: 1; visibility: visible; }
+        .d-flex { display: flex; } .align-items-center { align-items: center; } .gap-2 { gap: 8px; }
+
+        @media (max-width: 768px) {
+            .values-grid { grid-template-columns: 1fr; }
+            .stats-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="offline-banner" id="offlineBanner">📴 <span data-i18n="offline_mode">Mode hors-ligne</span></div>
+
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+
+
+    <main class="main-content">
+        <a href="settings.html" class="back-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg> <span data-i18n="back_to_settings">Retour aux paramètres</span></a>
+        
+        <div class="about-header"><h1><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> ESTRA LINK</h1><p data-i18n="tagline">L'architecte de votre futur numérique</p></div>
+
+        <div class="about-section"><h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> <span data-i18n="our_vision">Notre Vision</span></h2><p data-i18n="vision_text1">ESTRA LINK est né d'une conviction simple : <strong>la technologie doit être un pont, pas un mur.</strong> Nous créons un écosystème où l'éducation, l'innovation et le développement professionnel se rejoignent pour offrir à chaque étudiant et professionnel africain les outils nécessaires à sa réussite.</p><p data-i18n="vision_text2">Notre plateforme est le fruit du travail de <strong>passionnés congolais</strong> qui croient fermement que l'avenir du numérique en Afrique se construit main dans la main, avec nos talents, nos idées et notre détermination.</p></div>
+
+        <div class="about-section"><h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> <span data-i18n="our_mission">Notre Mission</span></h2><p data-i18n="mission_text">Connecter la communauté éducative congolaise et africaine à travers une plateforme innovante, accessible et sécurisée. Faciliter le partage de connaissances, les opportunités d'emploi et le réseautage professionnel.</p></div>
+
+        <div class="about-section">
+            <div class="team-section">
+                <div class="flag">🇨🇩</div>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                <h3 data-i18n="team_title">Construit par des passionnés, pour la communauté</h3>
+                <p data-i18n="team_text1"><span class="highlight">ESTRA LINK</span> est développé par une équipe de <span class="highlight">passionnés basés en République Démocratique du Congo</span>, unis par la volonté de répondre aux <span class="highlight">besoins communs</span> de notre peuple : l'accès au savoir, la connexion entre talents, et la création d'opportunités pour tous.</p>
+                <p style="margin-top:12px; font-style: italic; color: var(--text-secondary);" data-i18n="team_quote">« Ce n'est pas le nom ou le visage qui compte, mais l'impact que nous laissons. Chaque ligne de code est écrite avec l'espoir qu'un étudiant de Kinshasa, un entrepreneur de Lubumbashi ou un enseignant de Goma y trouve de la valeur. <strong>Ensemble, nous bâtissons l'avenir numérique de notre pays.</strong> »</p>
+                <p style="margin-top:12px; font-weight:600; color: var(--estra-cyan);" data-i18n="team_text2">🌍 Par les Congolais, pour les Congolais — et pour toute l'Afrique.</p>
+            </div>
+        </div>
+
+        <div class="about-section"><h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> <span data-i18n="our_values">Nos Valeurs</span></h2>
+            <div class="values-grid">
+                <div class="value-card"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg><h4 data-i18n="value_respect">Respect</h4><p data-i18n="value_respect_desc">Bienveillance et écoute</p></div>
+                <div class="value-card"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg><h4 data-i18n="value_sharing">Partage</h4><p data-i18n="value_sharing_desc">Connaissance ouverte</p></div>
+                <div class="value-card"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg><h4 data-i18n="value_innovation">Innovation</h4><p data-i18n="value_innovation_desc">Progrès continu</p></div>
+                <div class="value-card"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg><h4 data-i18n="value_excellence">Excellence</h4><p data-i18n="value_excellence_desc">Qualité et rigueur</p></div>
+            </div>
+        </div>
+
+        <div class="about-section"><h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg> <span data-i18n="estra_stats_title">ESTRA LINK en chiffres</span></h2>
+            <div class="stats-grid">
+                <div class="stat-card"><div class="stat-number">10K+</div><div class="stat-label" data-i18n="stat_users">Utilisateurs</div></div>
+                <div class="stat-card"><div class="stat-number">50+</div><div class="stat-label" data-i18n="stat_groups">Groupes d'étude</div></div>
+                <div class="stat-card"><div class="stat-number">100+</div><div class="stat-label" data-i18n="stat_jobs">Offres d'emploi</div></div>
+            </div>
+        </div>
+
+        <div class="about-section"><h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg> <span data-i18n="contact_us">Contact</span></h2>
+            <div class="contact-info">
+                <div class="contact-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg><span>contact@estralink.com</span></div>
+                <div class="contact-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg><span>+243 812 345 678</span></div>
+                <div class="contact-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg><span data-i18n="location">Lubumbashi, République Démocratique du Congo</span></div>
+            </div>
+            <div class="social-links">
+                <a href="#" onclick="showToast('📱 Facebook - ' + t('toast_soon'))" title="Facebook"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a>
+                <a href="#" onclick="showToast('🐦 Twitter - ' + t('toast_soon'))" title="Twitter"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/></svg></a>
+                <a href="#" onclick="showToast('💼 LinkedIn - ' + t('toast_soon'))" title="LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a>
+                <a href="#" onclick="showToast('🐙 GitHub - ' + t('toast_soon'))" title="GitHub"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+            </div>
+        </div>
+
+        <div class="about-footer">
+            <p>© 2026 <span data-i18n="footer_rights">ESTRA LINK - Tous droits réservés</span></p>
+            <p style="margin-top: 8px;" data-i18n="footer_version">Version 3.0.0 • Construit avec ❤️ en RDC</p>
+        </div>
+    </main>
+
+    <div class="toast-custom" id="toastMsg"></div>
+
+    <script>
+        var currentUser = { name: 'Rashidi', avatar: 'https://ui-avatars.com/api/?background=38bdf8&color=fff&name=Rashidi&size=40' };
+        var toastTimeout = null;
+
+        // ============ MOTEUR DE TRADUCTION (i18n) ============
+        const translations = {
+            fr: {
+                page_title: "ESTRA LINK | À propos",
+                offline_mode: "Mode hors-ligne",
+                posts: "Posts",
+                friends_label: "Amis",
+                groups_label: "Groupes",
+                home: "Accueil",
+                saved: "Enregistrés",
+                courses: "Cours",
+                jobs: "Emplois",
+                events: "Événements",
+                my_profile: "Mon Profil",
+                settings: "Paramètres",
+                logout: "Déconnexion",
+                back_to_settings: "Retour aux paramètres",
+                tagline: "L'architecte de votre futur numérique",
+                our_vision: "Notre Vision",
+                vision_text1: "ESTRA LINK est né d'une conviction simple : <strong>la technologie doit être un pont, pas un mur.</strong> Nous créons un écosystème où l'éducation, l'innovation et le développement professionnel se rejoignent pour offrir à chaque étudiant et professionnel africain les outils nécessaires à sa réussite.",
+                vision_text2: "Notre plateforme est le fruit du travail de <strong>passionnés congolais</strong> qui croient fermement que l'avenir du numérique en Afrique se construit main dans la main, avec nos talents, nos idées et notre détermination.",
+                our_mission: "Notre Mission",
+                mission_text: "Connecter la communauté éducative congolaise et africaine à travers une plateforme innovante, accessible et sécurisée. Faciliter le partage de connaissances, les opportunités d'emploi et le réseautage professionnel.",
+                team_title: "Construit par des passionnés, pour la communauté",
+                team_text1: "<span class='highlight'>ESTRA LINK</span> est développé par une équipe de <span class='highlight'>passionnés basés en République Démocratique du Congo</span>, unis par la volonté de répondre aux <span class='highlight'>besoins communs</span> de notre peuple : l'accès au savoir, la connexion entre talents, et la création d'opportunités pour tous.",
+                team_quote: "« Ce n'est pas le nom ou le visage qui compte, mais l'impact que nous laissons. Chaque ligne de code est écrite avec l'espoir qu'un étudiant de Kinshasa, un entrepreneur de Lubumbashi ou un enseignant de Goma y trouve de la valeur. <strong>Ensemble, nous bâtissons l'avenir numérique de notre pays.</strong> »",
+                team_text2: "🌍 Par les Congolais, pour les Congolais — et pour toute l'Afrique.",
+                our_values: "Nos Valeurs",
+                value_respect: "Respect",
+                value_respect_desc: "Bienveillance et écoute",
+                value_sharing: "Partage",
+                value_sharing_desc: "Connaissance ouverte",
+                value_innovation: "Innovation",
+                value_innovation_desc: "Progrès continu",
+                value_excellence: "Excellence",
+                value_excellence_desc: "Qualité et rigueur",
+                estra_stats_title: "ESTRA LINK en chiffres",
+                stat_users: "Utilisateurs",
+                stat_groups: "Groupes d'étude",
+                stat_jobs: "Offres d'emploi",
+                contact_us: "Contact",
+                location: "Lubumbashi, République Démocratique du Congo",
+                footer_rights: "ESTRA LINK - Tous droits réservés",
+                footer_version: "Version 3.0.0 • Construit avec ❤️ en RDC",
+                toast_soon: "bientôt disponible"
+            },
+            en: {
+                page_title: "ESTRA LINK | About",
+                offline_mode: "Offline mode",
+                posts: "Posts",
+                friends_label: "Friends",
+                groups_label: "Groups",
+                home: "Home",
+                saved: "Saved",
+                courses: "Courses",
+                jobs: "Jobs",
+                events: "Events",
+                my_profile: "My Profile",
+                settings: "Settings",
+                logout: "Logout",
+                back_to_settings: "Back to Settings",
+                tagline: "The architect of your digital future",
+                our_vision: "Our Vision",
+                vision_text1: "ESTRA LINK was born from a simple belief: <strong>technology should be a bridge, not a wall.</strong> We create an ecosystem where education, innovation, and professional development come together to provide every African student and professional with the tools they need to succeed.",
+                vision_text2: "Our platform is the fruit of the work of <strong>passionate Congolese people</strong> who firmly believe that Africa's digital future is built hand in hand, with our talents, our ideas, and our determination.",
+                our_mission: "Our Mission",
+                mission_text: "Connect the Congolese and African educational community through an innovative, accessible, and secure platform. Facilitate knowledge sharing, job opportunities, and professional networking.",
+                team_title: "Built by passionate people, for the community",
+                team_text1: "<span class='highlight'>ESTRA LINK</span> is developed by a team of <span class='highlight'>passionate people based in the Democratic Republic of Congo</span>, united by the desire to meet the <span class='highlight'>common needs</span> of our people: access to knowledge, connection between talents, and creating opportunities for all.",
+                team_quote: "\"It is not the name or the face that matters, but the impact we leave. Every line of code is written with the hope that a student in Kinshasa, an entrepreneur in Lubumbashi, or a teacher in Goma will find value in it. <strong>Together, we are building our country's digital future.</strong>\"",
+                team_text2: "🌍 By Congolese, for Congolese — and for all of Africa.",
+                our_values: "Our Values",
+                value_respect: "Respect",
+                value_respect_desc: "Kindness and listening",
+                value_sharing: "Sharing",
+                value_sharing_desc: "Open knowledge",
+                value_innovation: "Innovation",
+                value_innovation_desc: "Continuous progress",
+                value_excellence: "Excellence",
+                value_excellence_desc: "Quality and rigor",
+                estra_stats_title: "ESTRA LINK in numbers",
+                stat_users: "Users",
+                stat_groups: "Study groups",
+                stat_jobs: "Job offers",
+                contact_us: "Contact",
+                location: "Lubumbashi, Democratic Republic of Congo",
+                footer_rights: "ESTRA LINK - All rights reserved",
+                footer_version: "Version 3.0.0 • Built with ❤️ in DRC",
+                toast_soon: "coming soon"
+            },
+            ln: {
+                page_title: "ESTRA LINK | Etáli",
+                offline_mode: "Mode hors-connexion",
+                posts: "Masolo",
+                friends_label: "Baníngá",
+                groups_label: "Mampingá",
+                home: "Ebandeli",
+                saved: "Ebabómí",
+                courses: "Mateya",
+                jobs: "Misálá",
+                events: "Makámá",
+                my_profile: "Profil na ngáí",
+                settings: "Paramɛ́tɛ",
+                logout: "Kobíma",
+                back_to_settings: "Kozónga na Paramɛ́tɛ",
+                tagline: "Architecte ya bokɛsɛni na yɔ̂",
+                our_vision: "Vision na bísó",
+                vision_text1: "ESTRA LINK ebotámí na conviction simple: <strong>technologie esɛngɛ́lɛ kozala pont, kasi mur tɛ̂.</strong> Tozalí kosála écosystème epái wápi éducation, innovation, na développement professionnel ekutanaka mpɔ̂ kopesa étudiant mpe professionnel africain nyɔ́nsɔ ba outils ya nécessaire mpɔ̂ kolónga.",
+                vision_text2: "Plateforme na bísó ezalí mbuma ya mosálá ya <strong>passionnés congolais</strong> bandímaka makási que avenir ya numérique na Afrique etongámaka na mabɔ́kɔ na mabɔ́kɔ, na ba talents, ba idées, na détermination na bísó.",
+                our_mission: "Mission na bísó",
+                mission_text: "Kosangisa communauté éducative congolaise mpe africaine na nzela ya plateforme innovante, accessible mpe sécurisée. Kopésa nzela na partage ya connaissances, ba opportunités d'emploi, mpe réseautage professionnel.",
+                team_title: "Etongámí na passionnés, mpɔ̂ communauté",
+                team_text1: "<span class='highlight'>ESTRA LINK</span> etongámí na équipe ya <span class='highlight'>passionnés basés na République Démocratique du Congo</span>, basangání na volonté ya koyanola na <span class='highlight'>ba besoins communs</span> ya peuple na bísó : accès na savoir, connexion entre ba talents, mpe création ya ba opportunités mpɔ̂ bánsɔ.",
+                team_quote: "« Nkómbó tǒ elongi nde eza na ntína tɛ̂, kasi impact totíkí. Ligne nyɔ́nsɔ ya code ekomámí na elíkyá 'te étudiant ya Kinshasa, entrepreneur ya Lubumbashi tǒ enseignant ya Goma akózwa valeur na yangó. <strong>Ensemble, tozali kotonga avenir numérique ya mbóka na bísó.</strong> »",
+                team_text2: "🌍 Par ba Congolais, mpɔ̂ ba Congolais — mpe mpɔ̂ Afríka mobimba.",
+                our_values: "Ba Valeurs na bísó",
+                value_respect: "Respect",
+                value_respect_desc: "Bienveillance na écoute",
+                value_sharing: "Kokabola",
+                value_sharing_desc: "Connaissance ouverte",
+                value_innovation: "Innovation",
+                value_innovation_desc: "Progrès continu",
+                value_excellence: "Excellence",
+                value_excellence_desc: "Qualité na rigueur",
+                estra_stats_title: "ESTRA LINK na ba chiffres",
+                stat_users: "Ba Utilisateurs",
+                stat_groups: "Ba Groupes d'étude",
+                stat_jobs: "Ba Offres d'emploi",
+                contact_us: "Contact",
+                location: "Lubumbashi, République Démocratique du Congo",
+                footer_rights: "ESTRA LINK - Ba droits nyɔ́nsɔ babómámí",
+                footer_version: "Version 3.0.0 • Etongámí na ❤️ na RDC",
+                toast_soon: "ekoyâ kala mingi tɛ̂"
+            },
+            sw: {
+                page_title: "ESTRA LINK | Kuhusu",
+                offline_mode: "Hali ya nje ya mtandao",
+                posts: "Machapisho",
+                friends_label: "Marafiki",
+                groups_label: "Vikundi",
+                home: "Nyumbani",
+                saved: "Yaliyohifadhiwa",
+                courses: "Kozi",
+                jobs: "Kazi",
+                events: "Matukio",
+                my_profile: "Wasifu Wangu",
+                settings: "Mipangilio",
+                logout: "Kutoka",
+                back_to_settings: "Rudi kwenye Mipangilio",
+                tagline: "Mbunifu wa mustakabali wako wa kidijitali",
+                our_vision: "Dira Yetu",
+                vision_text1: "ESTRA LINK ilizaliwa kutokana na imani rahisi: <strong>teknolojia inapaswa kuwa daraja, sio ukuta.</strong> Tunaunda mfumo ikolojia ambapo elimu, uvumbuzi, na maendeleo ya kitaaluma hukutana ili kumpa kila mwanafunzi na mtaalamu wa Kiafrika zana anazohitaji kufanikiwa.",
+                vision_text2: "Jukwaa letu ni matunda ya kazi ya <strong>Wakongo wenye shauku</strong> wanaoamini kabisa kuwa mustakabali wa kidijitali wa Afrika unajengwa kwa kushirikiana, na vipaji vyetu, mawazo yetu, na dhamira yetu.",
+                our_mission: "Dhamira Yetu",
+                mission_text: "Kuunganisha jamii ya kielimu ya Kongo na Kiafrika kupitia jukwaa la kibunifu, linalofikika, na salama. Kuwezesha ushirikishaji wa maarifa, fursa za kazi, na mitandao ya kitaaluma.",
+                team_title: "Imejengwa na watu wenye shauku, kwa ajili ya jamii",
+                team_text1: "<span class='highlight'>ESTRA LINK</span> imetengenezwa na timu ya <span class='highlight'>watu wenye shauku walioko Jamhuri ya Kidemokrasia ya Kongo</span>, waliounganishwa na nia ya kukidhi <span class='highlight'>mahitaji ya pamoja</span> ya watu wetu: upatikanaji wa maarifa, uhusiano kati ya vipaji, na kuunda fursa kwa wote.",
+                team_quote: "\"Sio jina au uso unaojali, bali athari tunayoacha. Kila mstari wa msimbo umeandikwa kwa matumaini kwamba mwanafunzi wa Kinshasa, mjasiriamali wa Lubumbashi, au mwalimu wa Goma atapata thamani ndani yake. <strong>Kwa pamoja, tunajenga mustakabali wa kidijitali wa nchi yetu.</strong>\"",
+                team_text2: "🌍 Na Wakongo, kwa Wakongo — na kwa Afrika nzima.",
+                our_values: "Maadili Yetu",
+                value_respect: "Heshima",
+                value_respect_desc: "Wema na kusikiliza",
+                value_sharing: "Kushiriki",
+                value_sharing_desc: "Maarifa wazi",
+                value_innovation: "Uvumbuzi",
+                value_innovation_desc: "Maendeleo endelevu",
+                value_excellence: "Ubora",
+                value_excellence_desc: "Ubora na ukakamavu",
+                estra_stats_title: "ESTRA LINK kwa takwimu",
+                stat_users: "Watumiaji",
+                stat_groups: "Vikundi vya masomo",
+                stat_jobs: "Nafasi za kazi",
+                contact_us: "Wasiliana Nasi",
+                location: "Lubumbashi, Jamhuri ya Kidemokrasia ya Kongo",
+                footer_rights: "ESTRA LINK - Haki zote zimehifadhiwa",
+                footer_version: "Toleo 3.0.0 • Imejengwa kwa ❤️ nchini DRC",
+                toast_soon: "inakuja hivi karibuni"
+            }
+        };
+
+        let currentLang = localStorage.getItem('estra_language') || 'fr';
+
+        function t(key) {
+            if (translations[currentLang] && translations[currentLang][key]) {
+                return translations[currentLang][key];
+            }
+            if (translations['fr'] && translations['fr'][key]) {
+                return translations['fr'][key];
+            }
+            return key;
+        }
+
+        function applyTranslations() {
+            currentLang = localStorage.getItem('estra_language') || 'fr';
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                const translation = t(key);
+                if (translation) {
+                    if (key === 'vision_text1' || key === 'vision_text2' || key === 'team_text1' || key === 'team_quote') {
+                        el.innerHTML = translation;
+                    } else {
+                        el.textContent = translation;
+                    }
+                }
+            });
+            document.title = t('page_title');
+        }
+
+        (function(){
+            var savedTheme = localStorage.getItem('estra_theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            window.estraTheme = savedTheme;
+        })();
+
+        function checkOnlineStatus() { var b = document.getElementById('offlineBanner'); if(b) b.style.display = navigator.onLine ? 'none' : 'block'; }
+        function showToast(msg) { var t = document.getElementById('toastMsg'); if (toastTimeout) clearTimeout(toastTimeout); t.textContent = msg; t.classList.remove('show'); void t.offsetWidth; t.classList.add('show'); toastTimeout = setTimeout(function(){ t.classList.remove('show'); }, 3000); }
+
+        function updateSidebar() {
+            var sp = localStorage.getItem('estra_profile');
+            if (sp) { try { var p = JSON.parse(sp); currentUser.name = p.fullName || currentUser.name; currentUser.avatar = p.avatar || currentUser.avatar; } catch(e) {} }
+            var sn = document.getElementById('sidebarName'); if(sn) sn.textContent = currentUser.name;
+            var sa = document.getElementById('sidebarAvatar'); if(sa) sa.src = currentUser.avatar;
+            var na = document.getElementById('navAvatar'); if(na) na.src = currentUser.avatar;
+            var posts = JSON.parse(localStorage.getItem('estra_posts') || '[]');
+            var jobs = JSON.parse(localStorage.getItem('estra_jobs') || '[]');
+            var spEl = document.getElementById('sidebarPosts');
+            if(spEl) spEl.textContent = posts.filter(function(p){ return p.author === currentUser.name; }).length + jobs.filter(function(j){ return j.author === currentUser.name; }).length;
+            var sf = document.getElementById('sidebarFriends'); if(sf) sf.textContent = (JSON.parse(localStorage.getItem('estra_friends') || '[]')).length;
+            var sg = document.getElementById('sidebarGroups'); if(sg) sg.textContent = (JSON.parse(localStorage.getItem('estra_userGroups') || '[]')).length;
+        }
+
+        function toggleSidebar() { var s = document.getElementById('sidebar'); var o = document.getElementById('sidebarOverlay'); if(s) s.classList.toggle('open'); if(o) o.classList.toggle('active'); }
+        function closeSidebar() { var s = document.getElementById('sidebar'); var o = document.getElementById('sidebarOverlay'); if(s) s.classList.remove('open'); if(o) o.classList.remove('active'); }
+        function logout() { localStorage.clear(); window.location.href = 'login.html'; }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            applyTranslations();
+            updateSidebar(); checkOnlineStatus();
+            var so = document.getElementById('sidebarOverlay'); if(so) so.addEventListener('click', toggleSidebar);
+            document.addEventListener('click', function(e) {
+                var sidebar = document.getElementById('sidebar'); var menuToggle = document.querySelector('.menu-toggle');
+                if (sidebar && sidebar.classList.contains('open') && !sidebar.contains(e.target) && e.target !== menuToggle && !menuToggle.contains(e.target)) { closeSidebar(); }
+            });
+            window.addEventListener('online', function() { var b = document.getElementById('offlineBanner'); if(b) b.style.display = 'none'; });
+            window.addEventListener('offline', function() { var b = document.getElementById('offlineBanner'); if(b) b.style.display = 'block'; });
+            window.addEventListener('storage', function(e) {
+                if (e.key === 'estra_theme' && e.newValue) { document.documentElement.setAttribute('data-theme', e.newValue); window.estraTheme = e.newValue; }
+                if (e.key === 'estra_language' && e.newValue) { applyTranslations(); }
+                if (['estra_profile','estra_posts','estra_friends','estra_userGroups'].indexOf(e.key) !== -1) updateSidebar();
+            });
+        });
+
+        window.toggleSidebar = toggleSidebar; window.closeSidebar = closeSidebar; window.logout = logout; window.showToast = showToast;
+        window.t = t; window.applyTranslations = applyTranslations;
+    </script>
+    <!-- FICHIERS EXTERNES -->
+<script src="i18n.js"></script>
+<script src="pwa-init.js"></script>
+</body>
+</html>

@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, maximum-scale=1.0, viewport-fit=cover">
+    <title>ESTRA LINK • Profil Entreprise</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="student-form.html">
+    
+    <style>
+        /* =========================================
+           PALETTE STRICTE : BLUE, ORANGERED, BLACK, WHITE
+           ========================================= */
+        :root, [data-theme="light"] {
+            --blue: #0055ff; --blue-glow: rgba(0, 85, 255, 0.3);
+            --orangered: #ff4500; --orangered-glow: rgba(255, 69, 0, 0.3);
+            --black: #000000; --black-light: #222222;
+            --white: #ffffff; --white-dark: #f0f0f0;
+            
+            --bg: var(--white-dark);
+            --card-bg: rgba(255, 255, 255, 0.85);
+            --border: rgba(0, 0, 0, 0.15);
+            --input-bg: rgba(255, 255, 255, 0.95);
+            --active-bg: rgba(0, 85, 255, 0.08);
+            
+            --text: var(--black);
+            --text-secondary: var(--black-light);
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+            --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        [data-theme="dark"] {
+            --bg: var(--black);
+            --card-bg: rgba(20, 20, 20, 0.85);
+            --border: rgba(255, 255, 255, 0.15);
+            --input-bg: rgba(0, 0, 0, 0.8);
+            --active-bg: rgba(0, 85, 255, 0.15);
+            
+            --text: var(--white);
+            --text-secondary: var(--white-dark);
+            --shadow: 0 8px 32px rgba(255, 255, 255, 0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
+        
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: var(--bg); color: var(--text); min-height: 100vh; overflow-x: hidden; transition: background-color 0.5s ease, color 0.5s ease; }
+
+        /* ARRIÈRE-PLAN ANIMÉ (Blue & Orangered) */
+        .mesh-bg { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1; background-image: radial-gradient(at 0% 0%, rgba(0,85,255,0.15) 0px, transparent 50%), radial-gradient(at 100% 100%, rgba(255,69,0,0.12) 0px, transparent 50%); filter: blur(60px); animation: meshMove 12s ease-in-out infinite alternate; }
+        @keyframes meshMove { 0% { transform: scale(1); } 100% { transform: scale(1.15); } }
+
+        ::-webkit-scrollbar { width: 6px; } ::-webkit-scrollbar-thumb { background: var(--blue); border-radius: 10px; }
+
+        /* BOUTON THÈME */
+        .theme-btn { position: fixed; top: 20px; right: 20px; z-index: 50; background: var(--card-bg); border: 1px solid var(--border); backdrop-filter: blur(12px); width: 45px; height: 45px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--blue); box-shadow: var(--shadow); transition: var(--transition); font-size: 1.2rem; }
+        .theme-btn:hover { color: var(--white); background: var(--blue); transform: scale(1.1) rotate(15deg); }
+
+        /* ECRAN DE TRANSITION */
+        .page-transition { position: fixed; inset: 0; background: var(--black); z-index: 10000; display: flex; align-items: center; justify-content: center; transform: translateY(100%); transition: transform 0.7s cubic-bezier(0.65, 0, 0.35, 1); color: var(--white); text-align: center; pointer-events: none; border-top: 5px solid var(--blue); }
+        .page-transition.active { transform: translateY(0); pointer-events: all; }
+        .transition-content i { font-size: 3.5rem; margin-bottom: 20px; color: var(--blue); filter: drop-shadow(0 0 15px var(--blue-glow)); animation: pulseLogo 2s infinite; }
+        @keyframes pulseLogo { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.05); opacity: 0.8; } }
+
+        /* TOAST NOTIFICATION */
+        .toast-custom { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--black); color: var(--white); padding: 12px 24px; z-index: 1100; font-size: 0.85rem; border-radius: 30px; border: 1px solid var(--blue); font-weight: 600; white-space: nowrap; opacity: 0; visibility: hidden; transition: var(--transition); box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
+        .toast-custom.show { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0); }
+
+        /* --------------------------------------
+           SECTION HERO & TEXTE DÉFILANT
+           -------------------------------------- */
+        .hero-section { min-height: 30vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 40px 20px 20px; position: relative; z-index: 10; }
+        .hero-badge { display: inline-block; background: var(--blue); color: var(--white); padding: 10px 24px; border-radius: 30px; font-size: 0.9rem; font-weight: 800; margin-bottom: 24px; box-shadow: 0 10px 25px var(--blue-glow); letter-spacing: 1px; text-transform: uppercase; border: 1px solid var(--white); }
+        .hero-content { max-width: 900px; z-index: 5; }
+        .hero-content h1 { font-size: 3.5rem; font-weight: 900; line-height: 1.2; margin-bottom: 20px; color: var(--text); }
+        .dynamic-text-container { display: flex; flex-direction: column; align-items: center; height: 80px; justify-content: center; margin-bottom: 20px;}
+        #textRotator { display: inline-block; transition: opacity 0.6s ease-in-out; font-size: 2.2rem; font-weight: 800; color: var(--blue); }
+        .hero-content p { font-size: 1.2rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 40px; }
+
+        /* --------------------------------------
+           SECTION JOURNAL (STYLE SUBSTACK)
+           -------------------------------------- */
+        .journal-section { padding: 40px 20px 80px; max-width: 1200px; margin: -8vh 0; position: relative; z-index: 10; }
+        .journal-header { text-align: center; margin-bottom: 50px; }
+        .journal-header h2 { font-size: 2.5rem; font-weight: 900; margin-bottom: 15px; color: var(--text); }
+        .glass-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; margin-bottom: 60px; }
+        .glass-card { background-color: var(--black); border-radius: 20px; overflow: hidden; box-shadow: var(--shadow); transition: transform 0.4s ease, box-shadow 0.4s ease; position: relative; min-height: 380px; display: flex; flex-direction: column; justify-content: flex-end; cursor: pointer; border: 1px solid var(--border); }
+        .glass-card:hover { transform: translateY(-10px); box-shadow: 0 20px 40px var(--blue-glow); }
+        .glass-image-bg { position: absolute; inset: 0; background-size: cover; background-position: center; transition: transform 0.6s ease; z-index: 0; opacity: 0.7; }
+        .glass-card:hover .glass-image-bg { transform: scale(1.05); opacity: 0.9; }
+        .glass-content { position: relative; z-index: 1; background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); padding: 30px 25px; border-top: 1px solid var(--blue); color: var(--white); }
+        .glass-content h3 { font-size: 1.4rem; font-weight: 800; margin-bottom: 12px; color: var(--white); }
+        .glass-content p { font-size: 0.95rem; line-height: 1.6; opacity: 0.95; }
+
+        /* --------------------------------------
+           FORMULAIRE BENTO GRID & AUTOSAVE
+           -------------------------------------- */
+        .form-section { display: none; opacity: 0; transform: translateY(50px); transition: opacity 0.8s ease, transform 0.8s ease; padding-bottom: 60px; }
+        .form-section.visible { display: block; opacity: 1; transform: translateY(0); }
+        .container { max-width: 1050px; margin: 0 auto; padding: 0 20px; }
+        
+        .header { text-align: center; margin-bottom: 30px; }
+        .header h2 { font-size: 2rem; font-weight: 900; color: var(--text); }
+        
+        .premium-alert { background: var(--card-bg); border: 2px solid var(--orangered); border-radius: 20px; padding: 20px; margin-bottom: 30px; display: flex; align-items: center; gap: 15px; box-shadow: var(--shadow); }
+        .premium-alert .prem-icon { font-size: 2.5rem; color: var(--orangered); }
+        .premium-alert h3 { color: var(--orangered); font-size: 1rem; font-weight: 800; margin-bottom: 4px; }
+        .premium-alert p { color: var(--text-secondary); font-size: 0.85rem; line-height: 1.5; }
+
+        /* MOTIVATION & CERCLE ROTATIF */
+        .motivation-card { background: var(--card-bg); border: 2px solid var(--blue); border-radius: 24px; padding: 25px; margin-bottom: 30px; display: flex; align-items: center; gap: 25px; box-shadow: var(--shadow); transition: var(--transition); }
+        .progress-wrapper { position: relative; width: 110px; height: 110px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+        .progress-ring { width: 110px; height: 110px; transform: rotate(-90deg); transition: transform 0.5s ease; }
+        .progress-ring.spinning { animation: spin 2s linear infinite; }
+        @keyframes spin { 100% { transform: rotate(270deg); } }
+        .progress-ring__background { fill: none; stroke: var(--border); stroke-width: 8; }
+        .progress-ring__circle { fill: none; stroke: var(--blue); stroke-width: 8; stroke-linecap: round; stroke-dasharray: 283; stroke-dashoffset: 283; transition: stroke-dashoffset 0.8s cubic-bezier(0.4, 0, 0.2, 1), stroke 0.5s; }
+        .progress-text { position: absolute; font-weight: 900; font-size: 1.4rem; color: var(--blue); transition: color 0.5s; }
+        .mot-content h4 { color: var(--blue); font-size: 1.1rem; font-weight: 800; margin-bottom: 8px; transition: color 0.3s; }
+        .mot-content p { color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6; }
+
+        .autosave-badge { position: absolute; top: 20px; right: 20px; font-size: 0.75rem; color: var(--blue); font-weight: 700; opacity: 0; transition: opacity 0.3s; display: flex; align-items: center; gap: 5px; }
+        .autosave-badge.saving { opacity: 1; }
+
+        .bento-grid { display: grid; grid-template-columns: 1fr; gap: 24px; margin-bottom: 30px; }
+        @media (min-width: 850px) { .bento-grid { grid-template-columns: 1fr 1fr; } }
+
+        .form-card { position: relative; background: var(--card-bg); border: 1px solid var(--border); border-radius: 16px; padding: 25px; box-shadow: var(--shadow); transition: var(--transition); display: flex; flex-direction: column; }
+        .form-card h3 { font-size: 1.1rem; font-weight: 800; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; color: var(--text); padding-bottom: 15px; border-bottom: 1px solid var(--border); }
+        .form-card h3 i { color: var(--blue); font-size: 1.3rem; }
+
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 700; font-size: 0.85rem; color: var(--text); }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 14px 16px; border-radius: 12px; border: 1px solid var(--border); background: var(--input-bg); color: var(--text); font-size: 0.9rem; outline: none; transition: var(--transition); font-family: inherit; }
+        .form-group textarea { resize: vertical; min-height: 100px; }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--blue); box-shadow: 0 0 0 4px var(--blue-glow); }
+        .field-hint { font-size: 0.75rem; color: var(--text-secondary); margin-top: 6px; display: flex; gap: 6px; align-items: flex-start; line-height: 1.4; }
+        .field-hint i { color: var(--orangered); margin-top: 2px; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+        /* VISIBILITY CARDS */
+        .visibility-options { display: grid; grid-template-columns: 1fr; gap: 16px; margin-top: 10px; flex-grow: 1; }
+        .visibility-card { border: 2px solid var(--border); border-radius: 16px; padding: 20px; text-align: left; cursor: pointer; transition: var(--transition); background: var(--input-bg); display: flex; align-items: flex-start; gap: 15px; }
+        .visibility-card:hover { border-color: var(--blue); transform: translateY(-3px); }
+        .visibility-card.selected { border-color: var(--blue); background: var(--active-bg); box-shadow: 0 8px 25px var(--blue-glow); }
+        .visibility-card .vis-title { font-weight: 800; font-size: 1rem; margin-bottom: 6px; color: var(--text); }
+        .visibility-card .vis-desc { font-size: 0.8rem; color: var(--text-secondary); }
+
+        /* TOGGLES */
+        .toggle-option { display: flex; align-items: center; justify-content: space-between; padding: 16px; background: var(--input-bg); border: 1px solid var(--border); border-radius: 16px; margin-bottom: 12px; transition: var(--transition); }
+        .toggle-option .toggle-info strong { display: block; font-size: 0.9rem; font-weight: 700; margin-bottom: 4px; color: var(--text); }
+        .toggle-option .toggle-info span { font-size: 0.75rem; color: var(--text-secondary); }
+        .toggle-switch { position: relative; width: 50px; height: 28px; flex-shrink: 0; }
+        .toggle-switch input { opacity: 0; width: 0; height: 0; }
+        .toggle-slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: var(--text-secondary); transition: 0.4s; border-radius: 30px; opacity: 0.5; }
+        .toggle-slider:before { position: absolute; content: ""; height: 22px; width: 22px; left: 3px; bottom: 3px; background-color: var(--white); transition: 0.4s; border-radius: 50%; }
+        input:checked + .toggle-slider { background-color: var(--blue); opacity: 1; }
+        input:checked + .toggle-slider:before { transform: translateX(22px); }
+
+        /* LOGO & TAGS */
+        .cv-upload-box { border: 2px dashed var(--border); border-radius: 16px; padding: 30px 20px; text-align: center; cursor: pointer; transition: var(--transition); display: flex; flex-direction: column; justify-content: center; }
+        .cv-upload-box:hover { border-color: var(--blue); background: var(--active-bg); }
+        .cv-upload-box.has-file { border-style: solid; border-color: var(--blue); }
+        .skills-wrap { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+        .skill-tag { background: var(--black); color: var(--white); padding: 8px 16px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; display: flex; align-items: center; gap: 8px; border: 1px solid var(--blue); }
+        .skill-tag .remove-skill { cursor: pointer; font-weight: 800; font-size: 1rem; color: var(--orangered); }
+
+        /* CONDITIONALS */
+        .conditional-box { display: none; padding: 20px; background: var(--active-bg); border-radius: 12px; border-left: 4px solid var(--blue); margin-bottom: 20px; margin-top: -5px; }
+
+        /* BOUTONS */
+        .action-buttons { display: flex; gap: 16px; margin-top: 20px; flex-wrap: wrap; }
+        .btn { padding: 18px 24px; border-radius: 16px; border: none; font-weight: 800; font-size: 1rem; cursor: pointer; transition: var(--transition); display: inline-flex; align-items: center; justify-content: center; gap: 10px; font-family: inherit; flex: 1; }
+        .btn-primary { background: var(--blue); color: var(--white); box-shadow: 0 8px 20px var(--blue-glow); }
+        .btn-primary:hover { background: var(--black); color: var(--white); border: 1px solid var(--blue); }
+        .btn-accent { background: var(--orangered); color: var(--white); box-shadow: 0 8px 20px var(--orangered-glow); }
+        .btn-outline { background: var(--card-bg); border: 2px solid var(--border); color: var(--text); }
+
+        /* MODAL PARTENAIRE */
+        .modal-overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(8px); z-index: 9999; display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: var(--transition); }
+        .modal-overlay.active { opacity: 1; visibility: visible; }
+        .modal-box { background: var(--bg); border: 2px solid var(--blue); border-radius: 24px; padding: 35px; width: 90%; max-width: 650px; max-height: 90vh; overflow-y: auto; transform: scale(0.9); transition: var(--transition); box-shadow: 0 25px 50px rgba(0,0,0,0.5); position: relative; }
+        .modal-overlay.active .modal-box { transform: scale(1); }
+        .modal-close { position: absolute; top: 20px; right: 20px; background: none; border: none; font-size: 1.8rem; color: var(--orangered); cursor: pointer; }
+        .opt-label { display: flex; align-items: flex-start; gap: 15px; padding: 18px; background: var(--input-bg); border: 2px solid var(--border); border-radius: 12px; cursor: pointer; transition: var(--transition); margin-bottom: 12px; }
+        .opt-label:hover, .opt-label:has(input:checked) { border-color: var(--blue); background: var(--active-bg); }
+        .opt-label input[type="checkbox"] { width: 20px; height: 20px; margin-top: 2px; accent-color: var(--blue); }
+
+        @media(max-width: 768px) { .form-row { grid-template-columns: 1fr; } .action-buttons { flex-direction: column; } .motivation-card { flex-direction: column; text-align: center; } }
+        
+        
+                /* BOUTON THÈME */
+        .theme-btn { position: fixed; top: 20px; right: 20px; z-index: 50; background: var(--card-bg); border: 1px solid var(--border); backdrop-filter: blur(12px); width: 45px; height: 45px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--purple); box-shadow: var(--shadow); transition: var(--transition); font-size: 1.2rem; }
+        .theme-btn:hover { color: #fff; background: var(--purple); transform: scale(1.1) rotate(15deg); }
+
+
+
+        /* --------------------------------------
+           SECTION HERO & SCÈNE 3D INTERACTIVE
+           -------------------------------------- */
+
+      
+        /* SCÈNE 3D PARALLAXE */
+        .scene-3d-container {
+            position: relative;
+            width: 100%;
+            max-width: 700px;
+            height: 370px;
+            bottom: -20%;
+            transform-style: preserve-3d;
+            transition: transform 0.1s ease-out; /* Pour la réactivité de la souris */
+            z-index: 2;
+        }
+
+        /* Styles de base pour les personnages 3D */
+        .char-3d {
+            position: absolute;
+            object-fit: contain;
+            filter: drop-shadow(0 25px 25px rgba(0, 0, 0, 0.15));
+            will-change: transform;
+        }
+
+        /* 1. Le bonhomme Membership (gauche) */
+        .char-left {
+            height: 200px;
+            bottom: 20%;
+            left: -10%;
+            z-index: 3;
+            animation: presentGesture 4s infinite ease-in-out;
+        }
+
+        /* 2. Le bonhomme avec la valise (Centre) */
+        .char-center {
+            height: 280px;
+            bottom: 5%;
+            left: 50%;
+            margin-left: -140px; /* Centrage */
+            z-index: 4;
+            animation: walkGesture 3s infinite ease-in-out;
+        }
+
+        /* 3. Les bonhommes qui valident (Droite) */
+        .char-right {
+            height: 200px;
+            bottom: 15%;
+            right: -10%;
+            z-index: 2;
+            animation: validateGesture 5s infinite ease-in-out;
+        }
+
+        /* ANIMATIONS DES GESTES 3D */
+        @keyframes walkGesture {
+            0%, 100% { transform: translateY(0) translateZ(50px) rotate(-2deg); filter: drop-shadow(0 20px 15px rgba(0,0,0,0.15)); }
+            50% { transform: translateY(-20px) translateZ(80px) rotate(2deg) scale(1.05); filter: drop-shadow(0 35px 25px rgba(0,0,0,0.2)); }
+        }
+        @keyframes presentGesture {
+            0%, 100% { transform: translateY(0) translateX(0) translateZ(10px) rotateY(0deg); }
+            50% { transform: translateY(-10px) translateX(15px) translateZ(30px) rotateY(15deg); }
+        }
+        @keyframes validateGesture {
+            0%, 100% { transform: translateY(0) scale(1) translateZ(-20px); }
+            50% { transform: translateY(-15px) scale(1.03) translateZ(10px) rotate(-4deg); }
+        }
+
+        /* Bulles flottantes intégrées à la scène */
+        .node { position: absolute; background: var(--card-bg); backdrop-filter: blur(10px); border: 1px solid var(--border); border-radius: 20px; padding: 12px 20px; box-shadow: var(--shadow); display: flex; align-items: center; gap: 10px; font-weight: 700; color: var(--text); animation: floatBubble 6s ease-in-out infinite; font-size: 0.9rem; z-index: 5; }
+        .node i { font-size: 1.2rem; color: var(--purple); }
+        .node-1 { top: 10%; left: -7%; animation-delay: 0s; transform: translateZ(60px); }
+        .node-2 { top: 80%; right: -7%; animation-delay: 1.5s; transform: translateZ(40px); }
+        .node-3 { top: 5%; right: 25%; animation-delay: 1.5s; transform: translateZ(40px); }
+        @keyframes floatBubble { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+
+        .btn-start { background: linear-gradient(135deg, var(--purple), #5b21b6); color: white; border: none; padding: 18px 40px; font-size: 1.1rem; font-weight: 800; border-radius: 30px; cursor: pointer; transition: var(--transition); box-shadow: 0 10px 30px var(--purple-glow); display: inline-flex; align-items: center; gap: 12px; }
+        .btn-start:hover { transform: translateY(-5px); box-shadow: 0 15px 40px var(--purple-glow); }
+    </style>
+</head>
+<body>
+
+    <div class="mesh-bg"></div>
+    <button class="theme-btn" onclick="toggleTheme()"><i class="fas fa-moon"></i></button>
+    <div class="toast-custom" id="toastMsg">Action effectuée</div>
+    
+    <div class="page-transition" id="pageTransition">
+        <div class="transition-content">
+            <i class="fas fa-satellite-dish"></i>
+            <h2 style="font-weight: 800; margin-bottom: 8px;">Activation de l'Espace</h2>
+            <p style="opacity:0.8; font-size:0.9rem;">Sauvegarde de votre profil d'entreprise...</p>
+        </div>
+    </div>
+
+    <!-- 1. HERO SECTION -->
+    <div class="hero-section" id="heroSection">
+        
+        <div class="hero-content">
+            <h1>Bienvenue sur ESTRA LINK.</h1>
+            <div class="dynamic-text-container">
+                <span id="textRotator">Propulsez votre marque employeur.</span>
+            </div>
+            <p>Créez votre profil d'entreprise. Connectez-vous aux talents académiques et aux leaders de votre secteur, tout en gérant vos informations en un seul endroit.</p>
+        </div>
+    </div>
+       <div class="mesh-bg"></div>
+    <button class="theme-btn" id="themeToggleBtn" onclick="toggleTheme()"><i class="fas fa-moon"></i></button>
+
+
+    
+    
+   
+    <!-- 2. SECTION JOURNAL SUBSTACK -->
+    <section class="journal-section" id="journalSection">
+        
+    <!-- SECTION HÉROS (ANIMATIONS 3D ET GESTUELLES) -->
+    <div class="hero-section" id="heroSection">
+        
+        <!-- Scène 3D Interactive (Remplace les anciens nœuds simples) -->
+        <div class="scene-3d-container" id="interactiveScene">
+            <!-- IMPORTANT : Remplacez les 'src' par le nom ou le chemin exact de vos images -->
+            <img src="/cost-fee-price-payment-money-stick-figure-boy.png" class="char-3d char-left" alt="Membership Card 3D">
+            <img src="/model-sheet-3d-computer-graphics-character-3d-modeling-animation.png" class="char-3d char-center" alt="Businessman Walking 3D">
+            <img src="/survey-methodology-research-information-surveymonkey-survey-png-clipart-thumbnail.png" class="char-3d char-right" alt="Checklist Validation 3D">
+            
+            <!-- Bulles technologiques pour habiller la scène -->
+            <div class="node node-1"><i class="fas fa-building"></i> Entreprises</div>
+            <div class="node node-2"><i class="fas fa-user-graduate"></i> Étudiants Talents</div>
+            <div class="node node-3"><i class="fas fa-handshake"></i> Opportunités</div>
+        </div>
+    </div>
+        
+         <div style="text-align:center;">
+            <button class="btn btn-primary" onclick="revealForm()" style="padding: 18px 45px; border-radius: 30px;">
+                Créer le profil de mon entreprise <i class="fas fa-arrow-down"></i>
+            </button>
+        </div>
+        <div class="journal-header">
+            <h2>Qu'est-ce qu'ESTRA LINK ?</h2>
+        </div>
+        <div class="glass-grid">
+            <div class="glass-card">
+                <div class="glass-image-bg" style="background-image: url('https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=800&q=80');"></div>
+                <div class="glass-content">
+                    <h3>Fonctionnement Synergique</h3>
+                    <p>Développez vos partenariats avec d'autres entreprises pour créer une véritable force de frappe B2B.</p>
+                </div>
+            </div>
+            <div class="glass-card">
+                <div class="glass-image-bg" style="background-image: url('https://images.unsplash.com/photo-1586281380349-632531db7ed4?auto=format&fit=crop&w=800&q=80');"></div>
+                <div class="glass-content">
+                    <h3>Recrutement Ciblé</h3>
+                    <p>Filtrez et sélectionnez les meilleurs étudiants. Une gestion de vos RH simplifiée.</p>
+                </div>
+            </div>
+            <div class="glass-card">
+                <div class="glass-image-bg" style="background-image: url('https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&w=800&q=80');"></div>
+                <div class="glass-content">
+                    <h3>Partenariats Stratégiques</h3>
+                    <p>Intégrez notre programme pour des événements, masterclasses et une visibilité premium.</p>
+                </div>
+            </div>
+        </div>
+      
+      <div class="action-buttons animate-in delay-2">
+                <button type="button" class="btn btn-outline" onclick="goBack()">Retour</button>
+            </div>
+    </section>
+
+    <!-- 3. FORMULAIRE BENTO GRID -->
+    <div class="form-section" id="formSection">
+        <div class="container">
+            <div class="header">
+                <h2>Complétez votre Espace</h2>
+            </div>
+
+            <div class="premium-alert">
+                <div class="prem-icon"><i class="fas fa-star"></i></div>
+                <div>
+                    <h3>Période d'essai Premium (2 mois offerts)</h3>
+                    <p>Débloquez l'accès complet à la CVthèque des étudiants et la publication illimitée d'offres d'emploi.</p>
+                </div>
+            </div>
+
+            <div class="motivation-card">
+                <div class="progress-wrapper">
+                    <svg class="progress-ring" id="progressRingSvg">
+                        <circle class="progress-ring__background" cx="55" cy="55" r="45"></circle>
+                        <circle class="progress-ring__circle" id="progressCircle" cx="55" cy="55" r="45"></circle>
+                    </svg>
+                    <div class="progress-text" id="progressText">0%</div>
+                </div>
+                <div class="mot-content">
+                    <h4 id="motTitle">Attirez les meilleurs talents</h4>
+                    <p>Remplissez <strong>absolument tous les champs</strong>. À chaque donnée saisie, la jauge monte et votre profil s'enregistre automatiquement.</p>
+                </div>
+            </div>
+
+            <form id="companyForm" onsubmit="submitCompanyProfile(event)">
+                <div class="bento-grid">
+                    
+                    <!-- VISIBILITÉ -->
+                    <div class="form-card">
+                        <div class="autosave-badge" id="saveBadgeVis"><i class="fas fa-cloud-upload-alt"></i></div>
+                        <h3><i class="fas fa-globe"></i> Visibilité (Obligatoire)</h3>
+                        <div class="visibility-options">
+                            <div class="visibility-card" onclick="selectVisibility('public')" id="visPublic">
+                                <div class="vis-content">
+                                    <div class="vis-title">Profil Public</div>
+                                    <div class="vis-desc">Visible par les étudiants et talents. Indispensable pour recruter.</div>
+                                </div>
+                            </div>
+                            <div class="visibility-card" onclick="selectVisibility('private')" id="visPrivate">
+                                <div class="vis-content">
+                                    <div class="vis-title">Profil Privé (B2B)</div>
+                                    <div class="vis-desc">Seules les entreprises vérifiées peuvent vous voir.</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- INFOS -->
+                    <div class="form-card">
+                        <div class="autosave-badge" id="saveBadgeInfo"><i class="fas fa-cloud-upload-alt"></i></div>
+                        <h3><i class="fas fa-building"></i> Identité de l'entreprise</h3>
+                        <div class="form-group">
+                            <label>Nom officiel *</label>
+                            <input type="text" id="companyName" class="track-input" placeholder="Ex: ESTRA Technologies" required>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Secteur *</label>
+                                <select id="sector" class="track-input" required>
+                                    <option value="">Sélectionner</option>
+                                    <option>Technologie / IT</option>
+                                    <option>Finance / Banque</option>
+                                    <option>Santé / Médical</option>
+                                    <option>Commerce</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Taille équipe *</label>
+                                <select id="companySize" class="track-input" required>
+                                    <option value="">Sélectionner</option>
+                                    <option>1-10 employés</option>
+                                    <option>11-50 employés</option>
+                                    <option>Plus de 500</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Ville *</label>
+                            <input type="text" id="location" class="track-input" placeholder="Ex: Lubumbashi" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Adresse Physique *</label>
+                            <input type="text" id="address" class="track-input" placeholder="Avenue, Quartier..." required>
+                        </div>
+                        <div class="form-group" style="margin-bottom:0">
+                            <label>Lien Google Maps *</label>
+                            <input type="url" id="mapLink" class="track-input" placeholder="https://maps.app.goo.gl/..." required>
+                        </div>
+                    </div>
+
+                    <!-- ASSETS -->
+                    <div class="form-card">
+                        <div class="autosave-badge" id="saveBadgeAssets"><i class="fas fa-cloud-upload-alt"></i></div>
+                        <h3><i class="fas fa-image"></i> Marque & Avantages</h3>
+                        <div class="form-group">
+                            <label>Logo de l'entreprise *</label>
+                            <div class="cv-upload-box" id="logoUploadBox" onclick="document.getElementById('logoInput').click()">
+                                <i class="fas fa-upload" style="font-size:2rem; color:var(--blue); margin-bottom:10px;"></i>
+                                <span style="font-weight:700; font-size:0.9rem">Ajouter votre logo</span>
+                            </div>
+                            <!-- Fichier requis virtuellement, on vérifiera en JS -->
+                            <input type="file" id="logoInput" accept="image/png, image/jpeg" style="display:none" onchange="handleLogoUpload(event)">
+                        </div>
+                        <div class="form-group" style="margin-bottom:0;">
+                            <label>Avantages offerts (Min. 1 requis) *</label>
+                            <div style="display:flex;gap:10px">
+                                <input type="text" id="perkInput" placeholder="Ex: Télétravail..." onkeydown="if(event.key==='Enter'){event.preventDefault();addPerk()}">
+                                <button type="button" class="btn btn-outline" onclick="addPerk()" style="padding:10px 15px;"><i class="fas fa-plus"></i></button>
+                            </div>
+                            <div class="skills-wrap" id="perksList"></div>
+                        </div>
+                    </div>
+
+                    <!-- TOGGLES & CONDITIONNELS -->
+                    <div class="form-card">
+                        <div class="autosave-badge" id="saveBadgeToggles"><i class="fas fa-cloud-upload-alt"></i></div>
+                        <h3><i class="fas fa-sliders-h"></i> Outils de Recrutement</h3>
+                        
+                        <div class="toggle-option">
+                            <div class="toggle-info">
+                                <strong>🎓 Autoriser la réception de candidatures</strong>
+                            </div>
+                            <label class="toggle-switch"><input type="checkbox" id="recruitStudents" class="track-toggle" checked><span class="toggle-slider"></span></label>
+                        </div>
+                        <div class="toggle-option">
+                            <div class="toggle-info">
+                                <strong>💼 Activer la publication d'offres</strong>
+                            </div>
+                            <label class="toggle-switch"><input type="checkbox" id="publishJobs" class="track-toggle" checked><span class="toggle-slider"></span></label>
+                        </div>
+
+                        <div class="form-group" style="margin-top: 20px;">
+                            <label class="opt-label" style="margin-bottom:0;">
+                                <input type="checkbox" id="wantsRecruit" onchange="toggleRecruitForm()">
+                                <div class="opt-text">
+                                    <strong>Souhaitez-vous recruter immédiatement ?</strong>
+                                </div>
+                            </label>
+                        </div>
+                        <div id="recruitDetailsBox" class="conditional-box">
+                            <div class="form-group" style="margin-bottom:0;">
+                                <label>Quels profils recherchez-vous ? *</label>
+                                <textarea id="recruitDesc" class="track-input" placeholder="Développeurs, Comptables..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- DESCRIPTION -->
+                    <div class="form-card" style="grid-column: 1 / -1;">
+                        <div class="autosave-badge" id="saveBadgeDesc"><i class="fas fa-cloud-upload-alt"></i></div>
+                        <h3><i class="fas fa-pen"></i> Présentation publique *</h3>
+                        <div class="form-group" style="margin-bottom:0;">
+                            <textarea id="description" class="track-input" placeholder="Décrivez votre entreprise..." required></textarea>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="action-buttons">
+                    <button type="button" class="btn btn-accent" onclick="openPartnerModal()"><i class="fas fa-handshake"></i> Devenir Partenaire</button>
+                    <button type="submit" class="btn btn-primary" id="submitBtn"><i class="fas fa-check-circle"></i> Valider le Profil</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 4. MODAL PARTENAIRE -->
+    <div class="modal-overlay" id="partnerModal">
+        <div class="modal-box">
+            <button class="modal-close" onclick="closePartnerModal()">&times;</button>
+            <h2 style="font-size: 1.6rem; font-weight: 800; margin-bottom: 10px; color: var(--text);">
+                <i class="fas fa-star" style="color:var(--orangered);"></i> Programme Partenaire
+            </h2>
+            <p style="color: var(--text-secondary); margin-bottom: 25px;">Comment souhaitez-vous collaborer avec ESTRA LINK ?</p>
+            
+            <div class="partnership-options">
+                <label class="opt-label">
+                    <input type="checkbox" id="partnerRecruitCheck" onchange="togglePartnerRecruit(this)">
+                    <div class="opt-text">
+                        <strong>🎯 Recrutement Privilégié</strong>
+                    </div>
+                </label>
+                <div id="partnerRecruitExtra" class="conditional-box">
+                    <div class="form-group">
+                        <label>Combien de talents par an ? *</label>
+                        <select id="partnerTalentsCount">
+                            <option value="">Sélectionner</option>
+                            <option>1 à 5 talents</option>
+                            <option>6 à 15 talents</option>
+                        </select>
+                    </div>
+                </div>
+
+                <label class="opt-label">
+                    <input type="checkbox">
+                    <div class="opt-text"><strong>📢 Marque Employeur & Publicité</strong></div>
+                </label>
+                <label class="opt-label">
+                    <input type="checkbox">
+                    <div class="opt-text"><strong>🎓 Organiser des Masterclasses</strong></div>
+                </label>
+            </div>
+            
+            <button class="btn btn-primary" style="width:100%;" onclick="confirmPartnership()">Soumettre la demande</button>
+        </div>
+    </div>
+
+<script>
+    // --- GESTION DU THÈME ---
+    function toggleTheme() {
+        const cur = document.documentElement.getAttribute('data-theme');
+        const next = cur === 'light' ? 'dark' : 'light';
+        document.documentElement.setAttribute('data-theme', next);
+    }
+
+    // --- TEXTE ROTATIF (Toutes les 3.5s) ---
+    const phrases = ["Propulsez votre marque employeur.", "Trouvez les meilleurs talents.", "Développez un réseau B2B."];
+    let phraseIndex = 0;
+    const textRotator = document.getElementById('textRotator');
+    setInterval(() => {
+        textRotator.style.opacity = 0;
+        setTimeout(() => {
+            phraseIndex = (phraseIndex + 1) % phrases.length;
+            textRotator.innerText = phrases[phraseIndex];
+            textRotator.style.opacity = 1;
+        }, 600);
+    }, 3500);
+
+    // --- NAVIGATION ---
+    function revealForm() {
+        document.getElementById('heroSection').style.display = 'none';
+        document.getElementById('journalSection').style.display = 'none';
+        document.getElementById('formSection').classList.add('visible');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // --- VARIABLES & LOGIQUE FORMULAIRE ---
+    let selectedVisibility = null;
+    let perks = [];
+    let logoData = null;
+
+    const trackInputs = document.querySelectorAll('.track-input');
+    const trackToggles = document.querySelectorAll('.track-toggle');
+    const recruitCheck = document.getElementById('wantsRecruit');
+    const recruitDesc = document.getElementById('recruitDesc');
+
+    // --- CONDITIONNELS ---
+    function toggleRecruitForm() {
+        const box = document.getElementById('recruitDetailsBox');
+        if (recruitCheck.checked) {
+            box.style.display = 'block';
+            recruitDesc.setAttribute('required', 'true');
+        } else {
+            box.style.display = 'none';
+            recruitDesc.removeAttribute('required');
+            recruitDesc.value = ''; // clean
+        }
+        autoSaveAndProgress();
+    }
+
+    function togglePartnerRecruit(cb) {
+        const box = document.getElementById('partnerRecruitExtra');
+        box.style.display = cb.checked ? 'block' : 'none';
+    }
+
+    // --- PROGRESSION & AUTOSAVE ---
+    function autoSaveAndProgress() {
+        let filled = 0;
+        let total = 7; // Name, Sector, Size, Location, Address, Map, Desc
+        
+        if(recruitCheck.checked) total += 1; // Le champ textArea devient requis
+        
+        // Check Text Inputs
+        trackInputs.forEach(input => { 
+            if(input.id === 'recruitDesc' && !recruitCheck.checked) return; // ignore if hidden
+            if (input.value.trim().length > 1) filled++; 
+        });
+
+        // Check specials
+        if (selectedVisibility !== null) { filled++; }
+        total += 1; // visibility
+
+        if (logoData !== null) { filled++; }
+        total += 1; // logo
+
+        if (perks.length > 0) { filled++; }
+        total += 1; // perks
+
+        let percentage = Math.round((filled / total) * 100);
+        if(percentage > 100) percentage = 100;
+
+        const circle = document.getElementById('progressCircle');
+        const text = document.getElementById('progressText');
+        const offset = 283 - (283 * percentage) / 100;
+        circle.style.strokeDashoffset = offset;
+        text.innerText = percentage + '%';
+
+        const svgRing = document.getElementById('progressRingSvg');
+        svgRing.classList.add('spinning');
+        clearTimeout(window.spinTimeout);
+        window.spinTimeout = setTimeout(() => { svgRing.classList.remove('spinning'); }, 500);
+
+        const motTitle = document.getElementById('motTitle');
+        if (percentage >= 100) {
+            circle.style.stroke = "var(--blue)";
+            text.style.color = "var(--blue)";
+            motTitle.innerHTML = "✨ Profil 100% prêt à être soumis !";
+        } else {
+            circle.style.stroke = "var(--orangered)";
+            text.style.color = "var(--orangered)";
+            motTitle.innerHTML = "Complétez tous les champs obligatoires";
+        }
+
+        document.querySelectorAll('.autosave-badge').forEach(b => {
+            b.classList.add('saving');
+            setTimeout(() => b.classList.remove('saving'), 800);
+        });
+    }
+
+    trackInputs.forEach(input => { input.addEventListener('input', autoSaveAndProgress); });
+
+    function selectVisibility(type) {
+        selectedVisibility = type;
+        document.getElementById('visPublic').classList.toggle('selected', type === 'public');
+        document.getElementById('visPrivate').classList.toggle('selected', type === 'private');
+        autoSaveAndProgress();
+    }
+
+    // --- AVANTAGES (PERKS) ---
+    function addPerk() {
+        const input = document.getElementById('perkInput');
+        const perk = input.value.replace(/[<>"'`]/g, '').trim();
+        if (!perk || perks.includes(perk)) return;
+        perks.push(perk);
+        renderPerks();
+        input.value = '';
+        autoSaveAndProgress();
+    }
+    function removePerk(index) { perks.splice(index, 1); renderPerks(); autoSaveAndProgress(); }
+    function renderPerks() {
+        document.getElementById('perksList').innerHTML = perks.map((p, i) =>
+            `<span class="skill-tag">${p} <span class="remove-skill" onclick="removePerk(${i})">&times;</span></span>`
+        ).join('');
+    }
+
+    // --- LOGO ---
+    function handleLogoUpload(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            logoData = e.target.result;
+            const box = document.getElementById('logoUploadBox');
+            box.classList.add('has-file');
+            box.innerHTML = `<i class="fas fa-check-circle" style="color:var(--blue);font-size:2rem;margin-bottom:10px;"></i><span style="font-weight:700; color:var(--blue); font-size:0.9rem">Logo chargé</span>`;
+            autoSaveAndProgress();
+        };
+        reader.readAsDataURL(file);
+    }
+
+    // --- MODAL PARTENAIRE ---
+    const partnerModal = document.getElementById('partnerModal');
+    function openPartnerModal() { partnerModal.classList.add('active'); }
+    function closePartnerModal() { partnerModal.classList.remove('active'); }
+    function confirmPartnership() {
+        const check = document.getElementById('partnerRecruitCheck');
+        const select = document.getElementById('partnerTalentsCount');
+        if(check.checked && select.value === "") {
+            alert("Veuillez sélectionner le nombre de talents prévus.");
+            return;
+        }
+        alert("🎉 Demande de partenariat enregistrée !");
+        closePartnerModal();
+    }
+
+    // --- SOUMISSION STRICTE ---
+    function showToast(msg) {
+        const t = document.getElementById('toastMsg');
+        t.innerText = msg;
+        t.classList.add('show');
+        setTimeout(() => t.classList.remove('show'), 3000);
+    }
+
+    function submitCompanyProfile(e) {
+        e.preventDefault();
+
+        // VALIDATIONS MANUELLES STRICTES (Car le navigateur ne bloque pas les div/js virtuels)
+        if (!selectedVisibility) { showToast("Erreur : Choisissez la visibilité (Public ou Privé)."); return; }
+        if (!logoData) { showToast("Erreur : Le logo de l'entreprise est obligatoire."); return; }
+        if (perks.length === 0) { showToast("Erreur : Veuillez ajouter au moins un avantage."); return; }
+        if (document.getElementById('progressText').innerText !== "100%") {
+            showToast("Erreur : Veuillez remplir 100% des champs obligatoires."); return;
+        }
+
+        const btn = document.getElementById('submitBtn');
+        btn.disabled = true; 
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Finalisation...';
+
+        document.getElementById('pageTransition').classList.add('active');
+        setTimeout(() => { 
+            alert("Profil soumis avec succès ! Redirection..."); 
+            // window.location.href = '../index.html'; 
+            btn.innerHTML = '<i class="fas fa-check"></i> Terminé';
+            document.getElementById('pageTransition').classList.remove('active');
+        }, 2000);
+    }
+function goBack() { window.location.href = '../account-select.html'; }
+    // Init calc
+    document.addEventListener('DOMContentLoaded', () => { autoSaveAndProgress(); });
+</script>
+</body>
+</html>

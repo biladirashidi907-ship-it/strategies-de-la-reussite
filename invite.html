@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>ESTRA LINK | Inviter des amis</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        :root {
+            --primary: #0a66c2;
+            --secondary: #8b5cf6;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --dark: #1e1e2f;
+            --darker: #161625;
+            --gray-dark: #2d2d44;
+            --gray-light: #a0a0b8;
+            --light: #f1f5f9;
+            --border-light: #334155;
+            --text-secondary: #94a3b8;
+            --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            --gradient-bg: linear-gradient(135deg, #161625 0%, #1e1e2f 100%);
+        }
+
+        body.light-theme {
+            --dark: #ffffff;
+            --darker: #f8fafc;
+            --gray-dark: #e2e8f0;
+            --gray-light: #64748b;
+            --light: #0f172a;
+            --border-light: #e0e3e6;
+            --text-secondary: #536471;
+            --gradient-bg: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+        
+        body {
+            background: var(--gradient-bg);
+            color: var(--light);
+            min-height: 100vh;
+            padding-bottom: 70px;
+        }
+
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-track { background: var(--gray-dark); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; }
+
+        /* ========== SIDEBAR ========== */
+        .sidebar-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(5px);
+            z-index: 140;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+        }
+        .sidebar-overlay.active { opacity: 1; visibility: visible; }
+        
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: -280px;
+            width: 280px;
+            height: 100vh;
+            background: rgba(30, 30, 47, 0.98);
+            backdrop-filter: blur(10px);
+            z-index: 150;
+            transition: left 0.3s ease;
+            padding: 25px 20px;
+            border-right: 1px solid var(--border-light);
+            overflow-y: auto;
+        }
+        body.light-theme .sidebar { background: rgba(255, 255, 255, 0.98); }
+        .sidebar.open { left: 0; }
+        
+        .profile-card { text-align: center; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px solid var(--border-light); }
+        .profile-avatar { width: 80px; height: 80px; border-radius: 50%; margin-bottom: 12px; border: 3px solid var(--primary); object-fit: cover; }
+        .profile-name { font-size: 1.2rem; font-weight: 600; margin-bottom: 8px; }
+        .profile-stats { display: flex; justify-content: center; gap: 24px; margin-top: 12px; }
+        .profile-stats div { text-align: center; }
+        .profile-stats strong { display: block; font-size: 1.1rem; color: var(--primary); }
+        .profile-stats span { font-size: 0.7rem; color: var(--text-secondary); }
+        
+        .sidebar-nav { display: flex; flex-direction: column; gap: 6px; }
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 12px 16px;
+            border-radius: 12px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+        .sidebar-link:hover, .sidebar-link.active { background: rgba(10, 102, 194, 0.12); color: var(--primary); }
+        .sidebar-divider { margin: 16px 0; border-color: var(--border-light); }
+
+        /* ========== NAVBAR ========== */
+        .navbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 24px;
+            background: rgba(30, 30, 47, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-light);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        body.light-theme .navbar { background: rgba(255, 255, 255, 0.95); }
+        
+        .navbar-left { display: flex; align-items: center; gap: 20px; }
+        .menu-toggle { background: none; border: none; color: var(--text-secondary); font-size: 1.3rem; cursor: pointer; padding: 8px; border-radius: 10px; transition: var(--transition); }
+        .menu-toggle:hover { background: rgba(10, 102, 194, 0.12); color: var(--primary); }
+        
+        .logo-text-estra { font-size: 1.3rem; font-weight: 800; background: linear-gradient(135deg, #0a66c2, #8b5cf6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: 1px; }
+        .logo-text-link { font-size: 1rem; font-weight: 300; color: var(--light); }
+        .logo-slogan { font-size: 0.5rem; font-weight: 500; color: var(--text-secondary); letter-spacing: 2px; text-transform: uppercase; }
+        
+        .nav-icons { display: flex; gap: 20px; align-items: center; }
+        .nav-icon { color: var(--text-secondary); font-size: 1.2rem; cursor: pointer; transition: var(--transition); padding: 8px; border-radius: 10px; }
+        .nav-icon:hover { color: var(--primary); background: rgba(10, 102, 194, 0.12); }
+        .avatar { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary); cursor: pointer; }
+
+        /* ========== MAIN CONTENT ========== */
+        .main-content {
+            max-width: 680px;
+            margin: 0 auto;
+            background: var(--dark);
+            border-left: 1px solid var(--border-light);
+            border-right: 1px solid var(--border-light);
+            min-height: calc(100vh - 70px);
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ========== INVITE PAGE STYLES ========== */
+        .hero-section {
+            background: linear-gradient(135deg, rgba(10,102,194,0.15), rgba(139,92,246,0.1));
+            padding: 40px 24px;
+            text-align: center;
+            border-bottom: 1px solid var(--border-light);
+        }
+        
+        .hero-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+        
+        .hero-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 12px;
+        }
+        
+        .hero-subtitle {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            line-height: 1.5;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        
+        .inspire-card {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            margin: 20px;
+            padding: 24px;
+            border-radius: 24px;
+            color: white;
+            text-align: center;
+        }
+        
+        .inspire-card p {
+            font-size: 1.1rem;
+            line-height: 1.5;
+            margin-bottom: 16px;
+        }
+        
+        .inspire-card i {
+            font-size: 2rem;
+            opacity: 0.9;
+        }
+        
+        .invite-card {
+            background: var(--darker);
+            border-radius: 24px;
+            padding: 24px;
+            margin: 20px;
+            border: 1px solid var(--border-light);
+        }
+        
+        .invite-code-box {
+            background: var(--gray-dark);
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .invite-code-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            letter-spacing: 4px;
+            color: var(--primary);
+            font-family: monospace;
+        }
+        
+        .invite-link-box {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: var(--gray-dark);
+            border-radius: 12px;
+            padding: 12px 16px;
+            margin-bottom: 24px;
+        }
+        
+        .invite-link-text {
+            flex: 1;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            word-break: break-all;
+        }
+        
+        .copy-btn {
+            background: var(--primary);
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .copy-btn:hover { transform: scale(1.02); opacity: 0.9; }
+        
+        .share-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .share-item {
+            background: var(--gray-dark);
+            border-radius: 12px;
+            padding: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .share-item:hover { transform: translateY(-3px); background: var(--primary); color: white; }
+        .share-item i { font-size: 1.5rem; margin-bottom: 6px; display: block; }
+        .share-item span { font-size: 0.7rem; }
+        
+        .stats-card {
+            background: var(--darker);
+            border-radius: 24px;
+            padding: 24px;
+            margin: 20px;
+            border: 1px solid var(--border-light);
+            text-align: center;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+            margin-top: 20px;
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+        
+        .badge-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+        }
+        
+        .badge-icon i { font-size: 2rem; color: white; }
+
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(30, 30, 47, 0.95);
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 8px 16px;
+            border-top: 1px solid var(--border-light);
+            height: 60px;
+            z-index: 40;
+        }
+        .bottom-nav-item {
+            color: var(--text-secondary);
+            font-size: 1.3rem;
+            text-decoration: none;
+            padding: 8px;
+            border-radius: 12px;
+        }
+        .bottom-nav-item.active { color: var(--primary); background: rgba(10, 102, 194, 0.12); }
+
+        .toast-message {
+            position: fixed;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: var(--dark);
+            color: var(--light);
+            padding: 10px 24px;
+            border-radius: 30px;
+            z-index: 1000;
+            transition: transform 0.3s ease;
+            border: 1px solid var(--primary);
+            white-space: nowrap;
+        }
+        .toast-message.show { transform: translateX(-50%) translateY(0); }
+
+        @media (max-width: 480px) {
+            .share-grid { grid-template-columns: repeat(3, 1fr); }
+            .hero-title { font-size: 1.4rem; }
+            .invite-code-value { font-size: 1.2rem; letter-spacing: 2px; }
+        }
+        @media (min-width: 1024px) {
+            .menu-toggle { display: none; }
+            .sidebar { left: 0; }
+            .main-content { margin-left: 280px; }
+        }
+        @media (max-width: 1023px) {
+            .sidebar { left: -280px; }
+            .sidebar.open { left: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <nav class="navbar">
+        <div class="navbar-left">
+            <button class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button>
+            <a href="#" class="logo" style="text-decoration: none;">
+                <div style="display: flex; flex-direction: column;">
+                    <div><span class="logo-text-estra">ESTRA LINK</span></div>
+                    <span class="logo-slogan">INVITATION</span>
+                </div>
+            </a>
+        </div>
+        <div class="nav-icons">
+            <i class="fas fa-palette nav-icon" id="themeIcon"></i>
+            <img src="https://ui-avatars.com/api/?background=0a66c2&color=fff&name=Rashidi&size=40" class="avatar" id="navAvatar">
+        </div>
+    </nav>
+
+    <aside class="sidebar" id="sidebar">
+        <div class="profile-card">
+            <img src="https://ui-avatars.com/api/?background=0a66c2&color=fff&name=Rashidi&size=80" class="profile-avatar" id="sidebarAvatar">
+            <div class="profile-name" id="sidebarName">Rashidi</div>
+            <div class="profile-stats">
+                <div><strong id="sidebarPosts">0</strong><span>Posts</span></div>
+                <div><strong>24</strong><span>Amis</span></div>
+                <div><strong>5</strong><span>Groupes</span></div>
+            </div>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="index.html" class="sidebar-link"><i class="fas fa-home"></i> Accueil</a>
+            <a href="invite.html" class="sidebar-link active"><i class="fas fa-user-plus"></i> Inviter</a>
+            <a href="friends.html" class="sidebar-link"><i class="fas fa-user-friends"></i> Amis</a>
+            <a href="courses.html" class="sidebar-link"><i class="fas fa-graduation-cap"></i> Cours</a>
+            <a href="jobs.html" class="sidebar-link"><i class="fas fa-briefcase"></i> Emplois</a>
+            <a href="profile.html" class="sidebar-link"><i class="fas fa-user"></i> Mon Profil</a>
+            <hr class="sidebar-divider">
+            <a href="settings.html" class="sidebar-link"><i class="fas fa-cog"></i> Paramètres</a>
+            <a href="login.html" class="sidebar-link"><i class="fas fa-sign-out-alt"></i> Déconnexion</a>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+        <!-- Section d'inspiration / message d'accueil -->
+        <div class="hero-section">
+            <div class="hero-icon">🌟</div>
+            <h1 class="hero-title">Ensemble, construisons l'avenir</h1>
+            <p class="hero-subtitle">Invitez vos camarades à rejoindre ESTRA LINK. Chaque nouveau membre enrichit notre communauté éducative et ouvre de nouvelles opportunités pour tous.</p>
+        </div>
+
+        <!-- Message d'inspiration -->
+        <div class="inspire-card">
+            <i class="fas fa-quote-left"></i>
+            <p style="margin-top: 12px;">"L'éducation est l'arme la plus puissante pour changer le monde. Ensemble sur ESTRA LINK, nous créons un espace où chaque étudiant peut exceller, partager et grandir. Rejoignez-nous dans cette aventure extraordinaire !"</p>
+            <i class="fas fa-quote-right" style="display: block; text-align: right;"></i>
+            <div style="margin-top: 16px; font-size: 0.85rem; opacity: 0.9;">— La communauté ESTRA LINK</div>
+        </div>
+
+        <!-- Carte d'invitation -->
+        <div class="invite-card">
+            <div class="badge-icon">
+                <i class="fas fa-gift"></i>
+            </div>
+            <h3 style="text-align: center; margin-bottom: 20px;">Votre code d'invitation unique</h3>
+            
+            <div class="invite-code-box">
+                <div class="invite-code-value" id="inviteCode">ESTRA-ABC123</div>
+                <div style="font-size: 12px; color: var(--text-secondary); margin-top: 8px;">Partagez ce code avec vos amis</div>
+            </div>
+            
+            <div class="invite-link-box">
+                <div class="invite-link-text" id="inviteLink">https://estra-link.com/invite/ABC123</div>
+                <button class="copy-btn" onclick="copyInviteLink()">
+                    <i class="fas fa-copy"></i> Copier
+                </button>
+            </div>
+            
+            <h4 style="margin-bottom: 16px; text-align: center;">Partager sur</h4>
+            <div class="share-grid" id="shareGrid"></div>
+        </div>
+
+        <!-- Statistiques -->
+        <div class="stats-card">
+            <h3>📊 Votre impact sur la communauté</h3>
+            <div class="stats-grid">
+                <div class="stat">
+                    <div class="stat-value" id="invitesCount">0</div>
+                    <div class="stat-label">Personnes invitées</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="reputationPoints">0</div>
+                    <div class="stat-label">Points de réputation</div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div class="bottom-nav">
+        <a href="index.html" class="bottom-nav-item"><i class="fas fa-home"></i></a>
+        <a href="messages.html" class="bottom-nav-item"><i class="fas fa-envelope"></i></a>
+        <a href="notifications.html" class="bottom-nav-item"><i class="fas fa-bell"></i></a>
+        <a href="groups.html" class="bottom-nav-item"><i class="fas fa-users"></i></a>
+        <a href="profile.html" class="bottom-nav-item"><i class="fas fa-user"></i></a>
+    </div>
+
+    <div class="toast-message" id="toastMsg"></div>
+
+    <script>
+        // ========== DONNÉES ==========
+        let currentUser = JSON.parse(localStorage.getItem('estra_current_user')) || {
+            name: 'Rashidi', avatar: 'https://ui-avatars.com/api/?background=0a66c2&color=fff&name=Rashidi&size=80'
+        };
+        
+        // Générer un code d'invitation unique
+        function generateInviteCode() {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            let code = 'ESTRA-';
+            for (let i = 0; i < 6; i++) {
+                code += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return code;
+        }
+        
+        let inviteCode = localStorage.getItem('estra_invite_code');
+        if (!inviteCode) {
+            inviteCode = generateInviteCode();
+            localStorage.setItem('estra_invite_code', inviteCode);
+        }
+        
+        document.getElementById('inviteCode').textContent = inviteCode;
+        const inviteLink = `https://estra-link.com/invite/${inviteCode}`;
+        document.getElementById('inviteLink').textContent = inviteLink;
+        
+        // Statistiques
+        let invitesCount = parseInt(localStorage.getItem('estra_invites_count') || '0');
+        let reputationPoints = parseInt(localStorage.getItem('estra_reputation_points') || '0');
+        document.getElementById('invitesCount').textContent = invitesCount;
+        document.getElementById('reputationPoints').textContent = reputationPoints;
+        
+        // Mettre à jour sidebar
+        document.getElementById('sidebarName').textContent = currentUser.name;
+        document.getElementById('sidebarAvatar').src = currentUser.avatar;
+        document.getElementById('navAvatar').src = currentUser.avatar;
+        
+        // Liste des réseaux sociaux
+        const socialNetworks = [
+            { name: 'WhatsApp', icon: 'fab fa-whatsapp', color: '#25D366', url: (link, text) => `https://wa.me/?text=${encodeURIComponent(text + ' ' + link)}` },
+            { name: 'Telegram', icon: 'fab fa-telegram', color: '#0088cc', url: (link, text) => `https://t.me/share/url?url=${encodeURIComponent(link)}&text=${encodeURIComponent(text)}` },
+            { name: 'Facebook', icon: 'fab fa-facebook-f', color: '#1877F2', url: (link) => `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(link)}` },
+            { name: 'Twitter', icon: 'fab fa-twitter', color: '#1DA1F2', url: (link, text) => `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(link)}` },
+            { name: 'LinkedIn', icon: 'fab fa-linkedin-in', color: '#0077B5', url: (link) => `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(link)}` },
+            { name: 'Instagram', icon: 'fab fa-instagram', color: '#E4405F', url: () => `instagram://user?username=estralink` },
+            { name: 'YouTube', icon: 'fab fa-youtube', color: '#FF0000', url: () => `https://youtube.com/@estralink` },
+            { name: 'TikTok', icon: 'fab fa-tiktok', color: '#000000', url: () => `https://tiktok.com/@estralink` },
+            { name: 'Snapchat', icon: 'fab fa-snapchat-ghost', color: '#FFFC00', url: () => `https://snapchat.com/add/estralink` },
+            { name: 'Reddit', icon: 'fab fa-reddit-alien', color: '#FF4500', url: (link, text) => `https://www.reddit.com/submit?url=${encodeURIComponent(link)}&title=${encodeURIComponent(text)}` },
+            { name: 'Pinterest', icon: 'fab fa-pinterest-p', color: '#BD081C', url: (link, text) => `https://pinterest.com/pin/create/button/?url=${encodeURIComponent(link)}&description=${encodeURIComponent(text)}` },
+            { name: 'Substack', icon: 'fas fa-newspaper', color: '#FF6719', url: () => `https://substack.com/@estralink` },
+            { name: 'Google', icon: 'fab fa-google', color: '#4285F4', url: (link) => `https://plus.google.com/share?url=${encodeURIComponent(link)}` },
+            { name: 'Email', icon: 'fas fa-envelope', color: '#EA4335', url: (link, text) => `mailto:?subject=${encodeURIComponent('Rejoins-moi sur ESTRA LINK')}&body=${encodeURIComponent(text + '\n\n' + link)}` },
+            { name: 'Messenger', icon: 'fab fa-facebook-messenger', color: '#0084FF', url: (link) => `https://www.facebook.com/dialog/send?link=${encodeURIComponent(link)}&app_id=YOUR_APP_ID` }
+        ];
+        
+        const shareMessage = `🎓 Rejoins-moi sur ESTRA LINK ! Utilise mon code d'invitation : ${inviteCode}\n\nESTRA LINK est le réseau social éducatif qui te permet de :\n✓ Suivre tes cours en ligne\n✓ Échanger avec des étudiants et professeurs\n✓ Accéder à des ressources pédagogiques exclusives\n✓ Construire ton réseau professionnel\n\nRejoins-nous dès maintenant et fais partie de la communauté qui révolutionne l'éducation !`;
+        
+        function renderShareGrid() {
+            const container = document.getElementById('shareGrid');
+            container.innerHTML = socialNetworks.map(social => `
+                <div class="share-item" onclick="shareTo('${social.name}')" style="background: var(--gray-dark);">
+                    <i class="${social.icon}" style="color: ${social.color};"></i>
+                    <span>${social.name}</span>
+                </div>
+            `).join('');
+        }
+        
+        window.shareTo = (platform) => {
+            const social = socialNetworks.find(s => s.name === platform);
+            if (social) {
+                let url;
+                if (platform === 'Instagram') {
+                    showToast('📱 Ouvrez Instagram et recherchez @estralink');
+                    window.open('https://www.instagram.com/', '_blank');
+                } else if (platform === 'YouTube') {
+                    window.open('https://youtube.com/@estralink', '_blank');
+                } else if (platform === 'TikTok') {
+                    window.open('https://tiktok.com/@estralink', '_blank');
+                } else if (platform === 'Snapchat') {
+                    window.open('https://snapchat.com/add/estralink', '_blank');
+                } else if (platform === 'Substack') {
+                    window.open('https://substack.com/@estralink', '_blank');
+                } else {
+                    url = social.url(inviteLink, shareMessage);
+                    if (url) window.open(url, '_blank');
+                }
+                showToast(`📤 Partage via ${platform}`);
+                // Incrémenter les statistiques
+                addInvitation();
+            }
+        };
+        
+        function copyInviteLink() {
+            navigator.clipboard.writeText(inviteLink).then(() => {
+                showToast('✅ Lien copié ! Partagez-le avec vos camarades');
+            }).catch(() => {
+                showToast('🔗 Lien : ' + inviteLink);
+            });
+        }
+        
+        function addInvitation() {
+            invitesCount++;
+            reputationPoints += 10;
+            localStorage.setItem('estra_invites_count', invitesCount);
+            localStorage.setItem('estra_reputation_points', reputationPoints);
+            document.getElementById('invitesCount').textContent = invitesCount;
+            document.getElementById('reputationPoints').textContent = reputationPoints;
+        }
+        
+        // Vérifier si un paramètre d'invitation est présent dans l'URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const invitedBy = urlParams.get('ref');
+        if (invitedBy && invitedBy !== inviteCode) {
+            addInvitation();
+            showToast('🎉 Bienvenue ! Un ami vous a invité à rejoindre ESTRA LINK');
+        }
+        
+        function showToast(msg) {
+            const toast = document.getElementById('toastMsg');
+            toast.textContent = msg;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+        
+        // Fonctions UI
+        function toggleTheme() {
+            document.body.classList.toggle('light-theme');
+            localStorage.setItem('estra_theme', document.body.classList.contains('light-theme') ? 'light' : 'dark');
+        }
+        
+        function loadTheme() {
+            if (localStorage.getItem('estra_theme') === 'light') document.body.classList.add('light-theme');
+        }
+        
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+            document.getElementById('sidebarOverlay').classList.toggle('active');
+        }
+        
+        // Mettre à jour les stats sidebar
+        function updateSidebarStats() {
+            const posts = JSON.parse(localStorage.getItem('estra_posts') || '[]');
+            const userPosts = posts.filter(p => p.author === currentUser.name);
+            document.getElementById('sidebarPosts').textContent = userPosts.length;
+        }
+        
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', () => {
+            loadTheme();
+            renderShareGrid();
+            updateSidebarStats();
+            
+            document.getElementById('menuToggle').addEventListener('click', toggleSidebar);
+            document.getElementById('sidebarOverlay').addEventListener('click', toggleSidebar);
+            document.getElementById('themeIcon').addEventListener('click', toggleTheme);
+        });
+    </script>
+</body>
+</html>

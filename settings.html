@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title data-i18n="page_title">ESTRA LINK | Paramètres</title>
+    
+    <!-- SEO & Social Media Open Graph -->
+    <meta property="og:title" content="ESTRA LINK | Paramètres">
+    <meta property="og:description" content="Personnalisez votre expérience ESTRA LINK. Gérez votre compte, vos préférences et votre confidentialité.">
+    <meta property="og:image" content="https://ui-avatars.com/api/?background=38bdf8&color=fff&name=ESTRA&size=512">
+    <meta property="og:type" content="website">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- PWA -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#38bdf8">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="ESTRA LINK">
+    <link rel="apple-touch-icon" href="https://ui-avatars.com/api/?background=38bdf8&color=fff&name=E&size=152">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Styles supplémentaires pour la section des bloqués */
+        .blocked-user-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            background: var(--bg-tertiary, #f1f5f9);
+            border-radius: 12px;
+            margin-bottom: 8px;
+            transition: all 0.2s ease;
+        }
+        .blocked-user-item:hover {
+            background: var(--hover-bg, #e2e8f0);
+        }
+        .blocked-user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--danger, #dc2626);
+        }
+        .blocked-user-info {
+            flex: 1;
+        }
+        .blocked-user-name {
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: var(--text-primary, #0f172a);
+        }
+        .blocked-user-date {
+            font-size: 0.7rem;
+            color: var(--text-secondary, #64748b);
+        }
+        .blocked-user-unblock {
+            background: var(--success, #059669);
+            border: none;
+            color: #fff;
+            padding: 6px 14px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            font-family: inherit;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .blocked-user-unblock:hover {
+            transform: scale(1.05);
+            opacity: 0.9;
+        }
+        .empty-blocked {
+            text-align: center;
+            padding: 30px 20px;
+            color: var(--text-secondary, #64748b);
+            font-size: 0.9rem;
+        }
+        .empty-blocked i {
+            font-size: 2.5rem;
+            opacity: 0.3;
+            margin-bottom: 12px;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="offline-banner" id="offlineBanner"> <span data-i18n="offline_mode">Mode hors-ligne</span></div>
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+    
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+        <div class="profile-section">
+            <div style="position: relative; display: inline-block;">
+                <img src="" class="profile-img-sidebar" id="sidebarAvatar" alt="Avatar">
+                <div class="online-indicator" id="userOnlineIndicator"></div>
+            </div>
+            <h3 style="margin:0;font-size:1.05rem;" id="sidebarName">Rashidi</h3>
+            <div class="profile-stats">
+                <div><strong id="sidebarPosts">0</strong><span data-i18n="posts">Posts</span></div>
+                <div><strong id="sidebarFriends">0</strong><span data-i18n="friends_label">Amis</span></div>
+                <div><strong id="sidebarGroups">0</strong><span data-i18n="groups_label">Groupes</span></div>
+            </div>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="home.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg> <span data-i18n="home">Accueil</span></a>
+            <a href="saved.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg> <span data-i18n="saved">Enregistrés</span></a>
+            <a href="friends.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg> <span data-i18n="friends_label">Amis</span></a>
+            <a href="courses.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg> <span data-i18n="courses">Cours</span></a>
+            <a href="events.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> <span data-i18n="events">Événements</span></a>
+            <a href="groups.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> <span data-i18n="groups_label">Groupes</span></a>
+             <a href="mentorship.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg> <span >Mentorat</span></a>
+            <a href="profile.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> <span data-i18n="my_profile">Mon Profil</span></a>
+            <hr style="margin:10px 0;border-color:var(--border-color);">
+            <a href="settings.html" class="sidebar-link active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg> <span data-i18n="settings">Paramètres</span></a>
+            <hr style="margin:10px 0;border-color:var(--border-color);">
+            <button class="sidebar-link logout-link" onclick="logout()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg> <span data-i18n="logout">Déconnexion</span></button>
+        </nav>
+    </aside>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <div class="nav-left">
+            <button class="menu-toggle" onclick="toggleSidebar()" aria-label="Menu"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="7" x2="16" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="12" y2="17"/><circle cx="18" cy="17" r="2"/></svg></button>
+            <a href="home.html" class="navbar-brand">ESTRA LINK</a>
+        </div>
+        <div class="nav-right">
+            <img src="" class="avatar-nav" id="navAvatar" onclick="window.location.href='profile.html'" alt="Avatar">
+        </div>
+    </nav>
+
+    <!-- MAIN CONTENT (PARAMÈTRES) -->
+    <main class="main-content">
+        <div class="settings-header">
+            <h1><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg> <span data-i18n="settings_title">Paramètres</span></h1>
+            <p data-i18n="settings_subtitle">Personnalisez votre expérience ESTRA LINK</p>
+        </div>
+
+        <div class="settings-section">
+            <div class="section-header"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span data-i18n="section_account">COMPTE</span></div>
+            <div class="setting-row" onclick="window.location.href='profile.html'"><div class="setting-left"><div class="setting-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></div><div class="setting-info"><span class="setting-title" data-i18n="personal_info">Informations personnelles</span><span class="setting-desc" data-i18n="personal_info_desc">Nom, bio, photo</span></div></div><div class="setting-value"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div></div>
+            <div class="setting-row" onclick="openSecurityModal()"><div class="setting-left"><div class="setting-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div><div class="setting-info"><span class="setting-title" data-i18n="security">Sécurité</span><span class="setting-desc" data-i18n="security_desc">Mot de passe</span></div></div><div class="setting-value"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div></div>
+            <div class="setting-row" onclick="openEmailModal()"><div class="setting-left"><div class="setting-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div><div class="setting-info"><span class="setting-title" data-i18n="email_notif">Email et notifications</span><span class="setting-desc" data-i18n="email_notif_desc">Gérer vos emails</span></div></div><div class="setting-value"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div></div>
+        </div>
+
+        <div class="settings-section">
+            <div class="section-header"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg><span data-i18n="section_preferences">PRÉFÉRENCES</span></div>
+            <div class="setting-row" onclick="openLanguageModal()"><div class="setting-left"><div class="setting-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div><div class="setting-info"><span class="setting-title" data-i18n="language">Langue</span><span class="setting-desc" id="languageDesc">Français</span></div></div><div class="setting-value"><span class="status-badge" id="currentLanguage">FR</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div></div>
+            <div class="setting-row"><div class="setting-left"><div class="setting-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></div><div class="setting-info"><span class="setting-title" data-i18n="notifications">Notifications</span><span class="setting-desc" data-i18n="notifications_desc">Alertes push</span></div></div><div class="setting-value"><label class="toggle-switch"><input type="checkbox" id="notifToggle" checked><span class="toggle-slider"></span></label></div></div>
+            <div class="setting-row"><div class="setting-left"><div class="setting-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg></div><div class="setting-info"><span class="setting-title" data-i18n="sounds">Sons</span><span class="setting-desc" data-i18n="sounds_desc">Effets sonores</span></div></div><div class="setting-value"><label class="toggle-switch"><input type="checkbox" id="soundToggle" checked><span class="toggle-slider"></span></label></div></div>
+        </div>
+
+        <div class="settings-section">
+            <div class="section-header"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg><span data-i18n="section_display">AFFICHAGE</span></div>
+            <div class="setting-row" onclick="openFontSizeModal()"><div class="setting-left"><div class="setting-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="7" x2="20" y2="7"/><line x1="8" y1="3" x2="8" y2="21"/><line x1="14" y1="10" x2="20" y2="10"/></svg></div><div class="setting-info"><span class="setting-title" data-i18n="font_size">Taille de police</span><span class="setting-desc" id="fontSizeDesc">Moyenne</span></div></div><div class="setting-value"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div></div>
+            <div class="setting-row"><div class="setting-left"><div class="setting-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg></div><div class="setting-info"><span class="setting-title" data-i18n="autoplay">Lecture automatique</span><span class="setting-desc" data-i18n="autoplay_desc">Vidéos et GIFs</span></div></div><div class="setting-value"><label class="toggle-switch"><input type="checkbox" id="autoplayToggle" checked><span class="toggle-slider"></span></label></div></div>
+            <div class="setting-row"><div class="setting-left"><div class="setting-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><div class="setting-info"><span class="setting-title" data-i18n="data_saver">Économie de données</span><span class="setting-desc" data-i18n="data_saver_desc">Réduire la consommation</span></div></div><div class="setting-value"><label class="toggle-switch"><input type="checkbox" id="dataSaverToggle"><span class="toggle-slider"></span></label></div></div>
+        </div>
+
+        <div class="settings-section">
+            <div class="section-header"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg><span data-i18n="section_privacy">CONFIDENTIALITÉ</span></div>
+            <div class="setting-row" onclick="openPrivacyModal()"><div class="setting-left"><div class="setting-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg></div><div class="setting-info"><span class="setting-title" data-i18n="who_can_see">Qui peut me voir ?</span><span class="setting-desc" data-i18n="who_can_see_desc">Gérer la visibilité</span></div></div><div class="setting-value"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div></div>
+            <div class="setting-row" onclick="openBlockedModal()"><div class="setting-left"><div class="setting-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg></div><div class="setting-info"><span class="setting-title" data-i18n="blocked_users">Utilisateurs bloqués</span><span class="setting-desc" data-i18n="blocked_users_desc">Gérer la liste noire</span></div></div><div class="setting-value"><span class="status-badge" id="blockedCountBadge" style="background:var(--danger, #dc2626);color:#fff;">0</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div></div>
+            <div class="setting-row" onclick="exportData()"><div class="setting-left"><div class="setting-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></div><div class="setting-info"><span class="setting-title" data-i18n="export_data">Exporter mes données</span><span class="setting-desc" data-i18n="export_data_desc">Télécharger une copie</span></div></div><div class="setting-value"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div></div>
+            <div class="setting-row" onclick="openPageInDetail('privacy')"><div class="setting-left"><div class="setting-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div><div class="setting-info"><span class="setting-title" data-i18n="privacy_policy">Confidentialité</span></div></div><div class="setting-value"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div></div>
+            <div class="setting-row" onclick="openPageInDetail('terms')"><div class="setting-left"><div class="setting-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div><div class="setting-info"><span class="setting-title" data-i18n="terms_of_use">Conditions d'utilisation</span></div></div><div class="setting-value"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div></div>
+        </div>
+
+        <div class="settings-section">
+            <div class="section-header"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg><span data-i18n="section_storage">STOCKAGE</span></div>
+            <div class="storage-info"><div style="display:flex;justify-content:space-between;margin-bottom:8px;"><span data-i18n="storage_used">Espace utilisé</span><span id="storageUsed">0 MB</span></div><div class="storage-bar"><div class="storage-fill" id="storageFill" style="width:0%"></div></div><div class="storage-details"><span data-i18n="storage_total">Total: 100 MB</span><span id="storagePercent">0% <span data-i18n="storage_used_pct">utilisé</span></span></div></div>
+            <div class="setting-row" onclick="clearCache()"><div class="setting-left"><div class="setting-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></div><div class="setting-info"><span class="setting-title" data-i18n="clear_cache">Vider le cache</span><span class="setting-desc" data-i18n="clear_cache_desc">Libérer de l'espace</span></div></div><div class="setting-value"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div></div>
+            <div class="setting-row" onclick="clearAllData()"><div class="setting-left"><div class="setting-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></div><div class="setting-info"><span class="setting-title" data-i18n="clear_all_data">Effacer toutes les données</span><span class="setting-desc" data-i18n="clear_all_data_desc">Réinitialiser l'application</span></div></div><div class="setting-value"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div></div>
+        </div>
+
+        <div class="settings-section">
+            <div class="section-header"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg><span data-i18n="section_about">À PROPOS</span></div>
+            <div class="setting-row" onclick="openPageInDetail('about')"><div class="setting-left"><div class="setting-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18"/><path d="M5 21V7l8-4v18"/><path d="M19 21V11l-6-4"/><line x1="9" y1="9" x2="9" y2="9.01"/><line x1="9" y1="12" x2="9" y2="12.01"/><line x1="9" y1="15" x2="9" y2="15.01"/><line x1="9" y1="18" x2="9" y2="18.01"/></svg></div><div class="setting-info"><span class="setting-title" data-i18n="about_estra">À propos d'ESTRA LINK</span></div></div><div class="setting-value"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div></div>
+            <div class="setting-row" onclick="openFeedbackModal()"><div class="setting-left"><div class="setting-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div><div class="setting-info"><span class="setting-title" data-i18n="contact_us">Nous contacter</span><span class="setting-desc" data-i18n="contact_us_desc">Feedback et support</span></div></div><div class="setting-value"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div></div>
+        </div>
+
+        <div class="settings-section danger-zone">
+            <div class="section-header"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><span data-i18n="section_danger">ZONE DE DANGER</span></div>
+            <div class="setting-row" onclick="logout()"><div class="setting-left"><div class="setting-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></div><div class="setting-info"><span class="setting-title" data-i18n="logout">Déconnexion</span><span class="setting-desc" data-i18n="logout_desc">Se déconnecter</span></div></div><div class="setting-value"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div></div>
+            <div class="setting-row" onclick="deleteAccount()"><div class="setting-left"><div class="setting-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></div><div class="setting-info"><span class="setting-title" data-i18n="delete_account">Supprimer le compte</span><span class="setting-desc" data-i18n="delete_account_desc">Action irréversible</span></div></div><div class="setting-value"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div></div>
+        </div>
+
+        <div class="settings-footer">
+            <div class="footer-links">
+                <a href="#" onclick="openPageInDetail('help'); return false;" data-i18n="help">Aide</a>
+                <a href="#" onclick="openPageInDetail('terms'); return false;" data-i18n="terms_link">Conditions</a>
+                <a href="#" onclick="openPageInDetail('about'); return false;" data-i18n="about">À propos</a>
+            </div>
+            <div>ESTRA LINK © 2026 © v2.0.0<span data-i18n="all_rights">Tous droits réservés</span></div>
+        </div>
+    </main>
+
+    <!-- BOTTOM NAV -->
+    <div class="bottom-nav">
+        <a href="home.html" class="bottom-nav-item" title="Accueil"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></a>
+        <a href="notifications.html" class="bottom-nav-item" title="Notifications" style="position:relative;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg><span class="badge-count" id="notifBadge" style="display:none;">0</span></a>
+        <a href="messages.html" class="bottom-nav-item" style="position:relative"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg><span class="badge-count" id="msgBadge" style="display:none">0</span></a>
+        <a href="courses.html" class="bottom-nav-item" style="position:relative"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg><span class="badge-count" id="msgBadge" style="display:none">0</span></a>
+        <a href="profile.html" class="bottom-nav-item" title="Profil"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></a>
+    </div>
+
+    <div id="toastMsg" class="toast-custom"></div>
+
+<script>
+// ============ TRADUCTIONS MULTILINGUES COMPLÈTES ============
+const translations = {
+    fr: {
+        page_title: "ESTRA LINK | Paramètres",
+        offline_mode: "Mode hors-ligne", posts: "Posts", friends_label: "Amis", groups_label: "Groupes",
+        home: "Accueil", saved: "Enregistrés", courses: "Cours", jobs: "Emplois", events: "Événements", marketplace: "Boutique",
+        my_profile: "Mon Profil", settings: "Paramètres", logout: "Déconnexion", logout_desc: "Se déconnecter",
+        settings_title: "Paramètres", settings_subtitle: "Personnalisez votre expérience ESTRA LINK",
+        section_account: "COMPTE", personal_info: "Informations personnelles", personal_info_desc: "Nom, bio, photo",
+        security: "Sécurité", security_desc: "Mot de passe", auth_2fa: "Authentification à 2 facteurs", email_notif: "Email et notifications",
+        email_notif_desc: "Gérer vos emails", section_preferences: "PRÉFÉRENCES", language: "Langue", theme: "Thème",
+        notifications: "Notifications", notifications_desc: "Alertes push", sounds: "Sons", sounds_desc: "Effets sonores",
+        section_display: "AFFICHAGE", font_size: "Taille de police", data_saver: "Économie de données",
+        data_saver_desc: "Réduire la consommation", autoplay: "Lecture automatique", autoplay_desc: "Vidéos et GIFs", 
+        section_privacy: "CONFIDENTIALITÉ", who_can_see: "Qui peut me voir ?",
+        who_can_see_desc: "Gérer la visibilité", blocked_users: "Utilisateurs bloqués", blocked_users_desc: "Gérer la liste noire",
+        export_data: "Exporter mes données", export_data_desc: "Télécharger une copie", app_lock: "Verrouillage de l'app", app_lock_desc: "Protéger l'accès",
+        privacy_policy: "Confidentialité", terms_of_use: "Conditions d'utilisation", section_storage: "STOCKAGE",
+        storage_used: "Espace utilisé", storage_total: "Total: 100 MB", storage_used_pct: "utilisé",
+        clear_cache: "Vider le cache", clear_cache_desc: "Libérer de l'espace", clear_all_data: "Effacer toutes les données",
+        clear_all_data_desc: "Réinitialiser l'application", section_about: "À PROPOS", about_estra: "À propos d'ESTRA LINK",
+        contact_us: "Nous contacter", contact_us_desc: "Feedback et support", section_danger: "ZONE DE DANGER",
+        delete_account: "Supprimer le compte", delete_account_desc: "Action irréversible", all_rights: "Tous droits réservés",
+        help: "Aide", terms_link: "Conditions", about: "À propos", dark_theme: "Sombre", light_theme: "Clair",
+        small_font: "Petite", medium_font: "Moyenne", large_font: "Grande", public_visibility: "Public",
+        friends_visibility: "Amis seulement", private_visibility: "Privé", language_fr: "Français", language_en: "English",
+        language_ln: "Lingala", language_sw: "Kiswahili", toast_theme_dark: "Mode sombre activé",
+        toast_theme_light: "Mode clair activé", toast_theme_saved: "Thème sauvegardé",
+        toast_lang_saved: "Langue sauvegardée", toast_font_saved: "Taille de police sauvegardée",
+        toast_privacy_saved: "Visibilité sauvegardée", toast_cache_cleared: "Cache vidé avec succès",
+        toast_data_cleared: "Toutes les données ont été effacées", toast_notif_on: "Notifications activées",
+        toast_notif_off: "Notifications désactivées", toast_sound_on: "Sons activés", toast_sound_off: "Sons désactivés",
+        toast_data_saver_on: "Mode économie de données activé", toast_data_saver_off: "Mode économie désactivé",
+        toast_online: "Connexion rétablie", toast_offline: "Mode hors-ligne",
+        toast_pw_changed: "Mot de passe modifié avec succès", toast_pw_error: "Minimum 6 caractères requis",
+        toast_2fa: "2FA activé (simulation)", toast_email_changed: "Email modifié (simulation)",
+        toast_email_prefs: "Préférences sauvegardées", toast_feedback: "Merci pour votre feedback !",
+        toast_bug: "Bug signalé, merci !", toast_account_deleted: "Compte supprimé définitivement",
+        toast_export: "Exportation en cours...", toast_app_lock_on: "Verrouillage activé", toast_app_lock_off: "Verrouillage désactivé",
+        confirm_logout: "Voulez-vous vraiment vous déconnecter ?",
+        confirm_delete_account: "Supprimer définitivement votre compte ? Cette action est IRRÉVERSIBLE !",
+        confirm_clear_cache: "Vider le cache de l'application ?",
+        confirm_clear_data: "Cette action effacera TOUTES les données locales. Continuer ?",
+        prompt_delete_account: "Tapez \"SUPPRIMER\" pour confirmer :",
+        prompt_clear_data: "Tapez \"EFFACER\" pour confirmer :",
+        notif_settings_changed: "⚙️ Paramètres mis à jour",
+        notif_theme_changed: "🎨 Thème changé",
+        notif_lang_changed: "🌐 Langue changée",
+        notif_privacy_changed: "🔒 Confidentialité mise à jour",
+        notif_account_deleted: "💔 Compte supprimé",
+        notif_data_exported: "📦 Données exportées",
+        notif_cache_cleared: "🗑️ Cache vidé",
+        toast_unblocked: "✅ Utilisateur débloqué",
+        no_blocked_users: "Aucun utilisateur bloqué"
+    },
+    en: {
+        // ... (conserver les traductions existantes)
+        toast_unblocked: "✅ User unblocked",
+        no_blocked_users: "No blocked users"
+    },
+    sw: {
+        // ... (conserver les traductions existantes)
+        toast_unblocked: "✅ Mtumiaji amefunguliwa",
+        no_blocked_users: "Hakuna watumiaji waliozuiwa"
+    },
+    ln: {
+        // ... (conserver les traductions existantes)
+        toast_unblocked: "✅ Moto abóngólámí",
+        no_blocked_users: "Aza moto akangámí tɛ̂"
+    }
+};
+
+let currentLang = localStorage.getItem('estra_language') || 'fr';
+
+function t(key) {
+    if (translations[currentLang] && translations[currentLang][key]) return translations[currentLang][key];
+    if (translations['fr'] && translations['fr'][key]) return translations['fr'][key];
+    return key;
+}
+
+function applyTranslations() {
+    currentLang = localStorage.getItem('estra_language') || 'fr';
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        const translation = t(key);
+        if (translation) {
+            if (el.tagName === 'INPUT' && el.type === 'placeholder') {
+                el.placeholder = translation;
+            } else {
+                el.textContent = translation;
+            }
+        }
+    });
+}
+
+// ============ SYSTÈME DE NOTIFICATIONS EN TEMPS RÉEL ============
+function addNotification(type, title, message, metadata = {}) {
+    const notifications = JSON.parse(localStorage.getItem('estra_notifications') || '[]');
+    const newNotif = {
+        id: Date.now(),
+        type: type,
+        title: title,
+        message: message,
+        read: false,
+        timestamp: Date.now(),
+        metadata: metadata
+    };
+    notifications.unshift(newNotif);
+    if (notifications.length > 50) notifications.length = 50;
+    localStorage.setItem('estra_notifications', JSON.stringify(notifications));
+    updateBadges();
+    window.dispatchEvent(new CustomEvent('estra_notification_updated', { 
+        detail: { notifications: notifications, newNotification: newNotif }
+    }));
+    localStorage.setItem('estra_notification_trigger', Date.now().toString());
+    return newNotif;
+}
+
+// ============ MODE ECO DATA ============
+let ecoMode = localStorage.getItem('estra_eco_mode') === 'true';
+function initEcoMode() {
+    const btn = document.getElementById('ecoBtn');
+    if (btn) {
+        document.body.classList.toggle('eco-mode-active', ecoMode);
+        if (ecoMode) btn.classList.add('active');
+    }
+}
+function toggleEcoMode() {
+    ecoMode = !ecoMode;
+    localStorage.setItem('estra_eco_mode', ecoMode);
+    initEcoMode();
+    showToast(ecoMode ? "Mode Éco Activé" : "Mode Éco Désactivé");
+}
+
+// ============ GESTION DES UTILISATEURS BLOQUÉS ============
+function getBlockedUsers() {
+    return JSON.parse(localStorage.getItem('estra_blocked_users') || '[]');
+}
+
+function saveBlockedUsers(blocked) {
+    localStorage.setItem('estra_blocked_users', JSON.stringify(blocked));
+}
+
+function unblockUser(username) {
+    let blocked = getBlockedUsers();
+    const user = blocked.find(b => b.username === username || b.name === username);
+    
+    if (user && confirm(`Voulez-vous vraiment débloquer ${user.name} ?`)) {
+        blocked = blocked.filter(b => b.username !== username && b.name !== username);
+        saveBlockedUsers(blocked);
+        
+        // Mettre à jour le badge de compteur
+        updateBlockedCount();
+        
+        // Recharger la modale si elle est ouverte
+        const modal = document.querySelector('.modal-overlay');
+        if (modal) {
+            const title = modal.querySelector('.modal-header h3');
+            if (title && title.textContent.includes(t('blocked_users'))) {
+                openBlockedModal();
+            }
+        }
+        
+        showToast(`✅ ${user.name} ${t('toast_unblocked')}`);
+        addNotification('unblocked', `🔓 ${user.name} débloqué`, `Vous avez débloqué ${user.name}`, { username: username });
+    }
+}
+
+function updateBlockedCount() {
+    const blocked = getBlockedUsers();
+    const badge = document.getElementById('blockedCountBadge');
+    if (badge) {
+        badge.textContent = blocked.length;
+        badge.style.display = blocked.length > 0 ? 'inline-block' : 'none';
+    }
+}
+
+// ============ VARIABLES GLOBALES ============
+let currentUser = { name: 'Rashidi', avatar: 'https://ui-avatars.com/api/?background=1d9bf0&color=fff&name=Rashidi&size=40' };
+let toastTimeout = null;
+let settings = { theme: 'light', language: 'fr', fontSize: 'medium', notifications: true, sounds: true, dataSaver: false, privacy: 'public', autoplay: true, appLock: false };
+
+// ============ FONCTIONS DE BASE ============
+function checkOnlineStatus() {
+    const banner = document.getElementById('offlineBanner');
+    if (banner) banner.style.display = navigator.onLine ? 'none' : 'block';
+}
+
+function updateBadges() {
+    const notifs = JSON.parse(localStorage.getItem('estra_notifications') || '[]');
+    const unreadNotifs = notifs.filter(n => !n.read).length;
+    const notifBadge = document.getElementById('notifBadge');
+    if (notifBadge) {
+        notifBadge.style.display = unreadNotifs > 0 ? 'block' : 'none';
+        if (unreadNotifs > 0) notifBadge.textContent = unreadNotifs > 99 ? '99+' : unreadNotifs;
+    }
+    const msgBadge = document.getElementById('msgBadge');
+    if (msgBadge) {
+        const conversations = JSON.parse(localStorage.getItem('estra_conversations') || '[]');
+        const totalUnread = conversations.reduce((sum, conv) => sum + (conv.unread || 0), 0);
+        msgBadge.style.display = totalUnread > 0 ? 'block' : 'none';
+        if (totalUnread > 0) msgBadge.textContent = totalUnread > 99 ? '99+' : totalUnread;
+    }
+    updateBlockedCount();
+}
+
+function showToast(msg) {
+    const tEl = document.getElementById('toastMsg');
+    if (!tEl) return;
+    if (toastTimeout) clearTimeout(toastTimeout);
+    tEl.textContent = msg;
+    tEl.classList.remove('show');
+    void tEl.offsetWidth;
+    tEl.classList.add('show');
+    toastTimeout = setTimeout(() => tEl.classList.remove('show'), 3000);
+}
+
+function escapeHtml(str) {
+    if (!str) return '';
+    const d = document.createElement('div');
+    d.textContent = str;
+    return d.innerHTML;
+}
+
+function updateSidebar() {
+    const profile = JSON.parse(localStorage.getItem('estra_profile') || '{}');
+    currentUser.name = profile.fullName || 'Utilisateur';
+    currentUser.avatar = profile.avatar || `https://ui-avatars.com/api/?name=${currentUser.name}&background=38bdf8&color=fff`;
+    
+    const sidebarName = document.getElementById('sidebarName');
+    const sidebarAvatar = document.getElementById('sidebarAvatar');
+    const navAvatar = document.getElementById('navAvatar');
+    
+    if (sidebarName) sidebarName.textContent = currentUser.name;
+    if (sidebarAvatar) sidebarAvatar.src = currentUser.avatar;
+    if (navAvatar) navAvatar.src = currentUser.avatar;
+    
+    const posts = JSON.parse(localStorage.getItem('estra_posts') || '[]');
+    const friends = JSON.parse(localStorage.getItem('estra_friends') || '[]');
+    const userGroups = JSON.parse(localStorage.getItem('estra_userGroups') || '[]');
+    
+    const sidebarPosts = document.getElementById('sidebarPosts');
+    const sidebarFriends = document.getElementById('sidebarFriends');
+    const sidebarGroups = document.getElementById('sidebarGroups');
+    
+    if (sidebarPosts) sidebarPosts.textContent = posts.filter(p => p.author === currentUser.name).length;
+    if (sidebarFriends) sidebarFriends.textContent = friends.length;
+    if (sidebarGroups) sidebarGroups.textContent = userGroups.length;
+}
+
+function loadSettings() {
+    // Forcer le thème clair, ne pas lire le localStorage pour le thème
+    settings.theme = 'light';
+    settings.language = localStorage.getItem('estra_language') || 'fr';
+    settings.fontSize = localStorage.getItem('estra_font_size') || 'medium';
+    settings.notifications = localStorage.getItem('estra_notifications_enabled') !== 'false';
+    settings.sounds = localStorage.getItem('estra_sounds') !== 'false';
+    settings.dataSaver = localStorage.getItem('estra_data_saver') === 'true';
+    settings.privacy = localStorage.getItem('estra_privacy') || 'public';
+    settings.autoplay = localStorage.getItem('estra_autoplay') !== 'false';
+    
+    currentLang = settings.language;
+    
+    // Appliquer le thème clair de force
+    document.documentElement.setAttribute('data-theme', 'light');
+    window.estraTheme = 'light';
+    
+    const notifToggle = document.getElementById('notifToggle');
+    const soundToggle = document.getElementById('soundToggle');
+    const dataSaverToggle = document.getElementById('dataSaverToggle');
+    const autoplayToggle = document.getElementById('autoplayToggle');
+    
+    if (notifToggle) notifToggle.checked = settings.notifications;
+    if (soundToggle) soundToggle.checked = settings.sounds;
+    if (dataSaverToggle) dataSaverToggle.checked = settings.dataSaver;
+    if (autoplayToggle) autoplayToggle.checked = settings.autoplay;
+    
+    const sizes = { small: '14px', medium: '16px', large: '18px' };
+    document.body.style.fontSize = sizes[settings.fontSize] || '16px';
+    document.documentElement.style.fontSize = sizes[settings.fontSize] || '16px';
+    
+    applyTranslations();
+    updateSettingsDisplay();
+    checkOnlineStatus();
+    updateBadges();
+}
+
+function updateSettingsDisplay() {
+    const ln = { fr: t('language_fr'), en: t('language_en'), ln: t('language_ln'), sw: t('language_sw') };
+    const ls = { fr: 'FR', en: 'EN', ln: 'LN', sw: 'SW' };
+    const fn = { small: t('small_font'), medium: t('medium_font'), large: t('large_font') };
+    
+    const languageDesc = document.getElementById('languageDesc');
+    const currentLanguage = document.getElementById('currentLanguage');
+    const fontSizeDesc = document.getElementById('fontSizeDesc');
+    
+    if (languageDesc) languageDesc.textContent = ln[settings.language] || 'Français';
+    if (currentLanguage) currentLanguage.textContent = ls[settings.language] || 'FR';
+    if (fontSizeDesc) fontSizeDesc.textContent = fn[settings.fontSize] || 'Moyenne';
+    
+    updateBlockedCount();
+}
+
+function saveSettings() {
+    localStorage.setItem('estra_theme', 'light');
+    localStorage.setItem('estra_language', settings.language);
+    localStorage.setItem('estra_font_size', settings.fontSize);
+    localStorage.setItem('estra_notifications_enabled', settings.notifications);
+    localStorage.setItem('estra_sounds', settings.sounds);
+    localStorage.setItem('estra_data_saver', settings.dataSaver);
+    localStorage.setItem('estra_privacy', settings.privacy);
+    localStorage.setItem('estra_autoplay', settings.autoplay);
+    currentLang = settings.language;
+    applyTranslations();
+    
+    addNotification('settings_changed', t('notif_settings_changed'), `Les paramètres ont été mis à jour`, {});
+}
+
+function calculateStorage() {
+    let size = 0;
+    for (let k in localStorage) {
+        if (localStorage.hasOwnProperty(k)) size += (localStorage[k]?.length || 0) * 2;
+    }
+    const mb = (size / 1048576).toFixed(2);
+    const pct = Math.min((size / 104857600) * 100, 100);
+    
+    const storageUsed = document.getElementById('storageUsed');
+    const storageFill = document.getElementById('storageFill');
+    const storagePercent = document.getElementById('storagePercent');
+    
+    if (storageUsed) storageUsed.textContent = `${mb} MB`;
+    if (storageFill) storageFill.style.width = `${pct}%`;
+    if (storagePercent) storagePercent.textContent = `${pct.toFixed(1)}% ${t('storage_used_pct')}`;
+}
+
+function createModal(title, content) {
+    const m = document.createElement('div');
+    m.className = 'modal-overlay active';
+    m.innerHTML = `<div class="modal-content"><div class="modal-header"><h3>${title}</h3><button class="modal-close" onclick="this.closest('.modal-overlay').remove()">&times;</button></div><div class="option-list">${content}</div></div>`;
+    m.addEventListener('click', e => { if (e.target === m) m.remove(); });
+    return m;
+}
+
+function showModal(modal) { document.body.appendChild(modal); }
+function closeCurrentModal() { const m = document.querySelector('.modal-overlay'); if (m) m.remove(); }
+
+function openPageInDetail(pageType) {
+    if (window.innerWidth >= 1280) {
+        let title = "";
+        switch(pageType) {
+            case 'privacy': title = t('privacy_policy'); break;
+            case 'terms': title = t('terms_of_use'); break;
+            case 'about': title = t('about_estra'); break;
+            case 'help': title = t('help'); break;
+        }
+        const content = `<iframe src="${pageType}.html" style="width: 100%; height: calc(100vh - 150px); border: none; border-radius: 8px; background: var(--bg-primary);"></iframe>`;
+        showModal(createModal(title, content));
+    } else {
+        window.location.href = pageType + '.html';
+    }
+}
+
+// ============ FONCTIONS DE MODAL ============
+function openLanguageModal() {
+    showModal(createModal('🌐 ' + t('language'), `
+        <div class="option-item ${settings.language==='fr'?'selected':''}" onclick="setLanguage('fr')"><span>🇫🇷 ${t('language_fr')}</span></div>
+        <div class="option-item ${settings.language==='en'?'selected':''}" onclick="setLanguage('en')"><span>🇬🇧 ${t('language_en')}</span></div>
+        <div class="option-item ${settings.language==='ln'?'selected':''}" onclick="setLanguage('ln')"><span>🇨🇩 ${t('language_ln')}</span></div>
+        <div class="option-item ${settings.language==='sw'?'selected':''}" onclick="setLanguage('sw')"><span>🇹🇿 ${t('language_sw')}</span></div>
+    `));
+}
+
+function setLanguage(l) {
+    settings.language = l;
+    saveSettings();
+    updateSettingsDisplay();
+    const labels = { fr: t('language_fr'), en: t('language_en'), ln: t('language_ln'), sw: t('language_sw') };
+    showToast(`🌐 ${labels[l]}`);
+    addNotification('lang_changed', t('notif_lang_changed'), `Langue changée en ${labels[l]}`, { language: l });
+    closeCurrentModal();
+}
+
+function openFontSizeModal() {
+    showModal(createModal('📝 ' + t('font_size'), `
+        <div class="option-item ${settings.fontSize==='small'?'selected':''}" onclick="setFontSize('small')"><span>${t('small_font')} (14px)</span></div>
+        <div class="option-item ${settings.fontSize==='medium'?'selected':''}" onclick="setFontSize('medium')"><span>${t('medium_font')} (16px)</span></div>
+        <div class="option-item ${settings.fontSize==='large'?'selected':''}" onclick="setFontSize('large')"><span>${t('large_font')} (18px)</span></div>
+    `));
+}
+
+function setFontSize(s) {
+    settings.fontSize = s;
+    saveSettings();
+    updateSettingsDisplay();
+    const sizes = { small: '14px', medium: '16px', large: '18px' };
+    document.body.style.fontSize = sizes[s];
+    document.documentElement.style.fontSize = sizes[s];
+    showToast('📝 ' + t('toast_font_saved'));
+    closeCurrentModal();
+}
+
+function openPrivacyModal() {
+    showModal(createModal('👁️ ' + t('who_can_see'), `
+        <div class="option-item ${settings.privacy==='public'?'selected':''}" onclick="setPrivacy('public')"><span>🌍 ${t('public_visibility')}</span></div>
+        <div class="option-item ${settings.privacy==='friends'?'selected':''}" onclick="setPrivacy('friends')"><span>👥 ${t('friends_visibility')}</span></div>
+        <div class="option-item ${settings.privacy==='private'?'selected':''}" onclick="setPrivacy('private')"><span>🔒 ${t('private_visibility')}</span></div>
+    `));
+}
+
+function setPrivacy(p) {
+    settings.privacy = p;
+    saveSettings();
+    const labels = { public: t('public_visibility'), friends: t('friends_visibility'), private: t('private_visibility') };
+    showToast('👁️ ' + labels[p]);
+    addNotification('privacy_changed', t('notif_privacy_changed'), `Visibilité changée en ${labels[p]}`, { privacy: p });
+    closeCurrentModal();
+}
+
+function openSecurityModal() {
+    showModal(createModal('🔒 ' + t('security'), `
+        <div class="option-item" onclick="changePassword()"><span>🔑 ${t('security_desc')}</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="9 18 15 12 9 6"/></svg></div>
+        <div class="option-item" onclick="enable2FA()"><span>📱 ${t('auth_2fa')}</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="9 18 15 12 9 6"/></svg></div>
+    `));
+}
+
+function openEmailModal() {
+    showModal(createModal('📧 ' + t('email_notif'), `
+        <div class="option-item" onclick="changeEmail()"><span>✉️ ${t('email_notif_desc')}</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="9 18 15 12 9 6"/></svg></div>
+        <div class="option-item" onclick="manageEmailNotif()"><span>🔔 ${t('notifications')}</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="9 18 15 12 9 6"/></svg></div>
+    `));
+}
+
+// ============ FONCTION PRINCIPALE : MODALE DES BLOQUÉS ============
+function openBlockedModal() {
+    const blocked = getBlockedUsers();
+    
+    if (blocked.length === 0) {
+        showModal(createModal('🚫 ' + t('blocked_users'), `
+            <div class="empty-blocked">
+                <i class="fas fa-user-slash"></i>
+                <p>${t('no_blocked_users')}</p>
+            </div>
+        `));
+        return;
+    }
+    
+    let content = blocked.map(b => `
+        <div class="blocked-user-item">
+            <img src="${b.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(b.name)}&background=dc2626&color=fff`}" 
+                 class="blocked-user-avatar" alt="${escapeHtml(b.name)}">
+            <div class="blocked-user-info">
+                <div class="blocked-user-name">${escapeHtml(b.name)}</div>
+                <div class="blocked-user-date">Bloqué le ${new Date(b.blockedAt).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}</div>
+            </div>
+            <button class="blocked-user-unblock" onclick="unblockUser('${escapeHtml(b.username || b.name)}')">
+                <i class="fas fa-user-check"></i> Débloquer
+            </button>
+        </div>
+    `).join('');
+    
+    showModal(createModal('🚫 ' + t('blocked_users') + ` (${blocked.length})`, content));
+}
+
+function openFeedbackModal() {
+    showModal(createModal('💬 ' + t('contact_us'), `
+        <div class="option-item" onclick="sendFeedback()"><span>💬 ${t('contact_us_desc')}</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="9 18 15 12 9 6"/></svg></div>
+        <div class="option-item" onclick="reportBug()"><span>🐛 Signaler un bug</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><polyline points="9 18 15 12 9 6"/></svg></div>
+    `));
+}
+
+// ============ ACTIONS ============
+function changePassword() { closeCurrentModal(); const p = prompt('Nouveau mot de passe (min 6 caractères) :'); if (p && p.length >= 6) showToast('🔐 ' + t('toast_pw_changed')); else if (p) showToast('❌ ' + t('toast_pw_error')); }
+function enable2FA() { showToast('📱 ' + t('toast_2fa')); closeCurrentModal(); }
+function changeEmail() { showToast('📧 ' + t('toast_email_changed')); closeCurrentModal(); }
+function manageEmailNotif() { showToast('📧 ' + t('toast_email_prefs')); closeCurrentModal(); }
+function sendFeedback() { showToast('💬 ' + t('toast_feedback')); closeCurrentModal(); }
+function reportBug() { showToast('🐛 ' + t('toast_bug')); closeCurrentModal(); }
+
+function exportData() {
+    showToast('⏳ ' + t('toast_export'));
+    const data = {};
+    for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key.startsWith('estra_')) data[key] = localStorage.getItem(key);
+    }
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'estra_link_data_export.json';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+    addNotification('data_exported', t('notif_data_exported'), 'Vos données ont été exportées avec succès', {});
+}
+
+function clearCache() {
+    if (confirm(t('confirm_clear_cache'))) {
+        const keep = ['estra_profile','estra_theme','estra_language','estra_font_size','estra_notifications_enabled','estra_sounds','estra_data_saver','estra_privacy','estra_autoplay','estra_friends','estra_userGroups','estra_posts','estra_jobs','estra_events','estra_courses','estra_conversations','estra_messages_data','estra_notifications','estra_saved_posts','estra_saved_courses','estra_saved_jobs','estra_saved_events','estra_applications','estra_blocked_users'];
+        const d = {};
+        keep.forEach(k => { if (localStorage.getItem(k)) d[k] = localStorage.getItem(k); });
+        localStorage.clear();
+        Object.entries(d).forEach(([k,v]) => localStorage.setItem(k, v));
+        calculateStorage();
+        showToast('🗑️ ' + t('toast_cache_cleared'));
+        addNotification('cache_cleared', t('notif_cache_cleared'), 'Le cache de l\'application a été vidé', {});
+    }
+}
+
+function clearAllData() {
+    if (confirm('⚠️ ' + t('confirm_clear_data'))) {
+        const c = prompt(t('prompt_clear_data'));
+        if (c === 'EFFACER' || c === 'CLEAR') {
+            localStorage.clear();
+            showToast('💔 ' + t('toast_data_cleared'));
+            setTimeout(() => window.location.reload(), 2000);
+        }
+    }
+}
+
+function logout() {
+    if (confirm(t('confirm_logout'))) {
+        localStorage.clear();
+        window.location.href = 'login.html';
+    }
+}
+
+function deleteAccount() {
+    if (confirm('⚠️ ' + t('confirm_delete_account'))) {
+        const c = prompt(t('prompt_delete_account'));
+        if (c === 'SUPPRIMER' || c === 'DELETE') {
+            addNotification('account_deleted', t('notif_account_deleted'), 'Votre compte a été supprimé définitivement', {});
+            localStorage.clear();
+            showToast('💔 ' + t('toast_account_deleted'));
+            setTimeout(() => window.location.href = 'login.html', 2000);
+        }
+    }
+}
+
+function toggleSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('sidebarOverlay');
+    if (sidebar) sidebar.classList.toggle('open');
+    if (overlay) overlay.classList.toggle('active');
+}
+
+function closeSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('sidebarOverlay');
+    if (sidebar) sidebar.classList.remove('open');
+    if (overlay) overlay.classList.remove('active');
+}
+
+// ============ COMMUNICATION INTER-PAGES ============
+window.addEventListener('storage', function(e) {
+    if (e.key === 'estra_notification_trigger') {
+        updateBadges();
+    }
+    if (e.key === 'estra_theme' && e.newValue) {
+        document.documentElement.setAttribute('data-theme', 'light');
+        window.estraTheme = 'light';
+    }
+    if (e.key === 'estra_language' && e.newValue) {
+        currentLang = e.newValue;
+        settings.language = e.newValue;
+        applyTranslations();
+        updateSettingsDisplay();
+    }
+    if (['estra_profile','estra_posts','estra_friends','estra_userGroups'].includes(e.key)) {
+        updateSidebar();
+    }
+    if (e.key === 'estra_conversations') {
+        updateBadges();
+    }
+    if (e.key === 'estra_blocked_users') {
+        updateBlockedCount();
+    }
+});
+
+window.addEventListener('estra_notification_updated', function(e) {
+    updateBadges();
+});
+
+// ============ INITIALISATION ============
+document.addEventListener('DOMContentLoaded', () => {
+    loadSettings();
+    initEcoMode();
+    updateSidebar();
+    calculateStorage();
+    updateBlockedCount();
+    
+    const overlay = document.getElementById('sidebarOverlay');
+    if (overlay) overlay.addEventListener('click', closeSidebar);
+    
+    document.addEventListener('click', function(e) {
+        const sidebar = document.getElementById('sidebar');
+        const menuToggle = document.querySelector('.menu-toggle');
+        if (sidebar && sidebar.classList.contains('open') && !sidebar.contains(e.target) && e.target !== menuToggle && (menuToggle && !menuToggle.contains(e.target))) {
+            closeSidebar();
+        }
+    });
+    
+    const notifToggle = document.getElementById('notifToggle');
+    const soundToggle = document.getElementById('soundToggle');
+    const dataSaverToggle = document.getElementById('dataSaverToggle');
+    const autoplayToggle = document.getElementById('autoplayToggle');
+    
+    if (notifToggle) {
+        notifToggle.addEventListener('change', e => {
+            settings.notifications = e.target.checked;
+            saveSettings();
+            showToast(e.target.checked ? ('🔔 ' + t('toast_notif_on')) : ('🔕 ' + t('toast_notif_off')));
+        });
+    }
+    
+    if (soundToggle) {
+        soundToggle.addEventListener('change', e => {
+            settings.sounds = e.target.checked;
+            saveSettings();
+            showToast(e.target.checked ? ('🔊 ' + t('toast_sound_on')) : ('🔇 ' + t('toast_sound_off')));
+        });
+    }
+    
+    if (dataSaverToggle) {
+        dataSaverToggle.addEventListener('change', e => {
+            settings.dataSaver = e.target.checked;
+            saveSettings();
+            showToast(e.target.checked ? ('📱 ' + t('toast_data_saver_on')) : ('📱 ' + t('toast_data_saver_off')));
+        });
+    }
+    
+    if (autoplayToggle) {
+        autoplayToggle.addEventListener('change', e => {
+            settings.autoplay = e.target.checked;
+            saveSettings();
+        });
+    }
+    
+    window.addEventListener('online', () => {
+        const banner = document.getElementById('offlineBanner');
+        if (banner) banner.style.display = 'none';
+        showToast('🟢 ' + t('toast_online'));
+        checkOnlineStatus();
+    });
+    
+    window.addEventListener('offline', () => {
+        const banner = document.getElementById('offlineBanner');
+        if (banner) banner.style.display = 'block';
+        showToast('🔴 ' + t('toast_offline'));
+        checkOnlineStatus();
+    });
+    
+    setInterval(updateBadges, 3000);
+});
+
+// ============ EXPOSER LES FONCTIONS GLOBALEMENT ============
+window.toggleSidebar = toggleSidebar;
+window.closeSidebar = closeSidebar;
+window.logout = logout;
+window.deleteAccount = deleteAccount;
+window.clearCache = clearCache;
+window.clearAllData = clearAllData;
+window.openLanguageModal = openLanguageModal;
+window.openFontSizeModal = openFontSizeModal;
+window.openSecurityModal = openSecurityModal;
+window.openEmailModal = openEmailModal;
+window.openPrivacyModal = openPrivacyModal;
+window.openBlockedModal = openBlockedModal;
+window.openFeedbackModal = openFeedbackModal;
+window.openPageInDetail = openPageInDetail;
+window.setLanguage = setLanguage;
+window.setFontSize = setFontSize;
+window.setPrivacy = setPrivacy;
+window.changePassword = changePassword;
+window.enable2FA = enable2FA;
+window.changeEmail = changeEmail;
+window.manageEmailNotif = manageEmailNotif;
+window.unblockUser = unblockUser;
+window.sendFeedback = sendFeedback;
+window.reportBug = reportBug;
+window.exportData = exportData;
+window.showToast = showToast;
+window.updateBadges = updateBadges;
+window.t = t;
+window.applyTranslations = applyTranslations;
+window.translations = translations;
+window.currentLang = currentLang;
+window.addNotification = addNotification;
+window.toggleEcoMode = toggleEcoMode;
+window.getBlockedUsers = getBlockedUsers;
+window.updateBlockedCount = updateBlockedCount;
+</script>
+<script src="i18n.js"></script>
+<script src="pwa-init.js"></script>
+</body>
+</html>

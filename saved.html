@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title data-i18n="page_title">ESTRA LINK | Enregistrements</title>
+    
+    <!-- SEO & Social Media Open Graph -->
+    <meta property="og:title" content="ESTRA LINK | Enregistrements">
+    <meta property="og:description" content="Retrouvez tous vos éléments enregistrés : publications, événements et cours.">
+    <meta property="og:image" content="https://ui-avatars.com/api/?background=38bdf8&color=fff&name=ESTRA&size=512">
+    <meta property="og:type" content="website">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <!-- PWA -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#38bdf8">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="ESTRA LINK">
+    <link rel="apple-touch-icon" href="https://ui-avatars.com/api/?background=38bdf8&color=fff&name=E&size=152">
+    <link rel="stylesheet" href="estra-state.js">
+    <style>
+        /* ========== VARIABLES (thème clair forcé) ========== */
+        :root {
+            --bg-primary: #f8fafc;
+            --bg-secondary: #ffffff;
+            --bg-tertiary: #f1f5f9;
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --card-bg: rgba(255,255,255,0.95);
+            --hover-bg: rgba(2,132,199,0.03);
+            --active-bg: rgba(2,132,199,0.1);
+            --border-color: rgba(226,232,240,0.8);
+            --border-light: rgba(2,132,199,0.2);
+            --sidebar-bg: #ffffff;
+            --navbar-bg: rgba(255,255,255,0.85);
+            --toast-bg: #1e293b;
+            --input-bg: #f1f5f9;
+            --scrollbar-track: #e2e8f0;
+            --filter-btn-bg: #f1f5f9;
+            --doc-bg: #f1f5f9;
+            --course-badge-bg: #e8f5e9;
+            --course-badge-color: #1a3c1a;
+            --course-badge-border: #c8e6c9;
+            --cyan: #0284c7;
+            --purple: #7c3aed;
+            --success: #059669;
+            --danger: #dc2626;
+            --warning: #d97706;
+            --transition: all 0.2s ease;
+        }
+
+        * { margin:0; padding:0; box-sizing:border-box }
+        body {
+            background-color: var(--bg-primary);
+            background-image: radial-gradient(at 0% 0%,rgba(56,189,248,0.08) 0px,transparent 50%), radial-gradient(at 100% 100%,rgba(56,189,248,0.08) 0px,transparent 50%);
+            color: var(--text-primary);
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            padding-bottom: 80px;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        ::-webkit-scrollbar { width:6px }
+        ::-webkit-scrollbar-track { background: var(--scrollbar-track); border-radius:10px }
+        ::-webkit-scrollbar-thumb { background: var(--cyan); border-radius:10px }
+        
+        /* Bouton Éco (conservé) */
+        .btn-eco {
+            background: rgba(5, 150, 105, 0.1);
+            border: 1px solid rgba(5, 150, 105, 0.3);
+            color: #059669;
+            padding: 8px 16px;
+            border-radius: 25px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: var(--transition);
+            font-family: inherit;
+            white-space: nowrap;
+        }
+        .btn-eco.active { background: #059669; color: #fff; border-color: transparent; animation: ecoPulse 2s infinite; }
+        @keyframes ecoPulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(16,185,129,0.4); }
+            50% { box-shadow: 0 0 0 8px rgba(16,185,129,0); }
+        }
+
+        .offline-banner{position:fixed;top:0;left:0;right:0;background:#f59e0b;color:#000;text-align:center;padding:6px;z-index:9999;font-size:.8rem;font-weight:600;display:none}
+        .sidebar-overlay{position:fixed;inset:0;background:rgba(0,0,0,.4);backdrop-filter:blur(4px);z-index:1050;opacity:0;visibility:hidden;transition:var(--transition)}.sidebar-overlay.active{opacity:1;visibility:visible}
+        .sidebar{position:fixed;top:0;left:-280px;width:220px;height:100vh;background:var(--sidebar-bg);border-right:1px solid var(--border-light);z-index:1060;padding:30px 15px;overflow-y:auto;transition:left .3s ease}.sidebar.open{left:0}
+        .profile-section{text-align:center;padding-bottom:25px;border-bottom:1px solid var(--border-color);margin-bottom:20px;position:relative}
+        .profile-img-sidebar{width:65px;height:65px;border-radius:50%;border:2px solid var(--cyan);margin-bottom:10px;object-fit:cover}
+        .online-indicator{position:absolute;top:50px;right:50px;width:16px;height:16px;border-radius:50%;background:#10b981;border:2px solid var(--sidebar-bg)}
+        .profile-stats{display:flex;justify-content:center;gap:20px;margin-top:12px}.profile-stats div{text-align:center}.profile-stats strong{display:block;font-size:.95rem;color:var(--cyan)}.profile-stats span{font-size:.65rem;color:var(--text-secondary)}
+        .sidebar-nav{display:flex;flex-direction:column;gap:4px}
+        .sidebar-link{display:flex;align-items:center;gap:12px;padding:12px 15px;border-radius:10px;color:var(--text-secondary);text-decoration:none;font-size:.9rem;transition:var(--transition);cursor:pointer;background:0 0;border:0;width:100%;font-family:inherit}.sidebar-link svg{width:20px;height:20px;stroke-width:2;flex-shrink:0}.sidebar-link.active,.sidebar-link:hover{background:var(--active-bg);color:var(--cyan);transform:translateX(5px);border-right:2px solid var(--cyan)}.sidebar-link.logout-link{color:var(--danger)}.sidebar-link.logout-link:hover{background:rgba(239,68,68,.1);color:var(--danger);border-right-color:var(--danger)}
+        
+        .navbar{padding:10px 15px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border-color);background:var(--navbar-bg);backdrop-filter:blur(12px);position:sticky;top:0;z-index:100}.nav-left,.nav-right{display:flex;align-items:center;gap:12px}.navbar-brand{font-weight:800;color:coral;letter-spacing:1.5px;font-size:1.1rem;text-decoration:none}.menu-toggle{background:0 0;border:0;cursor:pointer;padding:8px;display:flex;align-items:center;color:var(--text-secondary);transition:var(--transition)}.menu-toggle:hover{color:var(--cyan)}.avatar-nav{width:34px;height:34px;border-radius:50%;border:1.5px solid var(--cyan);object-fit:cover;box-shadow:0 0 10px rgba(56,189,248,.2);cursor:pointer}
+        
+        .main-content{max-width:800px;margin:0 auto;background:var(--card-bg);border-left:1px solid var(--border-light);border-right:1px solid var(--border-light);min-height:calc(100vh - 60px);backdrop-filter:blur(8px)}
+        .page-header{display:flex;align-items:center;justify-content:space-between;padding:20px 24px;border-bottom:1px solid var(--border-light);flex-wrap:wrap;gap:12px}.page-header h2{display:flex;align-items:center;gap:10px;font-size:1.3rem}.page-header h2 svg{color:var(--cyan)}
+        .filter-buttons{display:flex;gap:8px;flex-wrap:wrap}.filter-btn{padding:8px 16px;background:var(--filter-btn-bg);border:1px solid var(--border-light);border-radius:30px;color:var(--text-secondary);cursor:pointer;font-size:.8rem;font-weight:500;transition:var(--transition);font-family:inherit}.filter-btn.active{background:var(--cyan);color:#fff;border-color:transparent}.filter-btn:hover{border-color:var(--cyan)}
+        
+        .post-card{background:0 0;width:100%;margin:0;border:0;transition:var(--transition);overflow:hidden;position:relative;z-index:1;cursor:pointer}.post-separator{width:100%;height:1px;background:linear-gradient(90deg,transparent,var(--border-light),transparent);margin:0;border:0}
+        .post-header{padding:14px 14px 0;display:flex;align-items:flex-start;gap:10px}.post-avatar{width:44px;height:44px;border-radius:50%;object-fit:cover;cursor:pointer;border:2px solid var(--cyan)}.post-author-info{flex:1}.post-author-name{font-weight:700;font-size:.9rem;cursor:pointer;display:inline-flex;align-items:center;gap:4px;color:var(--text-primary)}.post-time{font-size:.65rem;color:var(--text-secondary);margin-top:2px}
+        .post-content{padding:10px 14px}.post-text{font-size:.85rem;line-height:1.5;margin-bottom:6px;white-space:pre-wrap;word-break:break-word;max-height:6em;overflow:hidden;transition:max-height .3s ease;color:var(--text-primary)}.post-text.expanded{max-height:none}.see-more-btn{color:var(--text-secondary);font-size:.7rem;cursor:pointer;margin-bottom:10px;display:inline-block;font-weight:500}
+        .post-media{position:relative;cursor:pointer;margin-top:6px;border-radius:12px;overflow:hidden}.post-media img{width:100%;max-height:400px;object-fit:contain;background:var(--input-bg);cursor:pointer;border-radius:12px}
+        .post-stats{padding:6px 14px 0;font-size:.7rem;color:var(--text-secondary);display:flex;gap:14px}
+        .post-actions{display:flex;justify-content:space-around;padding:6px 14px 10px;border-top:1px solid var(--border-color);margin-top:6px}.post-action-btn{display:flex;align-items:center;justify-content:center;gap:6px;background:0 0;border:0;color:var(--text-secondary);font-size:.9rem;padding:8px;border-radius:50%;cursor:pointer;transition:var(--transition);width:38px;height:38px;font-family:inherit}.post-action-btn:hover{color:var(--cyan)}.post-action-btn svg{width:18px;height:18px}
+        
+        /* Badges (sans job) */
+        .event-badge{background:linear-gradient(135deg,#f59e0b,#ef4444);color:#fff;padding:3px 10px;border-radius:15px;font-size:.65rem;font-weight:600;display:inline-block;margin-bottom:6px}
+        .course-badge{background:var(--course-badge-bg);color:var(--course-badge-color);padding:3px 10px;border-radius:15px;font-size:.65rem;font-weight:700;display:inline-block;margin-bottom:6px;border:1px solid var(--course-badge-border)}
+        .event-details{display:flex;flex-wrap:wrap;gap:12px;margin:6px 0;font-size:.75rem;color:var(--text-secondary)}
+        .post-document{background:var(--doc-bg);border-radius:10px;padding:10px;margin-top:6px;display:flex;align-items:center;justify-content:space-between}.document-info{display:flex;align-items:center;gap:10px}.document-icon{width:40px;height:40px;background:rgba(239,68,68,.15);border-radius:10px;display:flex;align-items:center;justify-content:center;color:#ef4444;font-size:1.3rem}.document-name{font-weight:600;font-size:.8rem;color:var(--text-primary)}.document-meta{font-size:.65rem;color:var(--text-secondary)}.document-download{background:linear-gradient(135deg,var(--cyan),var(--purple));color:#fff;padding:6px 14px;border-radius:20px;font-size:.75rem;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:5px}
+        
+        .image-viewer{position:fixed;inset:0;background:rgba(0,0,0,.95);z-index:1200;display:none;flex-direction:column;align-items:center;justify-content:center}.image-viewer.active{display:flex}.image-viewer img{max-width:90%;max-height:80vh;object-fit:contain;border-radius:12px}.image-viewer-controls{position:absolute;top:20px;right:20px;display:flex;gap:10px}.image-viewer-controls button{background:rgba(0,0,0,.6);border:0;color:#fff;width:40px;height:40px;border-radius:50%;cursor:pointer;font-family:inherit}
+        
+        .bottom-nav{position:fixed;bottom:0;width:100%;height:60px;background:var(--navbar-bg);backdrop-filter:blur(15px);border-top:1px solid var(--border-color);display:flex;justify-content:space-around;align-items:center;z-index:1000}.bottom-nav-item{color:var(--text-secondary);padding:8px;cursor:pointer;transition:var(--transition);position:relative;text-decoration:none;display:flex;align-items:center}.bottom-nav-item svg{width:22px;height:22px}.bottom-nav-item.active,.bottom-nav-item:hover{color:var(--cyan)}.badge-count{position:absolute;top:0;right:-2px;background:var(--danger);color:#fff;font-size:.55rem;padding:2px 5px;border-radius:10px;font-weight:700;min-width:16px;text-align:center;display:none}
+        .toast-custom{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:var(--toast-bg);color:#fff;padding:10px 20px;z-index:1100;font-size:.8rem;border-radius:25px;border:1px solid var(--cyan);white-space:nowrap;opacity:0;visibility:hidden;transition:opacity .3s ease,visibility .3s ease}.toast-custom.show{opacity:1;visibility:visible}
+        .empty-state{text-align:center;padding:60px 20px;color:var(--text-secondary)}.d-flex{display:flex}.align-items-center{align-items:center}.justify-content-between{justify-content:space-between}
+
+        .desktop-modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 2000; display: none; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
+        .desktop-modal-overlay.active { display: flex; }
+        .desktop-modal-content { background: var(--bg-primary); width: 500px; max-width: 90%; max-height: 85vh; border-radius: 16px; overflow-y: auto; position: relative; border: 1px solid var(--border-light); }
+        .desktop-modal-header { padding: 16px 20px; border-bottom: 1px solid var(--border-light); display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; background: var(--bg-primary); z-index: 10; }
+        .desktop-modal-body { padding: 20px; }
+        .desktop-modal-close { background: none; border: none; color: var(--text-secondary); font-size: 1.5rem; cursor: pointer; }
+
+        .right-panel { display: none; }
+        
+        @media (min-width: 1024px) {
+            body { padding-bottom: 0; }
+            .sidebar { left: 0 !important; width: 240px; }
+            .sidebar-overlay { display: none !important; }
+            .navbar { margin-left: 240px; margin-right: 70px; }
+            .menu-toggle { display: none; }
+            .main-content { margin-left: 240px; margin-right: 350px; max-width: none; min-height: 100vh; }
+            .right-panel {
+                display: block; position: fixed; top: 0; right: 70px; width: 280px; height: 100vh;
+                background: var(--sidebar-bg); border-left: 1px solid var(--border-light); z-index: 90;
+                overflow-y: auto; padding: 80px 20px 20px;
+            }
+            .stats-ball-container { display: flex; flex-direction: column; gap: 30px; align-items: center; margin-top: 20px; }
+            .stats-ball {
+                position: relative; width: 130px; height: 130px; border-radius: 50%;
+                display: flex; flex-direction: column; align-items: center; justify-content: center;
+                background: var(--card-bg); z-index: 1; text-align: center;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            }
+            .stats-ball::before {
+                content: ''; position: absolute; inset: -4px; border-radius: 50%;
+                background: conic-gradient(from 0deg, var(--cyan), var(--purple), var(--warning), var(--cyan));
+                z-index: -1; animation: spinBall 4s linear infinite;
+            }
+            .stats-ball::after {
+                content: ''; position: absolute; inset: 2px; border-radius: 50%;
+                background: var(--sidebar-bg); z-index: -1;
+            }
+            .stats-ball.success::before { background: conic-gradient(from 0deg, var(--success), var(--cyan), var(--success)); }
+            .stats-ball.warning::before { background: conic-gradient(from 0deg, var(--warning), var(--danger), var(--warning)); }
+            @keyframes spinBall { 100% { transform: rotate(360deg); } }
+            .stats-ball-value { font-size: 2.2rem; font-weight: 800; color: var(--text-primary); line-height: 1; }
+            .stats-ball-label { font-size: 0.8rem; color: var(--text-secondary); margin-top: 6px; text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
+            
+            .bottom-nav { 
+                position: fixed; top: 0; right: 0; bottom: auto; width: 70px; height: 100vh; 
+                flex-direction: column; justify-content: flex-start; padding-top: 30px; gap: 20px; 
+                border-top: none; border-left: 1px solid var(--border-color); background: var(--sidebar-bg);
+            }
+            .bottom-nav-item { margin: 0; padding: 12px; width: 100%; justify-content: center; }
+
+            .desktop-modal-overlay { justify-content: flex-end; padding: 0; align-items: stretch; }
+            .desktop-modal-content { width: 500px; max-width: 100%; height: 100%; max-height: 100%; border-radius: 0; border-left: 1px solid var(--border-light); animation: slideInRightDesktop 0.3s ease-out forwards; }
+            @keyframes slideInRightDesktop { from { transform: translateX(100%); } to { transform: translateX(0); } }
+            .toast-custom { bottom: 30px; left: calc(50% - 50px); }
+        }
+    </style>
+</head>
+<body>
+<div class="offline-banner" id="offlineBanner"> <span data-i18n="offline_mode">Mode hors-ligne</span></div>
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+<aside class="sidebar" id="sidebar">
+    <div class="profile-section"><div style="position:relative;display:inline-block"><img src="" class="profile-img-sidebar" id="sidebarAvatar" alt="Avatar"><div class="online-indicator" id="userOnlineIndicator"></div></div><h3 style="margin:0;font-size:1.05rem" id="sidebarName">Rashidi</h3><div class="profile-stats"><div><strong id="sidebarPosts">0</strong><span data-i18n="posts">Posts</span></div><div><strong id="sidebarFriends">0</strong><span data-i18n="friends_label">Amis</span></div><div><strong id="sidebarGroups">0</strong><span data-i18n="groups_label">Groupes</span></div></div></div>
+    <nav class="sidebar-nav">
+        <a href="home.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg> <span data-i18n="home">Accueil</span></a>
+        <a href="saved.html" class="sidebar-link active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg> <span data-i18n="saved">Enregistrés</span></a>
+        <a href="friends.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg> <span data-i18n="friends_label">Amis</span></a>
+        <a href="courses.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg> <span data-i18n="courses">Cours</span></a>
+        <a href="events.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> <span data-i18n="events">Événements</span></a>
+        <a href="groups.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> <span data-i18n="groups_label">Groupes</span></a>
+        <a href="mentorship.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg> <span>Mentorat</span></a>
+        <a href="profile.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> <span data-i18n="my_profile">Mon Profil</span></a>
+        <hr style="margin:10px 0;border-color:var(--border-color)"><a href="settings.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg> <span data-i18n="settings">Paramètres</span></a>
+        <hr style="margin:10px 0;border-color:var(--border-color)"><button class="sidebar-link logout-link" onclick="logout()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg> <span data-i18n="logout">Déconnexion</span></button>
+    </nav>
+</aside>
+<nav class="navbar"><div class="nav-left"><button class="menu-toggle" onclick="toggleSidebar()" aria-label="Menu"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="7" x2="16" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="12" y2="17"/><circle cx="18" cy="17" r="2"/></svg></button><a href="home.html" class="navbar-brand">ESTRA LINK</a></div><div class="nav-right"><img src="" class="avatar-nav" id="navAvatar" onclick="window.location.href='profile.html'" alt="Avatar"></div></nav>
+
+<main class="main-content">
+    <div class="page-header">
+        <h2><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg> <span data-i18n="saved_items_title">Éléments enregistrés</span></h2>
+        <div class="filter-buttons">
+            <button class="filter-btn active" data-filter="all" onclick="filterSaved('all',this)" data-i18n="filter_all">Tous</button>
+            <button class="filter-btn" data-filter="posts" onclick="filterSaved('posts',this)" data-i18n="filter_posts">Publications</button>
+            <button class="filter-btn" data-filter="events" onclick="filterSaved('events',this)" data-i18n="filter_events">Événements</button>
+            <button class="filter-btn" data-filter="courses" onclick="filterSaved('courses',this)" data-i18n="filter_courses">Cours</button>
+            <!-- Filtre emploi supprimé -->
+        </div>
+    </div>
+    <div id="savedContainer"></div>
+</main>
+
+<aside class="right-panel">
+    <h3 style="font-size: 1.1rem; color: var(--text-primary); margin-bottom: 20px; display: flex; align-items: center; gap: 8px;">
+        <i class="fas fa-chart-pie" style="color: var(--cyan)"></i> Statistiques
+    </h3>
+    <div class="stats-ball-container">
+        <div class="stats-ball">
+            <div class="stats-ball-value" id="ballSavedPosts">0</div>
+            <div class="stats-ball-label">Publications</div>
+        </div>
+        <div class="stats-ball success">
+            <div class="stats-ball-value" id="ballSavedCourses">0</div>
+            <div class="stats-ball-label">Cours</div>
+        </div>
+        <div class="stats-ball warning">
+            <div class="stats-ball-value" id="ballSavedEvents">0</div>
+            <div class="stats-ball-label">Événements</div>
+        </div>
+    </div>
+</aside>
+
+<div class="bottom-nav">
+    <a href="home.html" class="bottom-nav-item" title="Accueil"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></a>
+    <a href="notifications.html" class="bottom-nav-item" title="Notifications" style="position:relative"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg><span class="badge-count" id="notifBadge" style="display:none">0</span></a>
+    <a href="messages.html" class="bottom-nav-item" style="position:relative"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg><span class="badge-count" id="msgBadge" style="display:none">0</span></a>
+    <a href="courses.html" class="bottom-nav-item" style="position:relative"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg><span class="badge-count" id="msgBadge" style="display:none">0</span></a>
+
+    <a href="profile.html" class="bottom-nav-item" title="Profil"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></a>
+</div>
+
+<div class="image-viewer" id="imageViewer"><div class="image-viewer-controls"><button onclick="downloadCurrentImage()"><i class="fas fa-download"></i></button><button onclick="closeImageViewer()"><i class="fas fa-times"></i></button></div><img id="viewerImage" src="" alt="Vue agrandie"></div>
+<div id="toastMsg" class="toast-custom"></div>
+
+<div class="desktop-modal-overlay" id="desktopItemModal" onclick="if(event.target===this) closeDesktopModal()">
+    <div class="desktop-modal-content">
+        <div class="desktop-modal-header">
+            <h3 id="desktopModalTitle">Détail</h3>
+            <button class="desktop-modal-close" onclick="closeDesktopModal()">&times;</button>
+        </div>
+        <div class="desktop-modal-body" id="desktopModalBody"></div>
+    </div>
+</div>
+
+<script>
+// ============ TRADUCTIONS (sans les jobs) ============
+const translations = {
+    fr: {
+        page_title: "ESTRA LINK | Enregistrements",
+        offline_mode: "Mode hors-ligne",
+        posts: "Posts", friends_label: "Amis", groups_label: "Groupes",
+        home: "Accueil", saved: "Enregistrés", courses: "Cours", events: "Événements",
+        my_profile: "Mon Profil", settings: "Paramètres", logout: "Déconnexion",
+        saved_items_title: "Éléments enregistrés",
+        filter_all: "Tous", filter_posts: "Publications", filter_events: "Événements", filter_courses: "Cours",
+        event_badge: "ÉVÉNEMENT", course_badge: "COURS",
+        empty_title: "Aucun élément enregistré",
+        empty_desc: "Enregistrez des publications, événements ou cours pour les retrouver ici.",
+        see_more: "Voir plus", see_less: "Voir moins",
+        time_just_now: "à l'instant", time_min: "il y a X min", time_hour: "il y a X h", time_day: "il y a X j",
+        download_btn: "Télécharger",
+        toast_removed_post: "Publication retirée des enregistrements",
+        toast_removed_event: "Événement retiré des enregistrements",
+        toast_removed_course: "Cours retiré des enregistrements",
+        toast_downloaded: "Téléchargement démarré",
+        toast_image_downloaded: "Image téléchargée",
+        toast_online: "Connexion rétablie",
+        toast_offline: "Mode hors-ligne",
+        organizer_label: "Organisateur", interested_label: "intéressés",
+        company_label: "Entreprise", students_label: "étudiants",
+        author_label: "Auteur",
+    }
+};
+
+let currentLang = localStorage.getItem('estra_language') || 'fr';
+function t(key) { return (translations[currentLang] && translations[currentLang][key]) || (translations['fr'] && translations['fr'][key]) || key; }
+function applyTranslations() {
+    currentLang = localStorage.getItem('estra_language') || 'fr';
+    document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = t(el.getAttribute('data-i18n')); });
+    document.title = t('page_title');
+}
+
+// Notifications
+function addNotification(type, title, message, metadata = {}) {
+    const notifications = JSON.parse(localStorage.getItem('estra_notifications') || '[]');
+    const newNotif = { id: Date.now(), type, title, message, read: false, timestamp: Date.now(), metadata };
+    notifications.unshift(newNotif);
+    if (notifications.length > 50) notifications.length = 50;
+    localStorage.setItem('estra_notifications', JSON.stringify(notifications));
+    updateBadges();
+    window.dispatchEvent(new CustomEvent('estra_notification_updated', { detail: { notifications, newNotification: newNotif } }));
+    localStorage.setItem('estra_notification_trigger', Date.now().toString());
+    return newNotif;
+}
+
+// Eco mode
+let ecoMode = localStorage.getItem('estra_eco_mode') === 'true';
+function initEcoMode() {
+    const btn = document.getElementById('ecoBtn');
+    if (btn) {
+        document.body.classList.toggle('eco-mode-active', ecoMode);
+        if (ecoMode) btn.classList.add('active');
+    }
+}
+function toggleEcoMode() {
+    ecoMode = !ecoMode;
+    localStorage.setItem('estra_eco_mode', ecoMode);
+    initEcoMode();
+    showToast(ecoMode ? "Mode Éco Activé (Économie 50% data)" : "Mode Éco Désactivé (Haute Qualité)");
+}
+
+// Données globales (sans jobs)
+if(!window.estraEvents) window.estraEvents = [];
+if(!window.estraPosts) window.estraPosts = [];
+if(!window.estraGroups) window.estraGroups = [];
+if(!window.estraUserGroups) window.estraUserGroups = [];
+if(!window.estraFriends) window.estraFriends = [];
+
+let currentUser = { name:'Rashidi', avatar:'https://ui-avatars.com/api/?background=1d9bf0&color=fff&name=Rashidi&size=40' };
+let savedPostsIds = [], savedCoursesIds = [], savedEventsIds = [];
+let currentFilter = 'all', toastTimeout = null, currentViewerImage = null;
+let posts = [], courses = [], events = [];
+
+function checkOnlineStatus() { document.getElementById('offlineBanner').style.display = navigator.onLine ? 'none' : 'block'; }
+function updateBadges() {
+    const notifs = JSON.parse(localStorage.getItem('estra_notifications')||'[]');
+    const unread = notifs.filter(n => !n.read).length;
+    const nb = document.getElementById('notifBadge');
+    if (nb) { nb.style.display = unread > 0 ? 'block' : 'none'; nb.textContent = unread > 99 ? '99+' : unread; }
+    const conversations = JSON.parse(localStorage.getItem('estra_conversations')||'[]');
+    const totalUnread = conversations.reduce((sum, conv) => sum + (conv.unread||0), 0);
+    const mb = document.getElementById('msgBadge');
+    if (mb) { mb.style.display = totalUnread > 0 ? 'block' : 'none'; mb.textContent = totalUnread > 99 ? '99+' : totalUnread; }
+}
+
+function loadData() {
+    // Thème clair forcé
+    document.documentElement.setAttribute('data-theme', 'light');
+    window.estraTheme = 'light';
+    applyTranslations();
+    initEcoMode();
+    
+    const sp = localStorage.getItem('estra_profile');
+    if (sp) { try { const p = JSON.parse(sp); currentUser.name = p.fullName || currentUser.name; currentUser.avatar = p.avatar || currentUser.avatar; } catch(e) {} }
+    
+    savedPostsIds = JSON.parse(localStorage.getItem('estra_saved_posts') || '[]');
+    savedCoursesIds = JSON.parse(localStorage.getItem('estra_saved_courses') || '[]');
+    savedEventsIds = JSON.parse(localStorage.getItem('estra_saved_events') || '[]');
+    // Plus de savedJobsIds
+    
+    posts = window.estraPosts && window.estraPosts.length > 0 ? window.estraPosts : JSON.parse(localStorage.getItem('estra_posts') || '[]');
+    courses = JSON.parse(localStorage.getItem('estra_courses') || '[]');
+    events = window.estraEvents && window.estraEvents.length > 0 ? window.estraEvents : JSON.parse(localStorage.getItem('estra_events') || '[]');
+    // Plus de jobs
+    
+    checkOnlineStatus();
+    updateSidebar();
+    updateBadges();
+}
+
+function saveIds() {
+    localStorage.setItem('estra_saved_posts', JSON.stringify(savedPostsIds));
+    localStorage.setItem('estra_saved_courses', JSON.stringify(savedCoursesIds));
+    localStorage.setItem('estra_saved_events', JSON.stringify(savedEventsIds));
+    updateRightPanelStats();
+}
+
+function updateSidebar() {
+    document.getElementById('sidebarName').textContent = currentUser.name;
+    document.getElementById('sidebarAvatar').src = currentUser.avatar;
+    document.getElementById('navAvatar').src = currentUser.avatar;
+    
+    // ✅ LIRE LES VRAIS COMPTEURS DEPUIS LOCALSTORAGE
+    const friendsList = JSON.parse(localStorage.getItem('estra_friends') || '[]');
+    const mentorsList = JSON.parse(localStorage.getItem('estra_mentors') || '[]');
+    const userGroups = window.estraUserGroups || [];
+    
+    document.getElementById('sidebarPosts').textContent = posts.filter(p => p.author === currentUser.name).length;
+    document.getElementById('sidebarFriends').textContent = friendsList.length;
+    document.getElementById('sidebarGroups').textContent = userGroups.length + mentorsList.length;
+}
+function escapeHtml(str) { if (!str) return ''; const d = document.createElement('div'); d.textContent = str; return d.innerHTML; }
+function formatTime(ts) {
+    if (!ts) return t('time_recently');
+    const diff = Math.floor((Date.now() - ts) / 60000);
+    if (diff < 1) return t('time_just_now');
+    if (diff < 60) return t('time_min').replace('X', diff);
+    if (diff < 1440) return t('time_hour').replace('X', Math.floor(diff / 60));
+    return t('time_day').replace('X', Math.floor(diff / 1440));
+}
+function showToast(msg) {
+    const te = document.getElementById('toastMsg');
+    if (!te) return;
+    if (toastTimeout) clearTimeout(toastTimeout);
+    te.textContent = msg;
+    te.classList.remove('show');
+    void te.offsetWidth;
+    te.classList.add('show');
+    toastTimeout = setTimeout(() => te.classList.remove('show'), 3000);
+}
+function formatDate(ds) {
+    if (!ds) return '';
+    return new Date(ds).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
+}
+
+function updateRightPanelStats() {
+    document.getElementById('ballSavedPosts').textContent = savedPostsIds.length;
+    document.getElementById('ballSavedCourses').textContent = savedCoursesIds.length;
+    document.getElementById('ballSavedEvents').textContent = savedEventsIds.length;
+}
+
+function renderSaved() {
+    const container = document.getElementById('savedContainer');
+    if (!container) return;
+    let items = [];
+    
+    if (currentFilter === 'all' || currentFilter === 'posts') posts.filter(p => savedPostsIds.includes(p.id)).forEach(p => items.push({ type: 'post', data: p }));
+    if (currentFilter === 'all' || currentFilter === 'events') events.filter(e => savedEventsIds.includes(e.id)).forEach(e => items.push({ type: 'event', data: e }));
+    if (currentFilter === 'all' || currentFilter === 'courses') courses.filter(c => savedCoursesIds.includes(c.id)).forEach(c => items.push({ type: 'course', data: c }));
+    // Plus de jobs
+    
+    items.sort((a, b) => (b.data.timestamp || b.data.createdAt || 0) - (a.data.timestamp || a.data.createdAt || 0));
+    
+    if (items.length) {
+        container.innerHTML = items.map(item => renderItemCard(item)).join('');
+    } else {
+        container.innerHTML = `<div class="empty-state"><svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" style="color:var(--text-secondary);margin-bottom:16px;"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg><h3>${t('empty_title')}</h3><p>${t('empty_desc')}</p></div>`;
+    }
+    
+    setTimeout(() => {
+        document.querySelectorAll('.post-text').forEach(td => {
+            const pid = td.id.split('-')[2];
+            const btn = document.getElementById('see-more-' + pid);
+            if (btn && (td.scrollHeight > td.clientHeight + 5 || td.innerText.split('\n').length > 4)) btn.style.display = 'inline-block';
+        });
+    }, 100);
+    updateRightPanelStats();
+}
+
+function renderItemCard(item) {
+    if (item.type === 'event') {
+        const e = item.data;
+        return `<div class="post-card" id="saved-${e.id}" onclick="navigateToEvent(${e.id})"><div class="post-header"><img src="${e.organizerAvatar || currentUser.avatar}" class="post-avatar" alt="Avatar"><div class="post-author-info"><div class="d-flex justify-content-between"><div><span class="post-author-name">${escapeHtml(e.organizer || t('organizer_label'))}</span><div class="post-time">${formatTime(e.createdAt)}</div></div></div></div></div><div class="post-content"><span class="event-badge"><i class="fas fa-calendar-alt"></i> ${t('event_badge')}</span><div class="post-text"><strong>${escapeHtml(e.title || '')}</strong></div><div class="event-details"><span><i class="far fa-calendar-alt"></i> ${formatDate(e.date)} à ${e.time||''}</span><span><i class="fas fa-map-marker-alt"></i> ${escapeHtml(e.location||'')}</span></div><p style="font-size:0.8rem;color:var(--text-secondary);">${escapeHtml((e.description||'').substring(0,100))}...</p></div><div class="post-stats"><span><i class="fas fa-heart"></i> ${e.interested||0} ${t('interested_label')}</span></div><div class="post-actions"><button class="post-action-btn" onclick="event.stopPropagation();unsaveItem('event',${e.id})" title="Retirer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button><button class="post-action-btn" onclick="event.stopPropagation();navigateToEvent(${e.id})" title="Voir"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button></div></div><hr class="post-separator">`;
+    }
+    if (item.type === 'course') {
+        const c = item.data;
+        return `<div class="post-card" id="saved-${c.id}" onclick="navigateToCourses(${c.id})"><div class="post-header"><img src="${c.authorAvatar || 'https://ui-avatars.com/api/?background=1d9bf0&color=fff&name=User&size=44'}" class="post-avatar" alt="Avatar"><div class="post-author-info"><div class="d-flex justify-content-between"><div><span class="post-author-name">${escapeHtml(c.author || t('author_label'))}</span><div class="post-time">${formatTime(c.timestamp)}</div></div></div></div></div><div class="post-content"><span class="course-badge"><i class="fas fa-graduation-cap"></i> ${t('course_badge')}</span><div class="post-text"><strong>${escapeHtml(c.title || '')}</strong></div><div style="display:flex;flex-wrap:wrap;gap:12px;margin:6px 0;font-size:0.75rem;color:var(--text-secondary);"><span><i class="fas fa-graduation-cap"></i> ${c.promotion||'N/A'}</span><span><i class="fas fa-university"></i> ${escapeHtml(c.university||'')}</span></div><p style="font-size:0.8rem;color:var(--text-secondary);">${escapeHtml((c.description||'').substring(0,100))}...</p></div><div class="post-stats"><span><i class="fas fa-users"></i> ${c.students||0} ${t('students_label')}</span></div><div class="post-actions"><button class="post-action-btn" onclick="event.stopPropagation();unsaveItem('course',${c.id})" title="Retirer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button><button class="post-action-btn" onclick="event.stopPropagation();navigateToCourses(${c.id})" title="Voir"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button></div></div><hr class="post-separator">`;
+    }
+    // Publication standard
+    const p = item.data;
+    let mediaHtml = '';
+    if (p.images && p.images.length === 1) mediaHtml = `<div class="post-media"><img src="${p.images[0]}" onclick="event.stopPropagation();openImageViewer('${p.images[0]}')" alt="Image"></div>`;
+    else if (p.image) mediaHtml = `<div class="post-media"><img src="${p.image}" onclick="event.stopPropagation();openImageViewer('${p.image}')" alt="Image"></div>`;
+    else if (p.document) mediaHtml = `<div class="post-document"><div class="document-info"><div class="document-icon"><i class="fas fa-file-pdf"></i></div><div><div class="document-name">${escapeHtml(p.documentName||'Document')}</div><div class="document-meta">PDF</div></div></div><div class="document-download" onclick="event.stopPropagation();downloadDocument('${p.document}','${p.documentName||'document'}')"><i class="fas fa-download"></i> ${t('download_btn')}</div></div>`;
+    
+    const hasLong = Math.ceil((p.content||'').length/40)>4 || (p.content||'').split('\n').length>4;
+    return `<div class="post-card" id="saved-${p.id}" onclick="navigateToHome(${p.id})"><div class="post-header"><img src="${p.authorAvatar||'https://ui-avatars.com/api/?background=1d9bf0&color=fff&name=User&size=44'}" class="post-avatar" alt="Avatar" style="cursor:pointer;" onclick="event.stopPropagation();viewProfile('${escapeHtml(p.author||'')}')"><div class="post-author-info"><div class="d-flex justify-content-between"><div><span class="post-author-name" style="cursor:pointer;" onclick="event.stopPropagation();viewProfile('${escapeHtml(p.author||'')}')">${escapeHtml(p.author||t('author_label'))}</span><div class="post-time">${formatTime(p.timestamp)}</div></div></div></div></div><div class="post-content"><div class="post-text" id="saved-text-${p.id}">${escapeHtml(p.content||'')}</div>${hasLong?`<span class="see-more-btn" id="see-more-${p.id}" onclick="event.stopPropagation();toggleReadMore(${p.id})" style="display:none;">${t('see_more')}</span>`:''}${mediaHtml}</div><div class="post-stats"><span><i class="fas fa-heart"></i> ${p.likes||0}</span><span><i class="fas fa-comment"></i> ${(p.comments||[]).length}</span></div><div class="post-actions"><button class="post-action-btn" onclick="event.stopPropagation();unsaveItem('post',${p.id})" title="Retirer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button><button class="post-action-btn" onclick="event.stopPropagation();navigateToHome(${p.id})" title="Voir"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button></div></div><hr class="post-separator">`;
+}
+
+function toggleReadMore(id) {
+    const td = document.getElementById(`saved-text-${id}`);
+    const btn = document.getElementById(`see-more-${id}`);
+    if (!td || !btn) return;
+    if (td.classList.contains('expanded')) {
+        td.classList.remove('expanded');
+        btn.textContent = t('see_more');
+    } else {
+        td.classList.add('expanded');
+        btn.textContent = t('see_less');
+    }
+}
+
+function filterSaved(filter, btn) {
+    currentFilter = filter;
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    if (btn) btn.classList.add('active');
+    renderSaved();
+}
+
+function unsaveItem(type, id) {
+    if (type === 'post') { savedPostsIds = savedPostsIds.filter(i => i !== id); saveIds(); renderSaved(); showToast(t('toast_removed_post')); }
+    else if (type === 'event') { savedEventsIds = savedEventsIds.filter(i => i !== id); saveIds(); renderSaved(); showToast(t('toast_removed_event')); }
+    else if (type === 'course') { savedCoursesIds = savedCoursesIds.filter(i => i !== id); saveIds(); renderSaved(); showToast(t('toast_removed_course')); }
+}
+
+// Navigation & modale desktop (sans jobs)
+function navigateToEvent(id) {
+    if (window.innerWidth >= 1024) {
+        openDesktopModal('event', id);
+    } else {
+        localStorage.setItem('estra_current_event', id);
+        window.location.href = 'events.html';
+    }
+}
+function navigateToCourses(id) {
+    if (window.innerWidth >= 1024) {
+        openDesktopModal('course', id);
+    } else {
+        window.location.href = 'courses.html';
+    }
+}
+function navigateToHome(id) {
+    if (window.innerWidth >= 1024) {
+        openDesktopModal('post', id);
+    } else {
+        window.location.href = 'home.html';
+    }
+}
+
+function openDesktopModal(type, id) {
+    const savedCard = document.getElementById('saved-'+id);
+    if (!savedCard) return;
+    let title = "Détail";
+    if (type === 'event') title = "Détail de l'événement";
+    else if (type === 'course') title = "Cours / Document";
+    else title = "Publication";
+    const contentHtml = `<div class="post-card" style="border:1px solid var(--border-light); border-radius:12px; background:var(--card-bg);">${savedCard.innerHTML}</div>`;
+    document.getElementById('desktopModalTitle').textContent = title;
+    document.getElementById('desktopModalBody').innerHTML = contentHtml;
+    document.getElementById('desktopItemModal').classList.add('active');
+}
+function closeDesktopModal() { document.getElementById('desktopItemModal').classList.remove('active'); }
+
+function downloadDocument(url, name) {
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = name || 'document.pdf';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    showToast(t('toast_downloaded'));
+}
+function openImageViewer(src) { currentViewerImage = src; document.getElementById('viewerImage').src = src; document.getElementById('imageViewer').classList.add('active'); }
+function closeImageViewer() { document.getElementById('imageViewer').classList.remove('active'); }
+function downloadCurrentImage() {
+    if (currentViewerImage) {
+        const a = document.createElement('a'); a.href = currentViewerImage; a.download = 'image.jpg';
+        document.body.appendChild(a); a.click(); document.body.removeChild(a);
+        showToast(t('toast_image_downloaded'));
+    }
+}
+
+function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); document.getElementById('sidebarOverlay').classList.toggle('active'); }
+function closeSidebar() { document.getElementById('sidebar').classList.remove('open'); document.getElementById('sidebarOverlay').classList.remove('active'); }
+function logout() { localStorage.clear(); window.location.href = 'login.html'; }
+// 🆕 Base de données des utilisateurs pour les liens de profil
+const allPeopleSuggestions = [
+    {name:"Rashidi", username:"rashidi", avatar:"https://ui-avatars.com/api/?name=Rashidi&background=38bdf8&color=fff"},
+    {name:"Marie Claire", username:"marie_claire", avatar:"https://ui-avatars.com/api/?name=Marie&background=10b981&color=fff"},
+    {name:"David Mwamba", username:"david_mwamba", avatar:"https://ui-avatars.com/api/?name=David&background=8b5cf6&color=fff"},
+    {name:"Pr. Kalenga", username:"prof_kalenga", avatar:"https://ui-avatars.com/api/?name=PrK&background=7c3aed&color=fff"},
+    {name:"Mr. Muteba", username:"mr_muteba", avatar:"https://ui-avatars.com/api/?name=MrM&background=d97706&color=fff"},
+    {name:"Alice Mwila", username:"alice_mwila", avatar:"https://ui-avatars.com/api/?name=Alice&background=059669&color=fff"},
+    {name:"Sophie Mukendi", username:"sophie_mukendi", avatar:"https://ui-avatars.com/api/?name=Sophie&background=ec4899&color=fff"},
+    {name:"Admin ESTRA", username:"admin_estra", avatar:"https://ui-avatars.com/api/?name=Admin&background=dc2626&color=fff"}
+];
+
+function viewProfile(nameOrUsername) {
+    if (!nameOrUsername) return;
+    const person = allPeopleSuggestions.find(p => 
+        p.name === nameOrUsername || p.username === nameOrUsername
+    );
+    if (person && person.username) {
+        window.location.href = 'profile.html?user=' + encodeURIComponent(person.username);
+    } else {
+        const fallback = nameOrUsername.toLowerCase().replace(/\s+/g, '_');
+        window.location.href = 'profile.html?user=' + encodeURIComponent(fallback);
+    }
+}
+// Initialisation
+document.addEventListener('DOMContentLoaded', () => {
+    loadData();
+    renderSaved();
+    document.getElementById('sidebarOverlay').addEventListener('click', closeSidebar);
+    document.addEventListener('click', function(e) {
+        const sidebar = document.getElementById('sidebar'), toggle = document.querySelector('.menu-toggle');
+        if (sidebar && sidebar.classList.contains('open') && !sidebar.contains(e.target) && e.target !== toggle && !toggle?.contains(e.target)) closeSidebar();
+    });
+    window.addEventListener('online', () => { document.getElementById('offlineBanner').style.display = 'none'; showToast(t('toast_online')); });
+    window.addEventListener('offline', () => { document.getElementById('offlineBanner').style.display = 'block'; showToast(t('toast_offline')); });
+    window.addEventListener('storage', e => {
+        if (e.key === 'estra_notification_trigger') updateBadges();
+        if (e.key === 'estra_theme' && e.newValue) { document.documentElement.setAttribute('data-theme', 'light'); window.estraTheme = 'light'; }
+        if (e.key === 'estra_language' && e.newValue) { applyTranslations(); renderSaved(); }
+        if (e.key === 'estra_posts') { posts = JSON.parse(e.newValue || '[]'); window.estraPosts = posts; renderSaved(); }
+        if (e.key === 'estra_courses') { courses = JSON.parse(e.newValue || '[]'); renderSaved(); }
+        if (e.key === 'estra_events') { events = JSON.parse(e.newValue || '[]'); window.estraEvents = events; renderSaved(); }
+        if (e.key === 'estra_saved_posts') { savedPostsIds = JSON.parse(e.newValue || '[]'); renderSaved(); }
+        if (e.key === 'estra_saved_courses') { savedCoursesIds = JSON.parse(e.newValue || '[]'); renderSaved(); }
+        if (e.key === 'estra_saved_events') { savedEventsIds = JSON.parse(e.newValue || '[]'); renderSaved(); }
+        if (e.key === 'estra_profile') loadData();
+        if (e.key === 'estra_conversations') updateBadges();
+    });
+    window.addEventListener('estra_notification_updated', updateBadges);
+    setInterval(updateBadges, 3000);
+});
+
+// Exports globaux
+window.filterSaved = filterSaved;
+window.unsaveItem = unsaveItem;
+window.toggleReadMore = toggleReadMore;
+window.navigateToEvent = navigateToEvent;
+window.navigateToCourses = navigateToCourses;
+window.navigateToHome = navigateToHome;
+window.downloadDocument = downloadDocument;
+window.openImageViewer = openImageViewer;
+window.closeImageViewer = closeImageViewer;
+window.downloadCurrentImage = downloadCurrentImage;
+window.toggleSidebar = toggleSidebar;
+window.closeSidebar = closeSidebar;
+window.logout = logout;
+window.showToast = showToast;
+window.updateBadges = updateBadges;
+window.checkOnlineStatus = checkOnlineStatus;
+window.t = t;
+window.applyTranslations = applyTranslations;
+window.addNotification = addNotification;
+window.toggleEcoMode = toggleEcoMode;
+window.viewProfile = viewProfile;
+</script>
+<script src="i18n.js"></script>
+<script src="pwa-init.js"></script>
+</body>
+</html>

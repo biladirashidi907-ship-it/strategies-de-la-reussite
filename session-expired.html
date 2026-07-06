@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title data-i18n="session_expired">ESTRA LINK | Session expirée</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        :root, [data-theme="light"] {
+            --bg: #f8fafc; --text: #0f172a; --text-secondary: #475569;
+            --cyan: #0284c7; --purple: #7c3aed; --danger: #dc2626;
+            --card-bg: rgba(255,255,255,0.95); --border: rgba(0,0,0,0.1);
+            --shadow: 0 25px 50px -12px rgba(0,0,0,0.1);
+        }
+        [data-theme="dark"] {
+            --bg: #0f172a; --text: #e2e8f0; --text-secondary: #94a3b8;
+            --cyan: #38bdf8; --purple: #a78bfa; --danger: #ef4444;
+            --card-bg: rgba(30,41,59,0.6); --border: rgba(56,189,248,0.2);
+            --shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+        }
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;transition:background-color 0.4s ease,color 0.4s ease}
+        .container{text-align:center;max-width:450px;width:100%}
+        .icon-circle{width:100px;height:100px;background:rgba(239,68,68,0.1);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 24px;font-size:3rem;color:var(--danger);animation:pulse 2s ease-in-out infinite}
+        @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(239,68,68,0.2)}50%{box-shadow:0 0 0 20px rgba(239,68,68,0)}}
+        h1{font-size:1.8rem;margin-bottom:12px;color:var(--text)}
+        p{color:var(--text-secondary);margin-bottom:24px;line-height:1.6;font-size:0.95rem}
+        .countdown{display:inline-block;background:var(--cyan);color:#fff;padding:4px 12px;border-radius:20px;font-weight:700;font-size:0.9rem;margin-bottom:24px}
+        .btn-reconnect{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,var(--cyan),var(--purple));color:#fff;padding:14px 28px;border-radius:30px;text-decoration:none;font-weight:600;font-size:0.95rem;transition:all 0.3s ease}
+        .btn-reconnect:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(56,189,248,0.3)}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="icon-circle"><i class="fas fa-clock"></i></div>
+        <h1 data-i18n="session_expired">Session expirée</h1>
+        <p data-i18n="session_expired_desc">Votre session a expiré pour des raisons de sécurité. Veuillez vous reconnecter.</p>
+        <div class="countdown" id="countdown">5</div>
+        <br>
+        <a href="login.html" class="btn-reconnect"><i class="fas fa-sign-in-alt"></i> <span data-i18n="reconnect">Se reconnecter</span></a>
+    </div>
+
+    <script src="i18n.js"></script>
+    <script>
+        let countdown = 5;
+        const cdEl = document.getElementById('countdown');
+        
+        function updateCountdown() {
+            if (countdown <= 0) {
+                window.location.href = 'login.html';
+                return;
+            }
+            cdEl.textContent = countdown;
+            countdown--;
+            setTimeout(updateCountdown, 1000);
+        }
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            applyTranslations();
+            updateCountdown();
+        });
+    </script>
+</body>
+</html>
