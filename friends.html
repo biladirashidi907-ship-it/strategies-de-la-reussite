@@ -6,6 +6,7 @@
     <title data-i18n="page_title">ESTRA LINK | Amis, Binômes & Mentors</title>
     <meta property="og:title" content="ESTRA LINK | Amis, Binômes & Mentors">
     <meta property="og:description" content="Gérez vos amis, trouvez votre binôme, connectez-vous à des mentors sur ESTRA LINK.">
+    
     <meta property="og:image" content="https://ui-avatars.com/api/?background=0284c7&color=fff&name=ESTRA&size=512">
     <meta property="og:type" content="website">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
@@ -56,7 +57,7 @@
         .friends-search { padding:12px 24px; border-bottom:1px solid rgba(0,0,0,0.1); } .search-wrapper { display:flex; align-items:center; background:#f1f5f9; border:1px solid rgba(0,0,0,0.1); border-radius:30px; padding:8px 18px; } .search-wrapper i { color:#64748b; margin-right:12px; } .search-wrapper input { flex:1; background:transparent; border:none; padding:10px 0; color:#0f172a; font-size:0.95rem; outline:none; }
         .friends-filters { display:flex; gap:10px; padding:12px 24px; border-bottom:1px solid rgba(0,0,0,0.1); overflow-x:auto; } .filter-btn { padding:8px 20px; background:#f1f5f9; border:1px solid rgba(0,0,0,0.1); border-radius:30px; color:#475569; cursor:pointer; font-size:0.85rem; white-space:nowrap; transition:var(--transition); display:flex; align-items:center; gap:6px; font-family:inherit; } .filter-btn.active { background:#0284c7; color:#fff; border-color:transparent; }
         .friends-count { padding:12px 24px; color:#475569; font-size:0.85rem; display:flex; align-items:center; gap:8px; border-bottom:1px solid rgba(0,0,0,0.1); }
-        .friends-list { display:flex; flex-direction:column; gap:12px; padding:16px 24px; }
+        .friends-list { display:flex; flex-direction:column; gap:16px; padding:16px 24px; }
         .friend-card { background:#f8fafc; border-radius:16px; padding:16px; display:flex; align-items:center; gap:14px; border:1px solid rgba(0,0,0,0.08); transition:var(--transition); } .friend-card:hover { border-color:#0284c7; transform:translateY(-2px); }
         .friend-avatar { width:52px; height:52px; border-radius:50%; object-fit:cover; border:2px solid var(--cyan); cursor:pointer; flex-shrink:0; }
         .friend-info { flex:1; cursor:pointer; min-width:0; } .friend-info h4 { font-size:1rem; font-weight:600; margin-bottom:4px; display:flex; align-items:center; gap:6px; color:#0f172a; } .friend-bio { font-size:0.75rem; color:#475569; margin-bottom:6px; } .friend-meta { font-size:0.7rem; color:#64748b; display:flex; align-items:center; gap:12px; } .mutual-badge { font-size:0.65rem; padding:2px 8px; background:rgba(2,132,199,0.1); color:#0284c7; border-radius:20px; }
@@ -123,6 +124,264 @@
             .modal-content { margin:0; height:100vh !important; max-height:100vh !important; width:450px !important; max-width:450px !important; border-radius:0 !important; border-top:none; border-bottom:none; border-right:none; transform:translateX(100%); box-shadow:-10px 0 50px rgba(0,0,0,0.3); }
             .modal-overlay.active .modal-content { transform:translateX(0); }
         }
+        /* ============ ANTI-ZOOM & ANTI-SÉLECTION GLOBALE ============ */
+        html { touch-action: manipulation; -ms-touch-action: manipulation; }
+        body { -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; -webkit-touch-callout: none; -webkit-tap-highlight-color: transparent; }
+        input, textarea, [contenteditable="true"] { -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important; }
+        img { touch-action: manipulation; -webkit-user-drag: none; -moz-user-drag: none; user-select: none; }
+        .image-viewer-full img, .full-image-view img { touch-action: manipulation !important; pointer-events: auto; }
+
+        /* ======= STYLES POUR LES CARTES ET ONGLETS ======= */
+        .relations-container {
+            padding: 16px 20px;
+        }
+        .tabs-row {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            position: relative;
+            margin-bottom: 16px;
+            border-bottom: 1px solid var(--border);
+        }
+        .tab-btn {
+            flex: 1;
+            padding: 12px 0;
+            background: transparent;
+            border: none;
+            font-family: inherit;
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            border-bottom: 3px solid transparent;
+            letter-spacing: -0.2px;
+            white-space: nowrap;
+        }
+        .tab-btn i { font-size: 1rem; }
+        .tab-btn.active {
+            color: var(--cyan);
+            border-bottom-color: var(--cyan);
+            background: rgba(2,132,199,0.03);
+        }
+        .tab-badge {
+            font-size: 0.65rem;
+            padding: 2px 10px;
+            border-radius: 14px;
+            font-weight: 700;
+        }
+        .badge-suggestions { background: rgba(245,158,11,0.15); color: #b45309; }
+        .badge-relations { background: rgba(5,150,105,0.15); color: #047857; }
+        .tabs-separator {
+            width: 2px;
+            height: 28px;
+            background: linear-gradient(to bottom, transparent, var(--cyan), transparent);
+            opacity: 0.4;
+            flex-shrink: 0;
+            border-radius: 2px;
+            align-self: center;
+        }
+        .sub-tabs {
+            display: none;
+            gap: px;
+            margin-top: 6px;
+            border-bottom: 1px solid var(--border);
+        }
+        .sub-tab {
+            flex: 1;
+            padding: 10px 6px;
+            text-align: center;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            background: transparent;
+            border: none;
+            border-bottom: 3px solid transparent;
+            color: var(--text-secondary);
+            font-family: inherit;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            white-space: nowrap;
+        }
+        .sub-tab.active {
+            color: var(--cyan);
+            border-bottom-color: var(--cyan);
+        }
+        .sub-count { font-size: 0.65rem; opacity: 0.7; }
+
+        .relations-list {
+            display: flex;
+            flex-direction: column;
+            gap: 22px;
+            margin-top: 12px;
+        }
+        .person-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 18px 20px;
+            border: 1px solid var(--border);
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+        }
+        .person-card.type-ami { border-left: 5px solid var(--cyan); }
+        .person-card.type-binome { border-left: 5px solid var(--purple); }
+        .person-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+            border-color: var(--cyan);
+        }
+        .card-top {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+        .person-avatar {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--cyan);
+            flex-shrink: 0;
+            cursor: pointer;
+        }
+        .person-card.type-binome .person-avatar { border-color: var(--purple); }
+        .person-info { flex:1; min-width:0; }
+        .person-name {
+            font-weight: 700;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .person-bio {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-top: 2px;
+        }
+        .person-tag {
+            font-size: 0.65rem;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 6px;
+            white-space: nowrap;
+        }
+        .person-tag.ami { background: rgba(2,132,199,0.12); color: var(--cyan); }
+        .person-tag.binome { background: rgba(124,58,237,0.12); color: var(--purple); }
+        .online-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #10b981;
+            flex-shrink: 0;
+            display: inline-block;
+        }
+        .online-dot.offline { background: #94a3b8; }
+        .person-details {
+            font-size: 0.78rem;
+            color: var(--text-secondary);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 4px;
+            background: var(--bg);
+            padding: 8px 12px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+        }
+        .person-details span { display: flex; align-items: center; gap: 6px; }
+        .person-details i { width: 16px; color: var(--cyan); }
+        .person-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            padding-top: 10px;
+            border-top: 1px solid var(--border);
+            align-items: center;
+        }
+        .btn-sm {
+            padding: 8px 16px;
+            border-radius: 24px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            font-family: inherit;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: var(--transition);
+            white-space: nowrap;
+            text-decoration: none;
+        }
+        .btn-sm.primary { background: var(--cyan); color: #fff; box-shadow: 0 2px 8px rgba(2,132,199,0.3); }
+        .btn-sm.primary:hover { background: #0369a1; transform: translateY(-1px); }
+        .btn-sm.purple { background: var(--purple); color: #fff; box-shadow: 0 2px 8px rgba(124,58,237,0.3); }
+        .btn-sm.purple:hover { background: #6d28d9; transform: translateY(-1px); }
+        .btn-sm.outline { background: transparent; color: var(--text-secondary); border: 1px solid var(--border); }
+        .btn-sm.outline:hover { background: var(--bg); border-color: var(--text-secondary); }
+        .btn-sm.danger-outline { background: transparent; color: var(--danger); border: 1px solid var(--danger); }
+        .btn-sm.danger-outline:hover { background: var(--danger); color: #fff; }
+        .btn-fav {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            transition: var(--transition);
+            padding: 4px 10px;
+            border-radius: 20px;
+        }
+        .btn-fav:hover { background: var(--bg); }
+        .btn-fav.active { color: #fbbf24; }
+        .pending-badge {
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 6px 14px;
+            border-radius: 20px;
+            background: rgba(245,158,11,0.15);
+            color: #b45309;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .suggestion-section {
+            margin-bottom: 20px;
+        }
+        .section-title {
+            font-size: 0.9rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-secondary);
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 8px;
+        }
+        .section-title i { font-size: 0.9rem; }
+        .empty-state i { font-size: 2.2rem; margin-bottom: 8px; opacity: 0.3; display: block; }
+        .empty-state p { font-size: 0.9rem; }
+
+        @media (max-width:768px) {
+            .relations-container { padding: 12px 14px; }
+            .person-card { padding: 14px 14px; }
+            .person-avatar { width: 44px; height: 44px; }
+            .person-name { font-size: 0.9rem; }
+            .btn-sm { font-size: 0.7rem; padding: 6px 12px; }
+            .relations-list { gap: 18px; }
+            .person-details { font-size: 0.7rem; gap: 8px; }
+        }
     </style>
 </head>
 <body>
@@ -152,29 +411,34 @@
     <nav class="navbar"><div class="nav-left"><button class="menu-toggle" onclick="toggleSidebar()"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0284c7" stroke-width="2"><line x1="4" y1="7" x2="16" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="12" y2="17"/><circle cx="18" cy="17" r="2"/></svg></button><a href="home.html" class="navbar-brand">ESTRA LINK</a></div><div class="nav-right"><img src="" class="avatar-nav" id="navAvatar" onclick="viewOwnProfile()" alt="Avatar"></div></nav>
     
     <main class="main-content">
-        <div class="page-header"><h2><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg> Amis, Binômes & Mentors</h2><button class="create-btn" onclick="openInviteModal()"><i class="fas fa-user-plus"></i> Inviter</button></div>
-        <div class="friends-search"><div class="search-wrapper"><i class="fas fa-search"></i><input type="text" id="friendSearchInput" placeholder="Rechercher..." oninput="renderFriends()"></div></div>
-        <div class="friends-filters"><button class="filter-btn active" data-filter="all" onclick="filterFriends('all', this)">Tous</button><button class="filter-btn" data-filter="favorites" onclick="filterFriends('favorites', this)"><i class="fas fa-star"></i> Favoris</button><button class="filter-btn" data-filter="binome" onclick="filterFriends('binome', this)"><i class="fas fa-link"></i> Binômes</button><button class="filter-btn" data-filter="mentor" onclick="filterFriends('mentor', this)"><i class="fas fa-graduation-cap"></i> Mentors</button></div>
-        <div class="friends-count"><i class="fas fa-users"></i><span id="friendsCount">0 relation(s)</span></div>
-        <div id="requestsSection" class="requests-section" style="display:none;"></div>
-        <div id="friendsListContainer" class="friends-list"></div>
-
-        <div class="binome-search-section">
-            <h3><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> Rechercher un Binôme</h3>
-            <div class="binome-filters">
-                <select class="binome-select" id="binomeDomain" onchange="searchBinome()"><option value="">Domaine</option><option value="Informatique">Informatique</option><option value="Médecine">Médecine</option><option value="Droit">Droit</option><option value="Design">Design</option><option value="Mathématiques">Mathématiques</option></select>
-                <select class="binome-select" id="binomeLevel" onchange="searchBinome()"><option value="">Niveau</option><option value="L1">L1</option><option value="L2">L2</option><option value="L3">L3</option><option value="M1">M1</option><option value="M2">M2</option></select>
+        <div class="relations-container" id="relationsApp">
+            <div class="page-header" style="padding: 12px 0;">
+                <h2><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg> Amis & Binômes</h2>
+                <button class="create-btn" onclick="openInviteModal()"><i class="fas fa-user-plus"></i> Inviter</button>
             </div>
-            <div id="binomeResults" class="binome-results"></div>
-        </div>
 
-        <div class="binome-search-section">
-            <h3><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> Rechercher un Mentor</h3>
-            <div class="binome-filters"><select class="binome-select" id="mentorDomain" onchange="searchMentor()"><option value="">Domaine</option><option value="Informatique">Informatique</option><option value="Médecine">Médecine</option><option value="Droit">Droit</option><option value="Mathématiques">Mathématiques</option><option value="Sciences">Sciences</option></select></div>
-            <div id="mentorResults" class="binome-results"></div>
-        </div>
+            <div class="global-search" style="margin-bottom:14px;position:relative;">
+                <input type="text" id="globalSearch" placeholder="Rechercher une personne..." oninput="renderCurrentList()" style="width:100%;padding:12px 16px 12px 40px;border:1px solid var(--border);border-radius:30px;font-size:0.9rem;outline:none;background:var(--bg);font-family:inherit;">
+                <i class="fas fa-search" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--text-muted);"></i>
+            </div>
 
-        <div class="suggestions-section"><div class="suggestions-header"><h3><i class="fas fa-lightbulb"></i> Suggestions pour vous</h3><button onclick="refreshSuggestions()"><i class="fas fa-sync-alt"></i></button></div><div id="suggestionsList" class="suggestions-list"></div></div>
+            <div class="tabs-row">
+                <button class="tab-btn active" id="tabSuggestions" onclick="switchMainTab('suggestions')">
+                    <i class="fas fa-lightbulb"></i> Suggestions <span class="tab-badge badge-suggestions" id="suggBadge">0</span>
+                </button>
+                <div class="tabs-separator"></div>
+                <button class="tab-btn" id="tabRelations" onclick="switchMainTab('relations')">
+                    <i class="fas fa-user-check"></i> Mes Relations <span class="tab-badge badge-relations" id="relBadge">0</span>
+                </button>
+            </div>
+
+            <div class="sub-tabs" id="subTabsContainer" style="display:none;">
+                <button class="sub-tab active" data-sub="ami" onclick="switchSubTab('ami', this)"><i class="fas fa-user"></i> Suivis <span class="sub-count">(0)</span></button>
+                <button class="sub-tab" data-sub="binome" onclick="switchSubTab('binome', this)"><i class="fas fa-link"></i> Binômes <span class="sub-count">(0)</span></button>
+            </div>
+
+            <div id="dynamicList" class="relations-list"></div>
+        </div>
     </main>
 
     <div class="modal-overlay" id="inviteModal">
@@ -203,58 +467,15 @@
 <script>
 // ============ CANAL DE COMMUNICATION TEMPS RÉEL ============
 const ESTRA_CHANNEL = new BroadcastChannel('estra_network');
-
-// Écouter les événements des autres pages
 ESTRA_CHANNEL.onmessage = (e) => {
     const { type, data } = e.data;
-    
-    if (type === 'friends_updated') {
+    if (type === 'friends_updated' || type === 'badges_updated' || type === 'profile_updated') {
         loadAllData();
-    }
-    
-    if (type === 'mentors_updated') {
-        const storedMentors = JSON.parse(localStorage.getItem('estra_mentors') || '[]');
-        mentors = storedMentors;
-        renderFriends();
-        renderSuggestions();
+        renderCurrentList();
         updateSidebarStats();
         updateRightPanelStats();
-        showToast('🆕 Nouveau mentor disponible : ' + (data?.mentorName || ''));
-    }
-    
-    if (type === 'new_mentor_request') {
-        if (data && data.to === currentUser.name) {
-            receivedMentorRequests.push({
-                id: 'req_' + Date.now(),
-                name: data.from,
-                avatar: data.avatar || '',
-                bio: data.bio || '',
-                domain: data.domain || ''
-            });
-            saveData();
-            renderFriendRequests();
-            updateBadges();
-            showToast('🔔 Nouvelle demande de mentorat de ' + data.from);
-        }
-    }
-    
-    if (type === 'badges_updated') {
-        updateBadges();
-    }
-    
-    if (type === 'notification_updated') {
-        updateBadges();
-    }
-    
-    if (type === 'profile_updated') {
-        loadAllData();
-    }
-    
-    if (type === 'new_message_from_friends') {
-        updateBadges();
     }
 };
-
 function estraEmit(type, data = {}) {
     ESTRA_CHANNEL.postMessage({ type, data, timestamp: Date.now() });
 }
@@ -315,13 +536,7 @@ function syncAllUsersToDatabase() {
     }
     friends.forEach(f => addIfNotExists(f));
     binomes.forEach(b => addIfNotExists(b));
-    mentors.forEach(m => addIfNotExists(m));
-    receivedFriendRequests.forEach(r => addIfNotExists(r));
-    receivedBinomeRequests.forEach(r => addIfNotExists(r));
-    receivedMentorRequests.forEach(r => addIfNotExists(r));
-    sentFriendRequests.forEach(r => addIfNotExists(r));
-    sentBinomeRequests.forEach(r => addIfNotExists(r));
-    sentMentorRequests.forEach(r => addIfNotExists(r));
+    suggestions.forEach(s => addIfNotExists(s));
     if (updated) localStorage.setItem('estra_all_users', JSON.stringify(users));
 }
 
@@ -337,564 +552,360 @@ const translations = {
         toast_link_copied: "Lien copié !", confirm_remove: "Voulez-vous vraiment retirer cette relation ?",
         menu_view_profile: "Voir le profil", menu_add_favorite: "Ajouter aux favoris",
         menu_remove_favorite: "Retirer des favoris", menu_remove_friend: "Retirer la relation",
-        menu_message: "Message", menu_binome_request: "Demander comme binôme",
-        menu_mentor_request: "Demander comme mentor", pending: "En attente"
+        menu_message: "Message", pending: "En attente"
     }
 };
-
-let currentLang = localStorage.getItem('estra_language') || 'fr';
+let currentLang = 'fr';
 function t(key){ return (translations[currentLang]&&translations[currentLang][key]) || (translations['fr']&&translations['fr'][key]) || key; }
 function applyTranslations(){ currentLang = localStorage.getItem('estra_language') || 'fr'; document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = t(el.getAttribute('data-i18n')) || el.textContent; }); document.title = t('page_title'); }
 
-let currentFilter = 'all', activeMenu = null, toastTimeout = null;
-let friends = [], binomes = [], mentors = [];
-let receivedFriendRequests = [], receivedBinomeRequests = [], receivedMentorRequests = [];
-let sentFriendRequests = [], sentBinomeRequests = [], sentMentorRequests = [];
-let hiddenSuggestions = [];
-let currentUser = { name: 'Utilisateur', username: 'user', avatar: 'https://ui-avatars.com/api/?background=0284c7&color=fff&name=User&size=80' };
-
-function escapeHtml(str) { if (!str) return ''; const d = document.createElement('div'); d.textContent = str; return d.innerHTML; }
+let toastTimeout = null;
 function showToast(msg) {
     const te = document.getElementById('toastMsg'); if (!te) return;
     if (toastTimeout) clearTimeout(toastTimeout);
     te.textContent = msg; te.classList.remove('show'); void te.offsetWidth; te.classList.add('show');
     toastTimeout = setTimeout(() => te.classList.remove('show'), 3000);
 }
-function checkOnlineStatus() { document.getElementById('offlineBanner').style.display = navigator.onLine ? 'none' : 'block'; }
-function updateBadges() {
-    const notifs = JSON.parse(localStorage.getItem('estra_notifications') || '[]');
-    const unread = notifs.filter(n => !n.read).length;
-    const nb = document.getElementById('notifBadge');
-    if (nb) { nb.style.display = unread > 0 ? 'block' : 'none'; if (unread > 0) nb.textContent = unread > 99 ? '99+' : unread; }
-    
-    const msgs = JSON.parse(localStorage.getItem('estra_messages_data') || '{}');
-    let unreadMsgs = 0;
-    Object.values(msgs).forEach(arr => { if (Array.isArray(arr)) unreadMsgs += arr.filter(m => m.sender === 'them' && m.status !== 'read').length; });
-    const mb = document.getElementById('msgBadge');
-    if (mb) { mb.style.display = unreadMsgs > 0 ? 'block' : 'none'; mb.textContent = unreadMsgs > 99 ? '99+' : unreadMsgs; }
-}
-function updateRightPanelStats() {
-    const storedMentors = JSON.parse(localStorage.getItem('estra_mentors') || '[]');
-    document.getElementById('ballTotalFriends').textContent = friends.length;
-    document.getElementById('ballBinomes').textContent = binomes.length;
-    document.getElementById('ballMentors').textContent = storedMentors.length;
-}
-function updateSidebarStats() {
-    document.getElementById('sidebarFriends').textContent = friends.length;
-    document.getElementById('sidebarGroups').textContent = binomes.length + mentors.length;
-    document.getElementById('sidebarAvatar').src = currentUser.avatar;
-    document.getElementById('navAvatar').src = currentUser.avatar;
-    updateRightPanelStats();
-}
+function escapeHtml(str) { if (!str) return ''; const d = document.createElement('div'); d.textContent = str; return d.innerHTML; }
 
-// ================= LOAD ALL DATA AVEC SYNC =================
+// ============ DONNÉES AVEC INFOS COMPLÈTES ============
+let friends = [], binomes = [], suggestions = [];
+let sentFriendRequests = [], sentBinomeRequests = [];
+let hiddenSuggestions = [];
+let currentUser = { name: 'Utilisateur', username: 'user', avatar: 'https://ui-avatars.com/api/?background=0284c7&color=fff&name=User&size=80', domain: 'Informatique', level: 'L2' };
+
 function loadAllData() {
-    applyTranslations();
     const sp = ESTRA.getProfile();
     if (sp) {
         currentUser.name = sp.fullName || currentUser.name;
         currentUser.username = sp.username || currentUser.username;
         currentUser.avatar = sp.avatar || currentUser.avatar;
+        currentUser.domain = sp.domain || currentUser.domain;
+        currentUser.level = sp.level || currentUser.level;
     }
-    
+    // Initialiser avec des données de démonstration complètes si vides
+    if (!localStorage.getItem('estra_friends') || JSON.parse(localStorage.getItem('estra_friends')).length === 0) {
+        const demoFriends = [
+            { id: 'f1', name: 'Marie Claire', avatar: 'https://ui-avatars.com/api/?name=Marie&background=10b981&color=fff', bio: 'Enseignante en Programmation Web | 5 ans d\'expérience', domain: 'Informatique', level: 'M2', mutualFriends: 4, online: true, verified: true, favorite: false, type: 'ami', joinDate: 'Janvier 2025', location: 'Kinshasa, RDC' },
+            { id: 'f2', name: 'David Mwamba', avatar: 'https://ui-avatars.com/api/?name=David&background=8b5cf6&color=fff', bio: 'Chercheur en IA | Projets de deep learning', domain: 'Informatique', level: 'M1', mutualFriends: 2, online: false, verified: true, favorite: true, type: 'ami', joinDate: 'Février 2025', location: 'Goma, RDC' },
+            { id: 'f3', name: 'Alice Kasongo', avatar: 'https://ui-avatars.com/api/?name=Alice&background=059669&color=fff', bio: 'Élève en Scientifique | Mention BIEN', domain: 'Biologie-Chimie', level: '3ème', mutualFriends: 1, online: true, verified: false, favorite: false, type: 'ami', joinDate: 'Mars 2025', location: 'Kolwezi, RDC' }
+        ];
+        localStorage.setItem('estra_friends', JSON.stringify(demoFriends));
+    }
+    if (!localStorage.getItem('estra_binomes') || JSON.parse(localStorage.getItem('estra_binomes')).length === 0) {
+        const demoBinomes = [
+            { id: 'b1', name: 'Sophie Mukendi', avatar: 'https://ui-avatars.com/api/?name=Sophie&background=ec4899&color=fff', bio: 'Étudiante en Médecine | Stage à l\'hôpital général', domain: 'Médecine', level: 'L3', commonCourses: 'Anatomie, Physiologie', commonUniversity: 'Université de Lubumbashi', commonPromotion: '2024-2025', online: false, favorite: false, type: 'binome', joinDate: 'Janvier 2025', location: 'Lubumbashi, RDC' },
+            { id: 'b2', name: 'Jean Mutombo', avatar: 'https://ui-avatars.com/api/?name=Jean&background=6366f1&color=fff', bio: 'Étudiant en Droit | Spécialisation Droit des affaires', domain: 'Droit', level: 'L2', commonCourses: 'Droit des contrats', commonUniversity: 'Université de Kinshasa', commonPromotion: '2024-2025', online: true, favorite: false, type: 'binome', joinDate: 'Février 2025', location: 'Kinshasa, RDC' }
+        ];
+        localStorage.setItem('estra_binomes', JSON.stringify(demoBinomes));
+    }
+
     friends = JSON.parse(localStorage.getItem('estra_friends') || '[]');
     binomes = JSON.parse(localStorage.getItem('estra_binomes') || '[]');
-    mentors = JSON.parse(localStorage.getItem('estra_mentors') || '[]');
-    receivedFriendRequests = JSON.parse(localStorage.getItem('estra_received_friend_requests') || '[]');
-    receivedBinomeRequests = JSON.parse(localStorage.getItem('estra_received_binome_requests') || '[]');
-    receivedMentorRequests = JSON.parse(localStorage.getItem('estra_received_mentor_requests') || '[]');
-    sentFriendRequests = JSON.parse(localStorage.getItem('estra_sent_friend_requests') || '[]');
-    sentBinomeRequests = JSON.parse(localStorage.getItem('estra_sent_binome_requests') || '[]');
-    sentMentorRequests = JSON.parse(localStorage.getItem('estra_sent_mentor_requests') || '[]');
-    hiddenSuggestions = JSON.parse(localStorage.getItem('estra_hidden_suggestions') || '[]');
     
-    // 🆕 Synchronisation des avatars au chargement
-    const avatarUpdate = JSON.parse(localStorage.getItem('estra_avatar_updated') || '{}');
-    if (avatarUpdate.username && avatarUpdate.timestamp) {
-        const sevenDays = 7 * 24 * 60 * 60 * 1000;
-        if (Date.now() - avatarUpdate.timestamp < sevenDays) {
-            friends.forEach(f => {
-                if (f.username === avatarUpdate.username || f.name === avatarUpdate.username || f.name === avatarUpdate.fullName) {
-                    f.avatar = avatarUpdate.avatar;
-                }
-            });
-            binomes.forEach(b => {
-                if (b.username === avatarUpdate.username || b.name === avatarUpdate.username || b.name === avatarUpdate.fullName) {
-                    b.avatar = avatarUpdate.avatar;
-                }
-            });
-            mentors.forEach(m => {
-                if (m.username === avatarUpdate.username || m.name === avatarUpdate.username || m.name === avatarUpdate.fullName) {
-                    m.avatar = avatarUpdate.avatar;
-                }
-            });
-            receivedFriendRequests.forEach(r => {
-                if (r.username === avatarUpdate.username || r.name === avatarUpdate.username || r.name === avatarUpdate.fullName) {
-                    r.avatar = avatarUpdate.avatar;
-                }
-            });
-            receivedBinomeRequests.forEach(r => {
-                if (r.username === avatarUpdate.username || r.name === avatarUpdate.username || r.name === avatarUpdate.fullName) {
-                    r.avatar = avatarUpdate.avatar;
-                }
-            });
-            receivedMentorRequests.forEach(r => {
-                if (r.username === avatarUpdate.username || r.name === avatarUpdate.username || r.name === avatarUpdate.fullName) {
-                    r.avatar = avatarUpdate.avatar;
-                }
-            });
-            sentFriendRequests.forEach(r => {
-                if (r.username === avatarUpdate.username || r.name === avatarUpdate.username || r.name === avatarUpdate.fullName) {
-                    r.avatar = avatarUpdate.avatar;
-                }
-            });
-            sentBinomeRequests.forEach(r => {
-                if (r.username === avatarUpdate.username || r.name === avatarUpdate.username || r.name === avatarUpdate.fullName) {
-                    r.avatar = avatarUpdate.avatar;
-                }
-            });
-            sentMentorRequests.forEach(r => {
-                if (r.username === avatarUpdate.username || r.name === avatarUpdate.username || r.name === avatarUpdate.fullName) {
-                    r.avatar = avatarUpdate.avatar;
-                }
-            });
-        }
+    // Suggestions depuis la base utilisateurs
+    const allUsers = getAllUsers();
+    const existingNames = [...friends.map(f => f.name), ...binomes.map(b => b.name)];
+    const allSuggestions = allUsers.filter(u => u.username !== currentUser.username && !existingNames.includes(u.fullName) && !hiddenSuggestions.includes(u.id));
+    // Filtrer les binômes par domaine si l'utilisateur a un domaine
+    let filteredSuggestions = allSuggestions;
+    if (currentUser.domain && currentUser.domain !== '') {
+        // Les binômes doivent être du même domaine que l'utilisateur
+        const binomeCandidates = allSuggestions.filter(u => u.domain === currentUser.domain && u.accountType === 'student');
+        const amiCandidates = allSuggestions.filter(u => u.domain !== currentUser.domain || u.accountType !== 'student');
+        // On priorise les binômes du même domaine, puis les autres comme amis
+        filteredSuggestions = [...binomeCandidates, ...amiCandidates];
     }
+    suggestions = filteredSuggestions.map(u => ({
+        id: u.id,
+        name: u.fullName,
+        avatar: u.avatar,
+        bio: u.bio || '',
+        type: (u.domain === currentUser.domain && u.accountType === 'student') ? 'binome' : 'ami',
+        domain: u.domain || '',
+        level: u.level || '',
+        mutualFriends: Math.floor(Math.random() * 5) + 1,
+        accountType: u.accountType,
+        verified: u.verified || false,
+        location: u.location || 'RDC',
+        joinDate: u.joinDate || '2025'
+    }));
+    // Filtrer les suggestions déjà envoyées
+    const sentNames = [...sentFriendRequests.map(r => r.name), ...sentBinomeRequests.map(r => r.name)];
+    suggestions = suggestions.filter(s => !sentNames.includes(s.name));
     
-    // 🆕 Synchronisation des noms mis à jour
-    const nameUpdate = JSON.parse(localStorage.getItem('estra_name_updated') || '{}');
-    if (nameUpdate.newName && nameUpdate.oldName && nameUpdate.timestamp) {
-        const sevenDays = 7 * 24 * 60 * 60 * 1000;
-        if (Date.now() - nameUpdate.timestamp < sevenDays) {
-            const oldName = nameUpdate.oldName;
-            const newName = nameUpdate.newName;
-            const oldUsername = nameUpdate.oldUsername || oldName.toLowerCase().replace(/\s+/g, '_');
-            const newUsername = nameUpdate.newUsername || newName.toLowerCase().replace(/\s+/g, '_');
-            
-            friends.forEach(f => {
-                if (f.name === oldName || f.username === oldUsername) {
-                    f.name = newName;
-                    f.username = newUsername;
-                }
-            });
-            binomes.forEach(b => {
-                if (b.name === oldName || b.username === oldUsername) {
-                    b.name = newName;
-                    b.username = newUsername;
-                }
-            });
-            mentors.forEach(m => {
-                if (m.name === oldName || m.username === oldUsername) {
-                    m.name = newName;
-                    m.username = newUsername;
-                }
-            });
-            receivedFriendRequests.forEach(r => {
-                if (r.name === oldName) r.name = newName;
-            });
-            receivedBinomeRequests.forEach(r => {
-                if (r.name === oldName) r.name = newName;
-            });
-            receivedMentorRequests.forEach(r => {
-                if (r.name === oldName) r.name = newName;
-            });
-            sentFriendRequests.forEach(r => {
-                if (r.name === oldName) r.name = newName;
-            });
-            sentBinomeRequests.forEach(r => {
-                if (r.name === oldName) r.name = newName;
-            });
-            sentMentorRequests.forEach(r => {
-                if (r.name === oldName) r.name = newName;
-            });
-        }
-    }
-    
-    // 🆕 Mettre à jour avec la base utilisateurs
-    const allUsers = JSON.parse(localStorage.getItem('estra_all_users') || '[]');
-    friends.forEach(f => {
-        const userInfo = allUsers.find(u => u.username === f.username || u.fullName === f.name);
-        if (userInfo) {
-            f.fullName = userInfo.fullName;
-            f.username = userInfo.username;
-            f.avatar = userInfo.avatar || f.avatar;
-            f.bio = userInfo.bio || f.bio || '';
-            f.location = userInfo.location || f.location || '';
-        }
-    });
-    
-    binomes.forEach(b => {
-        const userInfo = allUsers.find(u => u.username === b.username || u.fullName === b.name);
-        if (userInfo) {
-            b.fullName = userInfo.fullName;
-            b.username = userInfo.username;
-            b.avatar = userInfo.avatar || b.avatar;
-            b.bio = userInfo.bio || b.bio || '';
-            b.location = userInfo.location || b.location || '';
-            b.domain = userInfo.domain || b.domain || '';
-            b.level = userInfo.level || b.level || '';
-        }
-    });
-    
-    // Créer des amis par défaut si la liste est vide
-    if (!friends.length && !binomes.length && !mentors.length) {
-        const users = getAllUsers();
-        const otherUsers = users.filter(u => u.username !== currentUser.username);
-        if (otherUsers.length > 0) {
-            friends = otherUsers.slice(0, 3).map(u => ({
-                id: 'f_' + u.username,
-                name: u.fullName,
-                username: u.username,
-                bio: u.bio || '',
-                avatar: u.avatar,
-                mutualFriends: Math.floor(Math.random() * 5) + 1,
-                online: Math.random() > 0.5,
-                verified: u.verified || false,
-                favorite: false,
-                domain: u.domain || '',
-                level: u.level || ''
-            }));
-            localStorage.setItem('estra_friends', JSON.stringify(friends));
-        }
-    }
-    
-    syncAllUsersToDatabase();
-    checkOnlineStatus();
-    updateSidebarStats();
-    updateBadges();
-    updateRightPanelStats();
-}
-
-// ============================================================
-// SYNC DES NOMS ET AVATARS (MISE À JOUR GLOBALE)
-// ============================================================
-
-function updateUserNameInAllData(oldName, newName, oldUsername, newUsername) {
-    friends.forEach(f => {
-        if (f.name === oldName || f.username === oldUsername) {
-            f.name = newName;
-            if (newUsername) f.username = newUsername;
-        }
-    });
-    binomes.forEach(b => {
-        if (b.name === oldName || b.username === oldUsername) {
-            b.name = newName;
-            if (newUsername) b.username = newUsername;
-        }
-    });
-    mentors.forEach(m => {
-        if (m.name === oldName || m.username === oldUsername) {
-            m.name = newName;
-            if (newUsername) m.username = newUsername;
-        }
-    });
-    receivedFriendRequests.forEach(r => {
-        if (r.name === oldName) r.name = newName;
-    });
-    receivedBinomeRequests.forEach(r => {
-        if (r.name === oldName) r.name = newName;
-    });
-    receivedMentorRequests.forEach(r => {
-        if (r.name === oldName) r.name = newName;
-    });
-    sentFriendRequests.forEach(r => {
-        if (r.name === oldName) r.name = newName;
-    });
-    sentBinomeRequests.forEach(r => {
-        if (r.name === oldName) r.name = newName;
-    });
-    sentMentorRequests.forEach(r => {
-        if (r.name === oldName) r.name = newName;
-    });
-    saveData();
-    renderFriends();
-    renderFriendRequests();
-    renderSuggestions();
+    // Mettre à jour les badges
+    document.getElementById('suggBadge').textContent = suggestions.length;
+    document.getElementById('relBadge').textContent = friends.length + binomes.length;
     updateSidebarStats();
     updateRightPanelStats();
-    console.log(`✅ Nom mis à jour : "${oldName}" → "${newName}"`);
+    applyTranslations();
 }
 
-function updateUserAvatarInAllData(username, newAvatar, fullName) {
-    friends.forEach(f => {
-        if (f.username === username || f.name === username || f.name === fullName) {
-            f.avatar = newAvatar;
+function updateSidebarStats() {
+    document.getElementById('sidebarFriends').textContent = friends.length;
+    document.getElementById('sidebarGroups').textContent = binomes.length;
+    document.getElementById('sidebarAvatar').src = currentUser.avatar;
+    document.getElementById('navAvatar').src = currentUser.avatar;
+    document.getElementById('sidebarName').textContent = currentUser.name;
+}
+function updateRightPanelStats() {
+    document.getElementById('ballTotalFriends').textContent = friends.length;
+    document.getElementById('ballBinomes').textContent = binomes.length;
+    document.getElementById('ballMentors').textContent = 0;
+}
+function updateBadges() {}
+
+// ============ FONCTIONS DE RENDU ============
+let currentMainTab = 'suggestions';
+let currentSubTab = 'ami';
+
+function renderCard(person, mode) {
+    const type = person.type || 'ami';
+    const verifiedIcon = person.verified ? ' <i class="fas fa-check-circle" style="color:#1DA1F2;font-size:0.7rem;"></i>' : '';
+    let tagHtml = '';
+    if (mode === 'relation') {
+        const tagLabel = type === 'binome' ? 'Binôme' : 'Suivi(e)';
+        const tagClass = type === 'binome' ? 'binome' : 'ami';
+        tagHtml = `<span class="person-tag ${tagClass}">${tagLabel}</span>`;
+    }
+    const onlineDot = (person.online !== undefined) ? `<span class="online-dot ${person.online ? '' : 'offline'}" style="${person.online ? '' : 'background:#94a3b8;'}"></span>` : '';
+
+    // Détails enrichis
+    let detailsHtml = '';
+    if (person.domain) detailsHtml += `<span><i class="fas fa-graduation-cap"></i> ${escapeHtml(person.domain)}${person.level ? ' ('+escapeHtml(person.level)+')' : ''}</span>`;
+    if (person.location) detailsHtml += `<span><i class="fas fa-map-marker-alt"></i> ${escapeHtml(person.location)}</span>`;
+    if (person.joinDate) detailsHtml += `<span><i class="fas fa-calendar-alt"></i> Inscrit(e) en ${escapeHtml(person.joinDate)}</span>`;
+    if (person.mutualFriends !== undefined) detailsHtml += `<span><i class="fas fa-user-friends"></i> ${person.mutualFriends} ami(s) commun(s)</span>`;
+    if (person.commonCourses) detailsHtml += `<span><i class="fas fa-book"></i> ${escapeHtml(person.commonCourses)}</span>`;
+    if (person.commonUniversity) detailsHtml += `<span><i class="fas fa-university"></i> ${escapeHtml(person.commonUniversity)}</span>`;
+    if (person.commonPromotion) detailsHtml += `<span><i class="fas fa-calendar-alt"></i> Promo ${escapeHtml(person.commonPromotion)}</span>`;
+    if (person.since) detailsHtml += `<span><i class="fas fa-calendar"></i> Depuis ${escapeHtml(person.since)}</span>`;
+
+    let actionsHtml = '';
+    const profileLink = person.id ? `profile.html?user=${encodeURIComponent(person.id)}` : '#';
+    const profileBtn = `<a href="${profileLink}" class="btn-sm outline"><i class="fas fa-eye"></i> Voir profil</a>`;
+    const msgLink = person.name ? `messages.html?friend=${encodeURIComponent(person.name)}` : '#';
+    const msgBtn = `<a href="${msgLink}" class="btn-sm outline"><i class="fas fa-comment-dots"></i> Message</a>`;
+
+    if (mode === 'suggestion') {
+        const alreadySent = sentFriendRequests.find(r => r.id === person.id) || sentBinomeRequests.find(r => r.id === person.id);
+        if (alreadySent) {
+            actionsHtml = `<span class="pending-badge"><i class="fas fa-clock"></i> Demande envoyée</span> ${profileBtn}`;
+        } else {
+            let inviteBtns = '';
+            if (person.type === 'binome' && person.domain === currentUser.domain) {
+                inviteBtns += `<button class="btn-sm purple" onclick="sendRequest('${person.id}','binome')"><i class="fas fa-link"></i> Binôme</button>`;
+            } else {
+                inviteBtns += `<button class="btn-sm primary" onclick="sendRequest('${person.id}','ami')"><i class="fas fa-user-plus"></i> Suivre</button>`;
+            }
+            actionsHtml = inviteBtns + profileBtn;
         }
+    } else {
+        // relation
+        const favClass = person.favorite ? 'active' : '';
+        actionsHtml = `
+            ${profileBtn}
+            ${msgBtn}
+            <button class="btn-fav ${favClass}" onclick="toggleFavorite('${person.id}','${type}')" title="Ajouter aux favoris"><i class="fas fa-star"></i></button>
+            <button class="btn-sm danger-outline" onclick="removeRelation('${person.id}','${type}')"><i class="fas fa-user-minus"></i></button>
+        `;
+    }
+
+    return `<div class="person-card type-${type}">
+        <div class="card-top">
+            <img src="${person.avatar}" class="person-avatar" alt="${escapeHtml(person.name)}" onclick="window.location.href='profile.html?user=${encodeURIComponent(person.id||person.name)}'" />
+            <div class="person-info">
+                <div class="person-name">${escapeHtml(person.name)}${verifiedIcon}${tagHtml}${onlineDot}</div>
+                <div class="person-bio">${escapeHtml(person.bio||'')}</div>
+            </div>
+        </div>
+        <div class="person-details">${detailsHtml}</div>
+        <div class="person-actions">${actionsHtml}</div>
+    </div>`;
+}
+
+function renderSuggestionsBySection(list) {
+    // Séparer les binômes suggérés (même domaine) et les personnes à suivre
+    const binomesSugg = list.filter(p => p.type === 'binome');
+    const amisSugg = list.filter(p => p.type !== 'binome');
+    const sections = [
+        { title: 'Binômes suggérés (' + (currentUser.domain || 'tous') + ')', icon: 'fa-link', items: binomesSugg },
+        { title: 'Personnes à suivre', icon: 'fa-user', items: amisSugg }
+    ];
+    let html = '';
+    sections.forEach(sec => {
+        if (sec.items.length === 0) return;
+        html += `<div class="suggestion-section">
+            <div class="section-title"><i class="fas ${sec.icon}"></i> ${sec.title} (${sec.items.length})</div>
+            ${sec.items.map(p => renderCard(p, 'suggestion')).join('')}
+        </div>`;
     });
-    binomes.forEach(b => {
-        if (b.username === username || b.name === username || b.name === fullName) {
-            b.avatar = newAvatar;
+    return html || '<div class="empty-state"><i class="fas fa-lightbulb"></i><p>Aucune suggestion trouvée</p></div>';
+}
+
+function getCurrentList() {
+    const q = (document.getElementById('globalSearch')?.value || '').toLowerCase();
+    if (currentMainTab === 'suggestions') {
+        let filtered = suggestions;
+        if (q) filtered = suggestions.filter(s => s.name.toLowerCase().includes(q) || (s.bio||'').toLowerCase().includes(q));
+        return { mode: 'suggestions', list: filtered };
+    } else {
+        let all = [];
+        if (currentSubTab === 'ami') all = [...friends];
+        else if (currentSubTab === 'binome') all = [...binomes];
+        // tri favoris en premier
+        all.sort((a,b) => (b.favorite?1:0) - (a.favorite?1:0));
+        if (q) all = all.filter(p => p.name.toLowerCase().includes(q) || (p.bio||'').toLowerCase().includes(q));
+        return { mode: 'relation', list: all };
+    }
+}
+
+function renderCurrentList() {
+    const { mode, list } = getCurrentList();
+    const container = document.getElementById('dynamicList');
+    if (mode === 'suggestions') {
+        container.innerHTML = renderSuggestionsBySection(list);
+    } else {
+        if (list.length) {
+            container.innerHTML = list.map(p => renderCard(p, 'relation')).join('');
+        } else {
+            const labels = { ami: 'suivi', binome: 'binôme' };
+            container.innerHTML = `<div class="empty-state"><i class="fas fa-user-friends"></i><p>Aucun ${labels[currentSubTab]}</p></div>`;
         }
-    });
-    mentors.forEach(m => {
-        if (m.username === username || m.name === username || m.name === fullName) {
-            m.avatar = newAvatar;
-        }
-    });
-    receivedFriendRequests.forEach(r => {
-        if (r.username === username || r.name === username || r.name === fullName) {
-            r.avatar = newAvatar;
-        }
-    });
-    receivedBinomeRequests.forEach(r => {
-        if (r.username === username || r.name === username || r.name === fullName) {
-            r.avatar = newAvatar;
-        }
-    });
-    receivedMentorRequests.forEach(r => {
-        if (r.username === username || r.name === username || r.name === fullName) {
-            r.avatar = newAvatar;
-        }
-    });
+    }
+    updateBadgesCounts();
+}
+
+function updateBadgesCounts() {
+    document.getElementById('suggBadge').textContent = suggestions.length;
+    document.getElementById('relBadge').textContent = friends.length + binomes.length;
+    const amiCount = friends.length;
+    const binomeCount = binomes.length;
+    const subCounts = document.querySelectorAll('.sub-count');
+    if (subCounts.length >= 2) {
+        subCounts[0].textContent = '(' + amiCount + ')';
+        subCounts[1].textContent = '(' + binomeCount + ')';
+    }
+}
+
+function switchMainTab(tab) {
+    currentMainTab = tab;
+    document.getElementById('tabSuggestions').classList.toggle('active', tab === 'suggestions');
+    document.getElementById('tabRelations').classList.toggle('active', tab === 'relations');
+    document.getElementById('subTabsContainer').style.display = tab === 'relations' ? 'flex' : 'none';
+    document.getElementById('globalSearch').value = '';
+    if (tab === 'relations') {
+        document.querySelectorAll('.sub-tab').forEach(b => b.classList.remove('active'));
+        const activeSub = document.querySelector(`.sub-tab[data-sub="${currentSubTab}"]`);
+        if (activeSub) activeSub.classList.add('active');
+    }
+    renderCurrentList();
+}
+
+function switchSubTab(sub, btn) {
+    currentSubTab = sub;
+    document.querySelectorAll('.sub-tab').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderCurrentList();
+}
+
+// ============ ACTIONS ============
+function sendRequest(personId, type) {
+    const person = suggestions.find(s => s.id === personId);
+    if (!person) return;
+    if (type === 'ami') {
+        sentFriendRequests.push({ id: personId, name: person.name });
+        friends.push({
+            id: 'f_' + Date.now(),
+            name: person.name,
+            avatar: person.avatar,
+            bio: person.bio || '',
+            domain: person.domain || '',
+            level: person.level || '',
+            mutualFriends: person.mutualFriends || 0,
+            online: Math.random() > 0.5,
+            verified: person.verified || false,
+            favorite: false,
+            type: 'ami',
+            location: person.location || 'RDC',
+            joinDate: person.joinDate || '2025'
+        });
+    } else if (type === 'binome') {
+        sentBinomeRequests.push({ id: personId, name: person.name });
+        binomes.push({
+            id: 'b_' + Date.now(),
+            name: person.name,
+            avatar: person.avatar,
+            bio: person.bio || '',
+            domain: person.domain || '',
+            level: person.level || '',
+            commonCourses: 'Cours communs',
+            commonUniversity: 'Université',
+            commonPromotion: '2025',
+            online: Math.random() > 0.5,
+            favorite: false,
+            type: 'binome',
+            location: person.location || 'RDC',
+            joinDate: person.joinDate || '2025'
+        });
+    }
+    hiddenSuggestions.push(personId);
+    suggestions = suggestions.filter(s => s.id !== personId);
     saveData();
-    renderFriends();
-    renderFriendRequests();
-    renderSuggestions();
-    updateSidebarStats();
-    console.log(`✅ Avatar mis à jour pour : "${username}"`);
+    renderCurrentList();
+    showToast(`✅ ${person.name} ajouté(e) comme ${type === 'ami' ? 'suivi' : 'binôme'}`);
 }
 
-function listenToGlobalUpdates() {
-    window.addEventListener('storage', function(e) {
-        if (e.key === 'estra_name_updated') {
-            try {
-                const data = JSON.parse(e.newValue || '{}');
-                if (data.newName && data.oldName) {
-                    console.log(`🔄 Nom changé : ${data.oldName} → ${data.newName}`);
-                    updateUserNameInAllData(
-                        data.oldName,
-                        data.newName,
-                        data.oldUsername || data.oldName.toLowerCase().replace(/\s+/g, '_'),
-                        data.newUsername || data.newName.toLowerCase().replace(/\s+/g, '_')
-                    );
-                    showToast(`🔄 "${data.oldName}" est maintenant "${data.newName}"`);
-                }
-            } catch(err) {
-                console.error('Erreur synchro nom:', err);
-            }
-        }
-        if (e.key === 'estra_avatar_updated') {
-            try {
-                const data = JSON.parse(e.newValue || '{}');
-                if (data.username && data.avatar) {
-                    console.log(`🔄 Avatar changé pour : ${data.username}`);
-                    updateUserAvatarInAllData(data.username, data.avatar, data.fullName);
-                }
-            } catch(err) {
-                console.error('Erreur synchro avatar:', err);
-            }
-        }
-        if (e.key === 'estra_profile' || e.key === 'estra_all_users' || e.key === 'estra_friends' || e.key === 'estra_mentors' || e.key === 'estra_binomes') {
-            loadAllData();
-            renderFriends();
-            renderFriendRequests();
-            renderSuggestions();
-            updateSidebarStats();
-            updateRightPanelStats();
-        }
-    });
+function toggleFavorite(id, type) {
+    let target;
+    if (type === 'ami') target = friends.find(f => f.id === id);
+    else if (type === 'binome') target = binomes.find(b => b.id === id);
+    if (target) {
+        target.favorite = !target.favorite;
+        saveData();
+        renderCurrentList();
+        showToast(target.favorite ? t('toast_favorite_added') : t('toast_favorite_removed'));
+    }
 }
 
-function initSyncListeners() {
-    listenToGlobalUpdates();
-    console.log('✅ Synchronisation des noms et avatars activée');
+function removeRelation(id, type) {
+    let person;
+    if (type === 'ami') {
+        person = friends.find(f => f.id === id);
+        if (person && confirm(t('confirm_remove'))) friends = friends.filter(f => f.id !== id);
+    } else if (type === 'binome') {
+        person = binomes.find(b => b.id === id);
+        if (person && confirm(t('confirm_remove'))) binomes = binomes.filter(b => b.id !== id);
+    }
+    if (person) {
+        saveData();
+        renderCurrentList();
+        showToast(`👋 ${person.name} retiré(e)`);
+    }
+}
+
+function viewProfile(userId) {
+    if (userId) window.location.href = 'profile.html?user=' + encodeURIComponent(userId);
+}
+function viewOwnProfile() {
+    window.location.href = 'profile.html';
 }
 
 function saveData() {
     localStorage.setItem('estra_friends', JSON.stringify(friends));
     localStorage.setItem('estra_binomes', JSON.stringify(binomes));
-    localStorage.setItem('estra_mentors', JSON.stringify(mentors));
-    localStorage.setItem('estra_received_friend_requests', JSON.stringify(receivedFriendRequests));
-    localStorage.setItem('estra_received_binome_requests', JSON.stringify(receivedBinomeRequests));
-    localStorage.setItem('estra_received_mentor_requests', JSON.stringify(receivedMentorRequests));
     localStorage.setItem('estra_sent_friend_requests', JSON.stringify(sentFriendRequests));
     localStorage.setItem('estra_sent_binome_requests', JSON.stringify(sentBinomeRequests));
-    localStorage.setItem('estra_sent_mentor_requests', JSON.stringify(sentMentorRequests));
     localStorage.setItem('estra_hidden_suggestions', JSON.stringify(hiddenSuggestions));
     syncAllUsersToDatabase();
-    updateRightPanelStats();
     estraEmit('friends_updated', {});
-    estraEmit('badges_updated', {});
+    updateBadgesCounts();
+    updateSidebarStats();
+    updateRightPanelStats();
 }
 
-function getFilteredList() {
-    const query = (document.getElementById('friendSearchInput')?.value || '').toLowerCase();
-    let list = [];
-    if (currentFilter === 'binome') { list = [...binomes]; }
-    else if (currentFilter === 'mentor') { 
-        const storedMentors = JSON.parse(localStorage.getItem('estra_mentors') || '[]');
-        list = [...mentors];
-        friends.forEach(f => {
-            const isMentor = storedMentors.find(m => m.name === f.name);
-            if (isMentor && !list.find(l => l.id === f.id)) {
-                list.push({...f, isMentorOnly: true});
-            }
-        });
-        storedMentors.forEach(m => {
-            if (!list.find(l => l.name === m.name)) {
-                list.push({
-                    id: 'm_' + m.id, name: m.name, avatar: m.avatar,
-                    bio: m.bio || '', online: m.available || false,
-                    verified: m.rating >= 4.5, favorite: false,
-                    domain: m.domains ? m.domains[0] : '', level: m.level || '',
-                    isMentorOnly: true
-                });
-            }
-        });
-    }
-    else {
-        list = [...friends];
-        binomes.forEach(b => { if (!list.find(f => f.id === b.id)) list.push({...b, isBinomeOnly: true}); });
-        mentors.forEach(m => { if (!list.find(f => f.id === m.id)) list.push({...m, isMentorOnly: true}); });
-    }
-    if (query) list = list.filter(f => f.name.toLowerCase().includes(query));
-    if (currentFilter === 'favorites') list = list.filter(f => f.favorite);
-    return list;
-}
-
-function renderFriends() {
-    const container = document.getElementById('friendsListContainer');
-    if (!container) return;
-    const list = getFilteredList();
-    document.getElementById('friendsCount').innerHTML = '<i class="fas fa-users"></i> ' + list.length + ' ' + t('friends_count');
-    if (!list.length) { container.innerHTML = '<div class="empty-state"><i class="fas fa-user-friends" style="font-size:3rem;margin-bottom:16px;"></i><p>'+t('no_friends')+'</p></div>'; return; }
-    container.innerHTML = list.map(f => {
-        const isBinome = binomes.find(b => b.id === f.id);
-        const isMentor = mentors.find(m => m.id === f.id);
-        let badges = '';
-        if (isBinome) badges += '<span class="binome-badge">Binôme</span>';
-        if (isMentor) badges += '<span class="mentor-badge">Mentor</span>';
-        const profileUrl = f.username ? `profile.html?user=${f.username}` : '#';
-        return '<div class="friend-card"><img src="'+f.avatar+'" class="friend-avatar" onclick="window.location.href=\''+profileUrl+'\'"><div class="friend-info" onclick="window.location.href=\''+profileUrl+'\'"><h4>'+escapeHtml(f.name)+(f.verified?' <i class="fas fa-check-circle" style="color:#1DA1F2;"></i>':'')+(f.favorite?' <i class="fas fa-star" style="color:#fbbf24;"></i>':'')+' '+badges+'</h4><div class="friend-bio">'+escapeHtml(f.bio||'')+(f.domain?' • '+f.domain+(f.level?' ('+f.level+')':''):'')+'</div><div class="friend-meta">'+(f.mutualFriends?'<span><i class="fas fa-user-friends"></i> '+f.mutualFriends+' amis communs</span>':'')+(f.online?'<span class="mutual-badge"><i class="fas fa-circle" style="color:#10b981;"></i> En ligne</span>':'')+'</div></div><div class="friend-actions"><a href="messages.html?friend='+encodeURIComponent(f.name)+'" class="friend-chat" title="Message"><i class="fas fa-comment-dots"></i></a><button class="friend-more" onclick="event.stopPropagation();openFriendMenu(\''+f.id+'\', event)" title="Plus">⋯</button></div></div>';
-    }).join('');
-}
-
-function renderFriendRequests() {
-    const section = document.getElementById('requestsSection');
-    if (!section) return;
-    const all = [
-        ...receivedFriendRequests.map(r=>({...r, type:'friend'})),
-        ...receivedBinomeRequests.map(r=>({...r, type:'binome'})),
-        ...receivedMentorRequests.map(r=>({...r, type:'mentor'}))
-    ];
-    if (!all.length) { section.style.display = 'none'; return; }
-    section.style.display = 'block';
-    const badges = { binome:'<span class="binome-badge">Binôme</span>', mentor:'<span class="mentor-badge">Mentor</span>', friend:'' };
-    section.innerHTML = '<div class="requests-header"><i class="fas fa-user-clock" style="color:var(--warning);"></i> Demandes reçues (' + all.length + ')</div>' +
-        all.map(req => '<div class="request-card"><img src="'+req.avatar+'" class="friend-avatar" onclick="viewProfile(\''+escapeHtml(req.name)+'\')"><div class="friend-info" onclick="viewProfile(\''+escapeHtml(req.name)+'\')"><h4>'+escapeHtml(req.name)+' '+badges[req.type]+'</h4><div class="friend-bio">'+escapeHtml(req.bio||'')+'</div></div><div class="request-actions"><button class="request-accept" onclick="acceptRequest(\''+req.id+'\',\''+req.type+'\')"><i class="fas fa-check"></i></button><button class="request-decline" onclick="declineRequest(\''+req.id+'\',\''+req.type+'\')"><i class="fas fa-times"></i></button></div></div>').join('');
-}
-
-function renderSuggestions() {
-    const container = document.getElementById('suggestionsList');
-    if (!container) return;
-    const allNames = [...friends.map(f => f.name), ...binomes.map(b => b.name), ...mentors.map(m => m.name)];
-    const users = getAllUsers();
-    const filtered = users.filter(u => u.username !== currentUser.username && !allNames.includes(u.fullName) && !hiddenSuggestions.includes(u.id));
-    if (!filtered.length) { container.innerHTML = '<div class="empty-state" style="padding:20px;"><p>Plus de suggestions à venir...</p></div>'; return; }
-    container.innerHTML = filtered.slice(0, 5).map(u => {
-        const isAlreadySent = sentFriendRequests.some(r => r.name === u.fullName) || sentBinomeRequests.some(r => r.name === u.fullName) || sentMentorRequests.some(r => r.name === u.fullName);
-        if (isAlreadySent) {
-            return '<div class="suggestion-card"><img src="' + u.avatar + '" class="suggestion-avatar" onclick="viewProfile(\'' + escapeHtml(u.username) + '\')"><div class="suggestion-info" onclick="viewProfile(\'' + escapeHtml(u.username) + '\')"><h4>' + escapeHtml(u.fullName) + '</h4><p>' + escapeHtml(u.bio || '') + '</p></div><div class="suggestion-actions"><span class="pending-badge" style="padding:8px 16px;border-radius:20px;">⏳ ' + t('pending') + '</span></div></div>';
-        }
-        return '<div class="suggestion-card"><img src="' + u.avatar + '" class="suggestion-avatar" onclick="viewProfile(\'' + escapeHtml(u.username) + '\')"><div class="suggestion-info" onclick="viewProfile(\'' + escapeHtml(u.username) + '\')"><h4>' + escapeHtml(u.fullName) + '</h4><p>' + escapeHtml(u.bio || '') + '</p></div><div class="suggestion-actions"><button class="suggestion-add" onclick="sendFriendRequest(\'' + u.id + '\',\'' + escapeHtml(u.fullName) + '\',\'' + u.avatar + '\',\'' + escapeHtml(u.bio || '') + '\')"><i class="fas fa-user-plus"></i> Ajouter</button><button class="suggestion-remove" onclick="hideSuggestion(\'' + u.id + '\')"><i class="fas fa-times"></i></button></div></div>';
-    }).join('');
-}
-
-function searchBinome() {
-    const domain = document.getElementById('binomeDomain').value;
-    const level = document.getElementById('binomeLevel').value;
-    const container = document.getElementById('binomeResults');
-    if (!container) return;
-    const allNames = [...friends.map(f=>f.name), ...binomes.map(b=>b.name)];
-    const users = getAllUsers();
-    let results = users.filter(u => u.username !== currentUser.username && !allNames.includes(u.fullName) && u.accountType === 'student');
-    if (domain) results = results.filter(u => u.domain === domain);
-    if (level) results = results.filter(u => u.level === level);
-    if (!results.length) { container.innerHTML = '<p style="color:#64748b;text-align:center;padding:20px;">Aucun résultat.</p>'; return; }
-    container.innerHTML = results.map(u => {
-        const alreadySent = sentBinomeRequests.some(r => r.name === u.fullName);
-        if (alreadySent) return '<div class="binome-card"><img src="'+u.avatar+'" class="friend-avatar" onclick="viewProfile(\''+escapeHtml(u.username)+'\')"><div class="friend-info" onclick="viewProfile(\''+escapeHtml(u.username)+'\')"><h4>'+escapeHtml(u.fullName)+'</h4><div class="friend-bio">'+escapeHtml(u.bio||'')+' • '+u.domain+' ('+u.level+')</div></div><span class="pending-badge">⏳ '+t('pending')+'</span></div>';
-        return '<div class="binome-card"><img src="'+u.avatar+'" class="friend-avatar" onclick="viewProfile(\''+escapeHtml(u.username)+'\')"><div class="friend-info" onclick="viewProfile(\''+escapeHtml(u.username)+'\')"><h4>'+escapeHtml(u.fullName)+'</h4><div class="friend-bio">'+escapeHtml(u.bio||'')+' • '+u.domain+' ('+u.level+')</div></div><button class="binome-request-btn" onclick="sendBinomeRequest(\''+u.id+'\',\''+escapeHtml(u.fullName)+'\',\''+u.avatar+'\',\''+escapeHtml(u.bio||'')+'\',\''+u.domain+'\',\''+u.level+'\')"><i class="fas fa-link"></i> Binôme</button></div>';
-    }).join('');
-}
-
-function searchMentor() {
-    const domain = document.getElementById('mentorDomain').value;
-    const container = document.getElementById('mentorResults');
-    if (!container) return;
-    const allNames = [...friends.map(f => f.name), ...mentors.map(m => m.name)];
-    const storedMentors = JSON.parse(localStorage.getItem('estra_mentors') || '[]');
-    let results = storedMentors.filter(m => m.name !== currentUser.name && !allNames.includes(m.name));
-    if (domain) results = results.filter(m => m.domains && m.domains.includes(domain));
-    if (!results.length) { container.innerHTML = '<p style="color:#64748b;text-align:center;padding:20px;">Aucun mentor trouvé.</p>'; return; }
-    container.innerHTML = results.map(m => {
-        const alreadySent = sentMentorRequests.some(r => r.name === m.name);
-        if (alreadySent) return '<div class="binome-card"><img src="' + m.avatar + '" class="friend-avatar" onclick="viewProfile(\'' + escapeHtml(m.name) + '\')"><div class="friend-info" onclick="viewProfile(\'' + escapeHtml(m.name) + '\')"><h4>' + escapeHtml(m.name) + ' <span class="mentor-badge">⭐ ' + (m.rating || 4.0) + '</span></h4><div class="friend-bio">' + escapeHtml(m.bio || '') + (m.domains ? ' • ' + m.domains.join(', ') : '') + '</div></div><span class="pending-badge">⏳ ' + t('pending') + '</span></div>';
-        return '<div class="binome-card"><img src="' + m.avatar + '" class="friend-avatar" onclick="viewProfile(\'' + escapeHtml(m.name) + '\')"><div class="friend-info" onclick="viewProfile(\'' + escapeHtml(m.name) + '\')"><h4>' + escapeHtml(m.name) + ' <span class="mentor-badge">⭐ ' + (m.rating || 4.0) + '</span></h4><div class="friend-bio">' + escapeHtml(m.bio || '') + (m.domains ? ' • ' + m.domains.join(', ') : '') + '</div></div><button class="mentor-request-btn" onclick="sendMentorRequest(\'' + m.id + '\',\'' + escapeHtml(m.name) + '\',\'' + m.avatar + '\',\'' + escapeHtml(m.bio || '') + '\',\'' + (m.domains ? m.domains[0] : '') + '\')"><i class="fas fa-graduation-cap"></i> Mentor</button></div>';
-    }).join('');
-}
-
-function sendFriendRequest(sid, name, avatar, bio) {
-    sentFriendRequests.push({ id:'sreq_'+Date.now(), name, avatar, bio });
-    hiddenSuggestions.push(sid);
-    saveData(); renderSuggestions();
-    showToast(t('toast_request_sent') + ' ' + name);
-}
-function sendBinomeRequest(sid, name, avatar, bio, domain, level) {
-    sentBinomeRequests.push({ id:'sbreq_'+Date.now(), name, avatar, bio, domain, level });
-    hiddenSuggestions.push(sid);
-    saveData(); renderSuggestions(); searchBinome();
-    showToast(t('toast_binome_sent') + ' ' + name);
-}
-function sendMentorRequest(sid, name, avatar, bio, domain) {
-    sentMentorRequests.push({ id:'smreq_'+Date.now(), name, avatar, bio, domain });
-    hiddenSuggestions.push(sid);
-    saveData(); renderSuggestions(); searchMentor();
-    estraEmit('new_mentor_request', { from: currentUser.name, to: name, avatar: currentUser.avatar, bio, domain });
-    showToast(t('toast_mentor_sent') + ' ' + name);
-}
-
-function acceptRequest(reqId, type) {
-    let req;
-    if (type === 'friend') { req = receivedFriendRequests.find(r => r.id === reqId); if (req) { friends.push({ id:'f_'+Date.now(), name:req.name, avatar:req.avatar, bio:req.bio||'', mutualFriends:0, online:true, verified:false, favorite:false }); receivedFriendRequests = receivedFriendRequests.filter(r => r.id !== reqId); } }
-    else if (type === 'binome') { req = receivedBinomeRequests.find(r => r.id === reqId); if (req) { binomes.push({ id:'b_'+Date.now(), name:req.name, avatar:req.avatar, bio:req.bio||'', domain:req.domain||'', level:req.level||'' }); receivedBinomeRequests = receivedBinomeRequests.filter(r => r.id !== reqId); } }
-    else if (type === 'mentor') { req = receivedMentorRequests.find(r => r.id === reqId); if (req) { mentors.push({ id:'m_'+Date.now(), name:req.name, avatar:req.avatar, bio:req.bio||'', domain:req.domain||'' }); receivedMentorRequests = receivedMentorRequests.filter(r => r.id !== reqId); } }
-    saveData(); renderFriendRequests(); renderFriends(); renderSuggestions(); updateSidebarStats();
-    showToast('✅ Demande acceptée !');
-}
-function declineRequest(reqId, type) {
-    if (type === 'friend') receivedFriendRequests = receivedFriendRequests.filter(r => r.id !== reqId);
-    else if (type === 'binome') receivedBinomeRequests = receivedBinomeRequests.filter(r => r.id !== reqId);
-    else receivedMentorRequests = receivedMentorRequests.filter(r => r.id !== reqId);
-    saveData(); renderFriendRequests(); showToast('Demande refusée');
-}
-
-function openFriendMenu(friendId, event) {
-    event.stopPropagation();
-    if (activeMenu) { activeMenu.remove(); activeMenu = null; }
-    const f = friends.find(x => x.id === friendId) || binomes.find(x => x.id === friendId) || mentors.find(x => x.id === friendId);
-    if (!f) return;
-    const menu = document.createElement('div'); menu.className = 'friend-menu';
-    const rect = event.currentTarget.getBoundingClientRect();
-    menu.style.top = Math.min(rect.bottom + 5, window.innerHeight - 300) + 'px';
-    menu.style.right = (window.innerWidth - rect.right) + 'px';
-    const profileUrl = f.username ? `profile.html?user=${f.username}` : '#';
-    menu.innerHTML = '<a href="'+profileUrl+'" class="friend-menu-item" onclick="closeMenu();"><i class="fas fa-user"></i> '+t('menu_view_profile')+'</a>' +
-        '<a href="messages.html?friend='+encodeURIComponent(f.name)+'" class="friend-menu-item" onclick="closeMenu();"><i class="fas fa-comment-dots"></i> '+t('menu_message')+'</a>' +
-        '<div class="friend-menu-item" onclick="toggleFavorite(\''+friendId+'\');closeMenu();"><i class="fas fa-star"></i> '+(f.favorite?t('menu_remove_favorite'):t('menu_add_favorite'))+'</div>' +
-        '<div class="friend-menu-item danger" onclick="removeFriend(\''+friendId+'\');closeMenu();"><i class="fas fa-user-minus"></i> '+t('menu_remove_friend')+'</div>';
-    document.body.appendChild(menu); activeMenu = menu;
-    document.getElementById('friendMenuBackdrop').classList.add('active');
-}
-function closeMenu() { if (activeMenu) { activeMenu.remove(); activeMenu = null; } document.getElementById('friendMenuBackdrop').classList.remove('active'); }
-function toggleFavorite(friendId) { const f = friends.find(x => x.id === friendId) || binomes.find(x => x.id === friendId) || mentors.find(x => x.id === friendId); if (f) { f.favorite = !f.favorite; saveData(); renderFriends(); showToast(f.favorite ? t('toast_favorite_added') : t('toast_favorite_removed')); } }
-function removeFriend(friendId) { if (confirm(t('confirm_remove'))) { friends = friends.filter(x => x.id !== friendId); binomes = binomes.filter(x => x.id !== friendId); mentors = mentors.filter(x => x.id !== friendId); saveData(); renderFriends(); renderSuggestions(); updateSidebarStats(); showToast(t('toast_friend_removed')); } }
-function hideSuggestion(sid) { hiddenSuggestions.push(sid); saveData(); renderSuggestions(); showToast(t('toast_suggestion_hidden')); }
-function refreshSuggestions() { renderSuggestions(); showToast(t('toast_suggestions_refreshed')); }
-function viewProfile(username) { if (username) window.location.href = 'profile.html?user=' + encodeURIComponent(username); }
-function viewOwnProfile() { window.location.href = 'profile.html'; }
-function filterFriends(filter, btn) { currentFilter = filter; document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active')); if (btn) btn.classList.add('active'); renderFriends(); }
-
+// ============ AUTRES FONCTIONS ============
 function openInviteModal() { document.getElementById('inviteModal').classList.add('active'); }
 function closeInviteModal() { document.getElementById('inviteModal').classList.remove('active'); }
 function shareProfile() { navigator.clipboard?.writeText(window.location.origin + '/invite').then(() => { showToast(t('toast_link_copied')); closeInviteModal(); }); }
@@ -903,52 +914,44 @@ function shareViaEmail() { window.location.href = 'mailto:?subject=Invitation ES
 function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); document.getElementById('sidebarOverlay').classList.toggle('active'); }
 function closeSidebar() { document.getElementById('sidebar').classList.remove('open'); document.getElementById('sidebarOverlay').classList.remove('active'); }
 function logout() { ESTRA.logout(); }
+function closeMenu() { /* simplifié */ }
 
-// ================= INITIALISATION =================
+// ============ INITIALISATION ============
 document.addEventListener('DOMContentLoaded', () => {
-    loadAllData(); 
-    renderFriendRequests(); 
-    renderFriends(); 
-    renderSuggestions(); 
-    searchBinome(); 
-    searchMentor();
-    initSyncListeners();
-    
+    loadAllData();
+    renderCurrentList();
+    updateBadgesCounts();
     document.getElementById('sidebarOverlay').addEventListener('click', closeSidebar);
     document.getElementById('inviteModal').addEventListener('click', function(e) { if (e.target === this) closeInviteModal(); });
-    document.addEventListener('click', function(e) {
-        const sidebar = document.getElementById('sidebar'), menuToggle = document.querySelector('.menu-toggle');
-        if (sidebar && sidebar.classList.contains('open') && !sidebar.contains(e.target) && e.target !== menuToggle && !menuToggle?.contains(e.target)) closeSidebar();
+    document.addEventListener('keydown', function(e) { if (e.key === 'Escape') { closeInviteModal(); } });
+    window.addEventListener('storage', (e) => {
+        if (e.key && e.key.startsWith('estra_')) {
+            loadAllData();
+            renderCurrentList();
+        }
     });
-    document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeAllModals(); });
-    window.addEventListener('online', () => { document.getElementById('offlineBanner').style.display = 'none'; });
-    window.addEventListener('offline', () => { document.getElementById('offlineBanner').style.display = 'block'; });
-    window.addEventListener('storage', (e) => { if (e.key && e.key.startsWith('estra_')) loadAllData(); });
-    setInterval(updateBadges, 5000);
 });
 
-function closeAllModals() { closeInviteModal(); closeMenu(); }
-
-window.filterFriends = filterFriends; window.openFriendMenu = openFriendMenu; window.closeMenu = closeMenu;
-window.toggleFavorite = toggleFavorite; window.removeFriend = removeFriend;
-window.sendFriendRequest = sendFriendRequest; window.sendBinomeRequest = sendBinomeRequest; window.sendMentorRequest = sendMentorRequest;
-window.acceptRequest = acceptRequest; window.declineRequest = declineRequest;
-window.hideSuggestion = hideSuggestion; window.refreshSuggestions = refreshSuggestions;
-window.searchBinome = searchBinome; window.searchMentor = searchMentor;
-window.viewProfile = viewProfile; window.viewOwnProfile = viewOwnProfile;
-window.openInviteModal = openInviteModal; window.closeInviteModal = closeInviteModal;
-window.toggleSidebar = toggleSidebar; window.closeSidebar = closeSidebar; window.logout = logout;
-window.showToast = showToast; window.updateBadges = updateBadges; window.closeAllModals = closeAllModals;
-window.shareProfile = shareProfile; window.shareViaWhatsApp = shareViaWhatsApp; window.shareViaEmail = shareViaEmail;
-window.t = t; window.applyTranslations = applyTranslations;
+// Exposer globalement
+window.renderCurrentList = renderCurrentList;
+window.switchMainTab = switchMainTab;
+window.switchSubTab = switchSubTab;
+window.sendRequest = sendRequest;
+window.toggleFavorite = toggleFavorite;
+window.removeRelation = removeRelation;
+window.viewProfile = viewProfile;
+window.viewOwnProfile = viewOwnProfile;
+window.openInviteModal = openInviteModal;
+window.closeInviteModal = closeInviteModal;
+window.shareProfile = shareProfile;
+window.shareViaWhatsApp = shareViaWhatsApp;
+window.shareViaEmail = shareViaEmail;
+window.toggleSidebar = toggleSidebar;
+window.closeSidebar = closeSidebar;
+window.logout = logout;
+window.showToast = showToast;
 window.estraEmit = estraEmit;
-window.updateUserNameInAllData = updateUserNameInAllData;
-window.updateUserAvatarInAllData = updateUserAvatarInAllData;
-window.initSyncListeners = initSyncListeners;
 window.loadAllData = loadAllData;
 </script>
-<script src="i18n.js"></script>
-<script src="sync.js"></script>
-<script src="pwa-init.js"></script>
 </body>
 </html>
