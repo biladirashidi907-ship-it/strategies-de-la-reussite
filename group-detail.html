@@ -784,6 +784,34 @@
     <div id="toastMsg" class="toast-custom"></div>
 
     <script>
+        // ============ FONCTIONS POUR LES BADGES (AJOUT) ============
+        function getAllUsers() {
+            return JSON.parse(localStorage.getItem('estra_all_users') || '[]');
+        }
+
+        function getAllBadges() {
+            return JSON.parse(localStorage.getItem('estra_badges') || '[]');
+        }
+
+        function getUserByNameOrUsername(nameOrUsername) {
+            const users = getAllUsers();
+            return users.find(u => u.fullName === nameOrUsername || u.username === nameOrUsername) || null;
+        }
+
+        // ✅ NOUVEAU STYLE : plus de fond, plus de bordure, juste l'icône (ou icône + libellé)
+        function renderUserBadges(badges) {
+            if (!badges || badges.length === 0) return '';
+            const allBadges = getAllBadges();
+            return badges.map(badgeId => {
+                const b = allBadges.find(b => b.id === badgeId);
+                if (!b) return '';
+                // Afficher l'icône + le libellé si display === 'icon_label', sinon seulement l'icône
+                const label = b.display === 'icon_label' ? ` ${b.name}` : '';
+                return `<span class="badge-pill" style="color:${b.color}; font-size:0.7rem; font-weight:600; margin:0 2px; display:inline-flex; align-items:center; gap:3px;" title="${b.desc || b.name}"><i class="fas ${b.icon}"></i>${label}</span>`;
+            }).join('');
+        }
+        // ============================================================
+
         // ============ TRADUCTIONS MULTILINGUES COMPLÈTES ============
         const translations = {
             fr: {
@@ -1528,9 +1556,13 @@ function addSheetCommentESTRA() { closeESTRACommentsSheet(); showToast('💬 Com
             const posts = groupPosts[currentGroupId] || [], isAdmin = currentGroup.createdBy === currentUser.name, joined = currentGroup.joined === true;
             const cover = currentGroup.coverImage || presetCovers[0], av = currentGroup.avatarImage || currentGroup.avatar || `https://ui-avatars.com/api/?background=1d9bf0&color=fff&name=${encodeURIComponent(currentGroup.name)}&size=100`;
             
+            // --- Récupération des badges du créateur du groupe ---
+            const creatorUser = getUserByNameOrUsername(currentGroup.createdBy);
+            const creatorBadges = creatorUser ? renderUserBadges(creatorUser.badges || []) : '';
+
             let h = `<div class="group-cover" style="background-image:url('${cover}');">${isAdmin ? `<button class="cover-edit-btn" onclick="openCoverPicker()"><i class="fas fa-camera"></i> ${t('modify_cover')}</button>` : ''}</div>`;
             h += `<div style="position:relative;"><div class="group-avatar-wrapper"><img src="${av}" class="group-avatar" alt="Avatar">${isAdmin ? `<button class="avatar-edit-btn" onclick="editAvatar()"><i class="fas fa-camera" style="font-size:12px;"></i></button>` : ''}</div></div>`;
-h += `<div class="group-detail-info"><h2>${escapeHtml(currentGroup.name)} ${currentGroup.type === 'private' ? '<i class="fas fa-lock" style="font-size:1rem;color:var(--estra-warning);"></i>' : ''}</h2><p>${escapeHtml(currentGroup.description || t('no_description'))}</p><div class="group-detail-meta"><span><i class="fas fa-user"></i> ${currentGroup.members || 0} ${t('members_label')}</span><span><i class="fas fa-user-circle"></i> ${t('created_by')} ${escapeHtml(currentGroup.createdBy || 'Inconnu')}</span><span><i class="fas fa-tag"></i> ${escapeHtml(currentGroup.category || 'Général')}</span>${currentGroup.university ? `<span><i class="fas fa-university"></i> ${escapeHtml(currentGroup.university)}</span>` : ''}${isAdmin ? `<span><i class="fas fa-crown" style="color:var(--estra-warning);"></i> ${t('admin_label')}</span>` : ''}</div><div class="group-actions-detail">${joined ? `<button class="btn-leave" onclick="leaveGroup()">${t('leave')}</button>` : `<button class="btn-join" onclick="joinGroup()">${t('join')}</button>`}${joined ? `<button class="btn-invite" onclick="openInviteModal()"><i class="fas fa-user-plus"></i> ${t('invite')}</button>` : ''}${joined ? `<button class="btn-invite" onclick="openGroupChat(${currentGroup.id})" style="background:rgba(16,185,129,0.1);color:var(--estra-success);border:1px solid var(--estra-success);"><i class="fas fa-comments"></i> Discussion</button>` : ''}${isAdmin ? `<button class="btn-manage" onclick="manageGroup()"><i class="fas fa-cog"></i> ${t('manage')}</button>` : ''}</div></div>`;            
+h += `<div class="group-detail-info"><h2>${escapeHtml(currentGroup.name)} ${currentGroup.type === 'private' ? '<i class="fas fa-lock" style="font-size:1rem;color:var(--estra-warning);"></i>' : ''}</h2><p>${escapeHtml(currentGroup.description || t('no_description'))}</p><div class="group-detail-meta"><span><i class="fas fa-user"></i> ${currentGroup.members || 0} ${t('members_label')}</span><span><i class="fas fa-user-circle"></i> ${t('created_by')} ${escapeHtml(currentGroup.createdBy || 'Inconnu')} ${creatorBadges}</span><span><i class="fas fa-tag"></i> ${escapeHtml(currentGroup.category || 'Général')}</span>${currentGroup.university ? `<span><i class="fas fa-university"></i> ${escapeHtml(currentGroup.university)}</span>` : ''}${isAdmin ? `<span><i class="fas fa-crown" style="color:var(--estra-warning);"></i> ${t('admin_label')}</span>` : ''}</div><div class="group-actions-detail">${joined ? `<button class="btn-leave" onclick="leaveGroup()">${t('leave')}</button>` : `<button class="btn-join" onclick="joinGroup()">${t('join')}</button>`}${joined ? `<button class="btn-invite" onclick="openInviteModal()"><i class="fas fa-user-plus"></i> ${t('invite')}</button>` : ''}${joined ? `<button class="btn-invite" onclick="openGroupChat(${currentGroup.id})" style="background:rgba(16,185,129,0.1);color:var(--estra-success);border:1px solid var(--estra-success);"><i class="fas fa-comments"></i> Discussion</button>` : ''}${isAdmin ? `<button class="btn-manage" onclick="manageGroup()"><i class="fas fa-cog"></i> ${t('manage')}</button>` : ''}</div></div>`;            
             const isEdu = (currentGroup.category === 'university' || currentGroup.category === 'school');
             if (joined && isEdu) {
                 h += `
@@ -1555,12 +1587,16 @@ h += `<div class="group-detail-info"><h2>${escapeHtml(currentGroup.name)} ${curr
             else { 
                 posts.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp)); 
                 h += posts.map(p => { 
-                    const liked = userLikes[p.id] || false; 
+                    const liked = userLikes[p.id] || false;
+                    // --- Récupération des badges de l'auteur du post ---
+                    const authorUser = getUserByNameOrUsername(p.author);
+                    const authorBadges = authorUser ? renderUserBadges(authorUser.badges || []) : '';
+                    
                     return `<div class="post-card group-feed-post" id="groupPost-${p.id}" data-content="${escapeHtml(p.content || '').toLowerCase()}">
                         <div class="post-header">
                             <img src="${p.authorAvatar || 'https://ui-avatars.com/api/?background=1d9bf0&color=fff&name=User&size=44'}" class="post-avatar" alt="Avatar" onclick="viewProfile('${escapeHtml(p.author || '')}')">
                             <div class="post-info">
-                                <div class="post-name" onclick="viewProfile('${escapeHtml(p.author || '')}')">${escapeHtml(p.author || 'Inconnu')}</div>
+                                <div class="post-name" onclick="viewProfile('${escapeHtml(p.author || '')}')">${escapeHtml(p.author || 'Inconnu')} ${authorBadges}</div>
                                 <div class="post-time">${getRelativeTime(p.timestamp)}</div>
                             </div>
                             <button class="post-menu-btn" onclick="event.stopPropagation();openPostMenu(event, '${p.id}')">···</button>
@@ -1883,6 +1919,12 @@ function viewDocument(url, title) {
                 if (e.key === 'estra_group_likes') { userLikes = JSON.parse(e.newValue || '{}'); renderGroupDetail(); }
                 if (e.key === 'estra_conversations') updateBadges();
                 if (e.key === 'estra_userGroups') { window.estraUserGroups = JSON.parse(e.newValue || '[]'); updateSidebar(); }
+                // 🆕 Synchronisation badges
+                if (e.key === 'estra_all_users' || e.key === 'estra_badges') {
+                    renderGroupDetail();
+                    if (typeof renderAllPosts === 'function') renderAllPosts();
+                    if (typeof updateSidebar === 'function') updateSidebar();
+                }
             });
             
             window.addEventListener('estra_notification_updated', function(e) { updateBadges(); });
@@ -1890,7 +1932,16 @@ function viewDocument(url, title) {
         });
         window.viewDocument = viewDocument;
         window.openGroupChat = openGroupChat;
+        // Exposer les fonctions de badges globalement
+        window.renderUserBadges = renderUserBadges;
+        window.getUserByNameOrUsername = getUserByNameOrUsername;
+        window.getAllUsers = getAllUsers;
+        window.getAllBadges = getAllBadges;
     </script>
 <script src="reports.js"></script>
+<script src="antizome.js"></script>
+<script src="security.js"></script>
+<script src="security-advenced.js"></script>
+<script src="data.js"></script>
 </body>
 </html>
