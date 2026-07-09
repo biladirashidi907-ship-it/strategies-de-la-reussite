@@ -13,6 +13,7 @@
     <link rel="manifest" href="/manifest.json">
     <meta name="theme-color" content="#38bdf8">
     <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="ESTRA LINK">
     <link rel="apple-touch-icon" href="https://ui-avatars.com/api/?background=38bdf8&color=fff&name=E&size=152">
@@ -76,6 +77,43 @@
     .offline-banner{position:fixed;top:0;left:0;right:0;background:#f59e0b;color:#000;text-align:center;padding:6px;z-index:9999;font-size:0.8rem;font-weight:600;display:none}
 
     /* SIDEBAR (Original Restauration Complète) */
+    /* ============ ANTI-ZOOM & ANTI-SÉLECTION GLOBALE ============ */
+html {
+    touch-action: manipulation;
+    -ms-touch-action: manipulation;
+}
+
+body {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Réactiver la sélection uniquement dans les champs de saisie */
+input, textarea, [contenteditable="true"] {
+    -webkit-user-select: text !important;
+    -moz-user-select: text !important;
+    -ms-user-select: text !important;
+    user-select: text !important;
+}
+
+/* Désactiver le zoom sur les images */
+img {
+    touch-action: manipulation;
+    -webkit-user-drag: none;
+    -moz-user-drag: none;
+    user-select: none;
+}
+
+/* Empêcher l'agrandissement dans le viewer d'image */
+.image-viewer-full img,
+.full-image-view img {
+    touch-action: manipulation !important;
+    pointer-events: auto;
+}
     .sidebar-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(4px);z-index:1050;opacity:0;visibility:hidden;transition:var(--transition)}
     .sidebar-overlay.active{opacity:1;visibility:visible}
     .sidebar{position:fixed;top:0;left:-280px;width:220px;height:100vh;background:var(--sidebar-bg);border-right:1px solid var(--border-light);z-index:1060;padding:30px 15px;overflow-y:auto;transition:left 0.3s ease,background-color 0.4s ease}
@@ -713,6 +751,46 @@ function toggleEcoMode() {
     showToast(ecoMode ? "Mode Éco Activé" : "Mode Éco Désactivé");
 }
 
+// ============ FONCTIONS POUR LES BADGES (AJOUT) ============
+function getAllUsers() {
+    return JSON.parse(localStorage.getItem('estra_all_users') || '[]');
+}
+
+function getAllBadges() {
+    return JSON.parse(localStorage.getItem('estra_badges') || '[]');
+}
+
+function getUserByNameOrUsername(nameOrUsername) {
+    const users = getAllUsers();
+    return users.find(u => u.fullName === nameOrUsername || u.username === nameOrUsername) || null;
+}
+
+// ✅ NOUVEAU : Affichage différencié des badges
+function renderUserBadges(badges) {
+    if (!badges || badges.length === 0) return '';
+    const allBadges = getAllBadges();
+    
+    // Liste des badges qui doivent avoir un libellé + fond + bordure
+    const badgesWithStyle = ['sponsor', 'premium', 'mentor', 'teacher', 'recruiter'];
+    
+    return badges.map(badgeId => {
+        const b = allBadges.find(b => b.id === badgeId);
+        if (!b) return '';
+        
+        const hasStyle = badgesWithStyle.includes(b.id);
+        const showLabel = hasStyle ? ` ${b.name}` : '';
+        
+        if (hasStyle) {
+            // Badge avec fond + bordure (Premium, Sponsor, Mentor, etc.)
+            return `<span class="badge-pill" style="background:${b.color}20; color:${b.color}; border:1px solid ${b.color}40; padding:3px 10px; border-radius:15px; font-size:0.65rem; font-weight:700; display:inline-flex; align-items:center; gap:4px; margin:0 2px;" title="${b.desc || b.name}"><i class="fas ${b.icon}"></i> ${b.name}</span>`;
+        } else {
+            // Badge sans fond ni bordure (Vérifié, Contributeur, etc.)
+            return `<span class="badge-pill icon-only" style="color:${b.color}; font-size:0.7rem; font-weight:600; margin:0 2px; display:inline-flex; align-items:center; gap:3px;" title="${b.desc || b.name}"><i class="fas ${b.icon}"></i></span>`;
+        }
+    }).join('');
+}
+// ============================================================
+
 // ============ DONNÉES GLOBALES ============
 var currentUser={name:'Rashidi',avatar:'https://ui-avatars.com/api/?background=38bdf8&color=fff&name=Rashidi&size=40'};
 var events=[],savedEventsIds=[],userInterests={},currentFilter='all',currentView='list';
@@ -836,6 +914,10 @@ function renderEvents(){
         var heartIcon = userInterests[e.id]==='interested' ? 'fas fa-heart' : 'far fa-heart';
         var isGoing = userInterests[e.id]==='going';
 
+        // --- RÉCUPÉRATION DES BADGES DE L'ORGANISATEUR (AJOUT) ---
+        var orgUser = getUserByNameOrUsername(e.organizerUsername || e.organizer);
+        var orgBadges = orgUser ? renderUserBadges(orgUser.badges || []) : '';
+
         return `
         <div class="event-card" style="--theme-color: ${th.color}; --theme-bg: ${th.bg};">
             <div class="event-image" style="background-image:url('${e.image||'https://picsum.photos/600/300?random='+e.id}')">
@@ -861,6 +943,11 @@ function renderEvents(){
                         <span onclick="setInterest(${e.id},'going')" style="color:${isGoing?'var(--theme-color)':'inherit'}"><i class="fas fa-ticket-alt"></i> Billet</span>
                         <span onclick="shareEventNatif(${e.id})" title="Partager"><i class="fas fa-share-nodes"></i></span>
                     </div>
+                </div>
+                <div style="margin-top:8px; display:flex; align-items:center; gap:6px; font-size:0.8rem; color:rgba(255,255,255,0.6);">
+                    <i class="fas fa-user" style="font-size:0.7rem;"></i>
+                    <span onclick="viewProfile('${escapeHtml(e.organizerUsername || e.organizer)}')" style="cursor:pointer; font-weight:600; color:rgba(255,255,255,0.9);">${escapeHtml(e.organizer)}</span>
+                    ${orgBadges}
                 </div>
             </div>
             <button class="btn-save-floating ${savedClass}" onclick="saveEvent(${e.id})" title="Enregistrer"><i class="fas fa-bookmark"></i></button>
@@ -1064,6 +1151,10 @@ function openEventDetail(id){
     var goingBtn = userInterests[e.id]==='going' ? '✓ Participe' : '✅ Obtenir Billet';
     var th = themes[e.category] || themes.conference;
     var themeLabel = getThemeLabel(e.category);
+
+    // --- RÉCUPÉRATION DES BADGES DE L'ORGANISATEUR (AJOUT) ---
+    var orgUser = getUserByNameOrUsername(e.organizerUsername || e.organizer);
+    var orgBadges = orgUser ? renderUserBadges(orgUser.badges || []) : '';
     
     dc.innerHTML = `
         <div class="event-detail-header">
@@ -1072,8 +1163,10 @@ function openEventDetail(id){
         </div>
         <div class="event-detail-body">
             <h2 class="event-detail-title">${escapeHtml(e.title)}</h2>
-            <div class="event-organizer" style="cursor:pointer" onclick="viewProfile('${escapeHtml(e.organizer||'')}')">
-                <img src="${e.organizerAvatar||''}" alt="Avatar"> <span class="org-name" style="color:${th.color}">${escapeHtml(e.organizer||t('organizer_label'))}</span>
+            <div class="event-organizer" style="cursor:pointer; flex-wrap:wrap;" onclick="viewProfile('${escapeHtml(e.organizerUsername || e.organizer)}')">
+                <img src="${e.organizerAvatar||''}" alt="Avatar"> 
+                <span class="org-name" style="color:${th.color}">${escapeHtml(e.organizer||t('organizer_label'))}</span>
+                ${orgBadges}
             </div>
             
             <div class="event-details-row"><div class="event-details-icon" style="color:${th.color}"><i class="fas fa-calendar-alt"></i></div><span>${formatDate(e.date)} à ${e.time||''}</span></div>
@@ -1255,22 +1348,27 @@ document.addEventListener('DOMContentLoaded',function(){
             updateBadges();
         }
         // 🆕 Synchronisation avatar
-if (e.key === 'estra_avatar_updated') {
-    try {
-        const data = JSON.parse(e.newValue || '{}');
-        if (data.username && data.avatar) {
-            // Mettre à jour les avatars dans les événements
-            events.forEach(ev => {
-                if (ev.organizer === data.username || ev.organizer === data.fullName) {
-                    ev.organizerAvatar = data.avatar;
+        if (e.key === 'estra_avatar_updated') {
+            try {
+                const data = JSON.parse(e.newValue || '{}');
+                if (data.username && data.avatar) {
+                    events.forEach(ev => {
+                        if (ev.organizer === data.username || ev.organizer === data.fullName) {
+                            ev.organizerAvatar = data.avatar;
+                        }
+                    });
+                    saveEvents();
+                    renderEvents();
+                    updateSidebar();
                 }
-            });
-            saveEvents();
-            renderEvents();
-            updateSidebar();
+            } catch(err) {}
         }
-    } catch(err) {}
-}
+        // 🆕 Synchronisation badges
+        if (e.key === 'estra_all_users' || e.key === 'estra_badges') {
+            renderEvents();
+            if (typeof renderAllPosts === 'function') renderAllPosts();
+            if (typeof updateSidebar === 'function') updateSidebar();
+        }
     });
     
     window.addEventListener('estra_notification_updated', function(e) {
@@ -1296,8 +1394,16 @@ window.t = t; window.applyTranslations = applyTranslations;
 window.translations = translations; window.currentLang = currentLang;
 window.toggleEcoMode = toggleEcoMode;
 window.viewProfile = viewProfile;
+window.renderUserBadges = renderUserBadges;
+window.getUserByNameOrUsername = getUserByNameOrUsername;
+window.getAllUsers = getAllUsers;
+window.getAllBadges = getAllBadges;
 </script>
 <script src="i18n.js"></script>
 <script src="pwa-init.js"></script>
+<script src="antizome.js"></script>
+<script src="security.js"></script>
+<script src="security-advenced.js"></script>
+<script src="data.js"></script>
 </body>
 </html>
