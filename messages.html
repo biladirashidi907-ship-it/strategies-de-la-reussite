@@ -9,9 +9,11 @@
     <link rel="manifest" href="/manifest.json">
     <meta name="theme-color" content="#0284c7">
     <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="ESTRA LINK">
     <link rel="apple-touch-icon" href="https://ui-avatars.com/api/?background=0284c7&color=fff&name=E&size=152">
+    
     <style>
         :root {
             --bg-primary: whitesmoke; --bg-secondary: #ffffff; --bg-tertiary: #f1f5f9;
@@ -102,6 +104,43 @@
         .quick-replies-modal{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:var(--modal-bg);border:1px solid var(--border-light);border-radius:10px;padding:16px;z-index:300;display:none;flex-wrap:wrap;gap:8px;width:95%;box-shadow:0 8px 30px rgba(0,0,0,0.15);backdrop-filter:blur(15px);}
         .quick-replies-modal.active{display:flex;}
         .quick-reply-chip{background:var(--active-bg);border:1px solid var(--border-light);color:var(--text-primary);padding:8px 16px;border-radius:20px;cursor:pointer;font-size:0.85rem;transition:var(--transition);white-space:nowrap;font-family:inherit;}.quick-reply-chip:hover{background:var(--cyan);color:#fff;border-color:var(--cyan);transform:translateY(-2px);}
+        /* ============ ANTI-ZOOM & ANTI-SÉLECTION GLOBALE ============ */
+html {
+    touch-action: manipulation;
+    -ms-touch-action: manipulation;
+}
+
+body {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Réactiver la sélection uniquement dans les champs de saisie */
+input, textarea, [contenteditable="true"] {
+    -webkit-user-select: text !important;
+    -moz-user-select: text !important;
+    -ms-user-select: text !important;
+    user-select: text !important;
+}
+
+/* Désactiver le zoom sur les images */
+img {
+    touch-action: manipulation;
+    -webkit-user-drag: none;
+    -moz-user-drag: none;
+    user-select: none;
+}
+
+/* Empêcher l'agrandissement dans le viewer d'image */
+.image-viewer-full img,
+.full-image-view img {
+    touch-action: manipulation !important;
+    pointer-events: auto;
+}
         .image-viewer-full{position:fixed;inset:0;background:rgba(0,0,0,.95);z-index:10000;display:flex;align-items:center;justify-content:center;flex-direction:column;}.image-viewer-full img{max-width:90%;max-height:80%;border-radius:8px;transition:transform 0.25s cubic-bezier(0.4,0,0.2,1);object-fit:contain;}.zoom-controls{position:absolute;bottom:40px;display:flex;gap:15px;background:rgba(30,41,59,0.8);backdrop-filter:blur(8px);padding:10px 24px;border-radius:30px;border:1px solid var(--border-light);z-index:10002;}.zoom-btn{background:none;border:none;color:#fff;font-size:1.3rem;cursor:pointer;transition:var(--transition);width:40px;height:40px;display:flex;align-items:center;justify-content:center;border-radius:50%;}.zoom-btn:hover{background:var(--active-bg);color:var(--cyan);}
         .modal-overlay{position:fixed;inset:0;background:var(--modal-overlay);backdrop-filter:blur(8px);z-index:300;display:none;align-items:center;justify-content:center}.modal-overlay.active{display:flex}.modal-content{background:var(--modal-bg);width:90%;max-width:400px;border-radius:20px;padding:24px;border:1px solid var(--border-light);max-height:80vh;overflow-y:auto;}.modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}.modal-header h3{font-size:1.1rem;display:flex;align-items:center;gap:8px}.modal-close{background:0 0;border:0;color:var(--text-secondary);font-size:28px;cursor:pointer;transition:var(--transition)}.modal-close:hover{color:var(--danger)}
         .modal-input{width:100%;padding:12px;margin-bottom:16px;background:var(--input-bg);border:1px solid var(--border-light);border-radius:12px;outline:0;color:var(--text-primary);transition:var(--transition);font-family:inherit}.modal-input:focus{border-color:var(--cyan)}.modal-input::placeholder{color:var(--text-secondary)}.modal-btn{width:100%;padding:12px;background:var(--cyan);color:#fff;border:0;border-radius:12px;font-weight:600;cursor:pointer;transition:var(--transition);font-family:inherit}.modal-btn:disabled{opacity:.4;cursor:not-allowed}.modal-btn:not(:disabled):hover{opacity:.9}
@@ -126,6 +165,27 @@
         .chat-search-bar.active{display:flex;}
         .chat-search-bar input{flex:1;padding:8px 12px;background:var(--input-bg);border:1px solid var(--border-light);border-radius:20px;outline:none;}
         .highlight{background:yellow; color:#000;}
+
+        /* ======= STYLES POUR LES BADGES ======= */
+        .badge-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 0.65rem;
+            font-weight: 700;
+            margin: 0 2px;
+            border: 1px solid transparent;
+        }
+        .badge-pill i { font-size: 0.65rem; }
+        .badge-pill.icon-only {
+            padding: 0;
+            border: none;
+            background: transparent !important;
+            font-size: 0.7rem;
+            gap: 0;
+        }
 
         @media(min-width:1024px){
             body{padding-bottom:0!important;overflow:hidden;}
@@ -200,7 +260,10 @@
     <div class="chat-header">
         <button class="back-btn" onclick="closeChat()"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg></button>
         <div class="chat-header-avatar" id="chatAvatar" onclick="viewContactProfile()" style="cursor:pointer;"></div>
-        <div class="chat-header-info"><div class="chat-header-name" id="chatName" onclick="viewContactProfile()"></div><div class="chat-header-status" id="chatStatus"></div></div>
+        <div class="chat-header-info">
+            <div class="chat-header-name" id="chatName" onclick="viewContactProfile()"></div>
+            <div class="chat-header-status" id="chatStatus"></div>
+        </div>
         <div class="chat-options-container">
             <button class="chat-options-btn" id="chatOptionsBtn" onclick="toggleChatOptions(event)" aria-label="Options de la conversation"><i class="fas fa-ellipsis-v"></i></button>
             <div class="chat-options-menu" id="chatOptionsMenu">
@@ -284,6 +347,44 @@
 <div id="toastMsg" class="toast-custom"></div>
 
 <script>
+// ============ FONCTIONS POUR LES BADGES (AJOUT) ============
+function getAllUsers() {
+    return JSON.parse(localStorage.getItem('estra_all_users') || '[]');
+}
+
+function getAllBadges() {
+    return JSON.parse(localStorage.getItem('estra_badges') || '[]');
+}
+
+function getUserByNameOrUsername(nameOrUsername) {
+    const users = getAllUsers();
+    return users.find(u => u.fullName === nameOrUsername || u.username === nameOrUsername) || null;
+}
+
+// ✅ NOUVEAU : Affichage différencié des badges
+function renderUserBadges(badges) {
+    if (!badges || badges.length === 0) return '';
+    const allBadges = getAllBadges();
+    
+    // Liste des badges qui doivent avoir un libellé + fond + bordure
+    const badgesWithStyle = ['sponsor', 'premium', 'mentor', 'teacher', 'recruiter'];
+    
+    return badges.map(badgeId => {
+        const b = allBadges.find(b => b.id === badgeId);
+        if (!b) return '';
+        
+        const hasStyle = badgesWithStyle.includes(b.id);
+        const showLabel = hasStyle ? ` ${b.name}` : '';
+        
+        if (hasStyle) {
+            return `<span class="badge-pill" style="background:${b.color}20; color:${b.color}; border:1px solid ${b.color}40; padding:3px 10px; border-radius:15px; font-size:0.65rem; font-weight:700; display:inline-flex; align-items:center; gap:4px; margin:0 2px;" title="${b.desc || b.name}"><i class="fas ${b.icon}"></i> ${b.name}</span>`;
+        } else {
+            return `<span class="badge-pill icon-only" style="color:${b.color}; font-size:0.7rem; font-weight:600; margin:0 2px; display:inline-flex; align-items:center; gap:3px;" title="${b.desc || b.name}"><i class="fas ${b.icon}"></i></span>`;
+        }
+    }).join('');
+}
+// ============================================================
+
 // ============ PROTECTION DES DONNÉES ============
 const DATA_SECRET = 'estra_secure_2025';
 function protectData(data) {
@@ -345,7 +446,14 @@ function playMessageSound() {
 
 ESTRA_CHANNEL.onmessage = (e) => {
     const { type, data } = e.data;
-    if (type === 'friends_updated' || type === 'profile_updated') { loadAllFriends(); updateSidebarStats(); }
+    if (type === 'friends_updated' || type === 'profile_updated' || type === 'badges_updated') {
+        loadAllFriends();
+        updateSidebarStats();
+        renderCurrentList();
+        updateAllBadges();
+        // Mettre à jour les avatars dans les conversations
+        updateAllConversationsAvatar();
+    }
     if (type === 'new_message_to_friend') {
         if (data && data.to === currentUser.name) {
             let conv = privateConversations.find(c => c.name === data.from);
@@ -519,7 +627,6 @@ function loadData() {
         currentUser.avatar = `https://ui-avatars.com/api/?name=${encodeURIComponent(currentUser.name || 'User')}&background=0284c7&color=fff&size=120`;
     }
     
-
     try {
         const rawPrivate = localStorage.getItem('estra_private_conversations');
         privateConversations = rawPrivate ? JSON.parse(rawPrivate) : [];
@@ -557,16 +664,60 @@ function loadData() {
         archivedConversations = [];
     }
     
-    updateSidebarStats(); checkOnlineStatus(); initEmojis(); updateAllBadges();
+    updateSidebarStats();
+    checkOnlineStatus();
+    initEmojis();
+    updateAllBadges();
     requestNotificationPermission();
-    
-    // ✅ Mettre à jour les avatars des conversations
     updateAllConversationsAvatar();
     
+    // ✅ PREMIER RENDU (peut être vide si les données ne sont pas encore prêtes)
     renderCurrentList();
+    
+    // ✅ FORCER UN RE-RENDU APRÈS UN COURT DÉLAI
+    setTimeout(function() {
+        // Vérifier si les conversations sont bien chargées
+        var hasData = privateConversations.length > 0 || groupConversations.length > 0;
+        renderCurrentList();
+        updateAllBadges();
+        updateSidebarStats();
+        
+        // Si toujours vide, réessayer après un délai plus long
+        if (!hasData) {
+            setTimeout(function() {
+                renderCurrentList();
+                updateAllBadges();
+            }, 300);
+        }
+    }, 200);
     
     // ✅ Vérifier le profil toutes les 2 secondes
     setInterval(checkProfileUpdate, 2000);
+    
+    // ✅ Gérer l'ouverture automatique d'une conversation depuis l'URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const friendParam = urlParams.get('friend');
+    const groupParam = urlParams.get('groupId');
+    if (friendParam) {
+        // Rechercher une conversation avec ce nom ou en créer une
+        let conv = privateConversations.find(c => c.name.toLowerCase() === friendParam.toLowerCase());
+        if (!conv) {
+            // Créer une nouvelle conversation
+            const friend = allContacts.find(f => f.name.toLowerCase() === friendParam.toLowerCase());
+            if (friend) {
+                conv = { id: Date.now(), name: friend.name, avatar: friend.avatar, unread: 0, lastMsg: '', pinned: false };
+                privateConversations.unshift(conv);
+                messagesData[conv.id] = [];
+                saveAllData();
+            }
+        }
+        if (conv) {
+            setTimeout(() => openChatById(conv.id), 300);
+        }
+    } else if (groupParam) {
+        // Ouvrir un groupe
+        setTimeout(() => openGroupChatById(groupParam), 300);
+    }
 }
 // ✅ NOUVELLE FONCTION : Vérifier les changements de profil
 function checkProfileUpdate() {
@@ -658,13 +809,17 @@ function renderConvItem(c) {
     const msgList = messagesData[c.id] || [];
     const lastMsg = msgList[msgList.length - 1];
     let preview = lastMsg ? (lastMsg.text || '📎 Fichier').substring(0, 40) : '';
+    // Récupération des badges du contact
+    const user = getUserByNameOrUsername(c.name);
+    const badgesHtml = user ? renderUserBadges(user.badges || []) : '';
+    
     return `<div class="conv-item ${c.unread ? 'unread' : ''} ${c.pinned ? 'pinned' : ''}" onclick="openChatById('${c.id}')">
         <div class="conv-avatar" style="background-image:url('${escapeHtml(c.avatar)}');">
             ${!c.groupId ? '<span class="status-dot status-offline"></span>' : ''}
         </div>
         <div class="conv-info">
             <div class="conv-header">
-                <span class="conv-name">${escapeHtml(c.name)}</span>
+                <span class="conv-name">${escapeHtml(c.name)} ${badgesHtml}</span>
                 <span class="conv-time">${lastMsg ? formatTime(lastMsg.timestamp) : ''}</span>
             </div>
             <div class="conv-preview">
@@ -706,7 +861,10 @@ function openChatById(id) {
     if (!conv) { showToast('Conversation non trouvée'); return; }
     activeChat = conv;
     conv.unread = 0;
-    document.getElementById('chatName').innerText = conv.name;
+    // Récupération des badges du contact
+    const user = getUserByNameOrUsername(conv.name);
+    const badgesHtml = user ? renderUserBadges(user.badges || []) : '';
+    document.getElementById('chatName').innerHTML = `${escapeHtml(conv.name)} ${badgesHtml}`;
     document.getElementById('chatAvatar').style.backgroundImage = `url('${escapeHtml(conv.avatar)}')`;
     document.getElementById('chatStatus').innerHTML = conv.groupId ? '<span style="color:#00a884;">●</span> Groupe' : '<span style="color:#64748b;">●</span> Hors ligne';
     document.getElementById('pinText').textContent = conv.pinned ? 'Désépingler' : 'Épingler';
@@ -1200,7 +1358,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (e.key==='estra_friends'||e.key==='estra_binomes'||e.key==='estra_mentors') { loadAllFriends(); updateSidebarStats(); }
     if (e.key==='estra_private_conversations') { privateConversations = unprotectData(e.newValue)||JSON.parse(e.newValue||'[]'); renderCurrentList(); }
     if (e.key==='estra_group_conversations') { groupConversations = unprotectData(e.newValue)||JSON.parse(e.newValue||'[]'); renderCurrentList(); }
-    if (e.key==='estra_messages_data') { messagesData = unprotectData(e.newValue)||JSON.parse(e.newValue||'{}'); if(activeChat) renderMessages(); renderCurrentList(); }
+    if (e.key==='estra_messages_data') { messagesData = unprotectData(e.newValue)||JSON.parse(e.newValue||'[]'); if(activeChat) renderMessages(); renderCurrentList(); }
     if (e.key==='estra_userGroups') { userGroups = JSON.parse(e.newValue||'[]'); renderCurrentList(); }
     
     // ✅ Mettre à jour le profil en temps réel
@@ -1233,6 +1391,14 @@ window.scrollToBottom = scrollToBottom; window.viewFullImage = viewFullImage;
 window.adjustZoom = adjustZoom; window.resetZoom = resetZoom;
 window.showMsgContextMenu = showMsgContextMenu; window.closeContextMenu = closeContextMenu;
 window.replyToMsg = replyToMsg; window.copyMsgText = copyMsgText; window.deleteMsgConfirm = deleteMsgConfirm;
+window.renderUserBadges = renderUserBadges;
+window.getUserByNameOrUsername = getUserByNameOrUsername;
+window.getAllUsers = getAllUsers;
+window.getAllBadges = getAllBadges;
 </script>
+<script src="antizome.js"></script>
+<script src="security.js"></script>
+<script src="security-advenced.js"></script>
+<script src="data.js"></script>
 </body>
 </html>
