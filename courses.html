@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
     <title data-i18n="page_title">ESTRA LINK | Bibliothèque de Cours</title>
-    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <!-- SEO & Social Media Open Graph -->
     <meta property="og:title" content="ESTRA LINK | Bibliothèque de Cours">
     <meta property="og:description" content="Accédez à des cours, mémoires, thèses et documents académiques. Partagez vos connaissances avec la communauté ESTRA LINK.">
@@ -100,7 +100,43 @@
     width: 100%;
     overflow: hidden;
 }
+/* ============ ANTI-ZOOM & ANTI-SÉLECTION GLOBALE ============ */
+html {
+    touch-action: manipulation;
+    -ms-touch-action: manipulation;
+}
 
+body {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Réactiver la sélection uniquement dans les champs de saisie */
+input, textarea, [contenteditable="true"] {
+    -webkit-user-select: text !important;
+    -moz-user-select: text !important;
+    -ms-user-select: text !important;
+    user-select: text !important;
+}
+
+/* Désactiver le zoom sur les images */
+img {
+    touch-action: manipulation;
+    -webkit-user-drag: none;
+    -moz-user-drag: none;
+    user-select: none;
+}
+
+/* Empêcher l'agrandissement dans le viewer d'image */
+.image-viewer-full img,
+.full-image-view img {
+    touch-action: manipulation !important;
+    pointer-events: auto;
+}
         .offline-banner { position: fixed; top: 0; left: 0; right: 0; background: #f59e0b; color: #000; text-align: center; padding: 6px; z-index: 9999; font-size: 0.8rem; font-weight: 600; display: none; }
         .sidebar-overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(4px); z-index: 1050; opacity: 0; visibility: hidden; transition: var(--transition); }
         .sidebar-overlay.active { opacity: 1; visibility: visible; }
@@ -715,6 +751,47 @@ let currentCourseFileName = null;
 let currentPaymentCourseId = null;
 let toastTimeout = null;
 
+// ============ FONCTIONS POUR LES BADGES (AJOUT) ============
+function getAllUsers() {
+    return JSON.parse(localStorage.getItem('estra_all_users') || '[]');
+}
+
+function getAllBadges() {
+    return JSON.parse(localStorage.getItem('estra_badges') || '[]');
+}
+
+function getUserByNameOrUsername(nameOrUsername) {
+    const users = getAllUsers();
+    return users.find(u => u.fullName === nameOrUsername || u.username === nameOrUsername) || null;
+}
+
+// ✅ NOUVEAU : Affichage différencié des badges
+function renderUserBadges(badges) {
+    if (!badges || badges.length === 0) return '';
+    const allBadges = getAllBadges();
+    
+    // Liste des badges qui doivent avoir un libellé + fond + bordure
+    const badgesWithStyle = ['sponsor', 'premium', 'mentor', 'teacher', 'recruiter'];
+    
+    return badges.map(badgeId => {
+        const b = allBadges.find(b => b.id === badgeId);
+        if (!b) return '';
+        
+        const hasStyle = badgesWithStyle.includes(b.id);
+        const showLabel = hasStyle ? ` ${b.name}` : '';
+        
+        if (hasStyle) {
+            // Badge avec fond + bordure (Premium, Sponsor, Mentor, etc.)
+            return `<span class="badge-pill" style="background:${b.color}20; color:${b.color}; border:1px solid ${b.color}40; padding:3px 10px; border-radius:15px; font-size:0.65rem; font-weight:700; display:inline-flex; align-items:center; gap:4px; margin:0 2px;" title="${b.desc || b.name}"><i class="fas ${b.icon}"></i> ${b.name}</span>`;
+        } else {
+            // Badge sans fond ni bordure (Vérifié, Contributeur, etc.)
+            return `<span class="badge-pill icon-only" style="color:${b.color}; font-size:0.7rem; font-weight:600; margin:0 2px; display:inline-flex; align-items:center; gap:3px;" title="${b.desc || b.name}"><i class="fas ${b.icon}"></i></span>`;
+        }
+    }).join('');
+}
+
+// ============================================================
+
 function checkOnlineStatus() { const banner = document.getElementById('offlineBanner'); if(banner) banner.style.display = navigator.onLine ? 'none' : 'block'; }
 function updateBadges() {
     const notifs = JSON.parse(localStorage.getItem('estra_notifications') || '[]');
@@ -834,6 +911,10 @@ function renderCourses() {
         if(c.role === 'Établissement' || c.role === 'Entreprise') { roleClass = 'role-badge role-inst'; roleIcon = '<i class="fas fa-building"></i>'; }
         if(c.role === 'Ministère') { roleClass = 'role-badge role-min'; roleIcon = '<i class="fas fa-check-circle"></i>'; }
 
+        // --- RÉCUPÉRATION DES BADGES DE L'AUTEUR (AJOUT) ---
+        const authorUser = getUserByNameOrUsername(c.author);
+        const authorBadges = authorUser ? renderUserBadges(authorUser.badges || []) : '';
+
         const isPremium = c.price > 0;
         const isPurchased = purchasedCourses.includes(c.id);
         const isLocked = isPremium && !isPurchased && c.author !== currentUser.name;
@@ -895,7 +976,11 @@ function renderCourses() {
             <div class="course-post-header">
                 <img src="${c.authorAvatar}" class="course-post-avatar" alt="Avatar" style="cursor:pointer;" onclick="event.stopPropagation();viewProfile('${escapeHtml(c.author)}')">
                 <div class="course-post-info">
-                    <div class="course-post-name" style="cursor:pointer;" onclick="event.stopPropagation();viewProfile('${escapeHtml(c.author)}')">${escapeHtml(c.author)} <span class="${roleClass}">${roleIcon} ${escapeHtml(c.role)}</span></div>
+                    <div class="course-post-name" style="cursor:pointer;" onclick="event.stopPropagation();viewProfile('${escapeHtml(c.author)}')">
+                        ${escapeHtml(c.author)} 
+                        <span class="${roleClass}">${roleIcon} ${escapeHtml(c.role)}</span>
+                        ${authorBadges}
+                    </div>
                     <div class="course-post-time">${getRelativeTime(c.timestamp)}</div>
                     ${ratingHtml}
                 </div>
@@ -1351,7 +1436,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (e.key === 'estra_profile') { loadData(); }
     if (e.key === 'estra_conversations') { updateBadges(); }
     
-    // 🆕 Synchronisation nom
+    // Synchronisation nom
     if (e.key === 'estra_name_updated') {
         try {
             const data = JSON.parse(e.newValue || '{}');
@@ -1364,7 +1449,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (err) {}
     }
     
-    // 🆕 Synchronisation avatar
+    // Synchronisation avatar
     if (e.key === 'estra_avatar_updated') {
         try {
             const data = JSON.parse(e.newValue || '{}');
@@ -1377,7 +1462,14 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (err) {}
     }
     
-    // 🆕 Nouveau post depuis courses.html
+    // Synchronisation badges (AJOUT)
+    if (e.key === 'estra_all_users' || e.key === 'estra_badges') {
+        if (typeof renderCourses === 'function') renderCourses();
+        if (typeof renderAllPosts === 'function') renderAllPosts();
+        if (typeof updateSidebar === 'function') updateSidebar();
+    }
+    
+    // Nouveau post depuis courses.html
     if (e.key === 'estra_post_trigger') {
         if (typeof posts !== 'undefined') {
             posts = JSON.parse(localStorage.getItem('estra_posts') || '[]');
@@ -1420,8 +1512,16 @@ window.toggleAcademicFields = toggleAcademicFields;
 window.handleCourseFileSelect = handleCourseFileSelect;
 window.viewProfile = viewProfile;
 window.reportPost = reportPost;
+window.renderUserBadges = renderUserBadges;
+window.getUserByNameOrUsername = getUserByNameOrUsername;
+window.getAllUsers = getAllUsers;
+window.getAllBadges = getAllBadges;
 </script>
 <script src="reports.js"></script>
 <script src="sync.js"></script>
+<script src="antizome.js"></script>
+<script src="security.js"></script>
+<script src="security-advenced.js"></script>
+<script src="data.js"></script>
 </body>
 </html>
