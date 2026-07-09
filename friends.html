@@ -6,7 +6,6 @@
     <title data-i18n="page_title">ESTRA LINK | Amis, Binômes & Mentors</title>
     <meta property="og:title" content="ESTRA LINK | Amis, Binômes & Mentors">
     <meta property="og:description" content="Gérez vos amis, trouvez votre binôme, connectez-vous à des mentors sur ESTRA LINK.">
-    
     <meta property="og:image" content="https://ui-avatars.com/api/?background=0284c7&color=fff&name=ESTRA&size=512">
     <meta property="og:type" content="website">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
@@ -17,6 +16,7 @@
     <meta name="apple-mobile-web-app-title" content="ESTRA LINK">
     <link rel="apple-touch-icon" href="https://ui-avatars.com/api/?background=0284c7&color=fff&name=E&size=152">
     <style>
+        /* ============ TOUS LES STYLES (inchangés) ============ */
         :root {
             --cyan: #0284c7; --bg: #f8fafc; --card-bg: rgba(255,255,255,0.95);
             --text: #0f172a; --text-secondary: #475569; --border: rgba(0,0,0,0.1);
@@ -124,12 +124,11 @@
             .modal-content { margin:0; height:100vh !important; max-height:100vh !important; width:450px !important; max-width:450px !important; border-radius:0 !important; border-top:none; border-bottom:none; border-right:none; transform:translateX(100%); box-shadow:-10px 0 50px rgba(0,0,0,0.3); }
             .modal-overlay.active .modal-content { transform:translateX(0); }
         }
-        /* ============ ANTI-ZOOM & ANTI-SÉLECTION GLOBALE ============ */
+        /* ============ ANTI-ZOOM & ANTI-SÉLECTION ============ */
         html { touch-action: manipulation; -ms-touch-action: manipulation; }
         body { -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; -webkit-touch-callout: none; -webkit-tap-highlight-color: transparent; }
         input, textarea, [contenteditable="true"] { -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important; }
         img { touch-action: manipulation; -webkit-user-drag: none; -moz-user-drag: none; user-select: none; }
-        .image-viewer-full img, .full-image-view img { touch-action: manipulation !important; pointer-events: auto; }
 
         /* ======= STYLES POUR LES CARTES ET ONGLETS ======= */
         .relations-container {
@@ -157,7 +156,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 5px;
+            gap: 8px;
             border-bottom: 3px solid transparent;
             letter-spacing: -0.2px;
             white-space: nowrap;
@@ -187,7 +186,7 @@
         }
         .sub-tabs {
             display: none;
-            gap: px;
+            gap: 4px;
             margin-top: 6px;
             border-bottom: 1px solid var(--border);
         }
@@ -373,6 +372,39 @@
         .empty-state i { font-size: 2.2rem; margin-bottom: 8px; opacity: 0.3; display: block; }
         .empty-state p { font-size: 0.9rem; }
 
+        /* Styles pour les badges utilisateur (version admin) */
+        .badge-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.65rem;
+            font-weight: 700;
+            margin: 1px 2px;
+            border: 1px solid transparent;
+            line-height: 1.4;
+            background: transparent;
+        }
+        .badge-pill i { font-size: 0.65rem; }
+        .badge-pill.icon-only {
+            padding: 0 3px;
+            border: none;
+            background: transparent !important;
+            font-size: 0.8rem;
+        }
+        .badge-pill.icon-only i { font-size: 0.8rem; }
+
+        .blocked-indicator {
+            color: var(--danger);
+            font-size: 0.65rem;
+            font-weight: 600;
+            background: rgba(220,38,38,0.1);
+            padding: 2px 8px;
+            border-radius: 12px;
+            display: inline-block;
+        }
+
         @media (max-width:768px) {
             .relations-container { padding: 12px 14px; }
             .person-card { padding: 14px 14px; }
@@ -469,7 +501,7 @@
 const ESTRA_CHANNEL = new BroadcastChannel('estra_network');
 ESTRA_CHANNEL.onmessage = (e) => {
     const { type, data } = e.data;
-    if (type === 'friends_updated' || type === 'badges_updated' || type === 'profile_updated') {
+    if (type === 'friends_updated' || type === 'badges_updated' || type === 'profile_updated' || type === 'blocked_updated') {
         loadAllData();
         renderCurrentList();
         updateSidebarStats();
@@ -497,18 +529,72 @@ if(typeof ESTRA === 'undefined') {
     };
 }
 
+// ============ BADGES (VERSION ADMIN AVEC HIÉRARCHIE) ============
+function getAllBadges() {
+    return JSON.parse(localStorage.getItem('estra_badges') || '[]');
+}
+
+function getUserBadges(username) {
+    if (!username) return [];
+    const users = JSON.parse(localStorage.getItem('estra_all_users') || '[]');
+    const user = users.find(u => u.username === username || u.fullName === username);
+    return user?.badges || [];
+}
+
+function renderUserBadges(badges) {
+    if (!badges || badges.length === 0) return '';
+    const allBadges = getAllBadges();
+    
+    // Hiérarchie des badges (un seul avec libellé)
+    const badgesWithStyle = ['sponsor', 'partner', 'mentor', 'premium', 'teacher', 'recruiter'];
+    
+    // Séparer les badges avec libellé et sans libellé
+    const withLabel = [];
+    const withoutLabel = [];
+    
+    badges.forEach(badgeId => {
+        const b = allBadges.find(item => item.id === badgeId);
+        if (!b) return;
+        if (badgesWithStyle.includes(b.id) && b.display !== 'icon') {
+            withLabel.push(b);
+        } else {
+            withoutLabel.push(b);
+        }
+    });
+    
+    // Trier les badges avec libellé par priorité (sponsor > partner > mentor > premium > teacher > recruiter)
+    const priority = { sponsor: 1, partner: 2, mentor: 3, premium: 4, teacher: 5, recruiter: 6 };
+    withLabel.sort((a, b) => (priority[a.id] || 99) - (priority[b.id] || 99));
+    
+    // Garder UNIQUEMENT le badge avec la plus haute priorité (le premier)
+    const mainBadge = withLabel.length > 0 ? withLabel[0] : null;
+    
+    let html = '';
+    if (mainBadge) {
+        const style = `color:${mainBadge.color}; background:${mainBadge.color}20; border:1px solid ${mainBadge.color}40; padding:3px 10px; border-radius:15px; font-size:0.65rem; font-weight:700; display:inline-flex; align-items:center; gap:4px; margin:0 2px;`;
+        html += `<span class="badge-pill" style="${style}"><i class="fas ${mainBadge.icon}"></i> ${mainBadge.name}</span>`;
+    }
+    
+    // Ajouter les badges sans libellé (icônes seules)
+    withoutLabel.forEach(b => {
+        html += `<span class="badge-pill icon-only" style="color:${b.color}; font-size:0.8rem; margin:0 2px; display:inline-flex; align-items:center; gap:3px;" title="${b.desc || b.name}"><i class="fas ${b.icon}"></i></span>`;
+    });
+    
+    return html;
+}
+
 function getAllUsers() {
     let users = JSON.parse(localStorage.getItem('estra_all_users') || '[]');
     if (users.length === 0) {
         users = [
-            { id: 'rashidi', username: 'rashidi', fullName: 'Rashidi', bio: '👋 Étudiant passionné | ESTRA LINK', email: 'contact@estra-link.com', location: 'Lubumbashi, RDC', avatar: 'https://ui-avatars.com/api/?background=1d9bf0&color=fff&name=Rashidi&size=120', cover: null, verified: true, joinDate: '2026', accountType: 'student', domain: 'Informatique', level: 'L2' },
-            { id: 'marie_claire', username: 'marie_claire', fullName: 'Marie Claire', bio: 'Enseignante en Programmation Web', email: 'marie@estra-link.com', location: 'Kinshasa, RDC', avatar: 'https://ui-avatars.com/api/?name=Marie&background=10b981&color=fff', cover: null, verified: false, joinDate: '2025', accountType: 'teacher', domain: 'Informatique', level: 'M2' },
-            { id: 'david_mwamba', username: 'david_mwamba', fullName: 'David Mwamba', bio: 'Chercheur en Intelligence Artificielle', email: 'david@estra-link.com', location: 'Goma, RDC', avatar: 'https://ui-avatars.com/api/?name=David&background=8b5cf6&color=fff', cover: null, verified: true, joinDate: '2025', accountType: 'student', domain: 'Informatique', level: 'M1' },
-            { id: 'prof_kabengele', username: 'prof_kabengele', fullName: 'Pr. Kabengele', bio: 'Professeur en Intelligence Artificielle', email: 'kabengele@estra-link.com', location: 'Kinshasa, RDC', avatar: 'https://ui-avatars.com/api/?name=PrK&background=7c3aed&color=fff', cover: null, verified: true, joinDate: '2025', accountType: 'professor', domain: 'Informatique', level: 'Doctorat' },
-            { id: 'mr_muteba', username: 'mr_muteba', fullName: 'Mr. Muteba', bio: 'Enseignant en Mathématiques', email: 'muteba@estra-link.com', location: 'Lubumbashi, RDC', avatar: 'https://ui-avatars.com/api/?name=MrM&background=d97706&color=fff', cover: null, verified: false, joinDate: '2026', accountType: 'teacher', domain: 'Mathématiques', level: '4ème Humanité' },
-            { id: 'alice_kasongo', username: 'alice_mwila', fullName: 'Alice Kasongo', bio: 'Élève en Scientifique', email: 'alice@estra-link.com', location: 'Kolwezi, RDC', avatar: 'https://ui-avatars.com/api/?name=Alice&background=059669&color=fff', cover: null, verified: false, joinDate: '2026', accountType: 'highschool', domain: 'Biologie-Chimie', level: '3ème Humanité' },
-            { id: 'sophie_mukendi', username: 'sophie_mukendi', fullName: 'Sophie Mukendi', bio: 'Étudiante en Médecine', email: 'sophie@estra-link.com', location: 'Lubumbashi, RDC', avatar: 'https://ui-avatars.com/api/?name=Sophie&background=ec4899&color=fff', cover: null, verified: false, joinDate: '2026', accountType: 'student', domain: 'Médecine', level: 'L3' },
-            { id: 'admin_estra', username: 'admin_estra', fullName: 'Admin ESTRA', bio: '👑 Administrateur de la plateforme', email: 'admin@estra-link.com', location: 'RDC', avatar: 'https://ui-avatars.com/api/?name=Admin&background=dc2626&color=fff', cover: null, verified: true, joinDate: '2025', accountType: 'admin', domain: 'Administration', level: 'N/A' }
+            { id: 'rashidi', username: 'rashidi', fullName: 'Rashidi', bio: '👋 Étudiant passionné | ESTRA LINK', email: 'contact@estra-link.com', location: 'Lubumbashi, RDC', avatar: 'https://ui-avatars.com/api/?background=1d9bf0&color=fff&name=Rashidi&size=120', cover: null, verified: true, joinDate: '2026', accountType: 'student', domain: 'Informatique', level: 'L2', badges: [] },
+            { id: 'marie_claire', username: 'marie_claire', fullName: 'Marie Claire', bio: 'Enseignante en Programmation Web', email: 'marie@estra-link.com', location: 'Kinshasa, RDC', avatar: 'https://ui-avatars.com/api/?name=Marie&background=10b981&color=fff', cover: null, verified: false, joinDate: '2025', accountType: 'teacher', domain: 'Informatique', level: 'M2', badges: [] },
+            { id: 'david_mwamba', username: 'david_mwamba', fullName: 'David Mwamba', bio: 'Chercheur en Intelligence Artificielle', email: 'david@estra-link.com', location: 'Goma, RDC', avatar: 'https://ui-avatars.com/api/?name=David&background=8b5cf6&color=fff', cover: null, verified: true, joinDate: '2025', accountType: 'student', domain: 'Informatique', level: 'M1', badges: [] },
+            { id: 'prof_kabengele', username: 'prof_kabengele', fullName: 'Pr. Kabengele', bio: 'Professeur en Intelligence Artificielle', email: 'kabengele@estra-link.com', location: 'Kinshasa, RDC', avatar: 'https://ui-avatars.com/api/?name=PrK&background=7c3aed&color=fff', cover: null, verified: true, joinDate: '2025', accountType: 'professor', domain: 'Informatique', level: 'Doctorat', badges: [] },
+            { id: 'mr_muteba', username: 'mr_muteba', fullName: 'Mr. Muteba', bio: 'Enseignant en Mathématiques', email: 'muteba@estra-link.com', location: 'Lubumbashi, RDC', avatar: 'https://ui-avatars.com/api/?name=MrM&background=d97706&color=fff', cover: null, verified: false, joinDate: '2026', accountType: 'teacher', domain: 'Mathématiques', level: '4ème Humanité', badges: [] },
+            { id: 'alice_kasongo', username: 'alice_mwila', fullName: 'Alice Kasongo', bio: 'Élève en Scientifique', email: 'alice@estra-link.com', location: 'Kolwezi, RDC', avatar: 'https://ui-avatars.com/api/?name=Alice&background=059669&color=fff', cover: null, verified: false, joinDate: '2026', accountType: 'highschool', domain: 'Biologie-Chimie', level: '3ème Humanité', badges: [] },
+            { id: 'sophie_mukendi', username: 'sophie_mukendi', fullName: 'Sophie Mukendi', bio: 'Étudiante en Médecine', email: 'sophie@estra-link.com', location: 'Lubumbashi, RDC', avatar: 'https://ui-avatars.com/api/?name=Sophie&background=ec4899&color=fff', cover: null, verified: false, joinDate: '2026', accountType: 'student', domain: 'Médecine', level: 'L3', badges: [] },
+            { id: 'admin_estra', username: 'admin_estra', fullName: 'Admin ESTRA', bio: '👑 Administrateur de la plateforme', email: 'admin@estra-link.com', location: 'RDC', avatar: 'https://ui-avatars.com/api/?name=Admin&background=dc2626&color=fff', cover: null, verified: true, joinDate: '2025', accountType: 'admin', domain: 'Administration', level: 'N/A', badges: ['verified','premium','partner'] }
         ];
         localStorage.setItem('estra_all_users', JSON.stringify(users));
     }
@@ -529,7 +615,7 @@ function syncAllUsersToDatabase() {
                 avatar: person.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(person.name)}&background=random&color=fff`,
                 cover: person.cover || null, verified: person.verified || false,
                 joinDate: person.joinDate || '2026', accountType: person.accountType || 'student',
-                companyVisibility: person.companyVisibility || 'public', domain: person.domain || '', level: person.level || ''
+                companyVisibility: person.companyVisibility || 'public', domain: person.domain || '', level: person.level || '', badges: person.badges || []
             });
             updated = true;
         }
@@ -574,6 +660,24 @@ let sentFriendRequests = [], sentBinomeRequests = [];
 let hiddenSuggestions = [];
 let currentUser = { name: 'Utilisateur', username: 'user', avatar: 'https://ui-avatars.com/api/?background=0284c7&color=fff&name=User&size=80', domain: 'Informatique', level: 'L2' };
 
+function enrichWithUserData(items) {
+    const allUsers = getAllUsers();
+    return items.map(item => {
+        const user = allUsers.find(u => u.username === item.username || u.fullName === item.name);
+        if (user) {
+            return {
+                ...item,
+                badges: user.badges || [],
+                blocked: user.blocked || false,
+                accountType: user.accountType || 'simple',
+                verified: user.verified || item.verified || false,
+                fullUser: user
+            };
+        }
+        return { ...item, badges: [], blocked: false, accountType: 'simple' };
+    });
+}
+
 function loadAllData() {
     const sp = ESTRA.getProfile();
     if (sp) {
@@ -583,19 +687,18 @@ function loadAllData() {
         currentUser.domain = sp.domain || currentUser.domain;
         currentUser.level = sp.level || currentUser.level;
     }
-    // Initialiser avec des données de démonstration complètes si vides
     if (!localStorage.getItem('estra_friends') || JSON.parse(localStorage.getItem('estra_friends')).length === 0) {
         const demoFriends = [
-            { id: 'f1', name: 'Marie Claire', avatar: 'https://ui-avatars.com/api/?name=Marie&background=10b981&color=fff', bio: 'Enseignante en Programmation Web | 5 ans d\'expérience', domain: 'Informatique', level: 'M2', mutualFriends: 4, online: true, verified: true, favorite: false, type: 'ami', joinDate: 'Janvier 2025', location: 'Kinshasa, RDC' },
-            { id: 'f2', name: 'David Mwamba', avatar: 'https://ui-avatars.com/api/?name=David&background=8b5cf6&color=fff', bio: 'Chercheur en IA | Projets de deep learning', domain: 'Informatique', level: 'M1', mutualFriends: 2, online: false, verified: true, favorite: true, type: 'ami', joinDate: 'Février 2025', location: 'Goma, RDC' },
-            { id: 'f3', name: 'Alice Kasongo', avatar: 'https://ui-avatars.com/api/?name=Alice&background=059669&color=fff', bio: 'Élève en Scientifique | Mention BIEN', domain: 'Biologie-Chimie', level: '3ème', mutualFriends: 1, online: true, verified: false, favorite: false, type: 'ami', joinDate: 'Mars 2025', location: 'Kolwezi, RDC' }
+            { id: 'f1', name: 'Marie Claire', username: 'marie_claire', avatar: 'https://ui-avatars.com/api/?name=Marie&background=10b981&color=fff', bio: 'Enseignante en Programmation Web | 5 ans d\'expérience', domain: 'Informatique', level: 'M2', mutualFriends: 4, online: true, verified: true, favorite: false, type: 'ami', joinDate: 'Janvier 2025', location: 'Kinshasa, RDC' },
+            { id: 'f2', name: 'David Mwamba', username: 'david_mwamba', avatar: 'https://ui-avatars.com/api/?name=David&background=8b5cf6&color=fff', bio: 'Chercheur en IA | Projets de deep learning', domain: 'Informatique', level: 'M1', mutualFriends: 2, online: false, verified: true, favorite: true, type: 'ami', joinDate: 'Février 2025', location: 'Goma, RDC' },
+            { id: 'f3', name: 'Alice Kasongo', username: 'alice_mwila', avatar: 'https://ui-avatars.com/api/?name=Alice&background=059669&color=fff', bio: 'Élève en Scientifique | Mention BIEN', domain: 'Biologie-Chimie', level: '3ème', mutualFriends: 1, online: true, verified: false, favorite: false, type: 'ami', joinDate: 'Mars 2025', location: 'Kolwezi, RDC' }
         ];
         localStorage.setItem('estra_friends', JSON.stringify(demoFriends));
     }
     if (!localStorage.getItem('estra_binomes') || JSON.parse(localStorage.getItem('estra_binomes')).length === 0) {
         const demoBinomes = [
-            { id: 'b1', name: 'Sophie Mukendi', avatar: 'https://ui-avatars.com/api/?name=Sophie&background=ec4899&color=fff', bio: 'Étudiante en Médecine | Stage à l\'hôpital général', domain: 'Médecine', level: 'L3', commonCourses: 'Anatomie, Physiologie', commonUniversity: 'Université de Lubumbashi', commonPromotion: '2024-2025', online: false, favorite: false, type: 'binome', joinDate: 'Janvier 2025', location: 'Lubumbashi, RDC' },
-            { id: 'b2', name: 'Jean Mutombo', avatar: 'https://ui-avatars.com/api/?name=Jean&background=6366f1&color=fff', bio: 'Étudiant en Droit | Spécialisation Droit des affaires', domain: 'Droit', level: 'L2', commonCourses: 'Droit des contrats', commonUniversity: 'Université de Kinshasa', commonPromotion: '2024-2025', online: true, favorite: false, type: 'binome', joinDate: 'Février 2025', location: 'Kinshasa, RDC' }
+            { id: 'b1', name: 'Sophie Mukendi', username: 'sophie_mukendi', avatar: 'https://ui-avatars.com/api/?name=Sophie&background=ec4899&color=fff', bio: 'Étudiante en Médecine | Stage à l\'hôpital général', domain: 'Médecine', level: 'L3', commonCourses: 'Anatomie, Physiologie', commonUniversity: 'Université de Lubumbashi', commonPromotion: '2024-2025', online: false, favorite: false, type: 'binome', joinDate: 'Janvier 2025', location: 'Lubumbashi, RDC' },
+            { id: 'b2', name: 'Jean Mutombo', username: 'jean_mutombo', avatar: 'https://ui-avatars.com/api/?name=Jean&background=6366f1&color=fff', bio: 'Étudiant en Droit | Spécialisation Droit des affaires', domain: 'Droit', level: 'L2', commonCourses: 'Droit des contrats', commonUniversity: 'Université de Kinshasa', commonPromotion: '2024-2025', online: true, favorite: false, type: 'binome', joinDate: 'Février 2025', location: 'Kinshasa, RDC' }
         ];
         localStorage.setItem('estra_binomes', JSON.stringify(demoBinomes));
     }
@@ -603,22 +706,22 @@ function loadAllData() {
     friends = JSON.parse(localStorage.getItem('estra_friends') || '[]');
     binomes = JSON.parse(localStorage.getItem('estra_binomes') || '[]');
     
-    // Suggestions depuis la base utilisateurs
+    friends = enrichWithUserData(friends);
+    binomes = enrichWithUserData(binomes);
+    
     const allUsers = getAllUsers();
     const existingNames = [...friends.map(f => f.name), ...binomes.map(b => b.name)];
     const allSuggestions = allUsers.filter(u => u.username !== currentUser.username && !existingNames.includes(u.fullName) && !hiddenSuggestions.includes(u.id));
-    // Filtrer les binômes par domaine si l'utilisateur a un domaine
     let filteredSuggestions = allSuggestions;
     if (currentUser.domain && currentUser.domain !== '') {
-        // Les binômes doivent être du même domaine que l'utilisateur
         const binomeCandidates = allSuggestions.filter(u => u.domain === currentUser.domain && u.accountType === 'student');
         const amiCandidates = allSuggestions.filter(u => u.domain !== currentUser.domain || u.accountType !== 'student');
-        // On priorise les binômes du même domaine, puis les autres comme amis
         filteredSuggestions = [...binomeCandidates, ...amiCandidates];
     }
     suggestions = filteredSuggestions.map(u => ({
         id: u.id,
         name: u.fullName,
+        username: u.username,
         avatar: u.avatar,
         bio: u.bio || '',
         type: (u.domain === currentUser.domain && u.accountType === 'student') ? 'binome' : 'ami',
@@ -628,13 +731,13 @@ function loadAllData() {
         accountType: u.accountType,
         verified: u.verified || false,
         location: u.location || 'RDC',
-        joinDate: u.joinDate || '2025'
+        joinDate: u.joinDate || '2025',
+        badges: u.badges || [],
+        blocked: u.blocked || false
     }));
-    // Filtrer les suggestions déjà envoyées
     const sentNames = [...sentFriendRequests.map(r => r.name), ...sentBinomeRequests.map(r => r.name)];
     suggestions = suggestions.filter(s => !sentNames.includes(s.name));
     
-    // Mettre à jour les badges
     document.getElementById('suggBadge').textContent = suggestions.length;
     document.getElementById('relBadge').textContent = friends.length + binomes.length;
     updateSidebarStats();
@@ -671,7 +774,11 @@ function renderCard(person, mode) {
     }
     const onlineDot = (person.online !== undefined) ? `<span class="online-dot ${person.online ? '' : 'offline'}" style="${person.online ? '' : 'background:#94a3b8;'}"></span>` : '';
 
-    // Détails enrichis
+    // Badges utilisateur (version admin avec hiérarchie)
+    const badgesHtml = renderUserBadges(person.badges || []);
+
+    const blockedHtml = person.blocked ? `<span class="blocked-indicator"><i class="fas fa-ban"></i> Bloqué</span>` : '';
+
     let detailsHtml = '';
     if (person.domain) detailsHtml += `<span><i class="fas fa-graduation-cap"></i> ${escapeHtml(person.domain)}${person.level ? ' ('+escapeHtml(person.level)+')' : ''}</span>`;
     if (person.location) detailsHtml += `<span><i class="fas fa-map-marker-alt"></i> ${escapeHtml(person.location)}</span>`;
@@ -702,7 +809,6 @@ function renderCard(person, mode) {
             actionsHtml = inviteBtns + profileBtn;
         }
     } else {
-        // relation
         const favClass = person.favorite ? 'active' : '';
         actionsHtml = `
             ${profileBtn}
@@ -716,7 +822,14 @@ function renderCard(person, mode) {
         <div class="card-top">
             <img src="${person.avatar}" class="person-avatar" alt="${escapeHtml(person.name)}" onclick="window.location.href='profile.html?user=${encodeURIComponent(person.id||person.name)}'" />
             <div class="person-info">
-                <div class="person-name">${escapeHtml(person.name)}${verifiedIcon}${tagHtml}${onlineDot}</div>
+                <div class="person-name">
+                    ${escapeHtml(person.name)}
+                    ${verifiedIcon}
+                    ${badgesHtml}
+                    ${tagHtml}
+                    ${onlineDot}
+                    ${blockedHtml}
+                </div>
                 <div class="person-bio">${escapeHtml(person.bio||'')}</div>
             </div>
         </div>
@@ -726,7 +839,6 @@ function renderCard(person, mode) {
 }
 
 function renderSuggestionsBySection(list) {
-    // Séparer les binômes suggérés (même domaine) et les personnes à suivre
     const binomesSugg = list.filter(p => p.type === 'binome');
     const amisSugg = list.filter(p => p.type !== 'binome');
     const sections = [
@@ -754,7 +866,6 @@ function getCurrentList() {
         let all = [];
         if (currentSubTab === 'ami') all = [...friends];
         else if (currentSubTab === 'binome') all = [...binomes];
-        // tri favoris en premier
         all.sort((a,b) => (b.favorite?1:0) - (a.favorite?1:0));
         if (q) all = all.filter(p => p.name.toLowerCase().includes(q) || (p.bio||'').toLowerCase().includes(q));
         return { mode: 'relation', list: all };
@@ -816,9 +927,10 @@ function sendRequest(personId, type) {
     if (!person) return;
     if (type === 'ami') {
         sentFriendRequests.push({ id: personId, name: person.name });
-        friends.push({
+        const newFriend = {
             id: 'f_' + Date.now(),
             name: person.name,
+            username: person.username,
             avatar: person.avatar,
             bio: person.bio || '',
             domain: person.domain || '',
@@ -829,13 +941,23 @@ function sendRequest(personId, type) {
             favorite: false,
             type: 'ami',
             location: person.location || 'RDC',
-            joinDate: person.joinDate || '2025'
-        });
+            joinDate: person.joinDate || '2025',
+            badges: person.badges || [],
+            blocked: false,
+            accountType: person.accountType || 'simple'
+        };
+        friends.push(newFriend);
+        const allUsers = getAllUsers();
+        const user = allUsers.find(u => u.id === person.id);
+        if (user) {
+            // Les badges sont déjà dans person
+        }
     } else if (type === 'binome') {
         sentBinomeRequests.push({ id: personId, name: person.name });
-        binomes.push({
+        const newBinome = {
             id: 'b_' + Date.now(),
             name: person.name,
+            username: person.username,
             avatar: person.avatar,
             bio: person.bio || '',
             domain: person.domain || '',
@@ -847,8 +969,12 @@ function sendRequest(personId, type) {
             favorite: false,
             type: 'binome',
             location: person.location || 'RDC',
-            joinDate: person.joinDate || '2025'
-        });
+            joinDate: person.joinDate || '2025',
+            badges: person.badges || [],
+            blocked: false,
+            accountType: person.accountType || 'simple'
+        };
+        binomes.push(newBinome);
     }
     hiddenSuggestions.push(personId);
     suggestions = suggestions.filter(s => s.id !== personId);
@@ -952,6 +1078,10 @@ window.logout = logout;
 window.showToast = showToast;
 window.estraEmit = estraEmit;
 window.loadAllData = loadAllData;
+window.getAllBadges = getAllBadges;
+window.renderUserBadges = renderUserBadges;
+window.enrichWithUserData = enrichWithUserData;
 </script>
+<script src="data.js"></script>
 </body>
 </html>
