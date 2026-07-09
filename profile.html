@@ -11,6 +11,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="ESTRA LINK">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <link rel="apple-touch-icon" href="https://ui-avatars.com/api/?background=38bdf8&color=fff&name=E&size=152">
     <link rel="stylesheet" href="bouton-sheet.css">
     <style>
@@ -48,16 +49,12 @@
         }
 
         /* ================= THEMES DYNAMIQUES PAR RÔLE ================= */
-        /* Remplacer les lignes 56-59 */
+        body.role-highschool { --cyan: #10b981; --purple: #3b82f6; }
+        body.role-student { --cyan: #0284c7; --purple: #7c3aed; }
+        body.role-professor { --cyan: #7c3aed; --purple: #a78bfa; }
+        body.role-teacher { --cyan: #d97706; --purple: #f59e0b; }
+        body.role-simple { --cyan: #64748b; --purple: #475569; }
 
-/* Par */
-body.role-highschool { --cyan: #10b981; --purple: #3b82f6; }  /* Élève - Vert */
-body.role-student { --cyan: #0284c7; --purple: #7c3aed; }     /* Étudiant - Bleu */
-body.role-professor { --cyan: #7c3aed; --purple: #a78bfa; }    /* Professeur - Violet */
-body.role-teacher { --cyan: #d97706; --purple: #f59e0b; }      /* Enseignant - Orange */
-body.role-simple { --cyan: #64748b; --purple: #475569; }       /* Simple - Gris */
-
-        /* Design Spécifique aux Devoirs */
         .homework-card { background: var(--input-bg); border-left: 4px solid var(--cyan); padding: 15px; border-radius: 12px; margin-bottom: 12px; display:flex; justify-content: space-between; }
         .homework-card .hw-title { font-weight: bold; color: var(--text-primary); }
         .homework-card .hw-date { font-size: 0.75rem; color: var(--danger); }
@@ -75,28 +72,318 @@ body.role-simple { --cyan: #64748b; --purple: #475569; }       /* Simple - Gris 
         .sidebar-nav{display:flex;flex-direction:column;gap:4px}
         .sidebar-link{display:flex;align-items:center;gap:12px;padding:12px 15px;border-radius:10px;color:var(--text-secondary);text-decoration:none;font-size:.9rem;transition:var(--transition);cursor:pointer;background:0 0;border:0;width:100%;font-family:inherit}.sidebar-link svg{width:20px;height:20px;stroke-width:2;flex-shrink:0}.sidebar-link.active,.sidebar-link:hover{background:var(--active-bg);color:var(--cyan);transform:translateX(5px);border-right:2px solid var(--cyan)}.sidebar-link.logout-link{color:var(--danger)}.sidebar-link.logout-link:hover{background:rgba(239,68,68,.1);color:var(--danger);border-right-color:var(--danger)}
 
-        .navbar{padding:10px 15px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border-color);background:var(--navbar-bg);backdrop-filter:blur(12px);position:fixed;top:0;width:100%;z-index:1000;transition:background-color 0.4s ease,border-color 0.4s ease, width 0.3s ease, left 0.3s ease;}.nav-left,.nav-right{display:flex;align-items:center;gap:12px}.navbar-brand{font-weight:800;color:coral;letter-spacing:1.5px;font-size:1.1rem;text-decoration:none}.menu-toggle{background:0 0;border:0;cursor:pointer;padding:8px;display:flex;align-items:center;color:var(--text-secondary);transition:var(--transition)}.menu-toggle:hover{color:var(--cyan)}.avatar-nav{width:34px;height:34px;border-radius:50%;border:1.5px solid var(--cyan);object-fit:cover;box-shadow:0 0 10px rgba(56,189,248,.2);cursor:pointer}
+        .navbar{padding:10px 15px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border-color);background:var(--navbar-bg);backdrop-filter:blur(12px);position:fixed;top:0;width:100%;z-index:1000;transition:background-color 0.4s ease,border-color 0.4s ease, width 0.3s ease, left 0.3s ease;}.nav-left,.nav-right{display:flex;align-items:center;gap:12px}.navbar-brand{font-weight:800;color:coral;letter-spacing:1.5px;font-size:1.1rem;text-decoration:none}.menu-toggle{background:0 0;border:0;cursor:pointer;padding:8px;display:flex;align-items:center;color:var(--text-secondary);transition:var(--transition)}.menu-toggle:hover{color:var(--cyan)}
 
-        /* Layout de base */
+        /* ============ BOUTON PARAMÈTRES (⋮) DANS LA NAVBAR ============ */
+        .nav-settings-btn {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 1.3rem;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 50%;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 38px;
+            height: 38px;
+        }
+        .nav-settings-btn:hover {
+            background: var(--active-bg);
+            color: var(--cyan);
+        }
+
+        .nav-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+            padding: 6px 0;
+            min-width: 200px;
+            z-index: 1100;
+            display: none;
+            margin-top: 8px;
+            backdrop-filter: blur(12px);
+        }
+        .nav-dropdown.show {
+            display: block;
+            animation: dropdownFade 0.2s ease;
+        }
+        @keyframes dropdownFade {
+            from { opacity: 0; transform: translateY(-8px) scale(0.98); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .nav-dropdown .dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 18px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            color: var(--text-primary);
+            transition: var(--transition);
+            border-radius: 8px;
+            margin: 2px 6px;
+            text-decoration: none;
+        }
+        .nav-dropdown .dropdown-item:hover {
+            background: var(--active-bg);
+            color: var(--cyan);
+        }
+        .nav-dropdown .dropdown-item i {
+            width: 20px;
+            text-align: center;
+            font-size: 1rem;
+        }
+        .nav-dropdown .dropdown-item.danger {
+            color: var(--danger);
+        }
+        .nav-dropdown .dropdown-item.danger:hover {
+            background: rgba(239,68,68,0.08);
+        }
+        .nav-dropdown hr {
+            margin: 6px 12px;
+            border: none;
+            border-top: 1px solid var(--border-color);
+        }
+
+        /* ============ BOUTONS D'ACTION DU PROFIL (déplacés sous les infos) ============ */
+        .profile-actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin: 16px 20px 12px; /* espacement autour */
+        }
+        .profile-btn {
+            padding: 10px 28px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: inherit;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .profile-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .profile-btn.primary {
+            background: var(--cyan);
+            color: #fff;
+            box-shadow: 0 2px 8px rgba(2,132,199,0.3);
+        }
+        .profile-btn.primary:hover {
+            background: #0369a1;
+            box-shadow: 0 6px 20px rgba(2,132,199,0.4);
+        }
+
+        .profile-btn.follow {
+            background: var(--cyan);
+            color: #fff;
+            box-shadow: 0 2px 8px rgba(2,132,199,0.3);
+        }
+        .profile-btn.follow:hover {
+            background: #0369a1;
+            box-shadow: 0 6px 20px rgba(2,132,199,0.4);
+        }
+
+        .profile-btn.message {
+            background: var(--success);
+            color: #fff;
+            box-shadow: 0 2px 8px rgba(5,150,105,0.3);
+        }
+        .profile-btn.message:hover {
+            background: #047857;
+            box-shadow: 0 6px 20px rgba(5,150,105,0.4);
+        }
+
+        .profile-btn.info {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+        .profile-btn.info:hover {
+            background: var(--active-bg);
+            border-color: var(--cyan);
+            color: var(--cyan);
+        }
+
+        .profile-btn.dashboard {
+            background: var(--purple);
+            color: #fff;
+            border: none;
+            box-shadow: 0 4px 15px rgba(124,58,237,0.3);
+        }
+        .profile-btn.dashboard:hover {
+            background: #6d28d9;
+            box-shadow: 0 6px 20px rgba(124,58,237,0.4);
+        }
+
+        /* ============ BADGES (taille augmentée) ============ */
+        .badge-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 14px;
+            border-radius: 20px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            margin: 2px 4px;
+            border: 1px solid transparent;
+            transition: all 0.2s ease;
+            cursor: default;
+        }
+        .badge-pill i {
+            font-size: 0.95rem;
+        }
+        .badge-pill.icon-only {
+            padding: 0 4px;
+            border: none;
+            background: transparent !important;
+            font-size: 1rem;
+            gap: 0;
+        }
+        .badge-pill:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(56,189,248,0.2);
+        }
+
+        /* ============ GESTION DE LA BIOGRAPHIE (troncature) ============ */
+        .profile-bio-wrapper {
+            margin-bottom: 8px;
+            position: relative;
+        }
+        .profile-bio {
+            line-height: 1.4;
+            word-wrap: break-word;
+            white-space: pre-wrap;
+            transition: max-height 0.3s ease;
+            max-height: 60px; /* valeur par défaut, sera modifiée par JS */
+            overflow: hidden;
+        }
+        .profile-bio.expanded {
+            max-height: none !important;
+        }
+        #bioToggleBtn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--cyan);
+            cursor: pointer;
+            font-size: 0.75rem;
+            padding: 2px 0;
+            margin-top: 2px;
+            font-family: inherit;
+            transition: color 0.2s ease;
+        }
+        #bioToggleBtn:hover {
+            text-decoration: underline;
+            color: var(--purple);
+        }
+
+        /* ============ RESTE DU CSS (inchangé) ============ */
+        .avatar-nav{width:34px;height:34px;border-radius:50%;border:1.5px solid var(--cyan);object-fit:cover;box-shadow:0 0 10px rgba(56,189,248,.2);cursor:pointer}
         .main-content { margin: 60px auto 0; max-width: 800px; }
         .profile-main-col { background: var(--card-bg); border-left: 1px solid var(--border-light); border-right: 1px solid var(--border-light); min-height: calc(100vh - 60px); backdrop-filter: blur(8px); }
         .profile-side-col { display: none; }
 
         .profile-cover{height:200px;background:linear-gradient(135deg,var(--cyan),var(--purple));position:relative;cursor:pointer;background-size:cover;background-position:center;transition:background 0.5s ease}.cover-overlay{position:absolute;bottom:16px;right:16px;background:rgba(0,0,0,.6);padding:8px 16px;border-radius:30px;font-size:.75rem;color:#fff;backdrop-filter:blur(4px);cursor:pointer}
-        .profile-header{padding:0 20px;margin-top:-60px;position:relative}.profile-avatar-container{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:16px}.avatar-wrapper{position:relative}.profile-avatar-large{width:120px;height:120px;border-radius:50%;border:4px solid var(--bg-primary);object-fit:cover;cursor:pointer;background-color:var(--bg-primary);}.avatar-edit-badge{position:absolute;bottom:8px;right:8px;background:var(--cyan);width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;cursor:pointer;border:2px solid var(--bg-primary)}.profile-actions{display:flex;gap:12px; flex-wrap: wrap;}
-        .profile-btn{background:var(--chip-bg);border:1px solid var(--border-light);padding:7px 17px;border-radius:30px;color:var(--text-primary);cursor:pointer;font-size:.85rem;font-weight:500;transition:var(--transition);font-family:inherit}.profile-btn.primary{background:var(--cyan);border:0;color:#fff}.profile-btn:hover{transform:translateY(-2px);opacity:.9}
-        .profile-info{padding:20px}.profile-name-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px}.profile-name-large{font-size:1.8rem;font-weight:700}.verified-badge{color:#1DA1F2;font-size:1.2rem}.profile-username{color:var(--text-secondary);font-size:.9rem;margin-bottom:12px}.profile-bio{margin-bottom:16px;line-height:1.5}.profile-meta{display:flex;gap:20px;flex-wrap:wrap;color:var(--text-secondary);font-size:.85rem}.profile-meta span{display:flex;align-items:center;gap:6px}
+        .profile-header{padding:0 20px;margin-top:-60px;position:relative}.profile-avatar-container{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:16px}.avatar-wrapper{position:relative}.profile-avatar-large{width:120px;height:120px;border-radius:50%;border:4px solid var(--bg-primary);object-fit:cover;cursor:pointer;background-color:var(--bg-primary);}.avatar-edit-badge{position:absolute;bottom:8px;right:8px;background:var(--cyan);width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;cursor:pointer;border:2px solid var(--bg-primary)}
 
-        .profile-stats-container{display:flex;justify-content:space-around;padding:16px 20px;border-top:1px solid var(--border-light);border-bottom:1px solid var(--border-light)}.stat-item{text-align:center;cursor:pointer}.stat-number{font-size:1.3rem;font-weight:700;color:var(--cyan)}.stat-label{font-size:.75rem;color:var(--text-secondary)}
+        /* Espacements resserrés */
+        .profile-info {
+            padding: 12px 16px;
+        }
+        .profile-name-row {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-bottom: 4px;
+        }
+        .profile-name-large {
+            font-size: 1.6rem;
+            font-weight: 700;
+        }
+        .verified-badge {
+            color: #1DA1F2;
+            font-size: 1.1rem;
+        }
+        .profile-username {
+            color: var(--text-secondary);
+            font-size: .85rem;
+            margin-bottom: 6px;
+        }
+        .profile-meta {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            color: var(--text-secondary);
+            font-size: .8rem;
+        }
+        .profile-meta span {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
 
-        .profile-tabs{display:flex;border-bottom:1px solid var(--border-light);padding:0 20px; overflow-x: auto; white-space: nowrap; scrollbar-width: none;}
-        .profile-tabs::-webkit-scrollbar { display: none; }
-        .profile-tab{flex:1;padding:16px;background:0 0;border:0;color:var(--text-secondary);cursor:pointer;font-size:.9rem;font-weight:500;font-family:inherit}.profile-tab.active{color:var(--cyan);border-bottom:2px solid var(--cyan)}
+        .profile-stats-container {
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 16px;
+            border-top: 1px solid var(--border-light);
+            border-bottom: 1px solid var(--border-light);
+        }
+        .stat-item {
+            text-align: center;
+            cursor: pointer;
+        }
+        .stat-number {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--cyan);
+        }
+        .stat-label {
+            font-size: .7rem;
+            color: var(--text-secondary);
+        }
 
-        .btn-view-pro-info{display:inline-flex;align-items:center;gap:6px;background:var(--card-bg);border:1px solid var(--border-light);padding:8px 16px;border-radius:25px;color:var(--cyan);cursor:pointer;font-size:0.8rem;font-weight:600;margin:4px 20px 0;transition:var(--transition);font-family:inherit}
-        .btn-view-pro-info:hover{background:var(--active-bg);transform:translateY(-2px)}
+        .profile-tabs {
+            display: flex;
+            border-bottom: 1px solid var(--border-light);
+            padding: 0 16px;
+            overflow-x: auto;
+            white-space: nowrap;
+            scrollbar-width: none;
+        }
+        .profile-tabs::-webkit-scrollbar {
+            display: none;
+        }
+        .profile-tab {
+            flex: 1;
+            padding: 12px 8px;
+            background: 0 0;
+            border: 0;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: .85rem;
+            font-weight: 500;
+            font-family: inherit;
+        }
+        .profile-tab.active {
+            color: var(--cyan);
+            border-bottom: 2px solid var(--cyan);
+        }
 
-        /* Modales */
         .pro-fullscreen-modal{position:fixed;inset:0;background:var(--bg-primary);z-index:2000;overflow-y:auto;opacity:0;visibility:hidden;transition:var(--transition);display:flex;flex-direction:column;transform:translateY(20px)}
         .pro-fullscreen-modal.active{opacity:1;visibility:visible;transform:translateY(0)}
         .pro-fsm-header{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--border-light);position:sticky;top:0;background:var(--bg-primary);z-index:10}
@@ -127,7 +414,6 @@ body.role-simple { --cyan: #64748b; --purple: #475569; }       /* Simple - Gris 
         .access-denied{text-align:center;padding:20px;color:var(--text-secondary);background:rgba(239,68,68,0.05);border:1px solid var(--danger);border-radius:12px;margin-top:12px}
         .access-denied i{font-size:2rem;color:var(--danger);margin-bottom:8px;display:block}
 
-        /* Posts */
         .post-card{background:0 0;width:100%;border:0;position:relative;z-index:1}.post-separator{width:100%;height:1px;background:linear-gradient(90deg,transparent,var(--border-light),transparent);border:0}
         .post-header{padding:14px 14px 0;display:flex;align-items:flex-start;gap:10px}.post-avatar{width:44px;height:44px;border-radius:50%;object-fit:cover;border:2px solid var(--cyan)}.post-author-info{flex:1}.post-author-name{font-weight:700;font-size:.9rem;cursor:pointer;color:var(--text-primary)}.post-time{font-size:.65rem;color:var(--text-secondary);margin-top:2px}.post-menu-btn{background:0 0;border:0;color:var(--text-secondary);padding:6px;border-radius:50%;cursor:pointer;font-size:1.1rem;position:absolute;right:14px;top:14px}.post-menu-btn:hover{color:var(--cyan)}
         .post-content{padding:10px 14px}.post-text{font-size:.85rem;white-space:pre-wrap;word-break:break-word;max-height:6em;overflow:hidden;transition:max-height .3s ease;color:var(--text-primary)}.post-text.expanded{max-height:none}.see-more-btn{color:var(--text-secondary);font-size:.7rem;cursor:pointer}
@@ -165,7 +451,6 @@ body.role-simple { --cyan: #64748b; --purple: #475569; }       /* Simple - Gris 
             .modal-content { border-radius: 0; height: 100vh; max-height: 100vh; }
         }
 
-        /* Dashboard & Statistiques */
         .dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px; margin-bottom: 20px; }
         .dash-card { background: var(--hover-bg); border: 1px solid var(--border-color); padding: 16px; border-radius: 16px; text-align: center; }
         .dash-card h3 { color: var(--cyan); font-size: 1.5rem; margin-bottom: 4px; }
@@ -177,7 +462,6 @@ body.role-simple { --cyan: #64748b; --purple: #475569; }       /* Simple - Gris 
         .private-profile-lock h3 { color: var(--text-primary); margin-bottom: 8px; font-size: 1.3rem;}
         .private-profile-lock p { color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 20px; }
 
-        /* Tablette */
         @media(min-width: 768px) and (max-width: 1023px) {
             body { padding-bottom: 0; padding-left: 240px; }
             .bottom-nav { display: none !important; }
@@ -189,7 +473,6 @@ body.role-simple { --cyan: #64748b; --purple: #475569; }       /* Simple - Gris 
             .toast-custom { bottom: 30px; }
         }
 
-        /* Grands écrans */
         @media(min-width: 1024px) {
             body { padding-bottom: 0; padding-left: 240px; padding-right: 80px; }
             .sidebar { left: 0 !important; width: 240px; box-shadow: none; border-right: 1px solid var(--border-color); }
@@ -223,7 +506,6 @@ body.role-simple { --cyan: #64748b; --purple: #475569; }       /* Simple - Gris 
             .profile-side-col { display: flex; flex-direction: column; gap: 20px; }
         }
 
-        /* Widgets colonne 3 */
         .widget-contact, .animated-widget, .pro-widget-card, .right-widget { 
             background: var(--card-bg); border-radius: 16px; padding: 20px; 
             border: 1px solid var(--border-light); box-shadow: var(--shadow); backdrop-filter: blur(8px);
@@ -259,174 +541,35 @@ body.role-simple { --cyan: #64748b; --purple: #475569; }       /* Simple - Gris 
         .right-footer { font-size: 0.75rem; text-align: center; color: var(--text-secondary); padding-top: 10px; margin-top: auto;}
         .right-footer a { color: var(--text-secondary); text-decoration: none; margin: 0 4px; }
         .right-footer a:hover { color: var(--cyan); }
-        /* ============ BOTTOM SHEET STYLES ============ */
-.bottom-sheet-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(4px);
-    z-index: 2000;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.3s ease, visibility 0.3s ease;
-}
-.bottom-sheet-overlay.active {
-    opacity: 1;
-    visibility: visible;
-}
-.bottom-sheet {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: var(--bg-secondary, #ffffff);
-    border-radius: 20px 20px 0 0;
-    z-index: 2100;
-    max-height: 75vh;
-    overflow-y: auto;
-    transform: translateY(100%);
-    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 -5px 30px rgba(0,0,0,0.3);
-    padding-bottom: env(safe-area-inset-bottom, 20px);
-    border-top: 1px solid var(--border-color, rgba(0,0,0,0.1));
-}
-.bottom-sheet.active {
-    transform: translateY(0);
-}
-.bottom-sheet-handle {
-    width: 40px;
-    height: 4px;
-    background: var(--text-secondary, #94a3b8);
-    border-radius: 4px;
-    margin: 12px auto 8px;
-    opacity: 0.5;
-}
-.bottom-sheet-header {
-    padding: 8px 20px 16px;
-    text-align: center;
-    border-bottom: 1px solid var(--border-color, rgba(0,0,0,0.1));
-    font-weight: 700;
-    font-size: 0.95rem;
-    color: var(--text-primary, #0f172a);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-}
-.bottom-sheet-item {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    padding: 16px 20px;
-    cursor: pointer;
-    transition: all 0.15s ease;
-    color: var(--text-primary, #0f172a);
-    font-size: 0.9rem;
-    border-bottom: 1px solid rgba(0,0,0,0.05);
-}
-.bottom-sheet-item:hover {
-    background: rgba(56,189,248,0.05);
-}
-.bottom-sheet-item:active {
-    transform: scale(0.99);
-    opacity: 0.7;
-}
-.bottom-sheet-item.danger {
-    color: var(--danger, #dc2626);
-}
-.bottom-sheet-divider {
-    height: 8px;
-    background: var(--bg-tertiary, #f1f5f9);
-}
-.bottom-sheet-cancel {
-    display: block;
-    width: 100%;
-    padding: 16px;
-    background: transparent;
-    border: none;
-    border-top: 1px solid var(--border-color, rgba(0,0,0,0.1));
-    color: var(--text-secondary, #64748b);
-    font-weight: 600;
-    font-size: 0.9rem;
-    cursor: pointer;
-    text-align: center;
-    transition: all 0.2s ease;
-    font-family: inherit;
-}
-.bottom-sheet-cancel:hover {
-    background: rgba(239,68,68,0.05);
-    color: var(--danger, #dc2626);
-}
-.bs-icon {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.1rem;
-    flex-shrink: 0;
-}
-.bs-text {
-    flex: 1;
-}
-.bs-subtitle {
-    font-size: 0.7rem;
-    color: var(--text-secondary, #64748b);
-    margin-top: 2px;
-}
-.share-grid-bs {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 16px;
-    padding: 20px;
-}
-.share-item-bs {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    padding: 12px 6px;
-    border-radius: 12px;
-}
-.share-item-bs:hover {
-    background: rgba(56,189,248,0.05);
-    transform: translateY(-2px);
-}
-.share-item-bs:active {
-    transform: scale(0.95);
-}
-.share-icon-circle {
-    width: 52px;
-    height: 52px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.4rem;
-    transition: all 0.2s ease;
-}
-.share-label-bs {
-    font-size: 0.68rem;
-    color: var(--text-secondary, #64748b);
-    font-weight: 500;
-    text-align: center;
-}
-.bs-copy-link-zone {
-    background: var(--bg-tertiary, #f1f5f9);
-    border: 2px dashed var(--border-color, rgba(0,0,0,0.1));
-    border-radius: 12px;
-    padding: 14px;
-    text-align: center;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-.bs-copy-link-zone:hover {
-    background: rgba(56,189,248,0.05);
-    border-color: var(--cyan, #0284c7);
-}
+
+        .bottom-sheet-overlay {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); z-index: 2000; opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        .bottom-sheet-overlay.active { opacity: 1; visibility: visible; }
+        .bottom-sheet {
+            position: fixed; bottom: 0; left: 0; right: 0; background: var(--bg-secondary, #ffffff); border-radius: 20px 20px 0 0; z-index: 2100; max-height: 75vh; overflow-y: auto; transform: translateY(100%); transition: transform 0.35s cubic-bezier(0.4,0,0.2,1); box-shadow: 0 -5px 30px rgba(0,0,0,0.3); padding-bottom: env(safe-area-inset-bottom, 20px); border-top: 1px solid var(--border-color, rgba(0,0,0,0.1));
+        }
+        .bottom-sheet.active { transform: translateY(0); }
+        .bottom-sheet-handle { width: 40px; height: 4px; background: var(--text-secondary, #94a3b8); border-radius: 4px; margin: 12px auto 8px; opacity: 0.5; }
+        .bottom-sheet-header { padding: 8px 20px 16px; text-align: center; border-bottom: 1px solid var(--border-color, rgba(0,0,0,0.1)); font-weight: 700; font-size: 0.95rem; color: var(--text-primary, #0f172a); display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .bottom-sheet-item { display: flex; align-items: center; gap: 16px; padding: 16px 20px; cursor: pointer; transition: all 0.15s ease; color: var(--text-primary, #0f172a); font-size: 0.9rem; border-bottom: 1px solid rgba(0,0,0,0.05); }
+        .bottom-sheet-item:hover { background: rgba(56,189,248,0.05); }
+        .bottom-sheet-item:active { transform: scale(0.99); opacity: 0.7; }
+        .bottom-sheet-item.danger { color: var(--danger, #dc2626); }
+        .bottom-sheet-divider { height: 8px; background: var(--bg-tertiary, #f1f5f9); }
+        .bottom-sheet-cancel { display: block; width: 100%; padding: 16px; background: transparent; border: none; border-top: 1px solid var(--border-color, rgba(0,0,0,0.1)); color: var(--text-secondary, #64748b); font-weight: 600; font-size: 0.9rem; cursor: pointer; text-align: center; transition: all 0.2s ease; font-family: inherit; }
+        .bottom-sheet-cancel:hover { background: rgba(239,68,68,0.05); color: var(--danger, #dc2626); }
+        .bs-icon { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; flex-shrink: 0; }
+        .bs-text { flex: 1; }
+        .bs-subtitle { font-size: 0.7rem; color: var(--text-secondary, #64748b); margin-top: 2px; }
+        .share-grid-bs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; padding: 20px; }
+        .share-item-bs { display: flex; flex-direction: column; align-items: center; gap: 10px; cursor: pointer; transition: all 0.2s ease; padding: 12px 6px; border-radius: 12px; }
+        .share-item-bs:hover { background: rgba(56,189,248,0.05); transform: translateY(-2px); }
+        .share-item-bs:active { transform: scale(0.95); }
+        .share-icon-circle { width: 52px; height: 52px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; transition: all 0.2s ease; }
+        .share-label-bs { font-size: 0.68rem; color: var(--text-secondary, #64748b); font-weight: 500; text-align: center; }
+        .bs-copy-link-zone { background: var(--bg-tertiary, #f1f5f9); border: 2px dashed var(--border-color, rgba(0,0,0,0.1)); border-radius: 12px; padding: 14px; text-align: center; cursor: pointer; transition: all 0.2s ease; }
+        .bs-copy-link-zone:hover { background: rgba(56,189,248,0.05); border-color: var(--cyan, #0284c7); }
     </style>
 </head>
 <body>
@@ -454,7 +597,21 @@ body.role-simple { --cyan: #64748b; --purple: #475569; }       /* Simple - Gris 
     </nav>
 </aside>
 
-<nav class="navbar"><div class="nav-left"><button class="menu-toggle" onclick="toggleSidebar()" aria-label="Menu"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="7" x2="16" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="12" y2="17"/><circle cx="18" cy="17" r="2"/></svg></button><a href="home.html" class="navbar-brand">ESTRA LINK</a></div><div class="nav-right"><img src="https://ui-avatars.com/api/?name=Rashidi&background=38bdf8&color=fff" class="avatar-nav" id="navAvatar" alt="Avatar" onclick="window.location.href='profile.html'"></div></nav>
+<nav class="navbar">
+    <div class="nav-left">
+        <button class="menu-toggle" onclick="toggleSidebar()" aria-label="Menu"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="7" x2="16" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="12" y2="17"/><circle cx="18" cy="17" r="2"/></svg></button>
+        <a href="home.html" class="navbar-brand">ESTRA LINK</a>
+    </div>
+    <div class="nav-right" style="position:relative;">
+        <!-- Menu à 3 points (remplace l'avatar) -->
+        <button class="nav-settings-btn" id="navSettingsBtn" onclick="toggleNavDropdown(event)" aria-label="Paramètres">
+            <i class="fas fa-ellipsis-v"></i>
+        </button>
+        <div class="nav-dropdown" id="navDropdown">
+            <!-- Rempli dynamiquement via JavaScript -->
+        </div>
+    </div>
+</nav>
 
 <main class="main-content">
     <div class="profile-main-col">
@@ -462,23 +619,34 @@ body.role-simple { --cyan: #64748b; --purple: #475569; }       /* Simple - Gris 
         <div class="profile-header">
             <div class="profile-avatar-container">
                 <div class="avatar-wrapper"><img src="https://ui-avatars.com/api/?background=1d9bf0&color=fff&name=Rashidi&size=120" class="profile-avatar-large" id="profileAvatar"><div class="avatar-edit-badge" id="avatarEditBadge" onclick="changeAvatar()"><i class="fas fa-camera"></i></div></div>
-                <div class="profile-actions" id="profileActionsContainer"></div>
+                <!-- Le container des actions a été déplacé plus bas -->
             </div>
         </div>
         <div class="profile-info">
-<div class="profile-name-row">
-    <span class="profile-name-large" id="profileName">Rashidi</span>
-    <span id="profileBadgesContainer" style="display:flex;flex-wrap:wrap;gap:4px;"></span>
-</div>
+            <div class="profile-name-row">
+                <span class="profile-name-large" id="profileName">Rashidi</span>
+                <span id="profileBadgesContainer" style="display:flex;flex-wrap:wrap;gap:4px;align-items:center;"></span>
+                <!-- Icône de partage supprimée (à côté du nom) -->
+            </div>
             <div class="profile-username" id="profileUsername">@rashidi</div>
-            <div class="profile-bio" id="profileBio">👋 Étudiant passionné | ESTRA LINK</div>
+
+            <!-- ===== BIOGRAPHIE AVEC BOUTON "VOIR PLUS" ===== -->
+            <div class="profile-bio-wrapper">
+                <div class="profile-bio" id="profileBio">👋 Étudiant passionné | ESTRA LINK</div>
+                <button id="bioToggleBtn" onclick="toggleBio()">Voir plus</button>
+            </div>
+
             <div class="profile-meta">
                 <span><i class="fas fa-map-marker-alt"></i> <span id="profileLocation">Lubumbashi, RDC</span></span>
                 <span><i class="fas fa-envelope"></i> <span id="profileEmail">contact@estra-link.com</span></span>
                 <span><i class="fas fa-calendar"></i> <span data-i18n="joined_in">Inscrit en</span> <span id="profileJoinDate">2026</span></span>
             </div>
         </div>
-        <button class="btn-view-pro-info" id="btnViewProInfo" onclick="openProInfoModal()" style="display:none"><i class="fas fa-id-card"></i> Voir les informations (<span id="proTypeLabel">pro</span>)</button>
+
+        <!-- ===== BOUTONS D'ACTION DÉPLACÉS ICI ===== -->
+        <div class="profile-actions" id="profileActionsContainer"></div>
+
+        <!-- L'ancien bouton "Voir les informations" a été supprimé -->
         <div class="profile-stats-container">
             <div class="stat-item"><div class="stat-number" id="friendsCount">0</div><div class="stat-label" data-i18n="stat_friends">Amis</div></div>
             <div class="stat-item"><div class="stat-number" id="groupsCount">0</div><div class="stat-label" data-i18n="stat_groups">Groupes</div></div>
@@ -550,33 +718,24 @@ body.role-simple { --cyan: #64748b; --purple: #475569; }       /* Simple - Gris 
 
 <div class="image-viewer" id="imageViewer"><div class="image-viewer-controls"><button onclick="downloadCurrentImage()"><i class="fas fa-download"></i></button><button onclick="closeImageViewer()"><i class="fas fa-times"></i></button></div><img id="viewerImage" src=""></div>
 <div class="pro-fullscreen-modal" id="proInfoModal"><div class="pro-fsm-header"><h3 id="proInfoModalTitle"><i class="fas fa-id-card"></i> Informations</h3><button class="pro-fsm-close" onclick="closeProInfoModal()">&times;</button></div><div class="pro-fsm-body" id="proInfoModalBody"></div></div>
-<!-- ================= BOTTOM SHEET ================= -->
+
 <div class="bottom-sheet-overlay" id="bsMenuOverlay" style="display:none;"></div>
 <div class="bottom-sheet" id="bsMenuSheet" style="display:none;">
     <div class="bottom-sheet-handle"></div>
-
     <div id="bsMenuItems"></div>
 </div>
 
 <div class="bottom-sheet-overlay" id="bsShareOverlay" style="display:none;"></div>
 <div class="bottom-sheet" id="bsShareSheet" style="display:none;">
     <div class="bottom-sheet-handle"></div>
-    <div class="bottom-sheet-header">
-        <i class="fas fa-share-alt" style="color:var(--cyan);"></i> Partager
-    </div>
+    <div class="bottom-sheet-header"><i class="fas fa-share-alt" style="color:var(--cyan);"></i> Partager</div>
     <div class="share-grid-bs" id="bsShareGrid"></div>
-    <div style="padding:0 16px 12px;">
-        <div class="bs-copy-link-zone" onclick="event.stopPropagation();BS.copyLink(null)">
-            <i class="fas fa-link" style="color:var(--cyan);"></i>
-            <span style="color:var(--cyan);font-weight:600;margin-left:8px;">Copier le lien</span>
-        </div>
-    </div>
-    <button class="bottom-sheet-cancel" onclick="event.stopPropagation();BS.closeAll();">
-    </button>
+    <div style="padding:0 16px 12px;"><div class="bs-copy-link-zone" onclick="event.stopPropagation();BS.copyLink(null)"><i class="fas fa-link" style="color:var(--cyan);"></i><span style="color:var(--cyan);font-weight:600;margin-left:8px;">Copier le lien</span></div></div>
+    <button class="bottom-sheet-cancel" onclick="event.stopPropagation();BS.closeAll();"></button>
 </div>
 <div id="toastMsg" class="toast-custom"></div>
+
 <script>
-// ================= INTERCOMMUNICATION (ESTRA CORE MOCK) =================
 // ================= INTERCOMMUNICATION (ESTRA CORE MOCK) =================
 if (typeof ESTRA === 'undefined') {
     window.ESTRA = {
@@ -598,46 +757,23 @@ if (typeof ESTRA === 'undefined') {
             localStorage.setItem('estra_profile', JSON.stringify({ ...current, ...p }));
         },
         logout: () => {
-            const profile = ESTRA.getProfile();
-            if (profile && profile.email) {
-                localStorage.setItem('estra_remembered_email', profile.email);
-            }
             localStorage.setItem('estra_logged_in', 'false');
             window.location.href = 'login.html';
         },
         canViewSensitiveInfo: (viewerRole, targetRole) => {
-    // ✅ L'ADMINISTRATEUR voit TOUT
-    if (viewerRole === 'admin') return true;
-    
-    // ✅ Les professeurs et enseignants ont accès total (ils encadrent)
-    if (viewerRole === window.ESTRA.ROLES.PROFESSOR ||
-        viewerRole === window.ESTRA.ROLES.TEACHER) {
-        return true;
-    }
-    
-    // ❌ Les utilisateurs simples ne peuvent pas voir les CV/documents 
-    // des étudiants et élèves (protection des mineurs)
-    if (viewerRole === window.ESTRA.ROLES.SIMPLE &&
-        (targetRole === window.ESTRA.ROLES.STUDENT ||
-            targetRole === window.ESTRA.ROLES.HIGHSCHOOL)) {
-        return false;
-    }
-    
-    // ✅ Sinon, on autorise si c'est le même rôle ou si c'est un étudiant
-    // qui consulte un autre étudiant (entraide)
-    if (viewerRole === targetRole) return true;
-    
-    // ✅ Un étudiant peut voir les infos d'un autre étudiant ou élève
-    if (viewerRole === window.ESTRA.ROLES.STUDENT &&
-        (targetRole === window.ESTRA.ROLES.STUDENT ||
-            targetRole === window.ESTRA.ROLES.HIGHSCHOOL)) {
-        return true;
-    }
-    
-    // Par défaut, on refuse l'accès
-    return false;
-}
-};
+            if (viewerRole === 'admin') return true;
+            if (viewerRole === window.ESTRA.ROLES.PROFESSOR ||
+                viewerRole === window.ESTRA.ROLES.TEACHER) return true;
+            if (viewerRole === window.ESTRA.ROLES.SIMPLE &&
+                (targetRole === window.ESTRA.ROLES.STUDENT ||
+                 targetRole === window.ESTRA.ROLES.HIGHSCHOOL)) return false;
+            if (viewerRole === targetRole) return true;
+            if (viewerRole === window.ESTRA.ROLES.STUDENT &&
+                (targetRole === window.ESTRA.ROLES.STUDENT ||
+                 targetRole === window.ESTRA.ROLES.HIGHSCHOOL)) return true;
+            return false;
+        }
+    };
 }
 
 // ================= BASE DE DONNÉES DES UTILISATEURS =================
@@ -645,71 +781,13 @@ function getAllUsers() {
     let users = JSON.parse(localStorage.getItem('estra_all_users') || '[]');
     if (users.length === 0) {
         users = [
-            {
-                id: 'rashidi', username: 'rashidi', fullName: 'Rashidi',
-                bio: '👋 Étudiant passionné | ESTRA LINK', email: 'contact@estra-link.com',
-                location: 'Lubumbashi, RDC',
-                avatar: 'https://ui-avatars.com/api/?background=1d9bf0&color=fff&name=Rashidi&size=120',
-                cover: null, verified: true, joinDate: '2026', accountType: 'student', companyVisibility: 'public',
-                phone: '+243 977 126 962'
-            },
-            {
-                id: 'marie_claire', username: 'marie_claire', fullName: 'Marie Claire',
-                bio: 'Enseignante en Programmation Web', email: 'marie@estra-link.com',
-                location: 'Kinshasa, RDC',
-                avatar: 'https://ui-avatars.com/api/?name=Marie&background=10b981&color=fff',
-                cover: 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=800&h=300&fit=crop',
-                verified: false, joinDate: '2025', accountType: 'highschool', companyVisibility: 'public',
-                phone: '+243 999 888 777'
-            },
-            {
-                id: 'david_mwamba', username: 'david_mwamba', fullName: 'David Mwamba',
-                bio: 'Chercheur en Intelligence Artificielle', email: 'david@estra-link.com',
-                location: 'Goma, RDC',
-                avatar: 'https://ui-avatars.com/api/?name=David&background=8b5cf6&color=fff',
-                cover: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800&h=300&fit=crop',
-                verified: true, joinDate: '2025', accountType: 'student', companyVisibility: 'public',
-                phone: '+243 888 777 666'
-            },
-            {
-                id: 'alice_kasongo', username: 'alice_kasongo', fullName: 'Alice Kasongo',
-                bio: 'Développeuse React Native', email: 'alice@estra-link.com',
-                location: 'Bukavu, RDC',
-                avatar: 'https://ui-avatars.com/api/?name=Alice&background=06b6d4&color=fff',
-                cover: 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&h=300&fit=crop',
-                verified: false, joinDate: '2026', accountType: 'company', companyVisibility: 'public',
-                phone: '+243 777 666 555', companyName: 'Kasongo Tech', sector: 'Technologie'
-            },
-            // Dans getAllUsers(), remplacer les utilisateurs exemple
-
-    {
-        
-        id: 'prof_kabengele', username: 'prof_kabengele', fullName: 'Pr. Kabengele',
-        bio: 'Professeur en Intelligence Artificielle',
-        email: 'kabengele@estra-link.com', location: 'Kinshasa, RDC',
-        avatar: 'https://ui-avatars.com/api/?name=PrK&background=7c3aed&color=fff',
-        cover: null, verified: true, joinDate: '2025',
-        accountType: 'professor', institution: 'Université de Kinshasa',
-        grade: 'Professeur', speciality: 'Informatique', experience: '15'
-    },
-    {
-        id: 'mr_muteba', username: 'mr_muteba', fullName: 'Mr. Muteba',
-        bio: 'Enseignant en Mathématiques',
-        email: 'muteba@estra-link.com', location: 'Lubumbashi, RDC',
-        avatar: 'https://ui-avatars.com/api/?name=MrM&background=d97706&color=fff',
-        cover: null, verified: false, joinDate: '2026',
-        accountType: 'teacher', school: 'Lycée Mwanga',
-        level: '4ème Humanité', mainSubject: 'Mathématiques', section: 'Scientifique'
-    },
-    {
-        id: 'alice_mwila', username: 'alice_mwila', fullName: 'Alice Mwila',
-        bio: 'Élève en Scientifique',
-        email: 'alice@estra-link.com', location: 'Kolwezi, RDC',
-        avatar: 'https://ui-avatars.com/api/?name=Alice&background=059669&color=fff',
-        cover: null, verified: false, joinDate: '2026',
-        accountType: 'highschool', school: 'Collège Saint-Jacques',
-        level: '3ème Humanité', section: 'Biologie-Chimie'
-    }
+            { id: 'rashidi', username: 'rashidi', fullName: 'Rashidi', bio: '👋 Étudiant passionné | ESTRA LINK', email: 'contact@estra-link.com', location: 'Lubumbashi, RDC', avatar: 'https://ui-avatars.com/api/?background=1d9bf0&color=fff&name=Rashidi&size=120', cover: null, verified: true, joinDate: '2026', accountType: 'student', companyVisibility: 'public', phone: '+243 977 126 962', badges: ['verified', 'premium', 'top_contributor'] },
+            { id: 'marie_claire', username: 'marie_claire', fullName: 'Marie Claire', bio: 'Enseignante en Programmation Web', email: 'marie@estra-link.com', location: 'Kinshasa, RDC', avatar: 'https://ui-avatars.com/api/?name=Marie&background=10b981&color=fff', cover: 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=800&h=300&fit=crop', verified: false, joinDate: '2025', accountType: 'highschool', companyVisibility: 'public', phone: '+243 999 888 777', badges: ['top_contributor', 'mentor'] },
+            { id: 'david_mwamba', username: 'david_mwamba', fullName: 'David Mwamba', bio: 'Chercheur en Intelligence Artificielle', email: 'david@estra-link.com', location: 'Goma, RDC', avatar: 'https://ui-avatars.com/api/?name=David&background=8b5cf6&color=fff', cover: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800&h=300&fit=crop', verified: true, joinDate: '2025', accountType: 'student', companyVisibility: 'public', phone: '+243 888 777 666', badges: ['verified', 'premium'] },
+            { id: 'alice_kasongo', username: 'alice_kasongo', fullName: 'Alice Kasongo', bio: 'Développeuse React Native', email: 'alice@estra-link.com', location: 'Bukavu, RDC', avatar: 'https://ui-avatars.com/api/?name=Alice&background=06b6d4&color=fff', cover: 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&h=300&fit=crop', verified: false, joinDate: '2026', accountType: 'company', companyVisibility: 'public', phone: '+243 777 666 555', companyName: 'Kasongo Tech', sector: 'Technologie', badges: ['sponsor'] },
+            { id: 'prof_kabengele', username: 'prof_kabengele', fullName: 'Pr. Kabengele', bio: 'Professeur en Intelligence Artificielle', email: 'kabengele@estra-link.com', location: 'Kinshasa, RDC', avatar: 'https://ui-avatars.com/api/?name=PrK&background=7c3aed&color=fff', cover: null, verified: true, joinDate: '2025', accountType: 'professor', institution: 'Université de Kinshasa', grade: 'Professeur', speciality: 'Informatique', experience: '15', badges: ['verified', 'mentor', 'premium'] },
+            { id: 'mr_muteba', username: 'mr_muteba', fullName: 'Mr. Muteba', bio: 'Enseignant en Mathématiques', email: 'muteba@estra-link.com', location: 'Lubumbashi, RDC', avatar: 'https://ui-avatars.com/api/?name=MrM&background=d97706&color=fff', cover: null, verified: false, joinDate: '2026', accountType: 'teacher', school: 'Lycée Mwanga', level: '4ème Humanité', mainSubject: 'Mathématiques', section: 'Scientifique', badges: ['premium'] },
+            { id: 'alice_mwila', username: 'alice_mwila', fullName: 'Alice Mwila', bio: 'Élève en Scientifique', email: 'alice@estra-link.com', location: 'Kolwezi, RDC', avatar: 'https://ui-avatars.com/api/?name=Alice&background=059669&color=fff', cover: null, verified: false, joinDate: '2026', accountType: 'highschool', school: 'Collège Saint-Jacques', level: '3ème Humanité', section: 'Biologie-Chimie', badges: [] }
         ];
         localStorage.setItem('estra_all_users', JSON.stringify(users));
     }
@@ -735,6 +813,80 @@ function updateUserInDB(username, updates) {
     }
     return false;
 }
+
+// ================= BADGES =================
+function getAllBadges() {
+    return JSON.parse(localStorage.getItem('estra_badges') || '[]');
+}
+
+function renderUserBadges(badges) {
+    if (!badges || badges.length === 0) return '';
+    const allBadges = getAllBadges();
+    const badgesWithStyle = ['sponsor', 'premium', 'mentor', 'teacher', 'recruiter'];
+
+    return badges.map(badgeId => {
+        const b = allBadges.find(b => b.id === badgeId);
+        if (!b) return '';
+        const hasStyle = badgesWithStyle.includes(b.id);
+        if (hasStyle) {
+            return `<span class="badge-pill" style="background:${b.color}20; color:${b.color}; border:1px solid ${b.color}40;" title="${b.desc || b.name}"><i class="fas ${b.icon}"></i> ${b.name}</span>`;
+        } else {
+            return `<span class="badge-pill icon-only" style="color:${b.color};" title="${b.desc || b.name}"><i class="fas ${b.icon}"></i></span>`;
+        }
+    }).join('');
+}
+
+// ================= GESTION DES AMIS =================
+function isFriend(username) {
+    const friends = JSON.parse(localStorage.getItem('estra_friends') || '[]');
+    return friends.some(f => f.username === username || f.name === username);
+}
+
+function toggleFollow(username) {
+    const friends = JSON.parse(localStorage.getItem('estra_friends') || '[]');
+    const allUsers = getAllUsers();
+    const user = allUsers.find(u => u.username === username || u.fullName === username);
+    
+    const isFriendUser = friends.some(f => f.username === username || f.name === username);
+    if (isFriendUser) {
+        window.location.href = 'messages.html?user=' + encodeURIComponent(username);
+        return;
+    }
+    friends.push({
+        id: 'f_' + Date.now(),
+        name: user?.fullName || username,
+        username: user?.username || username,
+        avatar: user?.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(username)}&background=0284c7&color=fff`,
+        online: false,
+        verified: user?.verified || false
+    });
+    localStorage.setItem('estra_friends', JSON.stringify(friends));
+    showToast('✅ Vous suivez maintenant ' + username);
+    renderProfile();
+}
+
+function startConversation(username) {
+    window.location.href = 'messages.html?user=' + encodeURIComponent(username);
+}
+
+// ================= MENU NAVBAR =================
+function toggleNavDropdown(event) {
+    event.stopPropagation();
+    const dropdown = document.getElementById('navDropdown');
+    dropdown.classList.toggle('show');
+}
+
+function closeNavDropdown() {
+    document.getElementById('navDropdown').classList.remove('show');
+}
+
+document.addEventListener('click', function(e) {
+    const dropdown = document.getElementById('navDropdown');
+    const btn = document.getElementById('navSettingsBtn');
+    if (dropdown && btn && !dropdown.contains(e.target) && e.target !== btn && !btn.contains(e.target)) {
+        dropdown.classList.remove('show');
+    }
+});
 
 // ================= TRADUCTIONS =================
 const translations = {
@@ -803,7 +955,6 @@ let userProfile = {};
 let isOwner = false;
 let tempAvatar = null, tempCover = null, selectedCoverId = null;
 
-// Remplacer la ligne 703 environ
 const coverByType = {
     student: 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=800&h=300&fit=crop',
     highschool: 'https://images.unsplash.com/photo-1523050854058-8df90145f0f0?w=800&h=300&fit=crop',
@@ -848,38 +999,49 @@ function checkOnlineStatus() {
 }
 
 // ================= FONCTIONS PRINCIPALES =================
-
 function loadData() {
     applyTranslations();
     
-    // ✅ 1. Charger le profil CONNECTÉ
     myProfile = ESTRA.getProfile() || {};
-    // 🏅 Initialiser les badges par défaut
-if (!localStorage.getItem('estra_badges')) {
-    const defaultBadges = [
-        { id: 'verified', name: '✅ Vérifié', icon: 'fa-check-circle', color: '#1DA1F2', description: 'Compte vérifié' },
-        { id: 'premium', name: '⭐ Premium', icon: 'fa-star', color: '#fbbf24', description: 'Membre premium' },
-        { id: 'mentor', name: '👨‍🏫 Mentor', icon: 'fa-chalkboard-teacher', color: '#7c3aed', description: 'Mentor certifié' },
-        { id: 'top_contributor', name: '🏆 Top Contributeur', icon: 'fa-trophy', color: '#d97706', description: 'Contributeur exceptionnel' },
-        { id: 'partner', name: '🤝 Partenaire', icon: 'fa-handshake', color: '#059669', description: 'Partenaire ESTRA' },
-        { id: 'early_adopter', name: '🚀 Early Adopter', icon: 'fa-rocket', color: '#0284c7', description: 'Premiers inscrits' },
-        { id: 'event_host', name: '📅 Organisateur', icon: 'fa-calendar-alt', color: '#dc2626', description: 'Organisateur d\'événements' },
-        { id: 'scholar', name: '🎓 Scholar', icon: 'fa-graduation-cap', color: '#8b5cf6', description: 'Excellence académique' }
-    ];
-    localStorage.setItem('estra_badges', JSON.stringify(defaultBadges));
-}
-    // ✅ 2. Déterminer quel profil AFFICHER selon l'URL
+    if (!localStorage.getItem('estra_badges')) {
+        const defaultBadges = [
+            { id: 'verified', name: '✅ Vérifié', icon: 'fa-check-circle', color: '#1DA1F2', description: 'Compte vérifié' },
+            { id: 'premium', name: '⭐ Premium', icon: 'fa-star', color: '#fbbf24', description: 'Membre premium' },
+            { id: 'mentor', name: '👨‍🏫 Mentor', icon: 'fa-chalkboard-teacher', color: '#7c3aed', description: 'Mentor certifié' },
+            { id: 'top_contributor', name: '🏆 Top Contributeur', icon: 'fa-trophy', color: '#d97706', description: 'Contributeur exceptionnel' },
+            { id: 'partner', name: '🤝 Partenaire', icon: 'fa-handshake', color: '#059669', description: 'Partenaire ESTRA' },
+            { id: 'early_adopter', name: '🚀 Early Adopter', icon: 'fa-rocket', color: '#0284c7', description: 'Premiers inscrits' },
+            { id: 'event_host', name: '📅 Organisateur', icon: 'fa-calendar-alt', color: '#dc2626', description: 'Organisateur d\'événements' },
+            { id: 'scholar', name: '🎓 Scholar', icon: 'fa-graduation-cap', color: '#8b5cf6', description: 'Excellence académique' },
+            { id: 'sponsor', name: '💎 Sponsor', icon: 'fa-gem', color: '#f59e0b', description: 'Sponsor officiel' },
+            { id: 'recruiter', name: '🎯 Recruteur', icon: 'fa-bullseye', color: '#ef4444', description: 'Recruteur certifié' }
+        ];
+        localStorage.setItem('estra_badges', JSON.stringify(defaultBadges));
+    }
+
+    // ⭐ Initialiser MES badges si absents
+    if (!myProfile.badges || myProfile.badges.length === 0) {
+        const roleBadges = {
+            student: ['verified', 'top_contributor'],
+            professor: ['verified', 'mentor', 'premium'],
+            teacher: ['premium'],
+            highschool: ['early_adopter'],
+            simple: []
+        };
+        myProfile.badges = roleBadges[myProfile.accountType] || [];
+        ESTRA.updateProfile({ badges: myProfile.badges });
+        updateUserInDB(myProfile.username, { badges: myProfile.badges });
+    }
+    
     const urlParams = new URLSearchParams(window.location.search);
     const viewUsername = urlParams.get('user');
     
     if (viewUsername && viewUsername !== myProfile.username) {
-        // On regarde le profil de quelqu'un d'autre
         const foundUser = getUserByUsername(viewUsername);
         if (foundUser) {
             userProfile = { ...foundUser };
             isOwner = false;
         } else {
-            // Utilisateur non trouvé
             userProfile = {
                 fullName: "Utilisateur inconnu", username: viewUsername,
                 bio: "Profil non disponible", email: "", location: "Inconnu",
@@ -889,7 +1051,6 @@ if (!localStorage.getItem('estra_badges')) {
             isOwner = false;
         }
     } else {
-        // On regarde son PROPRE profil
         userProfile = { ...myProfile };
         if (!userProfile.avatar || userProfile.avatar === '') {
             userProfile.avatar = `https://ui-avatars.com/api/?background=1d9bf0&color=fff&name=${encodeURIComponent(userProfile.fullName || 'User')}&size=120`;
@@ -897,7 +1058,6 @@ if (!localStorage.getItem('estra_badges')) {
         isOwner = true;
     }
     
-    // ✅ 3. Charger les autres données
     posts = JSON.parse(localStorage.getItem("estra_posts") || "[]");
     jobsList = JSON.parse(localStorage.getItem("estra_jobs") || "[]");
     eventsList = JSON.parse(localStorage.getItem("estra_events") || "[]");
@@ -906,13 +1066,28 @@ if (!localStorage.getItem('estra_badges')) {
     groups = JSON.parse(localStorage.getItem("estra_groups") || "[]");
     userCourses = JSON.parse(localStorage.getItem("estra_courses_v4") || "[]");
     
-    // ✅ 4. Appliquer le thème selon le rôle du profil AFFICHÉ
-    document.body.className = `role-${userProfile.accountType || 'simple'}`;
+    document.body.className = `role-${myProfile.accountType || 'simple'}`;
     
-    // ✅ 5. Rendre la page
     renderProfile();
-    renderProButton();
     updateRightSidebar();
+}
+
+// ================= GESTION DE LA BIOGRAPHIE (toggle) =================
+function toggleBio() {
+    const bio = document.getElementById('profileBio');
+    const btn = document.getElementById('bioToggleBtn');
+    if (!bio || !btn) return;
+    if (bio.classList.contains('expanded')) {
+        bio.classList.remove('expanded');
+        bio.style.maxHeight = "60px";
+        bio.style.overflow = "hidden";
+        btn.textContent = "Voir plus";
+    } else {
+        bio.classList.add('expanded');
+        bio.style.maxHeight = "none";
+        bio.style.overflow = "visible";
+        btn.textContent = "Voir moins";
+    }
 }
 
 function saveAllData() {
@@ -922,97 +1097,38 @@ function saveAllData() {
     localStorage.setItem("estra_friends", JSON.stringify(userFriends));
     localStorage.setItem("estra_userGroups", JSON.stringify(userGroups));
     
-    // ✅ Si on modifie son PROPRE profil
     if (isOwner) {
         ESTRA.updateProfile(userProfile);
         updateUserInDB(myProfile.username, userProfile);
     }
 }
 
-// Remplacer la fonction renderProButton()
-function renderProButton() {
-    const btn = document.getElementById('btnViewProInfo');
-    const premiumBadge = document.getElementById('profilePremiumBadge');
-    const label = document.getElementById('proTypeLabel');
-    if (!btn) return;
-    
-    // Afficher pour tous les rôles SAUF simple
-    if (!userProfile.accountType || userProfile.accountType === 'simple') {
-        btn.style.display = 'none';
-        if (premiumBadge) premiumBadge.style.display = 'none';
-        return;
-    }
-    
-    btn.style.display = 'inline-flex';
-    const typeLabels = {
-        student: '🎓 Étudiant',
-        highschool: '🏫 Élève',
-        professor: '👨‍🏫 Professeur',
-        teacher: '📚 Enseignant'
-    };
-    if (label) label.textContent = typeLabels[userProfile.accountType] || 'pro';
-    
-    // Badge premium seulement pour professeur
-    if (premiumBadge) {
-        premiumBadge.style.display = userProfile.accountType === 'professor' ? 'inline-flex' : 'none';
-    }
-    
-    // Appliquer la couverture par défaut
-    if (coverByType[userProfile.accountType] && !userProfile.cover) {
-        document.getElementById('profileCover').style.backgroundImage = `url('${coverByType[userProfile.accountType]}')`;
-        document.getElementById('profileCover').style.backgroundSize = 'cover';
-        document.getElementById('profileCover').style.backgroundPosition = 'center';
-    }
-}
-
 function renderProfile() {
-    // ✅ Affichage du profil consulté
     document.getElementById("profileName").textContent = userProfile.fullName || "Utilisateur";
-
-// 🏅 Afficher les badges
-const profileBadges = userProfile.badges || [];
-const allBadges = JSON.parse(localStorage.getItem('estra_badges') || '[]');
-let badgesHTML = '';
-profileBadges.forEach(badgeId => {
-    const badge = allBadges.find(b => b.id === badgeId);
-    if (badge) {
-        badgesHTML += `<span style="display:inline-flex;align-items:center;gap:4px;background:${badge.color}20;color:${badge.color};border:1px solid ${badge.color}40;padding:3px 10px;border-radius:15px;font-size:0.7rem;margin:2px;" title="${badge.description}"><i class="fas ${badge.icon}"></i> ${badge.name}</span>`;
-    }
-});
-document.getElementById("profileBadgesContainer").innerHTML = badgesHTML;
-
-document.getElementById("profileUsername").textContent = "@" + (userProfile.username || "unknown");
-    document.getElementById("profileUsername").textContent = "@" + (userProfile.username || "unknown");
     
-    document.getElementById("profileBio").textContent = userProfile.bio || "";
+    const profileBadges = userProfile.badges || [];
+    const badgesHtml = renderUserBadges(profileBadges);
+    document.getElementById("profileBadgesContainer").innerHTML = badgesHtml;
+    
+    document.getElementById("profileUsername").textContent = "@" + (userProfile.username || "unknown");
     document.getElementById("profileLocation").textContent = userProfile.location || "Non renseigné";
     document.getElementById("profileEmail").textContent = userProfile.email || "Non renseigné";
     document.getElementById("profileJoinDate").textContent = userProfile.joinDate || "2026";
     document.getElementById("profileAvatar").src = userProfile.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(userProfile.fullName || '?')}&background=1d9bf0&color=fff`;
     
-    
-    // ✅ Navbar et sidebar montrent TOUJOURS l'utilisateur CONNECTÉ
-    document.getElementById("navAvatar").src = myProfile.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(myProfile.fullName || 'User')}&background=38bdf8&color=fff`;
     document.getElementById("sidebarAvatar").src = myProfile.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(myProfile.fullName || 'User')}&background=1d9bf0&color=fff`;
     document.getElementById("sidebarName").textContent = myProfile.fullName || "Utilisateur";
     
-    // Widgets Contact 3ème colonne
     if (document.getElementById("pcEmail")) document.getElementById("pcEmail").textContent = userProfile.email || "Non renseigné";
     if (document.getElementById("pcLocation")) document.getElementById("pcLocation").textContent = userProfile.location || "Non renseigné";
     if (userProfile.website) {
-        if (document.getElementById("pcWebsiteContainer")) {
-            document.getElementById("pcWebsiteContainer").style.display = "block";
-            document.getElementById("pcWebsite").href = userProfile.website;
-        }
+        document.getElementById("pcWebsiteContainer").style.display = "block";
+        document.getElementById("pcWebsite").href = userProfile.website;
     }
     
-    // Badge vérifié
     const verifiedBadge = document.getElementById("verifiedBadge");
-    if (verifiedBadge) {
-        verifiedBadge.style.display = userProfile.verified ? "inline" : "none";
-    }
+    if (verifiedBadge) verifiedBadge.style.display = userProfile.verified ? "inline" : "none";
     
-    // Couverture
     if (userProfile.cover) {
         document.getElementById("profileCover").style.backgroundImage = `url(${userProfile.cover})`;
         document.getElementById("profileCover").style.backgroundSize = "cover";
@@ -1023,57 +1139,6 @@ document.getElementById("profileUsername").textContent = "@" + (userProfile.user
         document.getElementById("profileCover").style.backgroundPosition = "center";
     }
     
-    function renderProfessorInfo() {
-    let html = '<div class="pro-fsm-card"><h4><i class="fas fa-university"></i> Parcours Académique</h4><div class="pro-fsm-grid">';
-    if (userProfile.institution) html += `<div class="pro-fsm-item"><span class="fsm-label">🏫 Institution</span><span class="fsm-value">${userProfile.institution}</span></div>`;
-    if (userProfile.grade) html += `<div class="pro-fsm-item"><span class="fsm-label">📚 Grade</span><span class="fsm-value">${userProfile.grade}</span></div>`;
-    if (userProfile.speciality) html += `<div class="pro-fsm-item"><span class="fsm-label">🎯 Spécialité</span><span class="fsm-value">${userProfile.speciality}</span></div>`;
-    if (userProfile.experience) html += `<div class="pro-fsm-item"><span class="fsm-label">📅 Expérience</span><span class="fsm-value">${userProfile.experience} ans</span></div>`;
-    html += '</div></div>';
-    html += renderCVSection();
-    return html;
-}
-
-function renderTeacherInfo() {
-    let html = '<div class="pro-fsm-card"><h4><i class="fas fa-school"></i> Enseignement</h4><div class="pro-fsm-grid">';
-    if (userProfile.school) html += `<div class="pro-fsm-item"><span class="fsm-label">🏫 École</span><span class="fsm-value">${userProfile.school}</span></div>`;
-    if (userProfile.level) html += `<div class="pro-fsm-item"><span class="fsm-label">📚 Niveau</span><span class="fsm-value">${userProfile.level}</span></div>`;
-    if (userProfile.mainSubject) html += `<div class="pro-fsm-item"><span class="fsm-label">📖 Matière</span><span class="fsm-value">${userProfile.mainSubject}</span></div>`;
-    if (userProfile.section) html += `<div class="pro-fsm-item"><span class="fsm-label">📋 Section</span><span class="fsm-value">${userProfile.section}</span></div>`;
-    html += '</div></div>';
-    html += renderCVSection();
-    return html;
-}
-
-function renderPupilInfo(canAccess) {
-    let html = '<div class="pro-fsm-card"><h4><i class="fas fa-school"></i> Scolarité</h4><div class="pro-fsm-grid">';
-    if (userProfile.school) html += `<div class="pro-fsm-item"><span class="fsm-label">🏫 École</span><span class="fsm-value">${userProfile.school}</span></div>`;
-    if (userProfile.level) html += `<div class="pro-fsm-item"><span class="fsm-label">📚 Classe</span><span class="fsm-value">${userProfile.level}</span></div>`;
-    if (userProfile.section) html += `<div class="pro-fsm-item"><span class="fsm-label">📋 Section</span><span class="fsm-value">${userProfile.section}</span></div>`;
-    html += '</div></div>';
-    return html;
-}
-
-function renderSimpleInfo() {
-    return `<div class="pro-fsm-card"><h4><i class="fas fa-user"></i> Informations</h4>
-        <p style="color:var(--text-secondary);">Profil utilisateur simple. 
-        <button class="profile-btn" style="margin-top:10px;" onclick="showToast('Fonctionnalité disponible prochainement')">
-            <i class="fas fa-arrow-up"></i> Passer à un profil pro
-        </button></p></div>`;
-}
-
-function renderCVSection() {
-    let html = '<div class="pro-fsm-card"><h4><i class="fas fa-file-alt"></i> CV / Document</h4>';
-    if (userProfile.cvData && userProfile.cvName) {
-        html += `<div class="cv-download-area"><div class="cv-info"><i class="fas fa-file-pdf"></i><div><strong>${userProfile.cvName}</strong></div></div>
-                 <button class="btn-download-cv" onclick="downloadCV()"><i class="fas fa-download"></i> Télécharger</button></div>`;
-    } else {
-        html += `<p style="color:var(--text-secondary);">Aucun document</p>`;
-    }
-    html += '</div>';
-    return html;
-}
-    // ✅ Gérer l'affichage des boutons d'édition (seulement si propriétaire)
     const coverOverlay = document.getElementById("coverOverlayBtn");
     const avatarBadge = document.getElementById("avatarEditBadge");
     if (isOwner) {
@@ -1084,207 +1149,214 @@ function renderCVSection() {
         if (avatarBadge) avatarBadge.style.display = "none";
     }
     
-    // Boutons d'action
+    // ============ GESTION DE LA BIOGRAPHIE (troncature) ============
+    const bio = document.getElementById("profileBio");
+    const bioText = userProfile.bio || "";
+    bio.textContent = bioText;
+    const btn = document.getElementById("bioToggleBtn");
+    if (bioText.length > 120) {
+        bio.style.maxHeight = "60px";
+        bio.style.overflow = "hidden";
+        bio.classList.remove('expanded');
+        btn.style.display = "inline-block";
+        btn.textContent = "Voir plus";
+    } else {
+        bio.style.maxHeight = "none";
+        btn.style.display = "none";
+    }
+    
+    // ============ BOUTONS D'ACTION ============
     const actionsContainer = document.getElementById('profileActionsContainer');
     let actionsHTML = '';
     
-    if (isOwner && ['company', 'business', 'hospital', 'institution'].includes(userProfile.accountType)) {
-        actionsHTML += `<button id="btnDashboard" class="profile-btn" onclick="openDashboard()" style="background:var(--purple); color:#fff; border:none; box-shadow: 0 4px 15px rgba(124,58,237,0.3);"><i class="fas fa-chart-line"></i> ${t('dashboard')}</button>`;
-    }
-    if (!isOwner && userProfile.accountType === 'mentor') {
-        actionsHTML += `<button id="btnMentor" class="profile-btn primary"><i class="fas fa-handshake"></i> ${t('mentor_request')}</button>`;
-    }
     if (isOwner) {
-        actionsHTML += `<button class="profile-btn" onclick="openEditProfileModal()"><i class="fas fa-pen"></i> ${t('edit_profile_btn')}</button>`;
-    }
-    actionsHTML += `<button class="profile-btn" onclick="shareProfile()"><i class="fas fa-share"></i> Partager</button>`;
-    if (isOwner) {
-        actionsHTML += `<button class="profile-btn primary" onclick="openPostModal()"><i class="fas fa-plus"></i> ${t('publish_btn')}</button>`;
+        actionsHTML += `<button class="profile-btn primary" onclick="openPostModal()">
+            <i class="fas fa-plus"></i> Publier
+        </button>`;
+        if (userProfile.accountType && userProfile.accountType !== 'simple') {
+            actionsHTML += `<button class="profile-btn info" onclick="openProInfoModal()">
+                <i class="fas fa-id-card"></i> Mes Informations
+            </button>`;
+        }
+        if (['company', 'business', 'hospital', 'institution'].includes(userProfile.accountType)) {
+            actionsHTML += `<button class="profile-btn dashboard" onclick="openDashboard()">
+                <i class="fas fa-chart-line"></i> ${t('dashboard')}
+            </button>`;
+        }
+    } else {
+        const isFriendUser = isFriend(userProfile.username);
+        if (isFriendUser) {
+            actionsHTML += `<button class="profile-btn message" onclick="startConversation('${userProfile.username}')">
+                <i class="fas fa-comment-dots"></i> Message
+            </button>`;
+        } else {
+            actionsHTML += `<button class="profile-btn follow" onclick="toggleFollow('${userProfile.username}')">
+                <i class="fas fa-user-plus"></i> Suivre
+            </button>`;
+        }
+        if (userProfile.accountType && userProfile.accountType !== 'simple') {
+            actionsHTML += `<button class="profile-btn info" onclick="openProInfoModal()">
+                <i class="fas fa-id-card"></i> Voir les informations
+            </button>`;
+        }
+        if (userProfile.accountType === 'mentor') {
+            actionsHTML += `<button class="profile-btn" onclick="showToast('${t('mentor_request')} Envoyé !')">
+                <i class="fas fa-handshake"></i> ${t('mentor_request')}
+            </button>`;
+        }
     }
     actionsContainer.innerHTML = actionsHTML;
     
-    // Onglets dynamiques
-    // Onglets dynamiques selon le rôle
-const tabsContainer = document.getElementById('profileTabsContainer');
-let extraTabs = '';
-
-switch (userProfile.accountType) {
-    case 'student':
-        extraTabs = `
-            <button class="profile-tab ${currentTab === 'cv' ? 'active' : ''}" onclick="switchTab('cv', this)">
-                <i class="fas fa-file-pdf"></i> CV & Compétences
-            </button>
-            `;
-        break;
-        
-    case 'highschool':
-        extraTabs = `
-            <button class="profile-tab ${currentTab === 'homework' ? 'active' : ''}" onclick="switchTab('homework', this)">
-                <i class="fas fa-book"></i> Devoirs & Notes
-            </button>`;
-        break;
-        
-    case 'professor':
-        extraTabs = `
-            <button class="profile-tab ${currentTab === 'cv' ? 'active' : ''}" onclick="switchTab('cv', this)">
-                <i class="fas fa-file-pdf"></i> CV & Publications
-            </button>
-            <button class="profile-tab ${currentTab === 'docs' ? 'active' : ''}" onclick="switchTab('docs', this)">
-                <i class="fas fa-book"></i> Publications
-            </button>`;
-        break;
-        
-    case 'teacher':
-        extraTabs = `
-            <button class="profile-tab ${currentTab === 'cv' ? 'active' : ''}" onclick="switchTab('cv', this)">
-                <i class="fas fa-file-pdf"></i> CV & Diplômes
-            </button>
-            <button class="profile-tab ${currentTab === 'homework' ? 'active' : ''}" onclick="switchTab('homework', this)">
-                <i class="fas fa-book"></i> Devoirs & Notes
-            </button>`;
-        break;
-        
-    case 'admin':
-        extraTabs = `
-            <button class="profile-tab ${currentTab === 'cv' ? 'active' : ''}" onclick="switchTab('cv', this)">
-                <i class="fas fa-file-pdf"></i> CV & Compétences
-            </button>
-            <button class="profile-tab ${currentTab === 'docs' ? 'active' : ''}" onclick="switchTab('docs', this)">
-                <i class="fas fa-book"></i> Documents
-            </button>
-            <button class="profile-tab" onclick="window.location.href='admin.html'" style="color:#4F46E5;font-weight:700;">
-                <i class="fas fa-crown"></i> Administration
-            </button>`;
-        break;
-        
-    case 'simple':
-        extraTabs = `
-            <button class="profile-tab ${currentTab === 'cv' ? 'active' : ''}" onclick="switchTab('cv', this)">
-                <i class="fas fa-file-pdf"></i> CV
-            </button>`;
-        break;
-        
-    default:
-        extraTabs = '';
-}
-
-tabsContainer.innerHTML = `
-    <button class="profile-tab ${currentTab === 'posts' ? 'active' : ''}" onclick="switchTab('posts', this)">
-        <i class="fas fa-newspaper"></i> ${t('tab_posts')}
-    </button>
-    ${extraTabs}
-    <button class="profile-tab ${currentTab === 'media' ? 'active' : ''}" onclick="switchTab('media', this)">
-        <i class="fas fa-image"></i> ${t('tab_media')}
-    </button>
-    <button class="profile-tab ${currentTab === 'likes' ? 'active' : ''}" onclick="switchTab('likes', this)">
-        <i class="fas fa-heart"></i> ${t('tab_likes')}
-    </button>
-`;
+    // ============ MENU NAVBAR (⋮) ============
+    const navDropdown = document.getElementById('navDropdown');
+    let menuHTML = '';
+    if (isOwner) {
+        menuHTML = `
+            <div class="dropdown-item" onclick="openEditProfileModal();closeNavDropdown();">
+                <i class="fas fa-user-edit"></i> Modifier le profil
+            </div>
+            <div class="dropdown-item" onclick="shareProfile();closeNavDropdown();">
+                <i class="fas fa-share-alt"></i> Partager le profil
+            </div>
+            <hr>
+            <div class="dropdown-item" onclick="window.location.href='settings.html';closeNavDropdown();">
+                <i class="fas fa-cog"></i> Paramètres
+            </div>
+            <div class="dropdown-item" onclick="window.location.href='help.html';closeNavDropdown();">
+                <i class="fas fa-question-circle"></i> Aide
+            </div>
+            <hr>
+            <div class="dropdown-item danger" onclick="if(confirm('Voulez-vous vraiment vous déconnecter ?')){logout();}closeNavDropdown();">
+                <i class="fas fa-sign-out-alt"></i> Déconnexion
+            </div>
+        `;
+    } else {
+        menuHTML = `
+            <div class="dropdown-item" onclick="shareProfile();closeNavDropdown();">
+                <i class="fas fa-share-alt"></i> Partager le profil
+            </div>
+            <div class="dropdown-item" onclick="reportUser('${userProfile.username}');closeNavDropdown();">
+                <i class="fas fa-flag"></i> Signaler
+            </div>
+            <div class="dropdown-item danger" onclick="blockUser('${userProfile.username}');closeNavDropdown();">
+                <i class="fas fa-ban"></i> Bloquer
+            </div>
+        `;
+    }
+    navDropdown.innerHTML = menuHTML;
     
-    // Vérification des permissions RBAC
+    // ============ STATISTIQUES ============
+    const userName = userProfile.fullName;
+    const userUsername = userProfile.username;
+    const myPosts = posts.filter(e =>
+        e.author === userName || e.author === userUsername || e.authorUsername === userUsername || e.authorUsername === userName
+    );
+    const myJobs = jobsList.filter(e => e.author === userName || e.author === userUsername);
+    const myEvents = eventsList.filter(e => e.organizer === userName);
+    const totalPosts = myPosts.length + myJobs.length + myEvents.length;
+    const totalLikes = myPosts.reduce((sum, p) => (p.likes || 0) + sum, 0) + myJobs.reduce((sum, j) => (j.likes || 0) + sum, 0) + myEvents.reduce((sum, e) => (e.interested || 0) + sum, 0);
+    
+    document.getElementById("postsCount").textContent = totalPosts;
+    document.getElementById("likesCount").textContent = totalLikes;
+    
+    if (isOwner) {
+        const friends = JSON.parse(localStorage.getItem('estra_friends') || '[]');
+        const mentors = JSON.parse(localStorage.getItem('estra_mentors') || '[]');
+        const userGroupsList = JSON.parse(localStorage.getItem('estra_userGroups') || '[]');
+        
+        document.getElementById("friendsCount").textContent = friends.length;
+        document.getElementById("groupsCount").textContent = userGroupsList.length + mentors.length;
+        document.getElementById("sidebarFriends").textContent = friends.length;
+        document.getElementById("sidebarGroups").textContent = userGroupsList.length + mentors.length;
+        if (document.getElementById("pcFriendsCount")) document.getElementById("pcFriendsCount").textContent = friends.length;
+        if (document.getElementById("pcGroupsCount")) document.getElementById("pcGroupsCount").textContent = userGroupsList.length + mentors.length;
+    } else {
+        const allFriends = JSON.parse(localStorage.getItem('estra_friends') || '[]');
+        const allMentors = JSON.parse(localStorage.getItem('estra_mentors') || '[]');
+        const viewedFriends = allFriends.filter(f => f.name === userName || f.fullName === userName);
+        const isMentor = allMentors.find(m => m.name === userName);
+        
+        document.getElementById("friendsCount").textContent = viewedFriends.length || '0';
+        document.getElementById("groupsCount").textContent = isMentor ? '1' : '0';
+        document.getElementById("sidebarFriends").textContent = viewedFriends.length || '0';
+        document.getElementById("sidebarGroups").textContent = isMentor ? '1' : '0';
+        if (document.getElementById("pcFriendsCount")) document.getElementById("pcFriendsCount").textContent = viewedFriends.length || '0';
+        if (document.getElementById("pcGroupsCount")) document.getElementById("pcGroupsCount").textContent = isMentor ? '1' : '0';
+    }
+    
+    const myPostsCount = posts.filter(p => p.author === myProfile.fullName || p.author === myProfile.username).length + jobsList.filter(j => j.author === myProfile.fullName || j.author === myProfile.username).length;
+    document.getElementById("sidebarPosts").textContent = myPostsCount;
+    if (document.getElementById("pcPostsCount")) document.getElementById("pcPostsCount").textContent = totalPosts;
+    if (document.getElementById("pcLikesCount")) document.getElementById("pcLikesCount").textContent = totalLikes;
+    
+    // ============ ONGLETS ============
+    const tabsContainer = document.getElementById('profileTabsContainer');
+    let extraTabs = '';
+    
+    switch (userProfile.accountType) {
+        case 'student':
+            extraTabs = `<button class="profile-tab ${currentTab === 'cv' ? 'active' : ''}" onclick="switchTab('cv', this)"><i class="fas fa-file-pdf"></i> CV & Compétences</button>`;
+            break;
+        case 'highschool':
+            extraTabs = `<button class="profile-tab ${currentTab === 'homework' ? 'active' : ''}" onclick="switchTab('homework', this)"><i class="fas fa-book"></i> Devoirs & Notes</button>`;
+            break;
+        case 'professor':
+            extraTabs = `<button class="profile-tab ${currentTab === 'cv' ? 'active' : ''}" onclick="switchTab('cv', this)"><i class="fas fa-file-pdf"></i> CV & Publications</button><button class="profile-tab ${currentTab === 'docs' ? 'active' : ''}" onclick="switchTab('docs', this)"><i class="fas fa-book"></i> Publications</button>`;
+            break;
+        case 'teacher':
+            extraTabs = `<button class="profile-tab ${currentTab === 'cv' ? 'active' : ''}" onclick="switchTab('cv', this)"><i class="fas fa-file-pdf"></i> CV & Diplômes</button><button class="profile-tab ${currentTab === 'homework' ? 'active' : ''}" onclick="switchTab('homework', this)"><i class="fas fa-book"></i> Devoirs & Notes</button>`;
+            break;
+        case 'admin':
+            extraTabs = `<button class="profile-tab ${currentTab === 'cv' ? 'active' : ''}" onclick="switchTab('cv', this)"><i class="fas fa-file-pdf"></i> CV & Compétences</button><button class="profile-tab ${currentTab === 'docs' ? 'active' : ''}" onclick="switchTab('docs', this)"><i class="fas fa-book"></i> Documents</button><button class="profile-tab" onclick="window.location.href='admin.html'" style="color:#4F46E5;font-weight:700;"><i class="fas fa-crown"></i> Administration</button>`;
+            break;
+        case 'simple':
+            extraTabs = `<button class="profile-tab ${currentTab === 'cv' ? 'active' : ''}" onclick="switchTab('cv', this)"><i class="fas fa-file-pdf"></i> CV</button>`;
+            break;
+        default:
+            extraTabs = '';
+    }
+    
+    tabsContainer.innerHTML = `
+        <button class="profile-tab ${currentTab === 'posts' ? 'active' : ''}" onclick="switchTab('posts', this)">
+            <i class="fas fa-newspaper"></i> ${t('tab_posts')}
+        </button>
+        ${extraTabs}
+        <button class="profile-tab ${currentTab === 'media' ? 'active' : ''}" onclick="switchTab('media', this)">
+            <i class="fas fa-image"></i> ${t('tab_media')}
+        </button>
+        <button class="profile-tab ${currentTab === 'likes' ? 'active' : ''}" onclick="switchTab('likes', this)">
+            <i class="fas fa-heart"></i> ${t('tab_likes')}
+        </button>
+    `;
+    
     const viewerRole = myProfile.accountType || 'simple';
     const targetRole = userProfile.accountType;
     const canViewSensitives = ESTRA.canViewSensitiveInfo(viewerRole, targetRole);
     
     if (!canViewSensitives && (targetRole === 'student' || targetRole === 'highschool')) {
-        const btnPro = document.getElementById('btnViewProInfo');
-        if (btnPro) {
-            btnPro.innerHTML = `<i class="fas fa-lock"></i> Accès Réservé`;
-            btnPro.style.color = "var(--danger)";
-            btnPro.onclick = () => showToast(t('access_denied_title'), true);
+        // Désactiver l'accès aux informations sensibles (déjà géré dans les boutons)
+    }
+    
+    const isPrivateCompany = (userProfile.accountType === 'company' || userProfile.accountType === 'mentor') && userProfile.companyVisibility === 'private';
+    const hasAccess = isOwner || userFriends.some(f => f.name === userProfile.fullName || f.fullName === userProfile.fullName);
+    
+    if (isPrivateCompany && !hasAccess) {
+        document.getElementById("postsContainer").innerHTML = `
+            <div class="private-profile-lock">
+                <i class="fas fa-lock"></i>
+                <h3>${t('private_profile')}</h3>
+                <p>${t('private_desc')}</p>
+                <button class="profile-btn primary" style="margin:0 auto;" onclick="showToast('${t('request_access')} Envoyé ! 😎')"><i class="fas fa-key"></i> ${t('request_access')}</button>
+            </div>
+        `;
+    } else {
+        if (currentTab === 'posts' || currentTab === 'media' || currentTab === 'likes') {
+            renderPosts();
+        } else {
+            switchTab(currentTab, document.querySelector('.profile-tab.active'));
         }
     }
     
-// ✅ Statistiques (filtrées selon le profil consulté)
-const userName = userProfile.fullName;
-const userUsername = userProfile.username;
-const myPosts = posts.filter(e =>
-    e.author === userName ||
-    e.author === userUsername ||
-    e.authorUsername === userUsername ||
-    e.authorUsername === userName
-);
-const myJobs = jobsList.filter(e => e.author === userName || e.author === userUsername);
-const myEvents = eventsList.filter(e => e.organizer === userName);
-const totalPosts = myPosts.length + myJobs.length + myEvents.length;
-const totalLikes = myPosts.reduce((sum, p) => (p.likes || 0) + sum, 0) + myJobs.reduce((sum, j) => (j.likes || 0) + sum, 0) + myEvents.reduce((sum, e) => (e.interested || 0) + sum, 0);
-
-document.getElementById("postsCount").textContent = totalPosts;
-document.getElementById("likesCount").textContent = totalLikes;
-
-// ✅ Amis et Groupes : différents selon isOwner
-if (isOwner) {
-    // TON profil → TES vrais compteurs
-    const friends = JSON.parse(localStorage.getItem('estra_friends') || '[]');
-    const mentors = JSON.parse(localStorage.getItem('estra_mentors') || '[]');
-    const userGroupsList = JSON.parse(localStorage.getItem('estra_userGroups') || '[]');
-    
-    document.getElementById("friendsCount").textContent = friends.length;
-    document.getElementById("groupsCount").textContent = userGroupsList.length + mentors.length;
-    document.getElementById("sidebarFriends").textContent = friends.length;
-    document.getElementById("sidebarGroups").textContent = userGroupsList.length + mentors.length;
-    if (document.getElementById("pcFriendsCount")) document.getElementById("pcFriendsCount").textContent = friends.length;
-    if (document.getElementById("pcGroupsCount")) document.getElementById("pcGroupsCount").textContent = userGroupsList.length + mentors.length;
-} else {
-    // Profil de QUELQU'UN D'AUTRE → SES stats
-    const allFriends = JSON.parse(localStorage.getItem('estra_friends') || '[]');
-    const allMentors = JSON.parse(localStorage.getItem('estra_mentors') || '[]');
-    const viewedFriends = allFriends.filter(f => f.name === userName || f.fullName === userName);
-    const isMentor = allMentors.find(m => m.name === userName);
-    
-    document.getElementById("friendsCount").textContent = viewedFriends.length || '0';
-    document.getElementById("groupsCount").textContent = isMentor ? '1' : '0';
-    document.getElementById("sidebarFriends").textContent = viewedFriends.length || '0';
-    document.getElementById("sidebarGroups").textContent = isMentor ? '1' : '0';
-    if (document.getElementById("pcFriendsCount")) document.getElementById("pcFriendsCount").textContent = viewedFriends.length || '0';
-    if (document.getElementById("pcGroupsCount")) document.getElementById("pcGroupsCount").textContent = isMentor ? '1' : '0';
-}
-
-// ✅ Sidebar = TOUJOURS TES données (même en consultant un autre profil)
-const myPostsCount = posts.filter(p => p.author === myProfile.fullName || p.author === myProfile.username).length + jobsList.filter(j => j.author === myProfile.fullName || j.author === myProfile.username).length;
-document.getElementById("sidebarPosts").textContent = myPostsCount;
-document.getElementById("sidebarFriends").textContent = JSON.parse(localStorage.getItem('estra_friends') || '[]').length;
-document.getElementById("sidebarGroups").textContent = (JSON.parse(localStorage.getItem('estra_userGroups') || '[]').length + JSON.parse(localStorage.getItem('estra_mentors') || '[]').length);
-
-// ✅ Compteurs sous le profil = selon la personne consultée
-if (isOwner) {
-    document.getElementById("friendsCount").textContent = JSON.parse(localStorage.getItem('estra_friends') || '[]').length;
-    document.getElementById("groupsCount").textContent = (JSON.parse(localStorage.getItem('estra_userGroups') || '[]').length + JSON.parse(localStorage.getItem('estra_mentors') || '[]').length);
-} else {
-    const viewedName = userProfile.fullName || userProfile.name;
-    const allFriends = JSON.parse(localStorage.getItem('estra_friends') || '[]');
-    const allMentors = JSON.parse(localStorage.getItem('estra_mentors') || '[]');
-    document.getElementById("friendsCount").textContent = allFriends.filter(f => f.name === viewedName).length || '0';
-    document.getElementById("groupsCount").textContent = allMentors.find(m => m.name === viewedName) ? '1' : '0';
-}
-
-// ✅ Ces lignes restent (pour les colonnes desktop)
-document.getElementById("sidebarPosts").textContent = myPostsCount;
-if (document.getElementById("pcPostsCount")) document.getElementById("pcPostsCount").textContent = totalPosts;
-if (document.getElementById("pcLikesCount")) document.getElementById("pcLikesCount").textContent = totalLikes;
-
-// Profil privé
-const isPrivateCompany = (userProfile.accountType === 'company' || userProfile.accountType === 'mentor') && userProfile.companyVisibility === 'private';
-const hasAccess = isOwner || userFriends.some(f => f.name === userProfile.fullName || f.fullName === userProfile.fullName);
-
-if (isPrivateCompany && !hasAccess) {
-    document.getElementById("postsContainer").innerHTML = `
-        <div class="private-profile-lock">
-            <i class="fas fa-lock"></i>
-            <h3>${t('private_profile')}</h3>
-            <p>${t('private_desc')}</p>
-            <button class="profile-btn primary" style="margin:0 auto;" onclick="showToast('${t('request_access')} Envoyé ! 😎')"><i class="fas fa-key"></i> ${t('request_access')}</button>
-        </div>
-    `;
-} else {
-    if (currentTab === 'posts' || currentTab === 'media' || currentTab === 'likes') {
-        renderPosts();
-    } else {
-        switchTab(currentTab, document.querySelector('.profile-tab.active'));
-    }
-}
-    
-    // Widgets Pro
     const proSide = document.getElementById("proSideWidgets");
     if (['company', 'business', 'hospital', 'institution'].includes(userProfile.accountType) && (!isPrivateCompany || hasAccess)) {
         proSide.innerHTML = `
@@ -1305,7 +1377,6 @@ if (isPrivateCompany && !hasAccess) {
     }
 }
 
-// ================= ONGLETS =================
 function switchTab(e, t_elem) {
     if (!t_elem) return;
     currentTab = e;
@@ -1318,15 +1389,8 @@ function switchTab(e, t_elem) {
     
     if (e === 'homework') {
         container.innerHTML = `
-            <div class="homework-card">
-                <div><div class="hw-title">Mathématiques - Trigonométrie</div><div style="font-size:0.8rem;color:var(--text-secondary)">PDF avec exercices</div></div>
-                <div class="hw-date"><i class="fas fa-clock"></i> À rendre : Demain</div>
-            </div>
-            <div class="homework-card" style="border-left-color:var(--success)">
-                <div><div class="hw-title">Histoire - Dissertation</div><div style="font-size:0.8rem;color:var(--text-secondary)">Corrigé disponible</div></div>
-                <div class="hw-date" style="color:var(--success)"><i class="fas fa-check"></i> Terminé</div>
-            </div>`;
-    
+            <div class="homework-card"><div><div class="hw-title">Mathématiques - Trigonométrie</div><div style="font-size:0.8rem;color:var(--text-secondary)">PDF avec exercices</div></div><div class="hw-date"><i class="fas fa-clock"></i> À rendre : Demain</div></div>
+            <div class="homework-card" style="border-left-color:var(--success)"><div><div class="hw-title">Histoire - Dissertation</div><div style="font-size:0.8rem;color:var(--text-secondary)">Corrigé disponible</div></div><div class="hw-date" style="color:var(--success)"><i class="fas fa-check"></i> Terminé</div></div>`;
     } else if (e === 'cv') {
         const viewerRole = myProfile.accountType || 'simple';
         if (ESTRA.canViewSensitiveInfo(viewerRole, 'student')) {
@@ -1345,41 +1409,21 @@ function switchTab(e, t_elem) {
             ` + myDocs.map(c => `
                 <div style="background:var(--card-bg); border:1px solid var(--border-light); border-radius:12px; padding:16px; margin-bottom:12px; display:flex; gap:12px;">
                     <div style="width:50px;height:50px;background:rgba(56,189,248,0.1);border-radius:10px;display:flex;align-items:center;justify-content:center;color:var(--cyan);font-size:1.5rem;"><i class="fas fa-file-pdf"></i></div>
-                    <div>
-                        <h4 style="margin-bottom:4px;font-size:1rem;color:var(--text-primary);">${escapeHtml(c.title)}</h4>
-                        <p style="font-size:0.85rem;color:var(--text-secondary);">${escapeHtml(c.description || '').substring(0, 100)}...</p>
-                        <button class="profile-btn" style="font-size:0.75rem;padding:6px 12px;" onclick="window.location.href='courses.html'"><i class="fas fa-eye"></i> Voir</button>
-                    </div>
+                    <div><h4 style="margin-bottom:4px;font-size:1rem;color:var(--text-primary);">${escapeHtml(c.title)}</h4><p style="font-size:0.85rem;color:var(--text-secondary);">${escapeHtml(c.description || '').substring(0, 100)}...</p><button class="profile-btn" style="font-size:0.75rem;padding:6px 12px;" onclick="window.location.href='courses.html'"><i class="fas fa-eye"></i> Voir</button></div>
                 </div>
             `).join('');
         } else {
-            container.innerHTML = `
-                <div style="padding:40px;text-align:center;border:1px dashed var(--border-color);border-radius:12px;">
-                    <i class="fas fa-folder-open" style="font-size:3rem;color:var(--text-secondary);margin-bottom:16px;"></i>
-                    <h3 style="color:var(--cyan);">Aucun document</h3>
-                    <p style="color:var(--text-secondary);font-size:0.85rem;">${isOwner ? "Vous n'avez publié aucun cours pour l'instant." : "Cet utilisateur n'a partagé aucun document."}</p>
-                </div>
-            `;
+            container.innerHTML = `<div style="padding:40px;text-align:center;border:1px dashed var(--border-color);border-radius:12px;"><i class="fas fa-folder-open" style="font-size:3rem;color:var(--text-secondary);margin-bottom:16px;"></i><h3 style="color:var(--cyan);">Aucun document</h3><p style="color:var(--text-secondary);font-size:0.85rem;">${isOwner ? "Vous n'avez publié aucun cours pour l'instant." : "Cet utilisateur n'a partagé aucun document."}</p></div>`;
         }
     } else if (e === 'products') {
-        container.innerHTML = `
-            <div class="business-products-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:16px;padding:20px;">
-                <div class="product-card"><img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e" style="width:100%;height:140px;object-fit:cover"><div style="padding:12px;"><h4>Casque Audio Pro</h4><div class="product-price" style="color:var(--cyan);font-weight:bold;font-size:1.1rem">120 $</div></div></div>
-                <div class="product-card"><img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30" style="width:100%;height:140px;object-fit:cover"><div style="padding:12px;"><h4>Montre Connectée</h4><div class="product-price" style="color:var(--cyan);font-weight:bold;font-size:1.1rem">199 $</div></div></div>
-                <div class="product-card"><img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff" style="width:100%;height:140px;object-fit:cover"><div style="padding:12px;"><h4>Sneakers ESTRA</h4><div class="product-price" style="color:var(--cyan);font-weight:bold;font-size:1.1rem">85 $</div></div></div>
-            </div>`;
+        container.innerHTML = `<div class="business-products-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:16px;padding:20px;"><div class="product-card"><img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e" style="width:100%;height:140px;object-fit:cover"><div style="padding:12px;"><h4>Casque Audio Pro</h4><div class="product-price" style="color:var(--cyan);font-weight:bold;font-size:1.1rem">120 $</div></div></div><div class="product-card"><img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30" style="width:100%;height:140px;object-fit:cover"><div style="padding:12px;"><h4>Montre Connectée</h4><div class="product-price" style="color:var(--cyan);font-weight:bold;font-size:1.1rem">199 $</div></div></div><div class="product-card"><img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff" style="width:100%;height:140px;object-fit:cover"><div style="padding:12px;"><h4>Sneakers ESTRA</h4><div class="product-price" style="color:var(--cyan);font-weight:bold;font-size:1.1rem">85 $</div></div></div></div>`;
     } else if (e === 'archives') {
-        container.innerHTML = `
-            <div class="company-archives-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:16px;padding:20px;">
-                <div class="archive-card"><img src="https://images.unsplash.com/photo-1557804506-669a67965ba0" style="width:100%;height:140px;object-fit:cover"><div style="padding:12px;"><h4>Rapport Annuel 2025</h4><p style="font-size:0.75rem;color:var(--text-secondary)">Publié le 12 Jan 2026</p></div></div>
-                <div class="archive-card"><img src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0" style="width:100%;height:140px;object-fit:cover"><div style="padding:12px;"><h4>Conférence ESTRA</h4><p style="font-size:0.75rem;color:var(--text-secondary)">Galerie Historique</p></div></div>
-            </div>`;
+        container.innerHTML = `<div class="company-archives-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:16px;padding:20px;"><div class="archive-card"><img src="https://images.unsplash.com/photo-1557804506-669a67965ba0" style="width:100%;height:140px;object-fit:cover"><div style="padding:12px;"><h4>Rapport Annuel 2025</h4><p style="font-size:0.75rem;color:var(--text-secondary)">Publié le 12 Jan 2026</p></div></div><div class="archive-card"><img src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0" style="width:100%;height:140px;object-fit:cover"><div style="padding:12px;"><h4>Conférence ESTRA</h4><p style="font-size:0.75rem;color:var(--text-secondary)">Galerie Historique</p></div></div></div>`;
     } else {
         renderPosts();
     }
 }
 
-// ================= RENDER POSTS =================
 // ============================================================
 // RENDER POSTS AVEC LES COURS (PROFIL)
 // ============================================================
@@ -1389,7 +1433,6 @@ function renderPosts() {
     const userName = userProfile.fullName;
     const userUsername = userProfile.username;
     
-    // 🆕 Filtrer par TOUS les identifiants possibles
     const myPosts = posts.filter(e =>
         e.author === userName ||
         e.author === userUsername ||
@@ -1427,102 +1470,104 @@ function renderPosts() {
         container.innerHTML = `<div style="text-align:center;padding:60px;color:var(--text-secondary);"><i class="fas fa-newspaper" style="font-size:3rem;margin-bottom:16px;"></i><p>${t('no_posts')}</p></div>`;
     }
 }
+
 // ============================================================
 // RENDER POST CARD AVEC SUPPORT DES COURS
 // ============================================================
 
 function renderPostCard(e) {
-    // ✅ CAS : ÉVÉNEMENT
+    // CAS : ÉVÉNEMENT
     if (e.isEvent && e.eventData) {
         return `<div class="post-card" id="post-${e.id}"><div class="post-header"><img src="${e.authorAvatar || userProfile.avatar}" class="post-avatar"><div class="post-author-info"><div class="d-flex justify-content-between"><div><span class="post-author-name">${escapeHtml(e.author)}</span><div class="post-time">${formatTime(e.timestamp || e.createdAt)}</div></div><button class="post-menu-btn" onclick="showPostOptionsWithBS(event,${e.id},'event')"><i class="fas fa-ellipsis-h"></i></button></div></div></div><div class="post-content"><span class="event-badge"><i class="fas fa-calendar-alt"></i> ${t('event_badge')}</span><div class="post-text"><strong>${escapeHtml(e.eventData.title)}</strong></div><div style="display:flex;flex-wrap:wrap;gap:16px;margin:8px 0;font-size:0.8rem;color:var(--text-secondary);"><span><i class="far fa-calendar-alt"></i> ${e.eventData.date} à ${e.eventData.time}</span><span><i class="fas fa-map-marker-alt"></i> ${escapeHtml(e.eventData.location)}</span></div><p style="font-size:0.85rem;color:var(--text-secondary);">${escapeHtml(e.eventData.description || "")}</p></div><div class="post-stats"><span><i class="fas fa-heart"></i> ${e.likes || 0}</span><span><i class="fas fa-comment"></i> ${(e.comments || []).length}</span></div><div class="post-actions"><button class="post-action-btn ${e.liked ? "liked" : ""}" onclick="toggleLike(${e.id},'event')"><svg viewBox="0 0 24 24" fill="${e.liked ? "currentColor" : "none"}" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button><button class="post-action-btn" onclick="toggleComments(${e.id})"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></button><button class="post-action-btn ${e.saved ? "saved" : ""}" onclick="toggleSave(${e.id},'event')"><svg viewBox="0 0 24 24" fill="${e.saved ? "currentColor" : "none"}" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></button><button class="post-action-btn" onclick="BS.openShare(${e.id})"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></button></div><div class="comments-section" id="comments-section-${e.id}"><div id="comments-list-${e.id}">${(e.comments || []).map(c => `<div class="comment-item"><img src="${c.avatar}" class="comment-avatar"><div class="comment-bubble"><div class="comment-author">${escapeHtml(c.author)}</div><div class="comment-text">${escapeHtml(c.text)}</div></div></div>`).join("")}</div><div class="comment-input-area"><input type="text" id="commentInput-${e.id}" class="comment-input" placeholder="${t('write_comment')}"><button class="comment-submit" onclick="addComment(${e.id},'event')">${t('send_comment')}</button></div></div></div><hr class="post-separator">`;
     }
     
-    // ✅ CAS : OFFRE D'EMPLOI
+    // CAS : OFFRE D'EMPLOI
     if (e.isJob && e.jobData) {
         const j = e.jobData;
         return `<div class="post-card" id="post-${e.id}"><div class="post-header"><img src="${e.authorAvatar}" class="post-avatar"><div class="post-author-info"><div class="d-flex justify-content-between"><div><span class="post-author-name">${escapeHtml(e.author)}</span><div class="post-time">${formatTime(e.timestamp)}</div></div><button class="post-menu-btn" onclick="showPostOptionsWithBS(event,${e.id},'job')"><i class="fas fa-ellipsis-h"></i></button></div></div></div><div class="post-content"><span class="job-badge"><i class="fas fa-briefcase"></i> ${t('job_badge')}</span><div class="post-text"><strong>${escapeHtml(j.title)}</strong> chez ${escapeHtml(j.company)}</div><div style="display:flex;flex-wrap:wrap;gap:16px;margin:8px 0;font-size:0.8rem;color:var(--text-secondary);"><span><i class="fas fa-map-marker-alt"></i> ${escapeHtml(j.location)}</span><span><i class="fas fa-file-contract"></i> ${escapeHtml(j.contract)}</span><span><i class="fas fa-money-bill"></i> ${escapeHtml(j.salary || "À discuter")}</span></div></div><div class="post-stats"><span><i class="fas fa-heart"></i> ${e.likes || 0}</span><span><i class="fas fa-comment"></i> ${(e.comments || []).length}</span></div><div class="post-actions"><button class="post-action-btn ${e.liked ? "liked" : ""}" onclick="toggleLike(${e.id},'job')"><svg viewBox="0 0 24 24" fill="${e.liked ? "currentColor" : "none"}" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button><button class="post-action-btn" onclick="toggleComments(${e.id})"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></button><button class="post-action-btn ${e.saved ? "saved" : ""}" onclick="toggleSave(${e.id},'job')"><svg viewBox="0 0 24 24" fill="${e.saved ? "currentColor" : "none"}" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></button><button class="post-action-btn" onclick="BS.openShare(${e.id})"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></button></div><div class="comments-section" id="comments-section-${e.id}"><div id="comments-list-${e.id}">${(e.comments || []).map(c => `<div class="comment-item"><img src="${c.avatar}" class="comment-avatar"><div class="comment-bubble"><div class="comment-author">${escapeHtml(c.author)}</div><div class="comment-text">${escapeHtml(c.text)}</div></div></div>`).join("")}</div><div class="comment-input-area"><input type="text" id="commentInput-${e.id}" class="comment-input" placeholder="${t('write_comment')}"><button class="comment-submit" onclick="addComment(${e.id},'job')">${t('send_comment')}</button></div></div></div><hr class="post-separator">`;
     }
     
-// ✅ CAS : COURS (BADGE DANS L'EN-TÊTE)
-if (e.isCourse && e.courseData) {
-    const c = e.courseData;
-    const priceDisplay = c.price && c.price > 0 ? `<span><i class="fas fa-money-bill"></i> ${c.price} FC</span>` : '<span><i class="fas fa-gratipay"></i> Gratuit</span>';
-    const roleDisplay = c.role ? `<span><i class="fas fa-user-tag"></i> ${escapeHtml(c.role)}</span>` : '';
-    
-    return `<div class="post-card" id="post-${e.id}">
-        <div class="post-header">
-            <img src="${e.authorAvatar}" class="post-avatar">
-            <div class="post-author-info">
-                <div class="d-flex justify-content-between">
-                    <div>
-                        <div style="display:flex; align-items:center; flex-wrap:wrap; gap:6px;">
-                            <span class="post-author-name">${escapeHtml(e.author)}</span>
-                            <span class="course-badge" style="background:var(--purple);color:#fff;padding:2px 10px;border-radius:12px;font-size:0.6rem;font-weight:700;display:inline-flex;align-items:center;gap:4px;">
-                                <i class="fas fa-graduation-cap"></i> COURS
-                            </span>
+    // CAS : COURS (BADGE DANS L'EN-TÊTE)
+    if (e.isCourse && e.courseData) {
+        const c = e.courseData;
+        const priceDisplay = c.price && c.price > 0 ? `<span><i class="fas fa-money-bill"></i> ${c.price} FC</span>` : '<span><i class="fas fa-gratipay"></i> Gratuit</span>';
+        const roleDisplay = c.role ? `<span><i class="fas fa-user-tag"></i> ${escapeHtml(c.role)}</span>` : '';
+        
+        return `<div class="post-card" id="post-${e.id}">
+            <div class="post-header">
+                <img src="${e.authorAvatar}" class="post-avatar">
+                <div class="post-author-info">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <div style="display:flex; align-items:center; flex-wrap:wrap; gap:6px;">
+                                <span class="post-author-name">${escapeHtml(e.author)}</span>
+                                <span class="course-badge" style="background:var(--purple);color:#fff;padding:2px 10px;border-radius:12px;font-size:0.6rem;font-weight:700;display:inline-flex;align-items:center;gap:4px;">
+                                    <i class="fas fa-graduation-cap"></i> COURS
+                                </span>
+                            </div>
+                            <div class="post-time">${formatTime(e.timestamp)}</div>
                         </div>
-                        <div class="post-time">${formatTime(e.timestamp)}</div>
-                    </div>
-                    <button class="post-menu-btn" onclick="event.stopPropagation();showPostOptionsWithBS(event,${e.id},'post')"><i class="fas fa-ellipsis-h"></i></button>
-                </div>
-            </div>
-        </div>
-        <div class="post-content">
-            <div class="post-text"><strong>${escapeHtml(c.title)}</strong></div>
-            ${e.content ? `<div class="post-text" style="margin-top:4px;">${escapeHtml(e.content)}</div>` : ''}
-            <div style="display:flex;flex-wrap:wrap;gap:16px;margin:8px 0;font-size:0.8rem;color:var(--text-secondary);">
-                <span><i class="fas fa-tag"></i> ${escapeHtml(c.category || 'Général')}</span>
-                <span><i class="fas fa-file-pdf"></i> ${escapeHtml(c.fileName)}</span>
-                ${c.pages ? `<span><i class="fas fa-file-alt"></i> ${c.pages} pages</span>` : ''}
-                ${priceDisplay}
-                ${roleDisplay}
-                ${c.institution ? `<span><i class="fas fa-university"></i> ${escapeHtml(c.institution)}</span>` : ''}
-                ${c.level ? `<span><i class="fas fa-level-up-alt"></i> ${escapeHtml(c.level)}</span>` : ''}
-                ${c.filiere ? `<span><i class="fas fa-book"></i> ${escapeHtml(c.filiere)}</span>` : ''}
-            </div>
-            <div style="background:var(--comment-bg);border-radius:12px;padding:12px;margin-top:8px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
-                <div style="display:flex;align-items:center;gap:12px;">
-                    <div style="width:48px;height:48px;background:rgba(239,68,68,0.15);border-radius:12px;display:flex;align-items:center;justify-content:center;color:#ef4444;">
-                        <i class="fas fa-file-pdf"></i>
-                    </div>
-                    <div>
-                        <div style="font-weight:600;">${escapeHtml(c.fileName)}</div>
-                        <div style="font-size:0.7rem;color:var(--text-secondary);">PDF ${c.pages ? `• ${c.pages} pages` : ''}</div>
+                        <button class="post-menu-btn" onclick="event.stopPropagation();showPostOptionsWithBS(event,${e.id},'post')"><i class="fas fa-ellipsis-h"></i></button>
                     </div>
                 </div>
-                <button style="background:var(--cyan);color:white;padding:8px 16px;border-radius:30px;font-size:0.8rem;cursor:pointer;border:none;font-family:inherit;" onclick="window.location.href='courses.html'">
-                    <i class="fas fa-eye"></i> Voir le cours
+            </div>
+            <div class="post-content">
+                <div class="post-text"><strong>${escapeHtml(c.title)}</strong></div>
+                ${e.content ? `<div class="post-text" style="margin-top:4px;">${escapeHtml(e.content)}</div>` : ''}
+                <div style="display:flex;flex-wrap:wrap;gap:16px;margin:8px 0;font-size:0.8rem;color:var(--text-secondary);">
+                    <span><i class="fas fa-tag"></i> ${escapeHtml(c.category || 'Général')}</span>
+                    <span><i class="fas fa-file-pdf"></i> ${escapeHtml(c.fileName)}</span>
+                    ${c.pages ? `<span><i class="fas fa-file-alt"></i> ${c.pages} pages</span>` : ''}
+                    ${priceDisplay}
+                    ${roleDisplay}
+                    ${c.institution ? `<span><i class="fas fa-university"></i> ${escapeHtml(c.institution)}</span>` : ''}
+                    ${c.level ? `<span><i class="fas fa-level-up-alt"></i> ${escapeHtml(c.level)}</span>` : ''}
+                    ${c.filiere ? `<span><i class="fas fa-book"></i> ${escapeHtml(c.filiere)}</span>` : ''}
+                </div>
+                <div style="background:var(--comment-bg);border-radius:12px;padding:12px;margin-top:8px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+                    <div style="display:flex;align-items:center;gap:12px;">
+                        <div style="width:48px;height:48px;background:rgba(239,68,68,0.15);border-radius:12px;display:flex;align-items:center;justify-content:center;color:#ef4444;">
+                            <i class="fas fa-file-pdf"></i>
+                        </div>
+                        <div>
+                            <div style="font-weight:600;">${escapeHtml(c.fileName)}</div>
+                            <div style="font-size:0.7rem;color:var(--text-secondary);">PDF ${c.pages ? `• ${c.pages} pages` : ''}</div>
+                        </div>
+                    </div>
+                    <button style="background:var(--cyan);color:white;padding:8px 16px;border-radius:30px;font-size:0.8rem;cursor:pointer;border:none;font-family:inherit;" onclick="window.location.href='courses.html'">
+                        <i class="fas fa-eye"></i> Voir le cours
+                    </button>
+                </div>
+            </div>
+            <div class="post-stats">
+                <span><i class="fas fa-heart"></i> ${e.likes || 0}</span>
+                <span><i class="fas fa-comment"></i> ${(e.comments || []).length}</span>
+            </div>
+            <div class="post-actions">
+                <button class="post-action-btn ${e.liked ? "liked" : ""}" onclick="toggleLike(${e.id},'post')">
+                    <svg viewBox="0 0 24 24" fill="${e.liked ? "currentColor" : "none"}" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                </button>
+                <button class="post-action-btn" onclick="toggleComments(${e.id})">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                </button>
+                <button class="post-action-btn ${e.saved ? "saved" : ""}" onclick="toggleSave(${e.id},'post')">
+                    <svg viewBox="0 0 24 24" fill="${e.saved ? "currentColor" : "none"}" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+                </button>
+                <button class="post-action-btn" onclick="event.stopPropagation();BS.openShare(${e.id})">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
                 </button>
             </div>
-        </div>
-        <div class="post-stats">
-            <span><i class="fas fa-heart"></i> ${e.likes || 0}</span>
-            <span><i class="fas fa-comment"></i> ${(e.comments || []).length}</span>
-        </div>
-        <div class="post-actions">
-            <button class="post-action-btn ${e.liked ? "liked" : ""}" onclick="toggleLike(${e.id},'post')">
-                <svg viewBox="0 0 24 24" fill="${e.liked ? "currentColor" : "none"}" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-            </button>
-            <button class="post-action-btn" onclick="toggleComments(${e.id})">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-            </button>
-            <button class="post-action-btn ${e.saved ? "saved" : ""}" onclick="toggleSave(${e.id},'post')">
-                <svg viewBox="0 0 24 24" fill="${e.saved ? "currentColor" : "none"}" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
-            </button>
-            <button class="post-action-btn" onclick="event.stopPropagation();BS.openShare(${e.id})">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
-            </button>
-        </div>
-        <div class="comments-section" id="comments-section-${e.id}">
-            <div id="comments-list-${e.id}">${(e.comments || []).map(c => `<div class="comment-item"><img src="${c.avatar}" class="comment-avatar"><div class="comment-bubble"><div class="comment-author">${escapeHtml(c.author)}</div><div class="comment-text">${escapeHtml(c.text)}</div></div></div>`).join("")}</div>
-            <div class="comment-input-area">
-                <input type="text" id="commentInput-${e.id}" class="comment-input" placeholder="${t('write_comment')}">
-                <button class="comment-submit" onclick="addComment(${e.id},'post')">${t('send_comment')}</button>
+            <div class="comments-section" id="comments-section-${e.id}">
+                <div id="comments-list-${e.id}">${(e.comments || []).map(c => `<div class="comment-item"><img src="${c.avatar}" class="comment-avatar"><div class="comment-bubble"><div class="comment-author">${escapeHtml(c.author)}</div><div class="comment-text">${escapeHtml(c.text)}</div></div></div>`).join("")}</div>
+                <div class="comment-input-area">
+                    <input type="text" id="commentInput-${e.id}" class="comment-input" placeholder="${t('write_comment')}">
+                    <button class="comment-submit" onclick="addComment(${e.id},'post')">${t('send_comment')}</button>
+                </div>
             </div>
-        </div>
-    </div><hr class="post-separator">`;
-}
-    // ✅ CAS : POST NORMAL
+        </div><hr class="post-separator">`;
+    }
+    
+    // CAS : POST NORMAL
     const hasLong = Math.ceil((e.content || "").length / 40) > 4 || (e.content || "").split("\n").length > 4;
     let media = "";
     if (e.image) media = `<div class="post-media"><img src="${e.image}" onclick="openImageViewer('${e.image}')"></div>`;
@@ -1532,6 +1577,7 @@ if (e.isCourse && e.courseData) {
     if (e.groupId && e.groupName) groupBadge = `<span style="display:inline-block;background:var(--purple);color:#fff;padding:2px 10px;border-radius:15px;font-size:.65rem;margin-bottom:6px">👥 ${escapeHtml(e.groupName)}</span>`;
     return `<div class="post-card" id="post-${e.id}"><div class="post-header"><img src="${e.authorAvatar}" class="post-avatar"><div class="post-author-info"><div class="d-flex justify-content-between"><div><span class="post-author-name">${escapeHtml(e.author)}</span>${e.groupId && e.groupName ? `<div style="font-size:.65rem;color:var(--text-secondary)"><i class="fas fa-users"></i> dans ${escapeHtml(e.groupName)}</div>` : ''}<div class="post-time">${formatTime(e.timestamp)}</div></div><button class="post-menu-btn" onclick="showPostOptionsWithBS(event,${e.id},'post')"><i class="fas fa-ellipsis-h"></i></button></div></div></div><div class="post-content">${groupBadge}<div class="post-text" id="post-text-${e.id}">${escapeHtml(e.content || '')}</div>${hasLong ? `<span class="see-more-btn" id="see-more-${e.id}" onclick="toggleReadMore(${e.id})" style="display:none;">${t('see_more')}</span>` : ""}${media}</div><div class="post-stats"><span><i class="fas fa-heart"></i> ${e.likes || 0}</span><span><i class="fas fa-comment"></i> ${(e.comments || []).length}</span></div><div class="post-actions"><button class="post-action-btn ${e.liked ? "liked" : ""}" onclick="toggleLike(${e.id},'post')"><svg viewBox="0 0 24 24" fill="${e.liked ? "currentColor" : "none"}" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button><button class="post-action-btn" onclick="toggleComments(${e.id})"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></button><button class="post-action-btn ${e.saved ? "saved" : ""}" onclick="toggleSave(${e.id},'post')"><svg viewBox="0 0 24 24" fill="${e.saved ? "currentColor" : "none"}" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></button><button class="post-action-btn" onclick="BS.openShare(${e.id})"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></button></div><div class="comments-section" id="comments-section-${e.id}"><div id="comments-list-${e.id}">${(e.comments || []).map(c => `<div class="comment-item"><img src="${c.avatar}" class="comment-avatar"><div class="comment-bubble"><div class="comment-author">${escapeHtml(c.author)}</div><div class="comment-text">${escapeHtml(c.text)}</div></div></div>`).join("")}</div><div class="comment-input-area"><input type="text" id="commentInput-${e.id}" class="comment-input" placeholder="${t('write_comment')}"><button class="comment-submit" onclick="addComment(${e.id},'post')">${t('send_comment')}</button></div></div></div><hr class="post-separator">`;
 }
+
 // ================= INTERACTIONS =================
 function toggleReadMore(e) {
     const txt = document.getElementById(`post-text-${e}`);
@@ -1605,7 +1651,6 @@ function showPostOptions(e, postId, postType) {
     e.stopPropagation();
     if (activePostMenu) { activePostMenu.remove(); activePostMenu = null; }
     
-    // ✅ Vérifier si le post appartient à l'utilisateur connecté
     const item = postType === 'job' ? jobsList.find(j => j.id === postId) : 
                  postType === 'event' ? eventsList.find(ev => ev.id === postId) : 
                  posts.find(p => p.id === postId);
@@ -1614,15 +1659,12 @@ function showPostOptions(e, postId, postType) {
     const menu = document.createElement("div");
     menu.className = "post-options-menu";
     
-    // ✅ Menu différent selon le propriétaire
     if (isMyPost || isOwner) {
-        // Menu complet pour MES posts
         menu.innerHTML = `
             <div class="option-item" onclick="hidePost(${postId},'${postType}')"><i class="fas fa-eye-slash"></i> ${t('menu_hide')}</div>
             <div class="option-item danger" onclick="deletePost(${postId},'${postType}')"><i class="fas fa-trash"></i> ${t('menu_delete')}</div>
         `;
     } else {
-        // Menu limité pour les posts des AUTRES
         menu.innerHTML = `
             <div class="option-item" onclick="hidePost(${postId},'${postType}')"><i class="fas fa-eye-slash"></i> ${t('menu_hide')}</div>
             <div class="option-item" onclick="reportPost(${postId},'${postType}')"><i class="fas fa-flag"></i> ${t('menu_report')}</div>
@@ -1685,41 +1727,31 @@ function selectVisibility(e) {
 }
 function selectGroupForPost(e, t_elem) { selectedGroupId = e; document.querySelectorAll(".group-selector-btn").forEach(el => el.classList.remove("selected")); t_elem.classList.add("selected"); }
 function publishPost() {
-    // ✅ Empêcher la double publication
     if (window.isPublishing) return;
     window.isPublishing = true;
     
     const content = document.getElementById("postContent").value.trim();
-    
-    // ✅ Vérifier que ce n'est pas vide (juste des espaces)
     if (!content && !currentImageData && !currentDocData) {
         window.isPublishing = false;
         return showToast(t('toast_empty'), true);
     }
-    
-    // ✅ Limiter le texte à 5000 caractères
     if (content.length > 3000) {
         document.getElementById("postContent").value = content.substring(0, 3000);
         window.isPublishing = false;
         showToast('⚠️ Texte limité à 3000 caractères', true);
         return;
     }
-    
-    // ✅ Vérifier le groupe si publication groupée
     if (currentVisibility === "group" && !selectedGroupId) {
         window.isPublishing = false;
         return showToast(t('toast_select_group'), true);
     }
-    
     const group = currentVisibility === "group" ? userGroups.find(g => g.id === selectedGroupId) : null;
-    
-    // ✅ Créer le post
     const newPost = {
         id: Date.now(),
         author: myProfile.fullName || 'Utilisateur',
         authorUsername: myProfile.username || '',
         authorAvatar: myProfile.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(myProfile.fullName || 'U')}&background=38bdf8&color=fff`,
-        content: content.substring(0, 5000), // Double sécurité
+        content: content.substring(0, 5000),
         image: currentImageData || null,
         document: currentDocData || null,
         documentName: currentDocName || null,
@@ -1731,8 +1763,6 @@ function publishPost() {
         comments: [],
         timestamp: Date.now()
     };
-    
-    // ✅ Sauvegarder avec try-catch (localStorage plein)
     try {
         posts.unshift(newPost);
         saveAllData();
@@ -1741,13 +1771,10 @@ function publishPost() {
         renderProfile();
         showToast(t('toast_published'));
     } catch (storageError) {
-        // Enlever le post si la sauvegarde a échoué
         posts = posts.filter(p => p.id !== newPost.id);
         showToast('❌ Fichier trop volumineux (max 10 Mo)', true);
         console.error('Erreur localStorage:', storageError);
     }
-    
-    // ✅ Réactiver le bouton
     window.isPublishing = false;
 }
 
@@ -1782,25 +1809,18 @@ function openEditProfileModal() {
 function closeEditProfileModal() { document.getElementById("editProfileModal").classList.remove("active"); }
 function saveProfile() {
     if (!isOwner) return;
-    
-    // 🆕 Sauvegarder l'ancien nom avant modification
     const oldName = userProfile.fullName;
     const oldUsername = userProfile.username;
-    
-    // ✅ Récupérer et limiter les champs
     let fullName = document.getElementById("editFullName").value.trim();
     let username = document.getElementById("editUsername").value.trim();
     let bio = document.getElementById("editBio").value.trim();
     let email = document.getElementById("editEmail").value.trim();
     let location = document.getElementById("editLocation").value.trim();
     
-    // ✅ Validation nom complet (max 60 caractères)
     if (fullName.length > 40) {
         fullName = fullName.substring(0, 40);
         showToast('⚠️ Nom complet limité à 40 caractères');
     }
-    
-    // ✅ Validation username (max 30 car, lettres, chiffres, underscore)
     if (username.length > 20) {
         username = username.substring(0, 20);
         showToast('⚠️ Username limité à 20 caractères');
@@ -1809,20 +1829,14 @@ function saveProfile() {
         showToast('❌ Username : uniquement lettres, chiffres, underscore', true);
         return;
     }
-    
-    // ✅ Validation bio (max 250 caractères)
     if (bio.length > 250) {
         bio = bio.substring(0, 250);
         showToast('⚠️ Bio limitée à 250 caractères');
     }
-    
-    // ✅ Validation email basique
     if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
         showToast('❌ Format email invalide', true);
         return;
     }
-    
-    // ✅ Appliquer les modifications
     if (fullName) userProfile.fullName = fullName;
     if (username) userProfile.username = username;
     userProfile.bio = bio || userProfile.bio;
@@ -1830,13 +1844,9 @@ function saveProfile() {
     userProfile.location = location || userProfile.location;
     if (tempAvatar) userProfile.avatar = tempAvatar;
     if (tempCover) userProfile.cover = tempCover;
-    
-    // 🆕 Mettre à jour le nom dans tous les contenus si changé
     if (fullName && fullName !== oldName) {
         updateAllContentAuthor(oldName, fullName, oldUsername, username);
     }
-    
-    // ✅ Sauvegarder avec try-catch
     try {
         saveAllData();
         renderProfile();
@@ -1848,70 +1858,37 @@ function saveProfile() {
     }
 }
 
-// 🆕 Fonction pour mettre à jour l'auteur dans tous les contenus
 function updateAllContentAuthor(oldName, newName, oldUsername, newUsername) {
-    // Mettre à jour les posts
     const allPosts = JSON.parse(localStorage.getItem('estra_posts') || '[]');
-    let postsUpdated = 0;
     allPosts.forEach(p => {
         if (p.author === oldName || p.authorUsername === oldUsername) {
             p.author = newName;
             if (newUsername) p.authorUsername = newUsername;
-            postsUpdated++;
         }
-        // Mettre à jour les commentaires
         if (p.comments) {
             p.comments.forEach(c => {
-                if (c.author === oldName || c.author === oldUsername) {
-                    c.author = newName;
-                }
+                if (c.author === oldName || c.author === oldUsername) c.author = newName;
             });
         }
     });
     localStorage.setItem('estra_posts', JSON.stringify(allPosts));
     posts = allPosts;
-    
-    // Mettre à jour les cours
     const allCourses = JSON.parse(localStorage.getItem('estra_courses_v4') || '[]');
-    let coursesUpdated = 0;
-    allCourses.forEach(c => {
-        if (c.author === oldName || c.author === oldUsername) {
-            c.author = newName;
-            coursesUpdated++;
-        }
-    });
+    allCourses.forEach(c => { if (c.author === oldName || c.author === oldUsername) c.author = newName; });
     localStorage.setItem('estra_courses_v4', JSON.stringify(allCourses));
-    
-    // Mettre à jour les événements
     const allEvents = JSON.parse(localStorage.getItem('estra_events') || '[]');
-    let eventsUpdated = 0;
     allEvents.forEach(e => {
-        if (e.organizer === oldName || e.organizer === oldUsername) {
-            e.organizer = newName;
-            eventsUpdated++;
-        }
-        if (e.author === oldName || e.author === oldUsername) {
-            e.author = newName;
-        }
+        if (e.organizer === oldName || e.organizer === oldUsername) e.organizer = newName;
+        if (e.author === oldName || e.author === oldUsername) e.author = newName;
     });
     localStorage.setItem('estra_events', JSON.stringify(allEvents));
     eventsList = allEvents;
-    
-    // Mettre à jour les amis
     const allFriends = JSON.parse(localStorage.getItem('estra_friends') || '[]');
-    allFriends.forEach(f => {
-        if (f.name === oldName) f.name = newName;
-    });
+    allFriends.forEach(f => { if (f.name === oldName) f.name = newName; });
     localStorage.setItem('estra_friends', JSON.stringify(allFriends));
-    
-    // Mettre à jour les conversations
     const allConversations = JSON.parse(localStorage.getItem('estra_conversations') || '[]');
-    allConversations.forEach(c => {
-        if (c.name === oldName) c.name = newName;
-    });
+    allConversations.forEach(c => { if (c.name === oldName) c.name = newName; });
     localStorage.setItem('estra_conversations', JSON.stringify(allConversations));
-    
-    // Mettre à jour dans la base utilisateurs
     const allUsers = JSON.parse(localStorage.getItem('estra_all_users') || '[]');
     const user = allUsers.find(u => u.username === oldUsername || u.username === newUsername);
     if (user) {
@@ -1919,236 +1896,74 @@ function updateAllContentAuthor(oldName, newName, oldUsername, newUsername) {
         if (newUsername) user.username = newUsername;
     }
     localStorage.setItem('estra_all_users', JSON.stringify(allUsers));
-    
-    // Mettre à jour le profil courant
     const profile = JSON.parse(localStorage.getItem('estra_profile') || '{}');
     profile.fullName = newName;
     if (newUsername) profile.username = newUsername;
     localStorage.setItem('estra_profile', JSON.stringify(profile));
-    
-    // Notification inter-onglets
-    localStorage.setItem('estra_name_updated', JSON.stringify({
-        oldName: oldName,
-        newName: newName,
-        username: newUsername || oldUsername,
-        timestamp: Date.now()
-    }));
-    
-    console.log(`✅ Nom mis à jour : "${oldName}" → "${newName}" (${postsUpdated} posts, ${coursesUpdated} cours, ${eventsUpdated} événements)`);
+    localStorage.setItem('estra_name_updated', JSON.stringify({ oldName, newName, username: newUsername || oldUsername, timestamp: Date.now() }));
 }
+
 function changeAvatar() {
     if (!isOwner) return;
-    
     const input = document.createElement("input");
     input.type = "file";
     input.accept = "image/jpeg, image/png, image/webp";
-    
     input.onchange = ev => {
         if (!ev.target.files[0]) return;
-        
         const file = ev.target.files[0];
-        const maxSize = 5 * 1024 * 1024; // 5 Mo
+        const maxSize = 5 * 1024 * 1024;
         const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
-        
-        // ✅ Vérifier la taille
-        if (file.size > maxSize) {
-            showToast('❌ Image trop volumineuse (max 5 Mo)', true);
-            return;
-        }
-        
-        // ✅ Vérifier le format
-        if (!allowedTypes.includes(file.type)) {
-            showToast('❌ Format non supporté (JPG, PNG, WEBP)', true);
-            return;
-        }
-        
+        if (file.size > maxSize) { showToast('❌ Image trop volumineuse (max 5 Mo)', true); return; }
+        if (!allowedTypes.includes(file.type)) { showToast('❌ Format non supporté (JPG, PNG, WEBP)', true); return; }
         const reader = new FileReader();
         reader.onload = e => {
             const newAvatar = e.target.result;
-            
-            // Vérifier que le base64 n'est pas trop long
-            if (newAvatar.length > 7 * 1024 * 1024) { // ~7 Mo en base64
-                showToast('❌ Image trop volumineuse après conversion', true);
-                return;
-            }
-            
-            // Sauvegarder avec try-catch pour localStorage plein
+            if (newAvatar.length > 7 * 1024 * 1024) { showToast('❌ Image trop volumineuse après conversion', true); return; }
             try {
-                // Mettre à jour le profil
                 userProfile.avatar = newAvatar;
                 myProfile.avatar = newAvatar;
                 ESTRA.updateProfile({ avatar: newAvatar });
                 updateUserInDB(myProfile.username, { avatar: newAvatar });
-                
-                // Mettre à jour tous les posts
                 const allPosts = JSON.parse(localStorage.getItem('estra_posts') || '[]');
-                let postsModifies = false;
-                
                 allPosts.forEach(p => {
-                    if (p.author === myProfile.fullName ||
-                        p.author === myProfile.username ||
-                        p.authorUsername === myProfile.username) {
+                    if (p.author === myProfile.fullName || p.author === myProfile.username || p.authorUsername === myProfile.username) {
                         p.authorAvatar = newAvatar;
-                        postsModifies = true;
                     }
                     if (p.comments) {
                         p.comments.forEach(c => {
-                            if (c.author === myProfile.fullName ||
-                                c.author === myProfile.username) {
-                                c.avatar = newAvatar;
-                                postsModifies = true;
-                            }
+                            if (c.author === myProfile.fullName || c.author === myProfile.username) c.avatar = newAvatar;
                         });
                     }
                 });
-                
-                if (postsModifies) {
-                    localStorage.setItem('estra_posts', JSON.stringify(allPosts));
-                    posts = allPosts;
-                }
-                
-                // Mettre à jour les événements
+                localStorage.setItem('estra_posts', JSON.stringify(allPosts));
+                posts = allPosts;
                 const allEvents = JSON.parse(localStorage.getItem('estra_events') || '[]');
                 allEvents.forEach(ev => {
-                    if (ev.organizer === myProfile.fullName ||
-                        ev.author === myProfile.fullName ||
-                        ev.organizer === myProfile.username) {
+                    if (ev.organizer === myProfile.fullName || ev.author === myProfile.fullName || ev.organizer === myProfile.username) {
                         ev.organizerAvatar = newAvatar;
                     }
                 });
                 localStorage.setItem('estra_events', JSON.stringify(allEvents));
                 eventsList = allEvents;
-                
-                // Mettre à jour les cours
                 const allCourses = JSON.parse(localStorage.getItem('estra_courses_v4') || '[]');
-                allCourses.forEach(c => {
-                    if (c.author === myProfile.fullName || c.author === myProfile.username) {
-                        c.authorAvatar = newAvatar;
-                    }
-                });
+                allCourses.forEach(c => { if (c.author === myProfile.fullName || c.author === myProfile.username) c.authorAvatar = newAvatar; });
                 localStorage.setItem('estra_courses_v4', JSON.stringify(allCourses));
-                
-                // Notification inter-onglets
-                localStorage.setItem('estra_avatar_updated', JSON.stringify({
-                    username: myProfile.username,
-                    fullName: myProfile.fullName,
-                    avatar: newAvatar,
-                    timestamp: Date.now()
-                }));
-                
-                // Rafraîchir l'affichage
+                localStorage.setItem('estra_avatar_updated', JSON.stringify({ username: myProfile.username, fullName: myProfile.fullName, avatar: newAvatar, timestamp: Date.now() }));
                 saveAllData();
                 renderProfile();
-                if (currentTab === 'posts' || currentTab === 'media' || currentTab === 'likes') {
-                    renderPosts();
-                }
-                
+                if (currentTab === 'posts' || currentTab === 'media' || currentTab === 'likes') renderPosts();
                 showToast('📸 Avatar mis à jour sur tous tes contenus !');
-                
             } catch (storageError) {
                 showToast('❌ Image trop volumineuse (max 5 Mo)', true);
                 console.error('Erreur localStorage:', storageError);
             }
         };
-        
-        reader.onerror = () => {
-            showToast('❌ Erreur de lecture du fichier', true);
-        };
-        
+        reader.onerror = () => { showToast('❌ Erreur de lecture du fichier', true); };
         reader.readAsDataURL(file);
     };
-    
     input.click();
 }
 
-// 🆕 Nouvelle fonction pour synchroniser l'avatar dans tous les posts
-function syncAvatarInAllPosts(username, newAvatar) {
-    const fullName = myProfile.fullName;
-    
-    // Mettre à jour les posts dans le localStorage
-    const allPosts = JSON.parse(localStorage.getItem('estra_posts') || '[]');
-    allPosts.forEach(p => {
-        if (p.author === username || p.author === fullName || p.authorUsername === username) {
-            p.authorAvatar = newAvatar;
-        }
-        // Mettre à jour les commentaires
-        if (p.comments) {
-            p.comments.forEach(c => {
-                if (c.author === username || c.author === fullName) {
-                    c.avatar = newAvatar;
-                }
-            });
-        }
-    });
-    localStorage.setItem('estra_posts', JSON.stringify(allPosts));
-    posts = allPosts;
-    
-    // Mettre à jour les événements
-    const allEvents = JSON.parse(localStorage.getItem('estra_events') || '[]');
-    allEvents.forEach(e => {
-        if (e.author === username || e.organizer === username || e.author === fullName) {
-            e.authorAvatar = newAvatar;
-        }
-    });
-    localStorage.setItem('estra_events', JSON.stringify(allEvents));
-    eventsList = allEvents;
-}
-
-// 🆕 Fonction pour mettre à jour les avatars dans tous les posts
-function updateAllPostsAvatar(username, newAvatar) {
-    // Mettre à jour dans les posts
-    posts.forEach(p => {
-        if (p.author === username || p.authorUsername === username ||
-            p.author === myProfile.fullName || p.authorUsername === myProfile.username) {
-            p.authorAvatar = newAvatar;
-        }
-    });
-    
-    // Mettre à jour dans les événements
-    eventsList.forEach(e => {
-        if (e.author === username || e.organizer === username) {
-            e.authorAvatar = newAvatar;
-        }
-    });
-    
-    // Mettre à jour dans les jobs (si encore utilisés)
-    if (typeof jobsList !== 'undefined') {
-        jobsList.forEach(j => {
-            if (j.author === username) {
-                j.authorAvatar = newAvatar;
-            }
-        });
-    }
-    
-    // Sauvegarder les modifications
-    localStorage.setItem('estra_posts', JSON.stringify(posts));
-    localStorage.setItem('estra_events', JSON.stringify(eventsList));
-}
-
-// 🆕 Fonction pour mettre à jour les avatars dans tous les commentaires
-function updateAllCommentsAvatar(username, newAvatar) {
-    // Dans les posts
-    posts.forEach(p => {
-        if (p.comments) {
-            p.comments.forEach(c => {
-                if (c.author === username || c.author === myProfile.fullName) {
-                    c.avatar = newAvatar;
-                }
-            });
-        }
-    });
-    
-    // Dans les événements
-    eventsList.forEach(e => {
-        if (e.comments) {
-            e.comments.forEach(c => {
-                if (c.author === username || c.author === myProfile.fullName) {
-                    c.avatar = newAvatar;
-                }
-            });
-        }
-    });
-}
 function changeCover() { if (!isOwner) return; selectedCoverId = null; if (userProfile.cover) { const found = coverImages.find(img => img.url === userProfile.cover); if (found) selectedCoverId = found.id; } renderCoverGrid(); document.getElementById("coverSelectionModal").classList.add("active"); }
 function chooseCover() { closeEditProfileModal(); changeCover(); }
 function closeCoverSelectionModal() { document.getElementById("coverSelectionModal").classList.remove("active"); }
@@ -2247,7 +2062,6 @@ function openProInfoModal() {
     const body = document.getElementById('proInfoModalBody');
     const title = document.getElementById('proInfoModalTitle');
     if (!modal || !body) return;
-    
     const typeLabels = {
         student: '🎓 Étudiant',
         highschool: '🏫 Élève',
@@ -2262,14 +2076,10 @@ function openProInfoModal() {
         teacher: 'fsm-badge-business',
         simple: 'fsm-badge-hospital'
     };
-    
     if (title) title.innerHTML = `<i class="fas fa-id-card"></i> ${typeLabels[userProfile.accountType] || 'Profil'}`;
-    
     let html = `<span class="pro-fsm-badge ${badgeClasses[userProfile.accountType] || 'fsm-badge-student'}">${typeLabels[userProfile.accountType] || 'Profil'}</span>`;
-    
     const viewerRole = myProfile.accountType || 'simple';
     const canViewSensitives = ESTRA.canViewSensitiveInfo(viewerRole, userProfile.accountType);
-    
     switch(userProfile.accountType) {
         case 'student': html += renderStudentInfo(canViewSensitives); break;
         case 'professor': html += renderProfessorInfo(); break;
@@ -2277,7 +2087,6 @@ function openProInfoModal() {
         case 'highschool': html += renderPupilInfo(canViewSensitives); break;
         case 'simple': html += renderSimpleInfo(); break;
     }
-    
     body.innerHTML = html;
     modal.classList.add('active');
 }
@@ -2306,20 +2115,52 @@ function renderStudentInfo(canAccess) {
     html += '</div>';
     return html;
 }
-function renderCompanyInfo() {
-    let html = '<div class="pro-fsm-card"><h4><i class="fas fa-building"></i> Informations Entreprise</h4><div class="pro-fsm-grid">';
-    if (userProfile.companyName) html += `<div class="pro-fsm-item"><span class="fsm-label">🏢 Nom</span><span class="fsm-value">${userProfile.companyName}</span></div>`;
-    if (userProfile.companyVisibility) html += `<div class="pro-fsm-item"><span class="fsm-label">👁️ Visibilité</span><span class="fsm-value">${userProfile.companyVisibility === 'public' ? '🌍 Publique' : '🔒 Privée'}</span></div>`;
-    if (userProfile.sector) html += `<div class="pro-fsm-item"><span class="fsm-label">📋 Secteur</span><span class="fsm-value">${userProfile.sector}</span></div>`;
-    if (userProfile.companySize) html += `<div class="pro-fsm-item"><span class="fsm-label">👥 Taille</span><span class="fsm-value">${userProfile.companySize} employés</span></div>`;
-    if (userProfile.website) html += `<div class="pro-fsm-item"><span class="fsm-label">🌐 Site web</span><span class="fsm-value"><a href="${userProfile.website}" target="_blank" style="color:var(--cyan)">${userProfile.website}</a></span></div>`;
+function renderProfessorInfo() {
+    let html = '<div class="pro-fsm-card"><h4><i class="fas fa-university"></i> Parcours Académique</h4><div class="pro-fsm-grid">';
+    if (userProfile.institution) html += `<div class="pro-fsm-item"><span class="fsm-label">🏫 Institution</span><span class="fsm-value">${userProfile.institution}</span></div>`;
+    if (userProfile.grade) html += `<div class="pro-fsm-item"><span class="fsm-label">📚 Grade</span><span class="fsm-value">${userProfile.grade}</span></div>`;
+    if (userProfile.speciality) html += `<div class="pro-fsm-item"><span class="fsm-label">🎯 Spécialité</span><span class="fsm-value">${userProfile.speciality}</span></div>`;
+    if (userProfile.experience) html += `<div class="pro-fsm-item"><span class="fsm-label">📅 Expérience</span><span class="fsm-value">${userProfile.experience} ans</span></div>`;
+    html += '</div></div>';
+    html += renderCVSection();
+    return html;
+}
+function renderTeacherInfo() {
+    let html = '<div class="pro-fsm-card"><h4><i class="fas fa-school"></i> Enseignement</h4><div class="pro-fsm-grid">';
+    if (userProfile.school) html += `<div class="pro-fsm-item"><span class="fsm-label">🏫 École</span><span class="fsm-value">${userProfile.school}</span></div>`;
+    if (userProfile.level) html += `<div class="pro-fsm-item"><span class="fsm-label">📚 Niveau</span><span class="fsm-value">${userProfile.level}</span></div>`;
+    if (userProfile.mainSubject) html += `<div class="pro-fsm-item"><span class="fsm-label">📖 Matière</span><span class="fsm-value">${userProfile.mainSubject}</span></div>`;
+    if (userProfile.section) html += `<div class="pro-fsm-item"><span class="fsm-label">📋 Section</span><span class="fsm-value">${userProfile.section}</span></div>`;
+    html += '</div></div>';
+    html += renderCVSection();
+    return html;
+}
+function renderPupilInfo(canAccess) {
+    let html = '<div class="pro-fsm-card"><h4><i class="fas fa-school"></i> Scolarité</h4><div class="pro-fsm-grid">';
+    if (userProfile.school) html += `<div class="pro-fsm-item"><span class="fsm-label">🏫 École</span><span class="fsm-value">${userProfile.school}</span></div>`;
+    if (userProfile.level) html += `<div class="pro-fsm-item"><span class="fsm-label">📚 Classe</span><span class="fsm-value">${userProfile.level}</span></div>`;
+    if (userProfile.section) html += `<div class="pro-fsm-item"><span class="fsm-label">📋 Section</span><span class="fsm-value">${userProfile.section}</span></div>`;
     html += '</div></div>';
     return html;
 }
-function renderBusinessInfo() { return '<div class="pro-fsm-card"><h4><i class="fas fa-store"></i> Informations Business</h4><p style="color:var(--text-secondary)">Fonctionnalité Business activée.</p></div>'; }
-function renderHospitalInfo() { return '<div class="pro-fsm-card"><h4><i class="fas fa-hospital"></i> Informations Hôpital</h4><p style="color:var(--text-secondary)">Fonctionnalité Hôpital activée.</p></div>'; }
-function renderInstitutionInfo() { return '<div class="pro-fsm-card"><h4><i class="fas fa-landmark"></i> Informations Établissement</h4><p style="color:var(--text-secondary)">Fonctionnalité Établissement activée.</p></div>'; }
-
+function renderSimpleInfo() {
+    return `<div class="pro-fsm-card"><h4><i class="fas fa-user"></i> Informations</h4>
+        <p style="color:var(--text-secondary);">Profil utilisateur simple. 
+        <button class="profile-btn" style="margin-top:10px;" onclick="showToast('Fonctionnalité disponible prochainement')">
+            <i class="fas fa-arrow-up"></i> Passer à un profil pro
+        </button></p></div>`;
+}
+function renderCVSection() {
+    let html = '<div class="pro-fsm-card"><h4><i class="fas fa-file-alt"></i> CV / Document</h4>';
+    if (userProfile.cvData && userProfile.cvName) {
+        html += `<div class="cv-download-area"><div class="cv-info"><i class="fas fa-file-pdf"></i><div><strong>${userProfile.cvName}</strong></div></div>
+                 <button class="btn-download-cv" onclick="downloadCV()"><i class="fas fa-download"></i> Télécharger</button></div>`;
+    } else {
+        html += `<p style="color:var(--text-secondary);">Aucun document</p>`;
+    }
+    html += '</div>';
+    return html;
+}
 function downloadCV() {
     if (userProfile.cvData && userProfile.cvName) {
         const a = document.createElement('a');
@@ -2332,30 +2173,13 @@ function changeCV() {
     const input = document.createElement('input');
     input.type = 'file';
     input.accept = '.pdf,.doc,.docx';
-    
     input.onchange = function(e) {
         if (!e.target.files[0]) return;
-        
         const file = e.target.files[0];
-        const maxSize = 10 * 1024 * 1024; // 10 Mo
-        const allowedTypes = [
-            'application/pdf',
-            'application/msword',
-            'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
-        ];
-        
-        // ✅ Vérifier la taille
-        if (file.size > maxSize) {
-            showToast('❌ CV trop volumineux (max 10 Mo)', true);
-            return;
-        }
-        
-        // ✅ Vérifier le format
-        if (!allowedTypes.includes(file.type)) {
-            showToast('❌ Format non supporté (PDF, DOC, DOCX)', true);
-            return;
-        }
-        
+        const maxSize = 10 * 1024 * 1024;
+        const allowedTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+        if (file.size > maxSize) { showToast('❌ CV trop volumineux (max 10 Mo)', true); return; }
+        if (!allowedTypes.includes(file.type)) { showToast('❌ Format non supporté (PDF, DOC, DOCX)', true); return; }
         const reader = new FileReader();
         reader.onload = function(ev) {
             try {
@@ -2368,14 +2192,12 @@ function changeCV() {
                 showToast('❌ Fichier trop volumineux (max 5 Mo)', true);
             }
         };
-        reader.onerror = () => {
-            showToast('❌ Erreur de lecture du fichier', true);
-        };
+        reader.onerror = () => { showToast('❌ Erreur de lecture du fichier', true); };
         reader.readAsDataURL(file);
     };
-    
     input.click();
 }
+
 // ================= DASHBOARD =================
 function openDashboard() {
     document.getElementById("dashViews").textContent = Math.floor(Math.random() * 5000) + 1200;
@@ -2395,10 +2217,8 @@ function updateRightSidebar() {
     const rs = document.getElementById('rightPeopleSuggestions');
     const rg = document.getElementById('rightGroupSuggestions');
     if (!rs || !rg) return;
-    
     const allUsers = getAllUsers();
     const otherUsers = allUsers.filter(u => u.username !== myProfile.username && !userFriends.some(f => f.username === u.username));
-    
     if (otherUsers.length === 0) {
         rs.innerHTML = '<div style="font-size:0.8rem;color:var(--text-secondary);text-align:center;">Aucune suggestion</div>';
     } else {
@@ -2415,7 +2235,6 @@ function updateRightSidebar() {
             </div>
         `).join('');
     }
-    
     const suggG = groups.filter(g => !userGroups.some(ug => ug.id === g.id)).slice(0, 3);
     if (suggG.length === 0) {
         rg.innerHTML = '<div style="font-size:0.8rem;color:var(--text-secondary);text-align:center;">Aucune suggestion</div>';
@@ -2434,93 +2253,7 @@ function updateRightSidebar() {
     }
 }
 
-// ================= INITIALISATION =================
-document.addEventListener("DOMContentLoaded", () => {
-    loadData();
-    checkOnlineStatus();
-    document.getElementById("sidebarOverlay").addEventListener("click", closeSidebar);
-    window.addEventListener("online", checkOnlineStatus);
-    window.addEventListener("offline", checkOnlineStatus);
-    // 🆕 Écouter les changements d'avatar depuis d'autres onglets
-// 🆕 Écouter les changements d'avatar depuis d'autres onglets
-window.addEventListener('storage', function(e) {
-    if (e.key === 'estra_avatar_updated') {
-        const data = JSON.parse(e.newValue || '{}');
-        if (data.username && data.avatar) {
-            // Mettre à jour si c'est le profil qu'on regarde
-            if (userProfile.username === data.username ||
-                userProfile.fullName === data.username) {
-                userProfile.avatar = data.avatar;
-                renderProfile();
-            }
-            
-            // Mettre à jour si c'est notre propre profil
-            if (myProfile.username === data.username) {
-                myProfile.avatar = data.avatar;
-                document.getElementById('navAvatar').src = data.avatar;
-                document.getElementById('sidebarAvatar').src = data.avatar;
-            }
-            
-            // Mettre à jour les posts
-            updateAllPostsAvatar(data.username, data.avatar);
-            if (currentTab === 'posts' || currentTab === 'media' || currentTab === 'likes') {
-                renderPosts();
-            }
-        }
-    }
-});
-    // Fermer la sidebar si on clique en dehors
-    document.addEventListener("click", function(e) {
-        const sidebar = document.getElementById("sidebar");
-        const toggle = document.querySelector(".menu-toggle");
-        if (sidebar.classList.contains("open") && !sidebar.contains(e.target) && e.target !== toggle && !toggle?.contains(e.target)) {
-            closeSidebar();
-        }
-        if (activePostMenu && !e.target.closest(".post-options-menu") && !e.target.closest(".post-menu-btn")) {
-            activePostMenu.remove();
-            activePostMenu = null;
-        }
-});
-    
-    // Fermer les modales si on clique sur l'overlay
-    document.getElementById("coverSelectionModal")?.addEventListener("click", e => { if (e.target === document.getElementById("coverSelectionModal")) closeCoverSelectionModal(); });
-    document.getElementById("editProfileModal")?.addEventListener("click", e => { if (e.target === document.getElementById("editProfileModal")) closeEditProfileModal(); });
-    document.getElementById("postModal")?.addEventListener("click", e => { if (e.target === document.getElementById("postModal")) closePostModal(); });
-    document.getElementById("shareModal")?.addEventListener("click", e => { if (e.target === document.getElementById("shareModal")) closeShareModal(); });
-    document.getElementById("proInfoModal")?.addEventListener("click", e => { if (e.target === document.getElementById("proInfoModal")) closeProInfoModal(); });
-    
-    // Écouter les changements dans le localStorage (depuis d'autres onglets)
-    window.addEventListener("storage", e => {
-        if (e.key === "estra_profile") {
-            myProfile = ESTRA.getProfile() || {};
-            if (isOwner) { userProfile = { ...myProfile }; renderProfile(); }
-        }
-        if (e.key === "estra_all_users") {
-            if (!isOwner) {
-                const viewUsername = new URLSearchParams(window.location.search).get('user');
-                if (viewUsername) {
-                    const foundUser = getUserByUsername(viewUsername);
-                    if (foundUser) { userProfile = { ...foundUser }; renderProfile(); }
-                }
-            }
-        }
-    });
-    
-    // Mettre à jour les badges de notification
-    setInterval(() => {
-        const notifications = JSON.parse(localStorage.getItem("estra_notifications") || "[]");
-        const unread = notifications.filter(n => !n.read).length;
-        const notifBadge = document.getElementById("notifBadge");
-        if (notifBadge) {
-            notifBadge.style.display = unread > 0 ? "block" : "none";
-            if (unread > 0) notifBadge.textContent = unread > 99 ? "99+" : unread;
-        }
-    }, 30000);
-});
-// ============================================================
-// BOTTOM SHEET - IDENTIQUE À L'ACCUEIL
-// ============================================================
-
+// ================= BOTTOM SHEET =================
 const BS = {
     currentPostId: null,
     currentPostType: 'post',
@@ -2542,7 +2275,6 @@ const BS = {
                 setTimeout(() => { el.style.display = 'none'; }, 350);
             }
         });
-
         if (!keepBodyFixed) {
             document.body.style.overflow = '';
             document.body.style.position = '';
@@ -2553,7 +2285,6 @@ const BS = {
     },
 
     _ensureElements() {
-        // Menu (SANS en-tête ni bouton Annuler)
         if (!document.getElementById('bsMenuOverlay')) {
             const overlay = document.createElement('div');
             overlay.id = 'bsMenuOverlay';
@@ -2564,14 +2295,9 @@ const BS = {
             const sheet = document.createElement('div');
             sheet.id = 'bsMenuSheet';
             sheet.className = 'bottom-sheet';
-            sheet.innerHTML = `
-                <div class="bottom-sheet-handle"></div>
-                <div id="bsMenuItems"></div>
-            `;
+            sheet.innerHTML = `<div class="bottom-sheet-handle"></div><div id="bsMenuItems"></div>`;
             document.body.appendChild(sheet);
         }
-
-        // Partage (AVEC en-tête "Partager", SANS bouton Annuler)
         if (!document.getElementById('bsShareOverlay')) {
             const overlay = document.createElement('div');
             overlay.id = 'bsShareOverlay';
@@ -2584,19 +2310,10 @@ const BS = {
             sheet.className = 'bottom-sheet';
             sheet.innerHTML = `
                 <div class="bottom-sheet-handle"></div>
-                <div class="bottom-sheet-header">
-                    <i class="fas fa-share-alt" style="color:var(--cyan)"></i> Partager
-                </div>
-                <div style="padding:0 16px 8px">
-                    <textarea id="bsShareMsg" class="bs-textarea" placeholder="Ajouter un message..." rows="2"></textarea>
-                </div>
+                <div class="bottom-sheet-header"><i class="fas fa-share-alt" style="color:var(--cyan)"></i> Partager</div>
+                <div style="padding:0 16px 8px"><textarea id="bsShareMsg" class="bs-textarea" placeholder="Ajouter un message..." rows="2"></textarea></div>
                 <div class="share-grid-bs" id="bsShareGrid"></div>
-                <div style="padding:0 16px 12px">
-                    <div class="bs-copy-link-zone" id="bsCopyLinkBtn">
-                        <i class="fas fa-link" style="color:var(--cyan)"></i>
-                        <span style="color:var(--cyan);font-weight:600;margin-left:8px">Copier le lien</span>
-                    </div>
-                </div>
+                <div style="padding:0 16px 12px"><div class="bs-copy-link-zone" id="bsCopyLinkBtn"><i class="fas fa-link" style="color:var(--cyan)"></i><span style="color:var(--cyan);font-weight:600;margin-left:8px;">Copier le lien</span></div></div>
             `;
             document.body.appendChild(sheet);
             document.getElementById('bsCopyLinkBtn').addEventListener('click', () => this._copyCurrentLink());
@@ -2608,15 +2325,12 @@ const BS = {
         this.currentPostId = postId;
         this.currentPostType = postType;
         this.scrollY = window.scrollY;
-
         const overlay = document.getElementById('bsMenuOverlay');
         const sheet = document.getElementById('bsMenuSheet');
         const items = document.getElementById('bsMenuItems');
-
         let html = '';
         html += this._menuItem('share', 'Partager', 'Envoyer à vos amis', 'fas fa-share-alt', 'rgba(56,189,248,0.1)', 'var(--cyan)');
         html += this._menuItem('copyLink', 'Copier le lien', "Copier l'URL", 'fas fa-link', 'rgba(99,102,241,0.1)', '#6366f1');
-
         if (isOwner) {
             html += '<div class="bottom-sheet-divider"></div>';
             html += this._menuItem('pin', isPinned ? 'Désépingler' : 'Épingler en haut', isPinned ? 'Retirer du haut' : 'Afficher en premier', 'fas fa-thumbtack', 'rgba(245,158,11,0.1)', '#f59e0b');
@@ -2629,82 +2343,47 @@ const BS = {
             html += this._menuItem('hide', 'Masquer', 'Ne plus voir', 'fas fa-eye-slash', 'rgba(100,116,139,0.1)', '#64748b');
             html += this._menuItem('report', 'Signaler', 'Contenu inapproprié', 'fas fa-flag', 'rgba(245,158,11,0.1)', '#f59e0b');
         }
-
         items.innerHTML = html;
-
         items.querySelectorAll('.bottom-sheet-item').forEach(item => {
             const action = item.dataset.action;
             if (!action) return;
             item.addEventListener('click', (e) => {
                 e.stopPropagation();
                 switch (action) {
-                    case 'share':
-                        this.closeAll(true);
-                        this.openShare(postId);
-                        break;
-                    case 'copyLink':
-                        this.copyLink(postId);
-                        break;
-                    case 'pin':
-                        this.pinPost(postId);
-                        break;
-                    case 'hide':
-                        this.hidePost(postId);
-                        break;
-                    case 'delete':
-                        this.deletePost(postId);
-                        break;
-                    case 'save':
-                        this.savePost(postId);
-                        break;
-                    case 'report':
-                        this.reportPost(postId);
-                        break;
+                    case 'share': this.closeAll(true); this.openShare(postId); break;
+                    case 'copyLink': this.copyLink(postId); break;
+                    case 'pin': this.pinPost(postId); break;
+                    case 'hide': this.hidePost(postId); break;
+                    case 'delete': this.deletePost(postId); break;
+                    case 'save': this.savePost(postId); break;
+                    case 'report': this.reportPost(postId); break;
                 }
             });
         });
-
         overlay.style.display = 'block';
         sheet.style.display = 'block';
         document.body.style.overflow = 'hidden';
         document.body.style.position = 'fixed';
         document.body.style.width = '100%';
         document.body.style.top = `-${this.scrollY}px`;
-
         requestAnimationFrame(() => {
             overlay.classList.add('active');
             sheet.classList.add('active');
         });
-
-        overlay.onclick = (e) => {
-            if (e.target === overlay) this.closeAll();
-        };
-
+        overlay.onclick = (e) => { if (e.target === overlay) this.closeAll(); };
         this._setupSwipe(sheet);
     },
 
     _menuItem(action, title, subtitle, icon, bgColor, color, danger = false) {
-        return `
-            <div class="bottom-sheet-item${danger ? ' danger' : ''}" data-action="${action}">
-                <div class="bs-icon" style="background:${bgColor};color:${color};">
-                    <i class="${icon}"></i>
-                </div>
-                <div class="bs-text">
-                    <div>${title}</div>
-                    <div class="bs-subtitle">${subtitle}</div>
-                </div>
-            </div>
-        `;
+        return `<div class="bottom-sheet-item${danger ? ' danger' : ''}" data-action="${action}"><div class="bs-icon" style="background:${bgColor};color:${color};"><i class="${icon}"></i></div><div class="bs-text"><div>${title}</div><div class="bs-subtitle">${subtitle}</div></div></div>`;
     },
 
     openShare(postId) {
         this._ensureElements();
         this.currentSharePostId = postId;
-
         const overlay = document.getElementById('bsShareOverlay');
         const sheet = document.getElementById('bsShareSheet');
         const grid = document.getElementById('bsShareGrid');
-
         const platforms = [
             { id: 'whatsapp', icon: 'fab fa-whatsapp', color: '#25D366', bg: 'rgba(37,211,102,0.15)', label: 'WhatsApp' },
             { id: 'facebook', icon: 'fab fa-facebook', color: '#1877F2', bg: 'rgba(24,119,242,0.15)', label: 'Facebook' },
@@ -2715,52 +2394,30 @@ const BS = {
             { id: 'email', icon: 'fas fa-envelope', color: '#EA4335', bg: 'rgba(234,67,53,0.15)', label: 'Email' },
             { id: 'sms', icon: 'fas fa-comment-sms', color: '#FFB800', bg: 'rgba(255,184,0,0.15)', label: 'SMS' }
         ];
-
-        grid.innerHTML = platforms.map(p => `
-            <div class="share-item-bs" data-platform="${p.id}">
-                <div class="share-icon-circle" style="background:${p.bg};color:${p.color};">
-                    <i class="${p.icon}"></i>
-                </div>
-                <span class="share-label-bs">${p.label}</span>
-            </div>
-        `).join('');
-
+        grid.innerHTML = platforms.map(p => `<div class="share-item-bs" data-platform="${p.id}"><div class="share-icon-circle" style="background:${p.bg};color:${p.color};"><i class="${p.icon}"></i></div><span class="share-label-bs">${p.label}</span></div>`).join('');
         grid.querySelectorAll('.share-item-bs').forEach(item => {
-            item.addEventListener('click', (e) => {
-                e.stopPropagation();
-                this._shareTo(item.dataset.platform);
-            });
+            item.addEventListener('click', (e) => { e.stopPropagation(); this._shareTo(item.dataset.platform); });
         });
-
         overlay.style.display = 'block';
         sheet.style.display = 'block';
         document.body.style.overflow = 'hidden';
         document.body.style.position = 'fixed';
         document.body.style.width = '100%';
         document.body.style.top = `-${this.scrollY}px`;
-
         requestAnimationFrame(() => {
             overlay.classList.add('active');
             sheet.classList.add('active');
         });
-
-        overlay.onclick = (e) => {
-            if (e.target === overlay) this.closeAll();
-        };
-
+        overlay.onclick = (e) => { if (e.target === overlay) this.closeAll(); };
         this._setupSwipe(sheet);
     },
 
-    _copyCurrentLink() {
-        this.copyLink(this.currentSharePostId);
-    },
+    _copyCurrentLink() { this.copyLink(this.currentSharePostId); },
 
     copyLink(postId) {
         const url = postId ? `${window.location.origin}/profile.html?post=${postId}` : window.location.href;
         if (navigator.clipboard) {
-            navigator.clipboard.writeText(url)
-                .then(() => showToast('📋 Lien copié avec succès !'))
-                .catch(() => this._fallbackCopy(url));
+            navigator.clipboard.writeText(url).then(() => showToast('📋 Lien copié avec succès !')).catch(() => this._fallbackCopy(url));
         } else {
             this._fallbackCopy(url);
         }
@@ -2785,7 +2442,6 @@ const BS = {
         const shareText = msgInput?.value?.trim() || 'Découvrez cette publication sur ESTRA LINK !';
         const encodedText = encodeURIComponent(shareText);
         const encodedUrl = encodeURIComponent(window.location.href);
-
         const urls = {
             whatsapp: `https://wa.me/?text=${encodedText}%20${encodedUrl}`,
             facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`,
@@ -2796,10 +2452,7 @@ const BS = {
             email: `mailto:?subject=ESTRA LINK&body=${encodedText}%0A%0A${encodedUrl}`,
             sms: `sms:?body=${encodedText}%20${encodedUrl}`
         };
-
-        if (urls[platform]) {
-            window.open(urls[platform], '_blank');
-        }
+        if (urls[platform]) window.open(urls[platform], '_blank');
     },
 
     pinPost(postId) {
@@ -2856,40 +2509,25 @@ const BS = {
         this.closeAll();
     },
 
-    // Nouvelle méthode reportPost connectée à reports.js
     reportPost(postId) {
         this.closeAll();
-        // Recherche automatique de la fonction de signalement
-        const possible = [
-            window.openReportModal,
-            window.reportPost,
-            window.reportContent,
-            window.signalPost,
-            window.report
-        ];
+        const possible = [window.openReportModal, window.reportPost, window.reportContent, window.signalPost, window.report];
         const fn = possible.find(f => typeof f === 'function');
         if (fn) {
             fn(postId, this.currentPostType || 'post');
         } else {
-            console.warn('Aucune fonction de signalement trouvée. Vérifiez reports.js. postId:', postId);
-            if (typeof showToast === 'function') {
-                showToast('⚠️ Fonction de signalement non disponible');
-            }
+            console.warn('Aucune fonction de signalement trouvée. postId:', postId);
+            if (typeof showToast === 'function') showToast('⚠️ Fonction de signalement non disponible');
         }
     },
 
     _setupSwipe(sheet) {
-        let startY = 0;
-        let isDragging = false;
-
+        let startY = 0, isDragging = false;
         const onTouchStart = (e) => {
-            if (e.target.closest('.bottom-sheet-item') || e.target.closest('button') || e.target.closest('.share-item-bs')) {
-                return;
-            }
+            if (e.target.closest('.bottom-sheet-item') || e.target.closest('button') || e.target.closest('.share-item-bs')) return;
             startY = e.touches[0].clientY;
             isDragging = true;
         };
-
         const onTouchMove = (e) => {
             if (!isDragging) return;
             const deltaY = e.touches[0].clientY - startY;
@@ -2903,7 +2541,6 @@ const BS = {
                 }
             }
         };
-
         const onTouchEnd = (e) => {
             if (!isDragging) return;
             isDragging = false;
@@ -2911,50 +2548,95 @@ const BS = {
             const overlay = document.querySelector('.bottom-sheet-overlay.active');
             if (overlay) overlay.style.background = '';
             const deltaY = e.changedTouches[0].clientY - startY;
-            if (deltaY > 120) {
-                this.closeAll();
-            } else {
-                sheet.style.transform = 'translateY(0)';
-            }
+            if (deltaY > 120) this.closeAll();
+            else sheet.style.transform = 'translateY(0)';
         };
-
         sheet.addEventListener('touchstart', onTouchStart, { passive: true });
         sheet.addEventListener('touchmove', onTouchMove, { passive: true });
         sheet.addEventListener('touchend', onTouchEnd, { passive: true });
-
         sheet._swipeHandlers = { onTouchStart, onTouchMove, onTouchEnd };
     }
-};// FONCTION DE REMPLACEMENT POUR LE MENU
-// ============================================================
+};
 
 function showPostOptionsWithBS(event, postId, postType) {
     if (event) {
         event.stopPropagation();
         event.preventDefault();
     }
-    
-    const item = postType === 'job' ? jobsList.find(j => j.id === postId) : 
-                 postType === 'event' ? eventsList.find(e => e.id === postId) : 
-                 posts.find(p => p.id === postId);
-    
+    const item = postType === 'job' ? jobsList.find(j => j.id === postId) : postType === 'event' ? eventsList.find(e => e.id === postId) : posts.find(p => p.id === postId);
     if (!item) return;
-    
-    const isMyPost = item && (item.author === myProfile.fullName || 
-                              item.author === myProfile.username);
-    
+    const isMyPost = item && (item.author === myProfile.fullName || item.author === myProfile.username);
     const isPinned = item && item.pinned === true;
     const isSaved = item && item.saved === true;
-    
     BS.openMenu(postId, postType, isMyPost || isOwner, isPinned, isSaved);
 }
 
-// ============================================================
-// EXPOSER LES FONCTIONS
-// ============================================================
+// ================= INITIALISATION =================
+document.addEventListener("DOMContentLoaded", () => {
+    loadData();
+    checkOnlineStatus();
+    document.getElementById("sidebarOverlay").addEventListener("click", closeSidebar);
+    window.addEventListener("online", checkOnlineStatus);
+    window.addEventListener("offline", checkOnlineStatus);
+    window.addEventListener('storage', function(e) {
+        if (e.key === 'estra_avatar_updated') {
+            const data = JSON.parse(e.newValue || '{}');
+            if (data.username && data.avatar) {
+                if (userProfile.username === data.username || userProfile.fullName === data.username) {
+                    userProfile.avatar = data.avatar;
+                    renderProfile();
+                }
+                if (myProfile.username === data.username) {
+                    myProfile.avatar = data.avatar;
+                    document.getElementById('sidebarAvatar').src = data.avatar;
+                }
+                updateAllPostsAvatar(data.username, data.avatar);
+                if (currentTab === 'posts' || currentTab === 'media' || currentTab === 'likes') renderPosts();
+            }
+        }
+    });
+    document.addEventListener("click", function(e) {
+        const sidebar = document.getElementById("sidebar");
+        const toggle = document.querySelector(".menu-toggle");
+        if (sidebar.classList.contains("open") && !sidebar.contains(e.target) && e.target !== toggle && !toggle?.contains(e.target)) {
+            closeSidebar();
+        }
+        if (activePostMenu && !e.target.closest(".post-options-menu") && !e.target.closest(".post-menu-btn")) {
+            activePostMenu.remove();
+            activePostMenu = null;
+        }
+    });
+    document.getElementById("coverSelectionModal")?.addEventListener("click", e => { if (e.target === document.getElementById("coverSelectionModal")) closeCoverSelectionModal(); });
+    document.getElementById("editProfileModal")?.addEventListener("click", e => { if (e.target === document.getElementById("editProfileModal")) closeEditProfileModal(); });
+    document.getElementById("postModal")?.addEventListener("click", e => { if (e.target === document.getElementById("postModal")) closePostModal(); });
+    document.getElementById("shareModal")?.addEventListener("click", e => { if (e.target === document.getElementById("shareModal")) closeShareModal(); });
+    document.getElementById("proInfoModal")?.addEventListener("click", e => { if (e.target === document.getElementById("proInfoModal")) closeProInfoModal(); });
+    window.addEventListener("storage", e => {
+        if (e.key === "estra_profile") {
+            myProfile = ESTRA.getProfile() || {};
+            if (isOwner) { userProfile = { ...myProfile }; renderProfile(); }
+        }
+        if (e.key === "estra_all_users") {
+            if (!isOwner) {
+                const viewUsername = new URLSearchParams(window.location.search).get('user');
+                if (viewUsername) {
+                    const foundUser = getUserByUsername(viewUsername);
+                    if (foundUser) { userProfile = { ...foundUser }; renderProfile(); }
+                }
+            }
+        }
+    });
+    setInterval(() => {
+        const notifications = JSON.parse(localStorage.getItem("estra_notifications") || "[]");
+        const unread = notifications.filter(n => !n.read).length;
+        const notifBadge = document.getElementById("notifBadge");
+        if (notifBadge) {
+            notifBadge.style.display = unread > 0 ? "block" : "none";
+            if (unread > 0) notifBadge.textContent = unread > 99 ? "99+" : unread;
+        }
+    }, 30000);
+});
 
-window.BS = BS;
-window.showPostOptionsWithBS = showPostOptionsWithBS;
-window.showPostOptions = showPostOptionsWithBS;
 // ================= EXPOSER LES FONCTIONS GLOBALEMENT =================
 window.showToast = showToast;
 window.toggleSidebar = toggleSidebar;
@@ -3003,9 +2685,19 @@ window.applyTranslations = applyTranslations;
 window.updateRightSidebar = updateRightSidebar;
 window.openDashboard = openDashboard;
 window.closeDashboard = closeDashboard;
+window.BS = BS;
+window.showPostOptionsWithBS = showPostOptionsWithBS;
+window.isFriend = isFriend;
+window.toggleFollow = toggleFollow;
+window.startConversation = startConversation;
+window.toggleBio = toggleBio;
 </script>
 <script src="i18n.js"></script>
 <script src="pwa-init.js"></script>
 <script src="reports.js"></script>
+<script src="antizome.js"></script>
+<script src="security.js"></script>
+<script src="security-advenced.js"></script>
+<script src="data.js"></script>
 </body>
-</html> 
+</html>
