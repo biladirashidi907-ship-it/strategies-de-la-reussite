@@ -10,6 +10,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="ESTRA LINK">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <link rel="apple-touch-icon" href="https://ui-avatars.com/api/?background=38bdf8&color=fff&name=E&size=152">
     <style>
     
@@ -111,7 +112,7 @@
         </div>
     </div>
 
-    <!-- CONTENEUR PRINCIPAL CORRIGÉ -->
+    <!-- CONTENEUR PRINCIPAL -->
     <div class="auth-container">
         <!-- Colonne Gauche : Informations & Branding -->
         <div class="auth-info">
@@ -228,228 +229,347 @@
         </div>
     </div>
 
-<script>
-// ================= INTERCOMMUNICATION (ESTRA CORE MOCK) =================
-if(typeof window.ESTRA === 'undefined') {
-    window.ESTRA = {
-        isLoggedIn: () => localStorage.getItem('estra_logged_in') === 'true',
-        getProfile: () => {
-    const profile = JSON.parse(localStorage.getItem('estra_profile') || 'null');
-    if (profile && profile.accountType) return profile;
-    // Vérifier si l'utilisateur existe dans estra_all_users
-    const allUsers = JSON.parse(localStorage.getItem('estra_all_users') || '[]');
-    const rememberedEmail = localStorage.getItem('estra_remembered_email');
-    if (rememberedEmail) {
-        const found = allUsers.find(u => u.email === rememberedEmail);
-        if (found) return found;
-    }
-    return null;
-},
-
-</script>
+<script src="data.js"></script>
+<script src="antizome.js"></script>
+<script src="security.js"></script>
+<script src="security-advenced.js"></script>
 
 <script>
-let toastTimeout=null,userEmailForReset=null,demoResetCode=null;
+// ============================================================
+// LOGIN PAGE – Utilisation de data.js pour l'isolation utilisateur
+// ============================================================
 
-const tr = (typeof t === 'function') ? t : (k) => k; 
+let toastTimeout = null;
+let userEmailForReset = null;
+let demoResetCode = null;
 
-function sanitizeInput(s){return s?String(s).trim():''}
-function isValidEmail(e){return /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(e)}
+const tr = (typeof t === 'function') ? t : (k) => k;
 
-function showToast(msg,isErr=false){
-    const te=document.getElementById('toastMsg');if(toastTimeout)clearTimeout(toastTimeout);
-    te.textContent=msg;te.style.borderColor=isErr?'#ef4444':'#38bdf8';
-    te.style.background=isErr?'linear-gradient(135deg,#dc2626,#991b1b)':'var(--toast-bg)';
-    te.classList.remove('show');void te.offsetWidth;te.classList.add('show');
-    toastTimeout=setTimeout(()=>te.classList.remove('show'),3000)
+function sanitizeInput(s) { return s ? String(s).trim() : ''; }
+function isValidEmail(e) { return /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(e); }
+
+// ---------- TOAST ----------
+function showToast(msg, isErr = false) {
+    const te = document.getElementById('toastMsg');
+    if (toastTimeout) clearTimeout(toastTimeout);
+    te.textContent = msg;
+    te.style.borderColor = isErr ? '#ef4444' : '#38bdf8';
+    te.style.background = isErr ? 'linear-gradient(135deg,#dc2626,#991b1b)' : 'var(--toast-bg)';
+    te.classList.remove('show');
+    void te.offsetWidth;
+    te.classList.add('show');
+    toastTimeout = setTimeout(() => te.classList.remove('show'), 3000);
 }
 
-function navigateTo(url){
+function navigateTo(url) {
     document.getElementById('pageTransition').classList.add('active');
-    setTimeout(()=>{window.location.href=url},1500)
+    setTimeout(() => { window.location.href = url; }, 1500);
 }
 
-function togglePassword(id,icon){
-    const inp=document.getElementById(id);
-    if(inp.type==='password'){inp.type='text';icon.classList.replace('fa-eye','fa-eye-slash')}
-    else{inp.type='password';icon.classList.replace('fa-eye-slash','fa-eye')}
+// ---------- MOT DE PASSE ----------
+function togglePassword(id, icon) {
+    const inp = document.getElementById(id);
+    if (inp.type === 'password') { inp.type = 'text'; icon.classList.replace('fa-eye', 'fa-eye-slash'); }
+    else { inp.type = 'password'; icon.classList.replace('fa-eye-slash', 'fa-eye'); }
 }
 
-function switchTab(tab){
-    document.querySelectorAll('.auth-tab').forEach((ta,i)=>ta.classList.toggle('active',(i===0&&tab==='login')||(i===1&&tab==='register')));
-    document.getElementById('loginForm').classList.toggle('hidden',tab!=='login');
-    document.getElementById('registerForm').classList.toggle('hidden',tab!=='register');
-    document.querySelectorAll('.error-message').forEach(e=>e.classList.remove('show'))
+function switchTab(tab) {
+    document.querySelectorAll('.auth-tab').forEach((ta, i) => {
+        ta.classList.toggle('active', (i === 0 && tab === 'login') || (i === 1 && tab === 'register'));
+    });
+    document.getElementById('loginForm').classList.toggle('hidden', tab !== 'login');
+    document.getElementById('registerForm').classList.toggle('hidden', tab !== 'register');
+    document.querySelectorAll('.error-message').forEach(e => e.classList.remove('show'));
 }
 
-function checkPasswordStrength(){
-    const pwd=document.getElementById('regPassword').value;const fill=document.getElementById('strengthFill');
-    let score=pwd.length>=6?1:0;if(pwd.length>=8)score++;if(/[A-Z]/.test(pwd))score++;
-    if(/[0-9]/.test(pwd))score++;if(/[^A-Za-z0-9]/.test(pwd))score++;
-    const colors=['#e2e8f0','#ef4444','#f59e0b','#fbbf24','#10b981','#10b981'];
-    fill.style.width=['0%','20%','40%','60%','80%','100%'][Math.min(score,5)];
-    fill.style.background=colors[Math.min(score,5)]
+function checkPasswordStrength() {
+    const pwd = document.getElementById('regPassword').value;
+    const fill = document.getElementById('strengthFill');
+    let score = pwd.length >= 6 ? 1 : 0;
+    if (pwd.length >= 8) score++;
+    if (/[A-Z]/.test(pwd)) score++;
+    if (/[0-9]/.test(pwd)) score++;
+    if (/[^A-Za-z0-9]/.test(pwd)) score++;
+    const colors = ['#e2e8f0', '#ef4444', '#f59e0b', '#fbbf24', '#10b981', '#10b981'];
+    fill.style.width = ['0%', '20%', '40%', '60%', '80%', '100%'][Math.min(score, 5)];
+    fill.style.background = colors[Math.min(score, 5)];
 }
 
-function toggleTheme(){
-    const cur=document.documentElement.getAttribute('data-theme');const next=cur==='light'?'dark':'light';
-    document.documentElement.setAttribute('data-theme',next);localStorage.setItem('estra_theme',next);window.estraTheme=next;
-    const btn=document.getElementById('themeToggleBtn');const icon=btn.querySelector('i');
-    if(next==='dark'){icon.classList.replace('fa-moon','fa-sun');btn.title='Mode clair'}
-    else{icon.classList.replace('fa-sun','fa-moon');btn.title='Mode sombre'}
+// ---------- THEME ----------
+function toggleTheme() {
+    const cur = document.documentElement.getAttribute('data-theme');
+    const next = cur === 'light' ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem('estra_theme', next);
+    window.estraTheme = next;
+    const btn = document.getElementById('themeToggleBtn');
+    const icon = btn.querySelector('i');
+    if (next === 'dark') { icon.classList.replace('fa-moon', 'fa-sun'); btn.title = 'Mode clair'; }
+    else { icon.classList.replace('fa-sun', 'fa-moon'); btn.title = 'Mode sombre'; }
 }
 
-function initTheme(){
-    const saved=localStorage.getItem('estra_theme')||'light';
-    document.documentElement.setAttribute('data-theme',saved);window.estraTheme=saved;
-    const btn=document.getElementById('themeToggleBtn');const icon=btn.querySelector('i');
-    if(saved==='dark'){icon.classList.replace('fa-moon','fa-sun');btn.title='Mode clair'}
+function initTheme() {
+    const saved = localStorage.getItem('estra_theme') || 'light';
+    document.documentElement.setAttribute('data-theme', saved);
+    window.estraTheme = saved;
+    const btn = document.getElementById('themeToggleBtn');
+    const icon = btn.querySelector('i');
+    if (saved === 'dark') { icon.classList.replace('fa-moon', 'fa-sun'); btn.title = 'Mode clair'; }
 }
 
-// ============ CONNEXION (INTERCOMMUNICATION) ============
-async function handleLogin(e){
+// ---------- UTILITAIRES data.js ----------
+function getAllUsersFromData() {
+    if (typeof window.getAllUsers === 'function') return window.getAllUsers();
+    return JSON.parse(localStorage.getItem('estra_all_users') || '[]');
+}
+
+function saveUsersToData(users) {
+    localStorage.setItem('estra_all_users', JSON.stringify(users));
+    if (typeof window.estraEmit === 'function') {
+        window.estraEmit('profile_updated', {});
+    }
+}
+
+function findUserByIdentifier(identifier) {
+    const users = getAllUsersFromData();
+    return users.find(u => u.email === identifier || u.username === identifier || u.fullName === identifier);
+}
+
+// ---------- CONNEXION ----------
+async function handleLogin(e) {
     e.preventDefault();
     document.getElementById('loginError').classList.remove('show');
-    
+
     const identifier = sanitizeInput(document.getElementById('loginIdentifier').value);
     const password = document.getElementById('loginPassword').value;
-    
-    const isQuickLogin = localStorage.getItem('estra_remembered_email') === identifier && document.getElementById('loginIdentifier').readOnly === true;
 
-    if(!identifier || (!password && !isQuickLogin)){showToast(tr('toast_fields_required') || 'Champs requis', true);return}
+    if (!identifier || !password) {
+        showToast(tr('toast_fields_required') || 'Champs requis', true);
+        return;
+    }
 
     const btn = e.target.querySelector('button[type="submit"]');
     const originalText = btn.innerHTML;
-    if(btn){btn.disabled=true;btn.innerHTML='<i class="fas fa-spinner fa-spin"></i> Connexion...'}
+    if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Connexion...'; }
 
     setTimeout(() => {
-        if(btn){btn.disabled=false;btn.innerHTML=originalText}
-        
-        localStorage.setItem('estra_logged_in', 'true');
-        
-        const profile = window.ESTRA.getProfile();
-        if (profile && profile.accountType) {
-            showToast(`Bon retour, ${profile.fullName || identifier} ! 🙃`);
-            navigateTo('index.html');
-        } else {
-            showToast(`Bienvenue ! Finalisons votre compte.`);
-            navigateTo('account-select.html');
+        if (btn) { btn.disabled = false; btn.innerHTML = originalText; }
+
+        const user = findUserByIdentifier(identifier);
+        if (!user) {
+            showToast('❌ Identifiants incorrects', true);
+            document.getElementById('loginError').classList.add('show');
+            return;
         }
+
+        const storedPassword = localStorage.getItem('estra_test_pwd_' + user.username);
+        if (storedPassword && storedPassword !== password) {
+            showToast('❌ Mot de passe incorrect', true);
+            document.getElementById('loginError').classList.add('show');
+            return;
+        }
+
+        // ---------- CONNEXION RÉUSSIE ----------
+        localStorage.setItem('estra_logged_in', 'true');
+        localStorage.setItem('estra_current_user', JSON.stringify(user));
+
+        // Mettre à jour le profil
+        localStorage.setItem('estra_profile', JSON.stringify({
+            fullName: user.fullName,
+            username: user.username,
+            email: user.email,
+            avatar: user.avatar,
+            accountType: user.accountType || 'student'
+        }));
+
+        // Initialiser les données utilisateur (si ce n'est pas déjà fait)
+        if (typeof window.initializeUserData === 'function') {
+            window.initializeUserData(user.username);
+        }
+
+        showToast(`Bon retour, ${user.fullName} ! 🙃`);
+        navigateTo('home.html');
     }, 800);
 }
 
-// ============ INSCRIPTION (INTERCOMMUNICATION) ============
-async function handleRegister(e){
+// ---------- INSCRIPTION ----------
+async function handleRegister(e) {
     e.preventDefault();
-    document.querySelectorAll('#registerForm .error-message').forEach(el=>el.classList.remove('show'));
-    
+    document.querySelectorAll('#registerForm .error-message').forEach(el => el.classList.remove('show'));
+
     const fullName = sanitizeInput(document.getElementById('fullName').value);
-    const username = sanitizeInput(document.getElementById('regUsername').value.replace('@',''));
+    const username = sanitizeInput(document.getElementById('regUsername').value.replace('@', ''));
     const email = sanitizeInput(document.getElementById('regEmail').value);
     const password = document.getElementById('regPassword').value;
     const confirmPassword = document.getElementById('regConfirmPassword').value;
     const terms = document.getElementById('regTerms').checked;
-    
-    if(fullName.length<3){document.getElementById('nameError').classList.add('show');return}
-    if(username.length<3){document.getElementById('usernameError').classList.add('show');return}
-    if(!isValidEmail(email)){document.getElementById('emailError').classList.add('show');return}
-    if(password.length<6){showToast('Mot de passe trop court',true);return}
-    if(password!==confirmPassword){document.getElementById('confirmError').classList.add('show');return}
-    if(!terms){showToast('Veuillez accepter les conditions',true);return}
+
+    if (fullName.length < 3) { document.getElementById('nameError').classList.add('show'); return; }
+    if (username.length < 3) { document.getElementById('usernameError').classList.add('show'); return; }
+    if (!isValidEmail(email)) { document.getElementById('emailError').classList.add('show'); return; }
+    if (password.length < 6) { showToast('Mot de passe trop court', true); return; }
+    if (password !== confirmPassword) { document.getElementById('confirmError').classList.add('show'); return; }
+    if (!terms) { showToast('Veuillez accepter les conditions', true); return; }
+
+    // Vérifier si l'utilisateur existe déjà
+    const users = getAllUsersFromData();
+    if (users.find(u => u.email === email || u.username === username)) {
+        showToast('❌ Email ou nom d\'utilisateur déjà utilisé', true);
+        return;
+    }
 
     const btn = document.getElementById('registerBtn');
-    if(btn){btn.disabled=true;btn.innerHTML='<i class="fas fa-spinner fa-spin"></i> Création...'}
+    if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Création...'; }
 
     setTimeout(() => {
-        if(btn){btn.disabled=false;btn.innerHTML=`<i class="fas fa-user-plus"></i> Inscription`}
-        
-        localStorage.setItem('estra_logged_in', 'true');
-        window.ESTRA.updateProfile({ 
-            email: email, 
+        if (btn) { btn.disabled = false; btn.innerHTML = `<i class="fas fa-user-plus"></i> Inscription`; }
+
+        // Créer le nouvel utilisateur
+        const newUser = {
+            id: 'user_' + Date.now(),
+            username: username,
             fullName: fullName,
-            username: username
-        });
-        
-        showToast('Compte créé avec succès ! 🚀');
-        navigateTo('account-select.html'); 
+            email: email,
+            avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(fullName)}&background=38bdf8&color=fff&size=120`,
+            bio: `👋 Étudiant sur ESTRA LINK`,
+            location: 'RDC',
+            accountType: 'student',
+            domain: '',
+            level: '',
+            joinDate: new Date().toISOString(),
+            badges: [],
+            verified: false
+        };
+
+        users.push(newUser);
+        saveUsersToData(users);
+
+        // Stocker le mot de passe (mode test)
+        localStorage.setItem('estra_test_pwd_' + username, password);
+
+        // ---------- INITIALISATION DES DONNÉES UTILISATEUR ----------
+        if (typeof window.initializeUserData === 'function') {
+            window.initializeUserData(username);
+            console.log('✅ Données initialisées pour :', username);
+        }
+
+        // Connecter automatiquement
+        localStorage.setItem('estra_logged_in', 'true');
+        localStorage.setItem('estra_current_user', JSON.stringify(newUser));
+        localStorage.setItem('estra_profile', JSON.stringify({
+            fullName: fullName,
+            username: username,
+            email: email,
+            avatar: newUser.avatar,
+            accountType: 'student'
+        }));
+
+        showToast('✅ Compte créé ! Choisissez votre profil.');
+        navigateTo('account-select.html');
     }, 800);
 }
 
-// ============ MOT DE PASSE OUBLIÉ (TEST MODE) ============
-function openForgotPasswordModal(){
+// ---------- MOT DE PASSE OUBLIÉ ----------
+function openForgotPasswordModal() {
     document.getElementById('forgotPasswordModal').classList.add('active');
-    ['forgotStep1','forgotStep2','forgotStep3','forgotStep4'].forEach((id,i)=>document.getElementById(id).style.display=i===0?'block':'none');
-    ['forgotEmail','resetCode','newPassword','confirmNewPassword'].forEach(id=>document.getElementById(id).value='');
-    userEmailForReset=null;demoResetCode=null;
+    ['forgotStep1', 'forgotStep2', 'forgotStep3', 'forgotStep4'].forEach((id, i) => {
+        document.getElementById(id).style.display = i === 0 ? 'block' : 'none';
+    });
+    ['forgotEmail', 'resetCode', 'newPassword', 'confirmNewPassword'].forEach(id => {
+        document.getElementById(id).value = '';
+    });
+    userEmailForReset = null;
+    demoResetCode = null;
 }
-function closeForgotPasswordModal(){document.getElementById('forgotPasswordModal').classList.remove('active')}
 
-function sendResetCode(){
-    const email=sanitizeInput(document.getElementById('forgotEmail').value);
-    if(!email||!isValidEmail(email)){document.getElementById('forgotEmailError').classList.add('show');return}
+function closeForgotPasswordModal() {
+    document.getElementById('forgotPasswordModal').classList.remove('active');
+}
+
+function sendResetCode() {
+    const email = sanitizeInput(document.getElementById('forgotEmail').value);
+    if (!email || !isValidEmail(email)) {
+        document.getElementById('forgotEmailError').classList.add('show');
+        return;
+    }
     document.getElementById('forgotEmailError').classList.remove('show');
-    userEmailForReset=email;
 
-    demoResetCode = Math.floor(100000+Math.random()*900000).toString();
-    alert(`🔑 Code de test : ${demoResetCode}`);
+    const user = getAllUsersFromData().find(u => u.email === email);
+    if (!user) {
+        showToast('❌ Email non trouvé', true);
+        return;
+    }
 
-    document.getElementById('codeSentMessage').textContent=`✅ Code envoyé à ${email}`;
-    document.getElementById('forgotStep1').style.display='none';
-    document.getElementById('forgotStep2').style.display='block';
+    userEmailForReset = email;
+    demoResetCode = Math.floor(100000 + Math.random() * 900000).toString();
+    alert(`🔑 Code de test pour ${email} : ${demoResetCode}`);
+
+    document.getElementById('codeSentMessage').textContent = `✅ Code envoyé à ${email}`;
+    document.getElementById('forgotStep1').style.display = 'none';
+    document.getElementById('forgotStep2').style.display = 'block';
     showToast('Code envoyé (Mode Test)');
 }
 
-function verifyResetCode(){
-    const code=sanitizeInput(document.getElementById('resetCode').value);
-    if(!code||code.length!==6){document.getElementById('resetCodeError').classList.add('show');return}
-    document.getElementById('resetCodeError').classList.remove('show');
-    
-    if(code===demoResetCode){
-        document.getElementById('forgotStep2').style.display='none';
-        document.getElementById('forgotStep3').style.display='block';
-        showToast('Code vérifié');
-    }else{
+function verifyResetCode() {
+    const code = sanitizeInput(document.getElementById('resetCode').value);
+    if (!code || code.length !== 6) {
         document.getElementById('resetCodeError').classList.add('show');
-        showToast('Code incorrect',true);
+        return;
+    }
+    document.getElementById('resetCodeError').classList.remove('show');
+
+    if (code === demoResetCode) {
+        document.getElementById('forgotStep2').style.display = 'none';
+        document.getElementById('forgotStep3').style.display = 'block';
+        showToast('✅ Code vérifié');
+    } else {
+        document.getElementById('resetCodeError').classList.add('show');
+        showToast('❌ Code incorrect', true);
     }
 }
 
-function resetPassword(){
-    const np=document.getElementById('newPassword').value;
-    const cp=document.getElementById('confirmNewPassword').value;
-    if(np.length<6){showToast('Mot de passe trop court',true);return}
-    if(np!==cp){document.getElementById('newPasswordError').classList.add('show');return}
+function resetPassword() {
+    const np = document.getElementById('newPassword').value;
+    const cp = document.getElementById('confirmNewPassword').value;
+    if (np.length < 6) { showToast('Mot de passe trop court', true); return; }
+    if (np !== cp) { document.getElementById('newPasswordError').classList.add('show'); return; }
     document.getElementById('newPasswordError').classList.remove('show');
 
-    document.getElementById('forgotStep3').style.display='none';
-    document.getElementById('forgotStep4').style.display='block';
-    showToast('Mot de passe réinitialisé');
+    const users = getAllUsersFromData();
+    const user = users.find(u => u.email === userEmailForReset);
+    if (user && user.username) {
+        localStorage.setItem('estra_test_pwd_' + user.username, np);
+    }
+
+    document.getElementById('forgotStep3').style.display = 'none';
+    document.getElementById('forgotStep4').style.display = 'block';
+    showToast('✅ Mot de passe réinitialisé');
 }
 
-document.addEventListener('DOMContentLoaded',()=>{
+// ---------- INITIALISATION ----------
+document.addEventListener('DOMContentLoaded', function() {
     initTheme();
-    if(typeof applyTranslations === 'function') applyTranslations();
+    if (typeof applyTranslations === 'function') applyTranslations();
 
-    const rememberedEmail = localStorage.getItem('estra_remembered_email');
-    if (rememberedEmail && !window.ESTRA.isLoggedIn()) {
-        const emailInput = document.getElementById('loginIdentifier');
-        emailInput.value = rememberedEmail;
-        emailInput.readOnly = true;
-        emailInput.style.opacity = '0.7'; 
-        
-        const pwdGroup = document.getElementById('passwordGroup');
-        if(pwdGroup) pwdGroup.style.display = 'none';
-        
-        const btn = document.querySelector('#loginForm button[type="submit"]');
-        if(btn) {
-            btn.innerHTML = `<i class="fas fa-bolt"></i> Continuer en tant que ${rememberedEmail.split('@')[0]}`;
+    // Vérifier si l'utilisateur est déjà connecté
+    if (localStorage.getItem('estra_logged_in') === 'true') {
+        const currentUser = JSON.parse(localStorage.getItem('estra_current_user') || '{}');
+        if (currentUser && currentUser.username) {
+            setTimeout(() => { window.location.href = 'home.html'; }, 800);
         }
-        
-        showToast("Rebonjour ! Cliquez pour continuer. 🙃");
     }
-    
-    document.getElementById('forgotPasswordModal').addEventListener('click', e => { if (e.target === document.getElementById('forgotPasswordModal')) closeForgotPasswordModal() });
-    window.addEventListener('storage', e => { if (e.key === 'estra_language' && e.newValue && typeof applyTranslations === 'function') applyTranslations() })
+
+    // Fermer le modal en cliquant à l'extérieur
+    document.getElementById('forgotPasswordModal').addEventListener('click', function(e) {
+        if (e.target === this) closeForgotPasswordModal();
+    });
+
+    // Réagir aux changements de langue
+    window.addEventListener('storage', function(e) {
+        if (e.key === 'estra_language' && e.newValue && typeof applyTranslations === 'function') {
+            applyTranslations();
+        }
+    });
 });
 </script>
 </body>
