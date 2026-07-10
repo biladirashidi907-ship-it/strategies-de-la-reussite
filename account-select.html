@@ -8,6 +8,7 @@
     <link rel="manifest" href="/manifest.json">
     <meta name="theme-color" content="#0284c7">
     <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="ESTRA LINK">
     <link rel="apple-touch-icon" href="https://ui-avatars.com/api/?background=0284c7&color=fff&name=E&size=152">
@@ -142,7 +143,43 @@
             color: var(--text-secondary);
             line-height: 1.5;
         }
+/* ============ ANTI-ZOOM & ANTI-SÉLECTION GLOBALE ============ */
+html {
+    touch-action: manipulation;
+    -ms-touch-action: manipulation;
+}
 
+body {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Réactiver la sélection uniquement dans les champs de saisie */
+input, textarea, [contenteditable="true"] {
+    -webkit-user-select: text !important;
+    -moz-user-select: text !important;
+    -ms-user-select: text !important;
+    user-select: text !important;
+}
+
+/* Désactiver le zoom sur les images */
+img {
+    touch-action: manipulation;
+    -webkit-user-drag: none;
+    -moz-user-drag: none;
+    user-select: none;
+}
+
+/* Empêcher l'agrandissement dans le viewer d'image */
+.image-viewer-full img,
+.full-image-view img {
+    touch-action: manipulation !important;
+    pointer-events: auto;
+}
         /* CARTES VERROUILLÉES */
         .locked-card {
             cursor: not-allowed;
@@ -399,10 +436,16 @@
         </div>
     </div>
 
+    <!-- Chargement de data.js en premier -->
+    <script src="data.js"></script>
+    <script src="antizome.js"></script>
+    <script src="security.js"></script>
+    <script src="security-advenced.js"></script>
+
     <script>
         let toastTimeout;
 
-        function showToast(msg) {
+        function showToast(msg, isDanger = false) {
             const te = document.getElementById('toastMsg');
             if (toastTimeout) clearTimeout(toastTimeout);
             te.innerHTML = msg;
@@ -417,12 +460,113 @@
             showToast('<i class="fas fa-lock" style="margin-right:8px;"></i> Fonctionnalité sur invitation uniquement');
         }
 
+        // ---------- FONCTION DE DÉCONNEXION CENTRALISÉE (avec toast) ----------
+        function logout() {
+            // Afficher un toast de confirmation
+            showToast('🔒 Déconnexion en cours...');
+
+            // Nettoyer les données de session
+            localStorage.removeItem('estra_logged_in');
+            localStorage.removeItem('estra_current_user');
+            localStorage.removeItem('estra_profile');
+            localStorage.removeItem('user_role');
+            localStorage.removeItem('estra_session_active');
+            localStorage.removeItem('access_token');
+
+            // Émettre la déconnexion
+            if (typeof window.estraEmit === 'function') {
+                window.estraEmit('logout', {});
+            }
+
+            // Rediriger vers session-expired après un court délai (pour afficher le toast)
+            setTimeout(() => {
+                window.location.href = 'session-expired.html';
+            }, 1000);
+        }
+
+        // ---------- Fonction principale de sélection de profil (avec data.js) ----------
         function selectProfile(e, role, url) {
             if (e) e.preventDefault();
+
+            // Récupérer l'utilisateur courant depuis data.js
+            let user = null;
+            if (typeof window.getCurrentUser === 'function') {
+                user = window.getCurrentUser();
+                console.log('👤 Utilisateur récupéré via getCurrentUser():', user);
+            } else {
+                // Fallback direct
+                try {
+                    const profile = JSON.parse(localStorage.getItem('estra_profile') || '{}');
+                    const currentUser = JSON.parse(localStorage.getItem('estra_current_user') || '{}');
+                    user = { ...profile, ...currentUser };
+                    if (!user.username && currentUser.username) user.username = currentUser.username;
+                    console.log('👤 Utilisateur récupéré via fallback:', user);
+                } catch (_) {
+                    console.warn('Impossible de récupérer l\'utilisateur');
+                }
+            }
+
+            if (!user || !user.username) {
+                showToast('⚠️ Erreur : utilisateur non identifié. Reconnectez-vous.', true);
+                setTimeout(() => { window.location.href = 'login.html'; }, 1500);
+                return;
+            }
+
+            // Mettre à jour le rôle dans la base de données utilisateur (estra_all_users)
+            try {
+                const allUsers = typeof window.getAllUsers === 'function' ? window.getAllUsers() : JSON.parse(localStorage.getItem('estra_all_users') || '[]');
+                const foundUser = allUsers.find(u => u.username === user.username);
+                if (foundUser) {
+                    foundUser.accountType = role;
+                    localStorage.setItem('estra_all_users', JSON.stringify(allUsers));
+                    console.log('✅ Rôle mis à jour dans estra_all_users :', role);
+                } else {
+                    console.warn('⚠️ Utilisateur non trouvé dans estra_all_users, création...');
+                    const newUser = {
+                        id: 'user_' + Date.now(),
+                        username: user.username,
+                        fullName: user.name || user.fullName || user.username,
+                        email: user.email || '',
+                        avatar: user.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.username)}&background=38bdf8&color=fff&size=120`,
+                        accountType: role,
+                        badges: [],
+                        joinDate: new Date().toISOString()
+                    };
+                    allUsers.push(newUser);
+                    localStorage.setItem('estra_all_users', JSON.stringify(allUsers));
+                    console.log('✅ Nouvel utilisateur créé dans estra_all_users');
+                }
+            } catch (e) {
+                console.warn('Erreur lors de la mise à jour du rôle:', e);
+            }
+
+            // Mettre à jour le profil local
+            const profile = JSON.parse(localStorage.getItem('estra_profile') || '{}');
+            profile.accountType = role;
+            profile.fullName = user.name || user.fullName || user.username;
+            profile.username = user.username;
+            profile.avatar = user.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.username)}&background=38bdf8&color=fff&size=120`;
+            localStorage.setItem('estra_profile', JSON.stringify(profile));
+            localStorage.setItem('estra_current_user', JSON.stringify({
+                username: user.username,
+                fullName: user.name || user.fullName || user.username,
+                avatar: user.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.username)}&background=38bdf8&color=fff&size=120`,
+                accountType: role
+            }));
 
             // Stocker le rôle choisi
             localStorage.setItem('user_role', role);
             localStorage.setItem('estra_session_active', 'true');
+
+            // Émettre un événement pour synchroniser les autres onglets
+            if (typeof window.estraEmit === 'function') {
+                window.estraEmit('profile_updated', { accountType: role, username: user.username });
+            }
+
+            // Déclencher l'initialisation des données utilisateur si elle n'a pas eu lieu
+            if (typeof window.initializeUserData === 'function') {
+                window.initializeUserData(user.username);
+            }
 
             // Animation de transition
             document.getElementById('pageTransition').classList.add('active');
@@ -433,20 +577,49 @@
             }, 1200);
         }
 
-        function logout() {
-            if (confirm('Se déconnecter d\'ESTRA LINK ?')) {
-                localStorage.removeItem('estra_session_active');
-                localStorage.removeItem('access_token');
-                localStorage.removeItem('user_role');
-                window.location.href = 'login.html';
+        // ---------- Chargement du nom d'utilisateur via data.js ----------
+        function loadUserName() {
+            let displayName = 'utilisateurs';
+            try {
+                if (typeof window.getCurrentUser === 'function') {
+                    const user = window.getCurrentUser();
+                    console.log('📛 Nom utilisateur chargé depuis getCurrentUser():', user);
+                    if (user && user.name && user.name !== 'Utilisateur') {
+                        displayName = user.name;
+                    } else if (user && user.username) {
+                        displayName = user.username;
+                    }
+                } else {
+                    const profile = JSON.parse(localStorage.getItem('estra_profile') || '{}');
+                    if (profile.fullName) displayName = profile.fullName;
+                    else if (profile.username) displayName = profile.username;
+                }
+            } catch (_) {
+                console.warn('Erreur lors du chargement du nom utilisateur');
             }
+            document.getElementById('userName').textContent = displayName;
+            console.log('✅ Nom affiché :', displayName);
         }
 
-        // Charger le nom d'utilisateur
-        window.onload = () => {
-            const profile = JSON.parse(localStorage.getItem('estra_profile') || '{}');
-            const userName = profile.fullName || profile.full_name || 'Biladi';
-            document.getElementById('userName').textContent = userName;
+        // ---------- Vérification de session (centralisée vers session-expired) ----------
+        function checkSession() {
+            const isLogged = localStorage.getItem('estra_logged_in') === 'true';
+            const hasProfile = !!localStorage.getItem('estra_profile');
+
+            if (!isLogged && !hasProfile) {
+                console.log('⚠️ Aucune session trouvée, redirection vers session-expired.html');
+                window.location.href = 'session-expired.html';
+                return false;
+            }
+            return true;
+        }
+
+        // ---------- Initialisation ----------
+        window.onload = function() {
+            console.log('🚀 account-select.html chargé');
+            // Vérifier la session (redirection vers session-expired si invalide)
+            if (!checkSession()) return;
+            loadUserName();
         };
     </script>
 </body>
