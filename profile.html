@@ -435,9 +435,10 @@
         .file-preview{margin-top:10px;padding:10px;background:var(--input-bg);border-radius:10px;font-size:.75rem;color:var(--text-secondary);display:flex;align-items:center;gap:10px;transition:background-color 0.4s ease}
         .modal-footer{display:flex;justify-content:flex-end;gap:12px;margin-top:20px}.btn-cancel{background:#334155;border:1px solid var(--border-color);padding:10px 24px;border-radius:30px;color:var(--text-secondary);cursor:pointer;font-weight:600;font-family:inherit}.btn-primary{background:var(--cyan);border:0;padding:10px 24px;border-radius:30px;color:#fff;cursor:pointer;font-weight:600;font-family:inherit}
         .form-group{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}.form-group label{font-size:.85rem;font-weight:500}.form-group input,.form-group select,.form-group textarea{background:var(--input-bg);border:1px solid var(--border-color);border-radius:12px;padding:11px 14px;color:var(--text-primary);font-size:.9rem;outline:0;font-family:inherit;transition:background-color 0.4s ease,border-color 0.4s ease}.form-group textarea{resize:vertical;min-height:80px}
-        .share-modal{position:fixed;inset:0;background:rgba(0,0,0,.95);z-index:2100;display:flex;align-items:center;justify-content:center;opacity:0;visibility:hidden;transition:opacity 0.4s ease, visibility 0.4s ease}.share-modal.active{opacity:1;visibility:visible}.share-modal-content{background:var(--modal-bg);width:100%;max-width:500px;border-radius:24px;padding:24px;border:1px solid var(--border-light);transition:background-color 0.4s ease, transform 0.4s cubic-bezier(0.4,0,0.2,1);transform:scale(0.95)}.share-modal.active .share-modal-content{transform:scale(1)}.share-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}.share-option{display:flex;flex-direction:column;align-items:center;gap:6px;padding:10px;border-radius:12px;cursor:pointer;color:var(--text-secondary);font-size:.75rem;transition:var(--transition)}.share-option:hover{background:var(--hover-bg);color:var(--cyan)}.share-option i{font-size:1.3rem}
+        .share-modal{position:fixed;inset:0;background:rgba(0,0,0,.95);z-index:10001;display:flex;align-items:center;justify-content:center;opacity:0;visibility:hidden;transition:opacity 0.4s ease, visibility 0.4s ease}.share-modal.active{opacity:1;visibility:visible}.share-modal-content{background:var(--modal-bg);width:100%;max-width:500px;border-radius:24px;padding: z-index:10002;
+        border:1px solid var(--border-light);transition:background-color 0.4s ease, transform 0.4s cubic-bezier(0.4,0,0.2,1);transform:scale(0.95)}.share-modal.active .share-modal-content{transform:scale(1)}.share-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}.share-option{display:flex;flex-direction:column;align-items:center;gap:6px;padding:10px;border-radius:12px;cursor:pointer;color:var(--text-secondary);font-size:.75rem;transition:var(--transition)}.share-option:hover{background:var(--hover-bg);color:var(--cyan)}.share-option i{font-size:1.3rem}
         .image-viewer{position:fixed;inset:0;background:rgba(0,0,0,.95);z-index:3000;display:none;flex-direction:column;align-items:center;justify-content:center}.image-viewer.active{display:flex}.image-viewer img{max-width:90%;max-height:80vh;object-fit:contain;border-radius:12px}.image-viewer-controls{position:absolute;top:20px;right:20px;display:flex;gap:10px}.image-viewer-controls button{background:rgba(0,0,0,.6);border:0;color:#fff;width:40px;height:40px;border-radius:50%;cursor:pointer;font-family:inherit}
-        .post-options-menu{position:fixed;background:var(--menu-bg);border:1px solid var(--border-light);border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,.5);padding:6px 0;min-width:160px;z-index:1060;transition:background-color 0.4s ease}.post-options-menu .option-item{padding:8px 14px;display:flex;align-items:center;gap:10px;cursor:pointer;font-size:.8rem;color:var(--text-primary)}.post-options-menu .option-item:hover{background:var(--menu-hover)}.post-options-menu .option-item.danger{color:var(--danger)}
+        .post-options-menu{position:fixed;background:var(--menu-bg);border:1px solid var(--border-light);border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,.5);padding:6px 0;min-width:160px;z-index:10001;transition:background-color 0.4s ease}.post-options-menu .option-item{padding:8px 14px;display:flex;align-items:center;gap:10px;cursor:pointer;font-size:.8rem;color:var(--text-primary)}.post-options-menu .option-item:hover{background:var(--menu-hover)}.post-options-menu .option-item.danger{color:var(--danger)}
         .bottom-nav{position:fixed;bottom:0;width:100%;height:60px;background:var(--navbar-bg);backdrop-filter:blur(15px);border-top:1px solid var(--border-color);display:flex;justify-content:space-around;align-items:center;z-index:1000;transition:background-color 0.4s ease}.bottom-nav-item{color:var(--text-secondary);padding:8px;cursor:pointer;transition:var(--transition);position:relative;text-decoration:none;display:flex;align-items:center}.bottom-nav-item svg{width:22px;height:22px}.bottom-nav-item.active,.bottom-nav-item:hover{color:var(--cyan)}.badge-count{position:absolute;top:0;right:-2px;background:var(--danger);color:#fff;font-size:.5rem;padding:2px 5px;border-radius:10px;font-weight:700;min-width:16px;text-align:center;display:none}
         .toast-custom{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:var(--toast-bg);color:#fff;padding:10px 20px;z-index:9999;font-size:.8rem;border-radius:25px;border:1px solid var(--cyan);white-space:nowrap;opacity:0;visibility:hidden;transition:opacity .3s ease,visibility .3s ease}.toast-custom.show{opacity:1;visibility:visible}
         .d-flex{display:flex}.align-items-center{align-items:center}.justify-content-between{justify-content:space-between}
@@ -543,11 +544,11 @@
         .right-footer a:hover { color: var(--cyan); }
 
         .bottom-sheet-overlay {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); z-index: 2000; opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s ease;
+            position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); z-index: 10001; opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s ease;
         }
         .bottom-sheet-overlay.active { opacity: 1; visibility: visible; }
         .bottom-sheet {
-            position: fixed; bottom: 0; left: 0; right: 0; background: var(--bg-secondary, #ffffff); border-radius: 20px 20px 0 0; z-index: 2100; max-height: 75vh; overflow-y: auto; transform: translateY(100%); transition: transform 0.35s cubic-bezier(0.4,0,0.2,1); box-shadow: 0 -5px 30px rgba(0,0,0,0.3); padding-bottom: env(safe-area-inset-bottom, 20px); border-top: 1px solid var(--border-color, rgba(0,0,0,0.1));
+            position: fixed; bottom: 0; left: 0; right: 0; background: var(--bg-secondary, #ffffff); border-radius: 20px 20px 0 0; z-index: 10002; max-height: 75vh; overflow-y: auto; transform: translateY(100%); transition: transform 0.35s cubic-bezier(0.4,0,0.2,1); box-shadow: 0 -5px 30px rgba(0,0,0,0.3); padding-bottom: env(safe-area-inset-bottom, 20px); border-top: 1px solid var(--border-color, rgba(0,0,0,0.1));
         }
         .bottom-sheet.active { transform: translateY(0); }
         .bottom-sheet-handle { width: 40px; height: 4px; background: var(--text-secondary, #94a3b8); border-radius: 4px; margin: 12px auto 8px; opacity: 0.5; }
@@ -570,6 +571,489 @@
         .share-label-bs { font-size: 0.68rem; color: var(--text-secondary, #64748b); font-weight: 500; text-align: center; }
         .bs-copy-link-zone { background: var(--bg-tertiary, #f1f5f9); border: 2px dashed var(--border-color, rgba(0,0,0,0.1)); border-radius: 12px; padding: 14px; text-align: center; cursor: pointer; transition: all 0.2s ease; }
         .bs-copy-link-zone:hover { background: rgba(56,189,248,0.05); border-color: var(--cyan, #0284c7); }
+
+/* Bouton Voir plus */
+.see-more-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 0;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--cyan, #0284c7);
+    cursor: pointer;
+    background: transparent;
+    border: none;
+    margin: 2px 0 6px 0;
+}
+.see-more-btn i { font-size: 0.7rem; transition: transform 0.3s ease; }
+.see-more-btn:hover { color: var(--text-primary); }
+.see-more-btn.less:hover i { transform: rotate(180deg); }
+[data-theme="light"] .see-more-btn { color: #0284c7; }
+[data-theme="light"] .see-more-btn:hover { color: #0f172a; }
+/* Wrapper pour effet de fondu */
+.post-text-wrapper {
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 4px;
+}
+.post-text-wrapper::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 50px;
+    background: linear-gradient(to bottom, transparent, var(--card-bg, #0f172a));
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+.post-text-wrapper.expanded::after {
+    opacity: 0;
+}
+
+/* Bouton Voir plus */
+.see-more-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 0;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--cyan, #0284c7);
+    cursor: pointer;
+    background: transparent;
+    border: none;
+    margin: 2px 0 6px 0;
+}
+.see-more-btn i { font-size: 0.7rem; transition: transform 0.3s ease; }
+.see-more-btn:hover { color: var(--text-primary); }
+.see-more-btn.less:hover i { transform: rotate(180deg); }
+[data-theme="light"] .see-more-btn { color: #0284c7; }
+[data-theme="light"] .see-more-btn:hover { color: #0f172a; }
+/* ================================================
+   LIGHTBOX ESTRA - STYLE X/TWITTER (comme l'accueil)
+   ================================================ */
+/* ================================================
+   LIGHTBOX ESTRA - STYLE X/TWITTER (comme l'accueil)
+   ================================================ */
+.estra-modal {
+    background: rgba(0, 0, 0, 0.95);
+    z-index: 10000;
+    display: none;
+    position: fixed;
+    inset: 0;
+}
+.estra-modal.active {
+    display: flex;
+}
+.estra-modal-container {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    background: #000;
+}
+.estra-image-area {
+    flex: 1.2;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 0;
+    overflow: hidden;
+}
+.estra-image-area img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+.estra-post-area {
+    flex: 0 0 400px;
+    background: var(--bg-secondary, #0f172a);
+    color: var(--text-primary);
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow-y: auto;
+    padding: 16px 20px;
+}
+@media (max-width: 768px) {
+    .estra-modal-container {
+        flex-direction: column;
+    }
+    .estra-image-area {
+        flex: 1 1 50vh;
+        min-height: 50vh;
+        max-height: 60vh;
+    }
+    .estra-post-area {
+        flex: 1;
+        height: auto;
+        max-height: 50vh;
+        overflow-y: auto;
+        flex-basis: auto;
+        width: 100%;
+        padding: 12px 16px;
+    }
+}
+
+/* ===== HEADER DU POST DANS LA LIGHTBOX ===== */
+.lightbox-post-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border-color, rgba(255, 255, 255, 0.1));
+}
+.lightbox-post-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    cursor: pointer;
+    object-fit: cover;
+    border: 2px solid var(--cyan, #38bdf8);
+}
+.lightbox-post-author-info {
+    flex: 1;
+    min-width: 0;
+}
+.lightbox-post-author-name {
+    font-weight: 700;
+    cursor: pointer;
+    font-size: 0.95rem;
+    color: var(--text-primary, #e2e8f0);
+}
+.lightbox-post-author-name:hover {
+    text-decoration: underline;
+}
+.lightbox-post-time {
+    color: var(--text-secondary, #94a3b8);
+    font-size: 0.75rem;
+    display: block;
+}
+.lightbox-post-menu-btn {
+    background: none;
+    border: none;
+    color: var(--text-secondary, #94a3b8);
+    font-size: 1.3rem;
+    cursor: pointer;
+    padding: 4px 8px;
+    transition: var(--transition);
+    border-radius: 50%;
+}
+.lightbox-post-menu-btn:hover {
+    color: var(--cyan, #38bdf8);
+    background: rgba(56, 189, 248, 0.1);
+}
+
+/* ===== TEXTE DU POST ===== */
+.lightbox-post-text {
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: 12px;
+    white-space: pre-wrap;
+    word-break: break-word;
+    color: var(--text-primary, #e2e8f0);
+}
+.lightbox-post-text .post-link {
+    color: var(--cyan, #38bdf8);
+    text-decoration: none;
+}
+.lightbox-post-text .post-link:hover {
+    text-decoration: underline;
+}
+
+/* ===== ACTIONS DU POST ===== */
+.lightbox-post-actions {
+    display: flex;
+    gap: 20px;
+    border-top: 1px solid var(--border-color, rgba(255, 255, 255, 0.1));
+    padding-top: 12px;
+    margin-bottom: 16px;
+}
+.lightbox-post-actions .post-action-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: none;
+    border: none;
+    color: var(--text-secondary, #94a3b8);
+    cursor: pointer;
+    padding: 6px 12px;
+    border-radius: 20px;
+    transition: var(--transition);
+    font-family: inherit;
+    font-size: 0.85rem;
+}
+.lightbox-post-actions .post-action-btn:hover {
+    background: var(--active-bg, rgba(56, 189, 248, 0.1));
+    color: var(--cyan, #38bdf8);
+}
+.lightbox-post-actions .post-action-btn.liked {
+    color: #ef4444;
+}
+.lightbox-post-actions .post-action-btn.liked svg {
+    fill: #ef4444;
+}
+.lightbox-post-actions .post-action-btn.saved {
+    color: var(--cyan, #38bdf8);
+}
+.lightbox-post-actions .post-action-btn.saved svg {
+    fill: var(--cyan, #38bdf8);
+}
+.lightbox-post-actions .post-action-btn svg {
+    width: 20px;
+    height: 20px;
+}
+.lightbox-post-actions .post-action-btn span {
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+/* ===== COMMENTAIRES DANS LA LIGHTBOX ===== */
+#lightboxComments {
+    flex: 1;
+    overflow-y: auto;
+    margin-bottom: 12px;
+}
+.lightbox-comment-item {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 12px;
+    align-items: flex-start;
+}
+.lightbox-comment-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+    object-fit: cover;
+    flex-shrink: 0;
+    border: 1px solid var(--border-color, rgba(255, 255, 255, 0.1));
+}
+.lightbox-comment-bubble {
+    background: var(--comment-bg, #1e293b);
+    padding: 8px 12px;
+    border-radius: 14px;
+    flex: 1;
+}
+.lightbox-comment-author {
+    font-weight: 600;
+    font-size: 0.8rem;
+    margin-right: 6px;
+    color: var(--text-primary, #e2e8f0);
+}
+.lightbox-comment-text {
+    font-size: 0.85rem;
+    color: var(--text-primary, #e2e8f0);
+    word-break: break-word;
+}
+.lightbox-no-comments {
+    color: var(--text-secondary, #94a3b8);
+    text-align: center;
+    padding: 16px 0;
+    font-size: 0.85rem;
+}
+
+/* ===== CHAMP DE COMMENTAIRE ===== */
+.lightbox-comment-input {
+    display: flex;
+    gap: 10px;
+    border-top: 1px solid var(--border-color, rgba(255, 255, 255, 0.1));
+    padding-top: 12px;
+    margin-top: auto;
+    background: var(--bg-secondary, #0f172a);
+}
+.lightbox-comment-input input {
+    flex: 1;
+    background: var(--input-bg, #1e293b);
+    border: none;
+    border-radius: 25px;
+    padding: 10px 16px;
+    color: var(--text-primary, #e2e8f0);
+    outline: none;
+    font-family: inherit;
+    font-size: 0.9rem;
+}
+.lightbox-comment-input input::placeholder {
+    color: var(--text-secondary, #94a3b8);
+}
+.lightbox-comment-input button {
+    background: var(--cyan, #38bdf8);
+    border: none;
+    border-radius: 25px;
+    padding: 10px 20px;
+    color: #0f172a;
+    font-weight: 700;
+    cursor: pointer;
+    transition: var(--transition);
+    font-family: inherit;
+    font-size: 0.85rem;
+    white-space: nowrap;
+}
+.lightbox-comment-input button:hover {
+    opacity: 0.85;
+    transform: scale(0.97);
+}
+
+/* ===== BOUTONS CARROUSEL ===== */
+.estra-carousel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    color: #fff;
+    font-size: 1.2rem;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(4px);
+    transition: all 0.2s ease;
+}
+.estra-carousel-btn:hover {
+    background: rgba(255, 255, 255, 0.4);
+}
+.estra-carousel-prev {
+    left: 16px;
+}
+.estra-carousel-next {
+    right: 16px;
+}
+
+/* ===== DOTS ===== */
+.estra-dots {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 8px;
+    z-index: 10;
+}
+.estra-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+.estra-dot.active {
+    background: #fff;
+    transform: scale(1.2);
+}
+
+/* ===== TOP BAR (fermer / télécharger) ===== */
+.estra-top-bar {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    gap: 12px;
+    z-index: 15;
+}
+.estra-top-bar button {
+    background: rgba(0, 0, 0, 0.6);
+    border: none;
+    color: #fff;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.estra-top-bar button:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* ===== THEME CLAIR ===== */
+[data-theme="light"] .estra-post-area {
+    background: #ffffff;
+    color: #0f172a;
+}
+[data-theme="light"] .lightbox-comment-bubble {
+    background: #f1f5f9;
+}
+[data-theme="light"] .lightbox-comment-input input {
+    background: #f1f5f9;
+    color: #0f172a;
+}
+[data-theme="light"] .lightbox-post-header {
+    border-bottom-color: rgba(0, 0, 0, 0.1);
+}
+[data-theme="light"] .lightbox-post-actions {
+    border-top-color: rgba(0, 0, 0, 0.1);
+}
+[data-theme="light"] .lightbox-comment-input {
+    border-top-color: rgba(0, 0, 0, 0.1);
+    background: #ffffff;
+}
+[data-theme="light"] .lightbox-post-author-name {
+    color: #0f172a;
+}
+[data-theme="light"] .lightbox-post-text {
+    color: #0f172a;
+}
+[data-theme="light"] .lightbox-comment-author {
+    color: #0f172a;
+}
+[data-theme="light"] .lightbox-comment-text {
+    color: #475569;
+}
+[data-theme="light"] .lightbox-no-comments {
+    color: #64748b;
+}
+[data-theme="light"] .lightbox-post-actions .post-action-btn {
+    color: #64748b;
+}
+[data-theme="light"] .lightbox-post-actions .post-action-btn:hover {
+    color: #0284c7;
+    background: rgba(2, 132, 199, 0.08);
+}
+[data-theme="light"] .lightbox-post-actions .post-action-btn.liked {
+    color: #dc2626;
+}
+[data-theme="light"] .lightbox-post-actions .post-action-btn.saved {
+    color: #0284c7;
+}
+[data-theme="light"] .lightbox-comment-input input {
+    background: #f1f5f9;
+    color: #0f172a;
+}
+[data-theme="light"] .lightbox-comment-input button {
+    background: #0284c7;
+    color: #ffffff;
+}
+[data-theme="light"] .lightbox-comment-input button:hover {
+    background: #0369a1;
+}
+/* Forcer les sheets à passer au‑dessus de la lightbox */
+.bottom-sheet-overlay {
+    z-index: 10001 !important;
+}
+.bottom-sheet {
+    z-index: 10002 !important;
+}
+.share-modal {
+    z-index: 10001 !important;
+}
+.share-modal-content {
+    z-index: 10002 !important;
+}
+.post-options-menu {
+    z-index: 10001 !important;
+}
     </style>
 </head>
 <body>
@@ -733,6 +1217,32 @@
     <div style="padding:0 16px 12px;"><div class="bs-copy-link-zone" onclick="event.stopPropagation();BS.copyLink(null)"><i class="fas fa-link" style="color:var(--cyan);"></i><span style="color:var(--cyan);font-weight:600;margin-left:8px;">Copier le lien</span></div></div>
     <button class="bottom-sheet-cancel" onclick="event.stopPropagation();BS.closeAll();"></button>
 </div>
+<!-- ================= MODAL ESTRA (STYLE X / TWITTER) ================= -->
+<div class="estra-modal" id="estraModal">
+    <div class="estra-modal-container">
+        <!-- Partie image -->
+        <div class="estra-image-area">
+            <img src="" id="estraMainImage" alt="Image">
+            <button class="estra-carousel-btn estra-carousel-prev" id="estraPrevBtn"><i class="fas fa-chevron-left"></i></button>
+            <button class="estra-carousel-btn estra-carousel-next" id="estraNextBtn"><i class="fas fa-chevron-right"></i></button>
+            <div class="estra-dots" id="estraDots"></div>
+            <div class="estra-top-bar">
+                <button onclick="closeESTRAModal()"><i class="fas fa-times"></i></button>
+                <button onclick="downloadCurrentLightboxImage()"><i class="fas fa-download"></i></button>
+            </div>
+        </div>
+        
+        <!-- Partie post + commentaires -->
+        <div class="estra-post-area">
+            <div id="lightboxPostContent"></div>
+            <div id="lightboxComments"></div>
+            <div class="lightbox-comment-input">
+                <input type="text" id="lightboxCommentInput" placeholder="Écrire un commentaire...">
+                <button id="lightboxCommentBtn">Envoyer</button>
+            </div>
+        </div>
+    </div>
+</div>
 <div id="toastMsg" class="toast-custom"></div>
 
 <script>
@@ -741,8 +1251,8 @@ if (typeof ESTRA === 'undefined') {
     window.ESTRA = {
         ROLES: {
             STUDENT: 'student',
-            HIGHSCHOOL: 'highschool',
-            PROFESSOR: 'professor',
+            HIGHSCHOOL: 'pupil',
+            PROFESSOR: 'prof',
             TEACHER: 'teacher',
             SIMPLE: 'simple'
         },
@@ -782,12 +1292,12 @@ function getAllUsers() {
     if (users.length === 0) {
         users = [
             { id: 'rashidi', username: 'rashidi', fullName: 'Rashidi', bio: '👋 Étudiant passionné | ESTRA LINK', email: 'contact@estra-link.com', location: 'Lubumbashi, RDC', avatar: 'https://ui-avatars.com/api/?background=1d9bf0&color=fff&name=Rashidi&size=120', cover: null, verified: true, joinDate: '2026', accountType: 'student', companyVisibility: 'public', phone: '+243 977 126 962', badges: ['verified', 'premium', 'top_contributor'] },
-            { id: 'marie_claire', username: 'marie_claire', fullName: 'Marie Claire', bio: 'Enseignante en Programmation Web', email: 'marie@estra-link.com', location: 'Kinshasa, RDC', avatar: 'https://ui-avatars.com/api/?name=Marie&background=10b981&color=fff', cover: 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=800&h=300&fit=crop', verified: false, joinDate: '2025', accountType: 'highschool', companyVisibility: 'public', phone: '+243 999 888 777', badges: ['top_contributor', 'mentor'] },
+            { id: 'marie_claire', username: 'marie_claire', fullName: 'Marie Claire', bio: 'Enseignante en Programmation Web', email: 'marie@estra-link.com', location: 'Kinshasa, RDC', avatar: 'https://ui-avatars.com/api/?name=Marie&background=10b981&color=fff', cover: 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=800&h=300&fit=crop', verified: false, joinDate: '2025', accountType: 'pupil', companyVisibility: 'public', phone: '+243 999 888 777', badges: ['top_contributor', 'mentor'] },
             { id: 'david_mwamba', username: 'david_mwamba', fullName: 'David Mwamba', bio: 'Chercheur en Intelligence Artificielle', email: 'david@estra-link.com', location: 'Goma, RDC', avatar: 'https://ui-avatars.com/api/?name=David&background=8b5cf6&color=fff', cover: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800&h=300&fit=crop', verified: true, joinDate: '2025', accountType: 'student', companyVisibility: 'public', phone: '+243 888 777 666', badges: ['verified', 'premium'] },
             { id: 'alice_kasongo', username: 'alice_kasongo', fullName: 'Alice Kasongo', bio: 'Développeuse React Native', email: 'alice@estra-link.com', location: 'Bukavu, RDC', avatar: 'https://ui-avatars.com/api/?name=Alice&background=06b6d4&color=fff', cover: 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&h=300&fit=crop', verified: false, joinDate: '2026', accountType: 'company', companyVisibility: 'public', phone: '+243 777 666 555', companyName: 'Kasongo Tech', sector: 'Technologie', badges: ['sponsor'] },
-            { id: 'prof_kabengele', username: 'prof_kabengele', fullName: 'Pr. Kabengele', bio: 'Professeur en Intelligence Artificielle', email: 'kabengele@estra-link.com', location: 'Kinshasa, RDC', avatar: 'https://ui-avatars.com/api/?name=PrK&background=7c3aed&color=fff', cover: null, verified: true, joinDate: '2025', accountType: 'professor', institution: 'Université de Kinshasa', grade: 'Professeur', speciality: 'Informatique', experience: '15', badges: ['verified', 'mentor', 'premium'] },
+            { id: 'prof_kabengele', username: 'prof_kabengele', fullName: 'Pr. Kabengele', bio: 'Professeur en Intelligence Artificielle', email: 'kabengele@estra-link.com', location: 'Kinshasa, RDC', avatar: 'https://ui-avatars.com/api/?name=PrK&background=7c3aed&color=fff', cover: null, verified: true, joinDate: '2025', accountType: 'prof', institution: 'Université de Kinshasa', grade: 'Professeur', speciality: 'Informatique', experience: '15', badges: ['verified', 'mentor', 'premium'] },
             { id: 'mr_muteba', username: 'mr_muteba', fullName: 'Mr. Muteba', bio: 'Enseignant en Mathématiques', email: 'muteba@estra-link.com', location: 'Lubumbashi, RDC', avatar: 'https://ui-avatars.com/api/?name=MrM&background=d97706&color=fff', cover: null, verified: false, joinDate: '2026', accountType: 'teacher', school: 'Lycée Mwanga', level: '4ème Humanité', mainSubject: 'Mathématiques', section: 'Scientifique', badges: ['premium'] },
-            { id: 'alice_mwila', username: 'alice_mwila', fullName: 'Alice Mwila', bio: 'Élève en Scientifique', email: 'alice@estra-link.com', location: 'Kolwezi, RDC', avatar: 'https://ui-avatars.com/api/?name=Alice&background=059669&color=fff', cover: null, verified: false, joinDate: '2026', accountType: 'highschool', school: 'Collège Saint-Jacques', level: '3ème Humanité', section: 'Biologie-Chimie', badges: [] }
+            { id: 'alice_mwila', username: 'alice_mwila', fullName: 'Alice Mwila', bio: 'Élève en Scientifique', email: 'alice@estra-link.com', location: 'Kolwezi, RDC', avatar: 'https://ui-avatars.com/api/?name=Alice&background=059669&color=fff', cover: null, verified: false, joinDate: '2026', accountType: 'pupil', school: 'Collège Saint-Jacques', level: '3ème Humanité', section: 'Biologie-Chimie', badges: [] }
         ];
         localStorage.setItem('estra_all_users', JSON.stringify(users));
     }
@@ -847,24 +1357,61 @@ function toggleFollow(username) {
     const allUsers = getAllUsers();
     const user = allUsers.find(u => u.username === username || u.fullName === username);
     
-    const isFriendUser = friends.some(f => f.username === username || f.name === username);
-    if (isFriendUser) {
+    // 1. Vérifier si déjà ami
+    if (friends.some(f => f.username === username || f.name === username)) {
         window.location.href = 'messages.html?user=' + encodeURIComponent(username);
         return;
     }
-    friends.push({
-        id: 'f_' + Date.now(),
-        name: user?.fullName || username,
-        username: user?.username || username,
-        avatar: user?.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(username)}&background=0284c7&color=fff`,
-        online: false,
-        verified: user?.verified || false
+    
+    // 2. Vérifier si demande déjà envoyée
+    const sentFriendRequests = JSON.parse(localStorage.getItem('estra_sent_friend_requests') || '[]');
+    if (sentFriendRequests.some(r => r.toUsername === username || r.toName === username)) {
+        showToast('Demande déjà envoyée', true);
+        return;
+    }
+    
+    // 3. Envoyer la demande
+    const profile = ESTRA.getProfile();
+    const myName = profile.fullName || 'Utilisateur';
+    const myUsername = profile.username || 'user';
+    const myAvatar = profile.avatar || '';
+    
+    // Sécurité : si l'utilisateur n'existe pas, on utilise le username passé
+    const targetName = user?.fullName || username;
+    const targetUsername = user?.username || username;
+    
+    sentFriendRequests.push({
+        fromName: myName,
+        fromUsername: myUsername,
+        fromAvatar: myAvatar,
+        toName: targetName,
+        toUsername: targetUsername,
+        timestamp: Date.now(),
+        status: 'pending'
     });
-    localStorage.setItem('estra_friends', JSON.stringify(friends));
-    showToast('✅ Vous suivez maintenant ' + username);
+    localStorage.setItem('estra_sent_friend_requests', JSON.stringify(sentFriendRequests));
+    
+    // 4. Créer une notification pour l'autre utilisateur
+    const notifications = JSON.parse(localStorage.getItem('estra_notifications') || '[]');
+    notifications.unshift({
+        id: 'notif_' + Date.now(),
+        type: 'friend_request',
+        fromName: myName,
+        fromUsername: myUsername,
+        fromAvatar: myAvatar,
+        toName: targetName,
+        toUsername: targetUsername,
+        message: `${myName} vous a envoyé une demande d'amitié`,
+        read: false,
+        timestamp: Date.now()
+    });
+    localStorage.setItem('estra_notifications', JSON.stringify(notifications));
+    
+    // 5. Mettre à jour l'affichage
     renderProfile();
+    updateRightSidebar();
+    showToast(`📨 Demande envoyée à ${targetName}`);
 }
-
 function startConversation(username) {
     window.location.href = 'messages.html?user=' + encodeURIComponent(username);
 }
@@ -949,6 +1496,8 @@ let posts = [], jobsList = [], eventsList = [], groups = [], userCourses = [];
 let currentImageData = null, currentDocData = null, currentDocName = '';
 let currentVisibility = 'public', currentSharePostId = null, currentViewerImage = null;
 let currentTab = 'posts', activePostMenu = null, toastTimeout = null, selectedGroupId = null;
+let sentFriendRequests = JSON.parse(localStorage.getItem('estra_sent_friend_requests') || '[]');
+let pendingFriendRequests = JSON.parse(localStorage.getItem('estra_pending_friend_requests') || '[]');
 let userGroups = [], userFriends = [];
 let myProfile = {};
 let userProfile = {};
@@ -1002,7 +1551,16 @@ function checkOnlineStatus() {
 function loadData() {
     applyTranslations();
     
-    myProfile = ESTRA.getProfile() || {};
+    // ✅ CORRECTION : rechargement complet depuis localStorage, sans valeur par défaut
+    myProfile = JSON.parse(localStorage.getItem('estra_profile') || '{}');
+    // Sécurité si le profil est vide
+    if (!myProfile.fullName) {
+        myProfile.fullName = 'Utilisateur';
+        myProfile.username = 'user_' + Date.now();
+        myProfile.avatar = `https://ui-avatars.com/api/?name=${encodeURIComponent(myProfile.fullName)}&background=1d9bf0&color=fff`;
+        myProfile.accountType = 'simple';
+    }
+    
     if (!localStorage.getItem('estra_badges')) {
         const defaultBadges = [
             { id: 'verified', name: '✅ Vérifié', icon: 'fa-check-circle', color: '#1DA1F2', description: 'Compte vérifié' },
@@ -1019,13 +1577,13 @@ function loadData() {
         localStorage.setItem('estra_badges', JSON.stringify(defaultBadges));
     }
 
-    // ⭐ Initialiser MES badges si absents
+    // ✅ CORRECTION : attribution des badges par type de compte (clés 'prof' et 'pupil')
     if (!myProfile.badges || myProfile.badges.length === 0) {
         const roleBadges = {
             student: ['verified', 'top_contributor'],
-            professor: ['verified', 'mentor', 'premium'],
+            prof: ['verified', 'mentor', 'premium'],
             teacher: ['premium'],
-            highschool: ['early_adopter'],
+            pupil: ['early_adopter'],
             simple: []
         };
         myProfile.badges = roleBadges[myProfile.accountType] || [];
@@ -1051,7 +1609,8 @@ function loadData() {
             isOwner = false;
         }
     } else {
-        userProfile = { ...myProfile };
+        // ✅ CORRECTION : toujours prendre une copie fraîche de myProfile
+        userProfile = JSON.parse(localStorage.getItem('estra_profile') || '{}');
         if (!userProfile.avatar || userProfile.avatar === '') {
             userProfile.avatar = `https://ui-avatars.com/api/?background=1d9bf0&color=fff&name=${encodeURIComponent(userProfile.fullName || 'User')}&size=120`;
         }
@@ -1297,10 +1856,10 @@ function renderProfile() {
         case 'student':
             extraTabs = `<button class="profile-tab ${currentTab === 'cv' ? 'active' : ''}" onclick="switchTab('cv', this)"><i class="fas fa-file-pdf"></i> CV & Compétences</button>`;
             break;
-        case 'highschool':
+        case 'pupil':
             extraTabs = `<button class="profile-tab ${currentTab === 'homework' ? 'active' : ''}" onclick="switchTab('homework', this)"><i class="fas fa-book"></i> Devoirs & Notes</button>`;
             break;
-        case 'professor':
+        case 'prof':
             extraTabs = `<button class="profile-tab ${currentTab === 'cv' ? 'active' : ''}" onclick="switchTab('cv', this)"><i class="fas fa-file-pdf"></i> CV & Publications</button><button class="profile-tab ${currentTab === 'docs' ? 'active' : ''}" onclick="switchTab('docs', this)"><i class="fas fa-book"></i> Publications</button>`;
             break;
         case 'teacher':
@@ -1333,7 +1892,7 @@ function renderProfile() {
     const targetRole = userProfile.accountType;
     const canViewSensitives = ESTRA.canViewSensitiveInfo(viewerRole, targetRole);
     
-    if (!canViewSensitives && (targetRole === 'student' || targetRole === 'highschool')) {
+    if (!canViewSensitives && (targetRole === 'student' || targetRole === 'pupil')) {
         // Désactiver l'accès aux informations sensibles (déjà géré dans les boutons)
     }
     
@@ -1427,7 +1986,6 @@ function switchTab(e, t_elem) {
 // ============================================================
 // RENDER POSTS AVEC LES COURS (PROFIL)
 // ============================================================
-
 function renderPosts() {
     const container = document.getElementById("postsContainer");
     const userName = userProfile.fullName;
@@ -1441,12 +1999,7 @@ function renderPosts() {
         (e.author && e.author.toLowerCase() === (userName || '').toLowerCase()) ||
         (e.author && e.author.toLowerCase() === (userUsername || '').toLowerCase())
     );
-    const myJobs = jobsList.filter(e =>
-        e.author === userName ||
-        e.author === userUsername ||
-        e.authorUsername === userUsername ||
-        e.authorUsername === userName
-    );
+    
     const myEvents = eventsList.filter(e =>
         e.organizer === userName ||
         e.organizer === userUsername ||
@@ -1466,28 +2019,126 @@ function renderPosts() {
     
     if (all.length) {
         container.innerHTML = all.map(e => renderPostCard(e)).join("");
+        
+        // 🔽 AJOUT : Gestion des boutons "Voir plus" (après rendu)
+        setTimeout(() => {
+            document.querySelectorAll('.post-text').forEach(td => {
+                const pid = td.id.split('-')[2];
+                const btn = document.getElementById('see-more-' + pid);
+                if (!btn) return;
+                const lineHeight = parseFloat(getComputedStyle(td).lineHeight) || 20;
+                const maxLines = 7;
+                const maxHeight = lineHeight * maxLines;
+                if (td.scrollHeight > maxHeight || td.innerText.split('\n').length > maxLines) {
+                    btn.style.display = 'inline-block';
+                }
+            });
+        }, 100);
     } else {
         container.innerHTML = `<div style="text-align:center;padding:60px;color:var(--text-secondary);"><i class="fas fa-newspaper" style="font-size:3rem;margin-bottom:16px;"></i><p>${t('no_posts')}</p></div>`;
     }
 }
-
-// ============================================================
-// RENDER POST CARD AVEC SUPPORT DES COURS
-// ============================================================
-
 function renderPostCard(e) {
-    // CAS : ÉVÉNEMENT
+    // ============================================================
+    // CAS : ÉVÉNEMENT (carte complète comme sur l'accueil)
+    // ============================================================
     if (e.isEvent && e.eventData) {
-        return `<div class="post-card" id="post-${e.id}"><div class="post-header"><img src="${e.authorAvatar || userProfile.avatar}" class="post-avatar"><div class="post-author-info"><div class="d-flex justify-content-between"><div><span class="post-author-name">${escapeHtml(e.author)}</span><div class="post-time">${formatTime(e.timestamp || e.createdAt)}</div></div><button class="post-menu-btn" onclick="showPostOptionsWithBS(event,${e.id},'event')"><i class="fas fa-ellipsis-h"></i></button></div></div></div><div class="post-content"><span class="event-badge"><i class="fas fa-calendar-alt"></i> ${t('event_badge')}</span><div class="post-text"><strong>${escapeHtml(e.eventData.title)}</strong></div><div style="display:flex;flex-wrap:wrap;gap:16px;margin:8px 0;font-size:0.8rem;color:var(--text-secondary);"><span><i class="far fa-calendar-alt"></i> ${e.eventData.date} à ${e.eventData.time}</span><span><i class="fas fa-map-marker-alt"></i> ${escapeHtml(e.eventData.location)}</span></div><p style="font-size:0.85rem;color:var(--text-secondary);">${escapeHtml(e.eventData.description || "")}</p></div><div class="post-stats"><span><i class="fas fa-heart"></i> ${e.likes || 0}</span><span><i class="fas fa-comment"></i> ${(e.comments || []).length}</span></div><div class="post-actions"><button class="post-action-btn ${e.liked ? "liked" : ""}" onclick="toggleLike(${e.id},'event')"><svg viewBox="0 0 24 24" fill="${e.liked ? "currentColor" : "none"}" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button><button class="post-action-btn" onclick="toggleComments(${e.id})"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></button><button class="post-action-btn ${e.saved ? "saved" : ""}" onclick="toggleSave(${e.id},'event')"><svg viewBox="0 0 24 24" fill="${e.saved ? "currentColor" : "none"}" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></button><button class="post-action-btn" onclick="BS.openShare(${e.id})"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></button></div><div class="comments-section" id="comments-section-${e.id}"><div id="comments-list-${e.id}">${(e.comments || []).map(c => `<div class="comment-item"><img src="${c.avatar}" class="comment-avatar"><div class="comment-bubble"><div class="comment-author">${escapeHtml(c.author)}</div><div class="comment-text">${escapeHtml(c.text)}</div></div></div>`).join("")}</div><div class="comment-input-area"><input type="text" id="commentInput-${e.id}" class="comment-input" placeholder="${t('write_comment')}"><button class="comment-submit" onclick="addComment(${e.id},'event')">${t('send_comment')}</button></div></div></div><hr class="post-separator">`;
+        const eventDateObj = new Date(e.eventData.date);
+        const day = eventDateObj.getDate() || '??';
+        const month = eventDateObj.toLocaleDateString('fr-FR', { month: 'short' }).toUpperCase() || '???';
+
+        let eventImg = 'https://images.unsplash.com/photo-1540317580384-e5d43616b9aa?auto=format&fit=crop&q=80&w=800';
+        if (e.images && e.images.length > 0) eventImg = e.images[0];
+        else if (e.image) eventImg = e.image;
+        else if (e.eventData && e.eventData.image) eventImg = e.eventData.image;
+
+        let categoryBadge = '';
+        if (e.eventData.category) {
+            const catColors = {
+                conference: '#06b6d4', workshop: '#10b981', meetup: '#f59e0b',
+                seminar: '#a78bfa', social: '#fb7185', business: '#eab308',
+                corporate: '#3b82f6', marketplace: '#14b8a6', hiring: '#6366f1', vip: '#fbbf24'
+            };
+            const catColor = catColors[e.eventData.category] || '#3b82f6';
+            categoryBadge = `<div style="position:absolute;top:12px;left:12px;background:${catColor};color:#fff;padding:4px 12px;border-radius:20px;font-size:0.75rem;font-weight:800;text-transform:capitalize;z-index:3;">${escapeHtml(e.eventData.category)}</div>`;
+        }
+
+        const eventLink = `events.html?eventId=${e.eventData.id || e.id}`;
+
+        return `
+        <div class="post-card" id="post-${e.id}">
+            <div class="post-header">
+                <img src="${e.authorAvatar || userProfile.avatar}" class="post-avatar">
+                <div class="post-author-info">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <span class="post-author-name">${escapeHtml(e.author)}</span>
+                            <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
+                                <span class="event-badge" style="background:linear-gradient(135deg,#f59e0b,#ef4444);color:#fff;padding:2px 10px;border-radius:12px;font-size:0.6rem;font-weight:700;display:inline-flex;align-items:center;gap:4px;">
+                                    <i class="fas fa-calendar-alt"></i> ÉVÉNEMENT
+                                </span>
+                            </div>
+                            <div class="post-time">${formatTime(e.timestamp || e.createdAt)}</div>
+                        </div>
+                        <button class="post-menu-btn" onclick="event.stopPropagation();showPostOptionsWithBS(event,${e.id},'event')"><i class="fas fa-ellipsis-h"></i></button>
+                    </div>
+                </div>
+            </div>
+            <div class="post-content">
+                <div style="margin-top:8px;border-radius:16px;overflow:hidden;position:relative;border:1px solid var(--border-color);cursor:pointer;background:var(--card-bg);transition:all 0.3s ease;" onclick="window.location.href='${eventLink}'" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 10px 25px rgba(0,0,0,0.15)';" onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='none';">
+                    <div style="height:200px;background-image:url('${escapeHtml(eventImg)}');background-size:cover;background-position:center;position:relative;">
+                        <div style="position:absolute;inset:0;background:linear-gradient(to bottom,transparent 30%,rgba(15,23,42,0.95) 100%);z-index:1;"></div>
+                        ${categoryBadge}
+                        <div style="position:absolute;top:12px;right:12px;background:rgba(255,255,255,0.95);backdrop-filter:blur(8px);padding:8px 12px;border-radius:12px;text-align:center;color:#0f172a;box-shadow:0 4px 10px rgba(0,0,0,0.15);min-width:50px;z-index:3;">
+                            <div style="font-size:1.4rem;font-weight:900;line-height:1;color:#38bdf8;">${day}</div>
+                            <div style="font-size:0.7rem;text-transform:uppercase;font-weight:800;margin-top:2px;">${month}</div>
+                        </div>
+                        <div style="position:absolute;bottom:0;left:0;right:0;padding:16px;z-index:2;">
+                            <h3 style="margin:0 0 6px 0;color:#ffffff;font-size:1.2rem;font-weight:800;line-height:1.2;">${escapeHtml(e.eventData.title)}</h3>
+                            <div style="display:flex;gap:16px;font-size:0.8rem;color:#e2e8f0;font-weight:500;flex-wrap:wrap;">
+                                <span><i class="fas fa-clock" style="color:#38bdf8;margin-right:4px;"></i> ${escapeHtml(e.eventData.time || 'TBA')}</span>
+                                <span style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;min-width:0;"><i class="fas fa-map-marker-alt" style="color:#38bdf8;margin-right:4px;"></i> ${escapeHtml(e.eventData.location)}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="padding:12px 16px;display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--border-color);background:var(--card-bg);">
+                        <div style="font-size:0.85rem;color:var(--text-secondary);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;flex:1;padding-right:12px;line-height:1.4;">${escapeHtml(e.eventData.description || e.content || '')}</div>
+                        <div style="background:rgba(56,189,248,0.1);color:var(--cyan);padding:8px 16px;border-radius:20px;font-weight:700;font-size:0.85rem;white-space:nowrap;transition:background 0.3s;flex-shrink:0;">Détails <i class="fas fa-arrow-right" style="margin-left:4px;"></i></div>
+                    </div>
+                </div>
+            </div>
+            <div class="post-stats">
+                <span><i class="fas fa-heart"></i> ${e.likes || 0}</span>
+                <span><i class="fas fa-comment"></i> ${(e.comments || []).length}</span>
+            </div>
+            <div class="post-actions">
+                <button class="post-action-btn ${e.liked ? "liked" : ""}" onclick="toggleLike(${e.id},'event')">
+                    <svg viewBox="0 0 24 24" fill="${e.liked ? "currentColor" : "none"}" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                </button>
+                <button class="post-action-btn" onclick="toggleComments(${e.id})">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                </button>
+                <button class="post-action-btn ${e.saved ? "saved" : ""}" onclick="toggleSave(${e.id},'event')">
+                    <svg viewBox="0 0 24 24" fill="${e.saved ? "currentColor" : "none"}" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+                </button>
+                <button class="post-action-btn" onclick="BS.openShare(${e.id})">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+                </button>
+            </div>
+            <div class="comments-section" id="comments-section-${e.id}">
+                <div id="comments-list-${e.id}">${(e.comments || []).map(c => `<div class="comment-item"><img src="${c.avatar}" class="comment-avatar"><div class="comment-bubble"><div class="comment-author">${escapeHtml(c.author)}</div><div class="comment-text">${escapeHtml(c.text)}</div></div></div>`).join("")}</div>
+                <div class="comment-input-area">
+                    <input type="text" id="commentInput-${e.id}" class="comment-input" placeholder="${t('write_comment')}">
+                    <button class="comment-submit" onclick="addComment(${e.id},'event')">${t('send_comment')}</button>
+                </div>
+            </div>
+        </div>
+        <hr class="post-separator">`;
     }
-    
-    // CAS : OFFRE D'EMPLOI
-    if (e.isJob && e.jobData) {
-        const j = e.jobData;
-        return `<div class="post-card" id="post-${e.id}"><div class="post-header"><img src="${e.authorAvatar}" class="post-avatar"><div class="post-author-info"><div class="d-flex justify-content-between"><div><span class="post-author-name">${escapeHtml(e.author)}</span><div class="post-time">${formatTime(e.timestamp)}</div></div><button class="post-menu-btn" onclick="showPostOptionsWithBS(event,${e.id},'job')"><i class="fas fa-ellipsis-h"></i></button></div></div></div><div class="post-content"><span class="job-badge"><i class="fas fa-briefcase"></i> ${t('job_badge')}</span><div class="post-text"><strong>${escapeHtml(j.title)}</strong> chez ${escapeHtml(j.company)}</div><div style="display:flex;flex-wrap:wrap;gap:16px;margin:8px 0;font-size:0.8rem;color:var(--text-secondary);"><span><i class="fas fa-map-marker-alt"></i> ${escapeHtml(j.location)}</span><span><i class="fas fa-file-contract"></i> ${escapeHtml(j.contract)}</span><span><i class="fas fa-money-bill"></i> ${escapeHtml(j.salary || "À discuter")}</span></div></div><div class="post-stats"><span><i class="fas fa-heart"></i> ${e.likes || 0}</span><span><i class="fas fa-comment"></i> ${(e.comments || []).length}</span></div><div class="post-actions"><button class="post-action-btn ${e.liked ? "liked" : ""}" onclick="toggleLike(${e.id},'job')"><svg viewBox="0 0 24 24" fill="${e.liked ? "currentColor" : "none"}" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button><button class="post-action-btn" onclick="toggleComments(${e.id})"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></button><button class="post-action-btn ${e.saved ? "saved" : ""}" onclick="toggleSave(${e.id},'job')"><svg viewBox="0 0 24 24" fill="${e.saved ? "currentColor" : "none"}" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></button><button class="post-action-btn" onclick="BS.openShare(${e.id})"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></button></div><div class="comments-section" id="comments-section-${e.id}"><div id="comments-list-${e.id}">${(e.comments || []).map(c => `<div class="comment-item"><img src="${c.avatar}" class="comment-avatar"><div class="comment-bubble"><div class="comment-author">${escapeHtml(c.author)}</div><div class="comment-text">${escapeHtml(c.text)}</div></div></div>`).join("")}</div><div class="comment-input-area"><input type="text" id="commentInput-${e.id}" class="comment-input" placeholder="${t('write_comment')}"><button class="comment-submit" onclick="addComment(${e.id},'job')">${t('send_comment')}</button></div></div></div><hr class="post-separator">`;
-    }
-    
-    // CAS : COURS (BADGE DANS L'EN-TÊTE)
+
+    // ============================================================
+    // CAS : COURS (identique à l'accueil)
+    // ============================================================
     if (e.isCourse && e.courseData) {
         const c = e.courseData;
         const priceDisplay = c.price && c.price > 0 ? `<span><i class="fas fa-money-bill"></i> ${c.price} FC</span>` : '<span><i class="fas fa-gratipay"></i> Gratuit</span>';
@@ -1513,7 +2164,7 @@ function renderPostCard(e) {
             </div>
             <div class="post-content">
                 <div class="post-text"><strong>${escapeHtml(c.title)}</strong></div>
-                ${e.content ? `<div class="post-text" style="margin-top:4px;">${escapeHtml(e.content)}</div>` : ''}
+                ${e.content ? `<div class="post-text" style="margin-top:4px;">${parsePostContent(escapeHtml(e.content))}</div>` : ''}
                 <div style="display:flex;flex-wrap:wrap;gap:16px;margin:8px 0;font-size:0.8rem;color:var(--text-secondary);">
                     <span><i class="fas fa-tag"></i> ${escapeHtml(c.category || 'Général')}</span>
                     <span><i class="fas fa-file-pdf"></i> ${escapeHtml(c.fileName)}</span>
@@ -1566,29 +2217,123 @@ function renderPostCard(e) {
             </div>
         </div><hr class="post-separator">`;
     }
-    
-    // CAS : POST NORMAL
-    const hasLong = Math.ceil((e.content || "").length / 40) > 4 || (e.content || "").split("\n").length > 4;
-    let media = "";
-    if (e.image) media = `<div class="post-media"><img src="${e.image}" onclick="openImageViewer('${e.image}')"></div>`;
-    else if (e.video) media = `<div class="post-media"><video src="${e.video}" style="width:100%;max-height:400px;border-radius:12px" controls></video></div>`;
-    else if (e.document) media = `<div style="background:var(--comment-bg);border-radius:12px;padding:12px;margin-top:8px;display:flex;align-items:center;justify-content:space-between;"><div style="display:flex;align-items:center;gap:12px;"><div style="width:48px;height:48px;background:rgba(239,68,68,0.15);border-radius:12px;display:flex;align-items:center;justify-content:center;color:#ef4444;"><i class="fas fa-file-pdf"></i></div><div><div style="font-weight:600;">${escapeHtml(e.documentName || "Document")}</div><div style="font-size:0.7rem;color:var(--text-secondary);">PDF</div></div></div><div style="background:var(--cyan);color:white;padding:8px 16px;border-radius:30px;font-size:0.8rem;cursor:pointer;" onclick="downloadDocument('${e.document}','${e.documentName || "document"}')"><i class="fas fa-download"></i> ${t('download_btn')}</div></div>`;
-    let groupBadge = '';
-    if (e.groupId && e.groupName) groupBadge = `<span style="display:inline-block;background:var(--purple);color:#fff;padding:2px 10px;border-radius:15px;font-size:.65rem;margin-bottom:6px">👥 ${escapeHtml(e.groupName)}</span>`;
-    return `<div class="post-card" id="post-${e.id}"><div class="post-header"><img src="${e.authorAvatar}" class="post-avatar"><div class="post-author-info"><div class="d-flex justify-content-between"><div><span class="post-author-name">${escapeHtml(e.author)}</span>${e.groupId && e.groupName ? `<div style="font-size:.65rem;color:var(--text-secondary)"><i class="fas fa-users"></i> dans ${escapeHtml(e.groupName)}</div>` : ''}<div class="post-time">${formatTime(e.timestamp)}</div></div><button class="post-menu-btn" onclick="showPostOptionsWithBS(event,${e.id},'post')"><i class="fas fa-ellipsis-h"></i></button></div></div></div><div class="post-content">${groupBadge}<div class="post-text" id="post-text-${e.id}">${escapeHtml(e.content || '')}</div>${hasLong ? `<span class="see-more-btn" id="see-more-${e.id}" onclick="toggleReadMore(${e.id})" style="display:none;">${t('see_more')}</span>` : ""}${media}</div><div class="post-stats"><span><i class="fas fa-heart"></i> ${e.likes || 0}</span><span><i class="fas fa-comment"></i> ${(e.comments || []).length}</span></div><div class="post-actions"><button class="post-action-btn ${e.liked ? "liked" : ""}" onclick="toggleLike(${e.id},'post')"><svg viewBox="0 0 24 24" fill="${e.liked ? "currentColor" : "none"}" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button><button class="post-action-btn" onclick="toggleComments(${e.id})"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></button><button class="post-action-btn ${e.saved ? "saved" : ""}" onclick="toggleSave(${e.id},'post')"><svg viewBox="0 0 24 24" fill="${e.saved ? "currentColor" : "none"}" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></button><button class="post-action-btn" onclick="BS.openShare(${e.id})"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></button></div><div class="comments-section" id="comments-section-${e.id}"><div id="comments-list-${e.id}">${(e.comments || []).map(c => `<div class="comment-item"><img src="${c.avatar}" class="comment-avatar"><div class="comment-bubble"><div class="comment-author">${escapeHtml(c.author)}</div><div class="comment-text">${escapeHtml(c.text)}</div></div></div>`).join("")}</div><div class="comment-input-area"><input type="text" id="commentInput-${e.id}" class="comment-input" placeholder="${t('write_comment')}"><button class="comment-submit" onclick="addComment(${e.id},'post')">${t('send_comment')}</button></div></div></div><hr class="post-separator">`;
-}
 
+    // ============================================================
+    // CAS : POST NORMAL (identique à l'accueil avec openESTRALightbox)
+    // ============================================================
+    const hasLong = Math.ceil((e.content || "").length / 40) > 4 || (e.content || "").split("\n").length > 7;
+    const wrapperClass = hasLong ? 'post-text-wrapper' : 'post-text-wrapper expanded';
+    const seeMoreBtnHtml = hasLong ? `<span class="see-more-btn" id="see-more-${e.id}" onclick="toggleReadMore(${e.id})" style="display:none;">${t('see_more')}</span>` : '';
+
+    let media = "";
+    // Images multiples (grille) - on ajoute e.id en troisième paramètre
+    if (e.images && e.images.length > 0) {
+        const count = e.images.length;
+        let cls = 'col-2';
+        if (count === 3 || count >= 5) cls = 'col-3';
+        else if (count === 4) cls = 'col-4';
+        const display = e.images.slice(0, 4);
+        let html = `<div class="post-images-grid ${cls}">`;
+        display.forEach((img, i) => {
+            if (i === 3 && count > 4) {
+                html += `<div class="more-images" onclick="openESTRALightbox(${JSON.stringify(e.images)}, 3, ${e.id})"><img src="${img}" alt="Image"><div class="overlay">+${count-3}</div></div>`;
+            } else {
+                html += `<img src="${img}" alt="Image" onclick="openESTRALightbox(${JSON.stringify(e.images)}, ${i}, ${e.id})">`;
+            }
+        });
+        html += '</div>';
+        media = html;
+    }
+    // Image seule - on utilise openESTRALightbox avec l'ID du post
+    else if (e.image) {
+        media = `<div class="post-media"><img src="${e.image}" onclick="openESTRALightbox(['${e.image}'], 0, ${e.id})"></div>`;
+    }
+    // Vidéo
+    else if (e.video) {
+        media = `<div class="post-media"><video src="${e.video}" style="width:100%;max-height:400px;border-radius:12px" controls></video></div>`;
+    }
+    // Document
+    else if (e.document) {
+        media = `<div style="background:var(--comment-bg);border-radius:12px;padding:12px;margin-top:8px;display:flex;align-items:center;justify-content:space-between;">
+            <div style="display:flex;align-items:center;gap:12px;">
+                <div style="width:48px;height:48px;background:rgba(239,68,68,0.15);border-radius:12px;display:flex;align-items:center;justify-content:center;color:#ef4444;">
+                    <i class="fas fa-file-pdf"></i>
+                </div>
+                <div>
+                    <div style="font-weight:600;">${escapeHtml(e.documentName || "Document")}</div>
+                    <div style="font-size:0.7rem;color:var(--text-secondary);">PDF</div>
+                </div>
+            </div>
+            <div style="background:var(--cyan);color:white;padding:8px 16px;border-radius:30px;font-size:0.8rem;cursor:pointer;" onclick="downloadDocument('${e.document}','${e.documentName || "document"}')">
+                <i class="fas fa-download"></i> ${t('download_btn')}
+            </div>
+        </div>`;
+    }
+
+    return `<div class="post-card" id="post-${e.id}">
+        <div class="post-header">
+            <img src="${e.authorAvatar}" class="post-avatar">
+            <div class="post-author-info">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <span class="post-author-name">${escapeHtml(e.author)}</span>
+                        <div class="post-time">${formatTime(e.timestamp)}</div>
+                    </div>
+                    <button class="post-menu-btn" onclick="showPostOptionsWithBS(event,${e.id},'post')"><i class="fas fa-ellipsis-h"></i></button>
+                </div>
+            </div>
+        </div>
+        <div class="post-content">
+            <div class="${wrapperClass}">
+                <div class="post-text" id="post-text-${e.id}">${parsePostContent(escapeHtml(e.content || ''))}</div>
+            </div>
+            ${seeMoreBtnHtml}
+            ${media}
+        </div>
+        <div class="post-stats">
+            <span><i class="fas fa-heart"></i> ${e.likes || 0}</span>
+            <span><i class="fas fa-comment"></i> ${(e.comments || []).length}</span>
+        </div>
+        <div class="post-actions">
+            <button class="post-action-btn ${e.liked ? "liked" : ""}" onclick="toggleLike(${e.id},'post')">
+                <svg viewBox="0 0 24 24" fill="${e.liked ? "currentColor" : "none"}" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            </button>
+            <button class="post-action-btn" onclick="toggleComments(${e.id})">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            </button>
+            <button class="post-action-btn ${e.saved ? "saved" : ""}" onclick="toggleSave(${e.id},'post')">
+                <svg viewBox="0 0 24 24" fill="${e.saved ? "currentColor" : "none"}" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+            </button>
+            <button class="post-action-btn" onclick="BS.openShare(${e.id})">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+            </button>
+        </div>
+        <div class="comments-section" id="comments-section-${e.id}">
+            <div id="comments-list-${e.id}">${(e.comments || []).map(c => `<div class="comment-item"><img src="${c.avatar}" class="comment-avatar"><div class="comment-bubble"><div class="comment-author">${escapeHtml(c.author)}</div><div class="comment-text">${escapeHtml(c.text)}</div></div></div>`).join("")}</div>
+            <div class="comment-input-area">
+                <input type="text" id="commentInput-${e.id}" class="comment-input" placeholder="${t('write_comment')}">
+                <button class="comment-submit" onclick="addComment(${e.id},'post')">${t('send_comment')}</button>
+            </div>
+        </div>
+    </div>
+    <hr class="post-separator">`;
+}
 // ================= INTERACTIONS =================
 function toggleReadMore(e) {
     const txt = document.getElementById(`post-text-${e}`);
     const btn = document.getElementById(`see-more-${e}`);
     if (!txt || !btn) return;
+    const wrapper = txt.closest('.post-text-wrapper');
     if (txt.classList.contains("expanded")) {
         txt.classList.remove("expanded");
-        btn.textContent = t('see_more');
+        if (wrapper) wrapper.classList.remove("expanded");
+        btn.innerHTML = 'Voir plus <i class="fas fa-chevron-down"></i>';
+        btn.classList.remove('less');
     } else {
         txt.classList.add("expanded");
-        btn.textContent = t('see_less');
+        if (wrapper) wrapper.classList.add("expanded");
+        btn.innerHTML = 'Voir moins <i class="fas fa-chevron-up"></i>';
+        btn.classList.add('less');
     }
 }
 function toggleComments(e) { document.getElementById(`comments-section-${e}`)?.classList.toggle("show"); }
@@ -1646,6 +2391,32 @@ function toggleSave(e, postType = "post") {
         showToast(item.saved ? t('toast_saved') : t('toast_unsaved'));
         saveAllData();
     }
+}
+function parsePostContent(text) {
+    if (!text) return '';
+    let result = text;
+    // Emails
+    result = result.replace(/([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/gi, function(match) {
+        return `<a href="mailto:${match}" class="post-link post-link-email" target="_blank">${match}</a>`;
+    });
+    // URLs
+    const urlRegex = /(https?:\/\/[^\s]+|www\.[^\s]+|[a-zA-Z0-9][-a-zA-Z0-9]*\.[a-zA-Z0-9][-a-zA-Z0-9]*\.[a-zA-Z]{2,}(?:\/[^\s]*)?)/gi;
+    result = result.replace(urlRegex, function(match) {
+        if (match.includes('@') || match.includes('href=')) return match;
+        let href = match;
+        if (match.toLowerCase().startsWith('www.')) href = 'https://' + match;
+        else if (!/^https?:\/\//i.test(match)) href = 'https://' + match;
+        return `<a href="${href}" target="_blank" rel="noopener noreferrer" class="post-link">${match}</a>`;
+    });
+    // Mentions @
+    result = result.replace(/(^|\s)@([a-zA-Z0-9_]+)/g, function(match, space, username) {
+        return `${space}<a href="/profile?user=${username}" class="post-link post-link-mention">@${username}</a>`;
+    });
+    // Hashtags #
+    result = result.replace(/(^|\s)#([a-zA-Z0-9_]+)/g, function(match, space, tag) {
+        return `${space}<a href="/search?q=%23${tag}" class="post-link post-link-hashtag">#${tag}</a>`;
+    });
+    return result;
 }
 function showPostOptions(e, postId, postType) {
     e.stopPropagation();
@@ -1785,6 +2556,199 @@ document.getElementById("imageInput")?.addEventListener("change", e => {
         reader.readAsDataURL(e.target.files[0]);
     }
 });
+
+
+
+let currentLightboxImages = [];
+let currentLightboxIndex = 0;
+let currentLightboxPostId = null;
+
+function openESTRALightbox(images, index, postId) {
+    if (!images || images.length === 0) return;
+    var post = posts.find(p => p.id === postId) || eventsList.find(e => e.id === postId);
+    if (!post) return;
+    currentLightboxPostId = postId;
+    currentLightboxImages = images;
+    currentLightboxIndex = index || 0;
+    var modal = document.getElementById('estraModal');
+    if (!modal) {
+        modal = document.createElement('div');
+        modal.id = 'estraModal';
+        modal.className = 'estra-modal';
+        modal.innerHTML = `
+            <div class="estra-modal-container">
+                <div class="estra-image-area">
+                    <img src="" id="estraMainImage" alt="Image">
+                    <button class="estra-carousel-btn estra-carousel-prev" id="estraPrevBtn"><i class="fas fa-chevron-left"></i></button>
+                    <button class="estra-carousel-btn estra-carousel-next" id="estraNextBtn"><i class="fas fa-chevron-right"></i></button>
+                    <div class="estra-dots" id="estraDots"></div>
+                    <div class="estra-top-bar">
+                        <button onclick="closeESTRAModal()"><i class="fas fa-times"></i></button>
+                        <button onclick="downloadCurrentLightboxImage()"><i class="fas fa-download"></i></button>
+                    </div>
+                </div>
+                <div class="estra-post-area">
+                    <div id="lightboxPostContent"></div>
+                    <div id="lightboxComments"></div>
+                    <div class="lightbox-comment-input">
+                        <input type="text" id="lightboxCommentInput" placeholder="Écrire un commentaire...">
+                        <button id="lightboxCommentBtn">Envoyer</button>
+                    </div>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(modal);
+        document.getElementById('estraPrevBtn').addEventListener('click', function(e) {
+            e.stopPropagation();
+            navigateESTRA(-1);
+        });
+        document.getElementById('estraNextBtn').addEventListener('click', function(e) {
+            e.stopPropagation();
+            navigateESTRA(1);
+        });
+        document.getElementById('lightboxCommentBtn').addEventListener('click', function() {
+            addCommentFromLightbox(currentLightboxPostId);
+        });
+        document.getElementById('lightboxCommentInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') addCommentFromLightbox(currentLightboxPostId);
+        });
+    }
+    var img = document.getElementById('estraMainImage');
+    if (img) img.src = images[currentLightboxIndex];
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+    updateESTRADots();
+    renderLightboxPost(post);
+    renderLightboxComments(post);
+}
+
+function closeESTRAModal() {
+    var modal = document.getElementById('estraModal');
+    if (modal) modal.classList.remove('active');
+    document.body.style.overflow = '';
+    currentLightboxPostId = null;
+    var img = document.getElementById('estraMainImage');
+    if (img) img.src = '';
+}
+
+function navigateESTRA(dir) {
+    var total = currentLightboxImages.length;
+    if (total === 0) return;
+    currentLightboxIndex = (currentLightboxIndex + dir + total) % total;
+    var img = document.getElementById('estraMainImage');
+    if (img) img.src = currentLightboxImages[currentLightboxIndex];
+    updateESTRADots();
+}
+
+function updateESTRADots() {
+    var dots = document.getElementById('estraDots');
+    if (!dots) return;
+    var html = '';
+    for (var i = 0; i < currentLightboxImages.length; i++) {
+        html += '<div class="estra-dot ' + (i === currentLightboxIndex ? 'active' : '') + '" onclick="currentLightboxIndex=' + i + ';updateESTRADots();document.getElementById(\'estraMainImage\').src=currentLightboxImages[' + i + ']"></div>';
+    }
+    dots.innerHTML = html;
+}
+
+function downloadCurrentLightboxImage() {
+    var img = document.getElementById('estraMainImage');
+    if (!img || !img.src) return;
+    var a = document.createElement('a');
+    a.href = img.src;
+    a.download = 'image_estra.jpg';
+    a.click();
+    showToast('📥 Image téléchargée');
+}
+
+function renderLightboxPost(post) {
+    var container = document.getElementById('lightboxPostContent');
+    if (!container) return;
+    var html = '';
+    html += '<div class="lightbox-post-header">';
+    html += '<img src="' + escapeHtml(post.authorAvatar) + '" class="lightbox-post-avatar" onclick="viewProfile(\'' + escapeHtml(post.author) + '\')">';
+    html += '<div class="lightbox-post-author-info">';
+    html += '<span class="lightbox-post-author-name" onclick="viewProfile(\'' + escapeHtml(post.author) + '\')">' + escapeHtml(post.author) + '</span>';
+    html += '<span class="lightbox-post-time">' + formatTime(post.timestamp || post.createdAt) + '</span>';
+    html += '</div>';
+    html += '<button class="lightbox-post-menu-btn" onclick="event.stopPropagation();showPostOptionsWithBS(event, ' + post.id + ', \'post\')">···</button>';
+    html += '</div>';
+    html += '<div class="lightbox-post-text">' + parsePostContent(escapeHtml(post.content || '')) + '</div>';
+    html += '<div class="lightbox-post-actions">';
+    html += '<button class="post-action-btn ' + (post.liked ? 'liked' : '') + '" onclick="toggleLikeFromLightbox(' + post.id + ')">';
+    html += '<svg viewBox="0 0 24 24" fill="' + (post.liked ? 'currentColor' : 'none') + '" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>';
+    html += '<span>' + (post.likes || 0) + '</span>';
+    html += '</button>';
+    html += '<button class="post-action-btn" onclick="toggleCommentsFromLightbox(' + post.id + ')">';
+    html += '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>';
+    html += '<span>' + (post.comments ? post.comments.length : 0) + '</span>';
+    html += '</button>';
+    html += '<button class="post-action-btn ' + (post.saved ? 'saved' : '') + '" onclick="toggleSaveFromLightbox(' + post.id + ')">';
+    html += '<svg viewBox="0 0 24 24" fill="' + (post.saved ? 'currentColor' : 'none') + '" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>';
+    html += '</button>';
+    html += '<button class="post-action-btn" onclick="BS.openShare(' + post.id + ')">';
+    html += '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>';
+    html += '</button>';
+    html += '</div>';
+    container.innerHTML = html;
+}
+
+function renderLightboxComments(post) {
+    var container = document.getElementById('lightboxComments');
+    if (!container) return;
+    var comments = post.comments || [];
+    if (comments.length === 0) {
+        container.innerHTML = '<div class="lightbox-no-comments">Aucun commentaire</div>';
+        return;
+    }
+    var html = '';
+    for (var i = 0; i < comments.length; i++) {
+        var c = comments[i];
+        html += '<div class="lightbox-comment-item">';
+        html += '<img src="' + escapeHtml(c.avatar) + '" class="lightbox-comment-avatar" onclick="viewProfile(\'' + escapeHtml(c.author) + '\')">';
+        html += '<div class="lightbox-comment-bubble">';
+        html += '<span class="lightbox-comment-author">' + escapeHtml(c.author) + '</span>';
+        html += '<span class="lightbox-comment-text">' + escapeHtml(c.text) + '</span>';
+        html += '</div>';
+        html += '</div>';
+    }
+    container.innerHTML = html;
+}
+
+function toggleLikeFromLightbox(postId) {
+    toggleLike(postId, 'post');
+    var post = posts.find(p => p.id === postId) || eventsList.find(e => e.id === postId);
+    if (post) renderLightboxPost(post);
+}
+
+function toggleSaveFromLightbox(postId) {
+    toggleSave(postId, 'post');
+    var post = posts.find(p => p.id === postId) || eventsList.find(e => e.id === postId);
+    if (post) renderLightboxPost(post);
+}
+
+function toggleCommentsFromLightbox(postId) {
+    var container = document.getElementById('lightboxComments');
+    if (container) {
+        container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        var input = document.getElementById('lightboxCommentInput');
+        if (input) setTimeout(function() { input.focus(); }, 300);
+    }
+}
+
+function addCommentFromLightbox(postId) {
+    var input = document.getElementById('lightboxCommentInput');
+    if (!input) return;
+    var text = input.value.trim();
+    if (!text) return;
+    addComment(postId, 'post');
+    input.value = '';
+    var post = posts.find(p => p.id === postId) || eventsList.find(e => e.id === postId);
+    if (post) {
+        renderLightboxComments(post);
+        renderLightboxPost(post);
+    }
+}
+
 
 // ================= PROFIL MODALES =================
 function openEditProfileModal() {
@@ -2082,9 +3046,9 @@ function openProInfoModal() {
     const canViewSensitives = ESTRA.canViewSensitiveInfo(viewerRole, userProfile.accountType);
     switch(userProfile.accountType) {
         case 'student': html += renderStudentInfo(canViewSensitives); break;
-        case 'professor': html += renderProfessorInfo(); break;
+        case 'prof': html += renderProfessorInfo(); break;
         case 'teacher': html += renderTeacherInfo(); break;
-        case 'highschool': html += renderPupilInfo(canViewSensitives); break;
+        case 'pupil': html += renderPupilInfo(canViewSensitives); break;
         case 'simple': html += renderSimpleInfo(); break;
     }
     body.innerHTML = html;
@@ -2333,6 +3297,7 @@ const BS = {
         html += this._menuItem('copyLink', 'Copier le lien', "Copier l'URL", 'fas fa-link', 'rgba(99,102,241,0.1)', '#6366f1');
         if (isOwner) {
             html += '<div class="bottom-sheet-divider"></div>';
+            html += this._menuItem('edit', 'Modifier', 'Modifier le texte ou les médias', 'fas fa-pen', 'rgba(5,150,105,0.1)', '#059669');
             html += this._menuItem('pin', isPinned ? 'Désépingler' : 'Épingler en haut', isPinned ? 'Retirer du haut' : 'Afficher en premier', 'fas fa-thumbtack', 'rgba(245,158,11,0.1)', '#f59e0b');
             html += '<div class="bottom-sheet-divider"></div>';
             html += this._menuItem('hide', 'Masquer', 'Ne plus voir', 'fas fa-eye-slash', 'rgba(100,116,139,0.1)', '#64748b');
@@ -2352,6 +3317,7 @@ const BS = {
                 switch (action) {
                     case 'share': this.closeAll(true); this.openShare(postId); break;
                     case 'copyLink': this.copyLink(postId); break;
+                    case 'edit': this.editPost(postId); break;
                     case 'pin': this.pinPost(postId); break;
                     case 'hide': this.hidePost(postId); break;
                     case 'delete': this.deletePost(postId); break;
@@ -2453,6 +3419,42 @@ const BS = {
             sms: `sms:?body=${encodedText}%20${encodedUrl}`
         };
         if (urls[platform]) window.open(urls[platform], '_blank');
+    },
+
+    // ===== MÉTHODE editPost AJOUTÉE =====
+    editPost(postId) {
+        let post = null;
+        for (let i = 0; i < posts.length; i++) {
+            if (posts[i].id === postId) { post = posts[i]; break; }
+        }
+        if (!post) {
+            for (let j = 0; j < jobsList.length; j++) {
+                if (jobsList[j].id === postId) { post = jobsList[j]; break; }
+            }
+        }
+        if (!post) {
+            for (let k = 0; k < eventsList.length; k++) {
+                if (eventsList[k].id === postId) { post = eventsList[k]; break; }
+            }
+        }
+        if (!post) return;
+        openPostModal();
+        document.getElementById('postContent').value = post.content || '';
+        if (post.image) currentImageData = post.image;
+        const publishBtn = document.querySelector('.modal-footer .btn-primary');
+        if (publishBtn) {
+            publishBtn.textContent = '📝 Mettre à jour';
+            publishBtn.onclick = function() {
+                post.content = document.getElementById('postContent').value;
+                if (currentImageData) post.image = currentImageData;
+                saveAllData();
+                renderPosts();
+                renderProfile();
+                showToast('✅ Publication mise à jour !');
+                closePostModal();
+            };
+        }
+        this.closeAll();
     },
 
     pinPost(postId) {
@@ -2557,7 +3559,6 @@ const BS = {
         sheet._swipeHandlers = { onTouchStart, onTouchMove, onTouchEnd };
     }
 };
-
 function showPostOptionsWithBS(event, postId, postType) {
     if (event) {
         event.stopPropagation();
@@ -2692,12 +3693,14 @@ window.toggleFollow = toggleFollow;
 window.startConversation = startConversation;
 window.toggleBio = toggleBio;
 </script>
+
 <script src="i18n.js"></script>
 <script src="pwa-init.js"></script>
 <script src="reports.js"></script>
 <script src="antizome.js"></script>
 <script src="security.js"></script>
+<script src="syn.js"></script>
 <script src="security-advenced.js"></script>
-<script src="data.js"></script>
+<script src="dat.js"></script>
 </body>
 </html>
