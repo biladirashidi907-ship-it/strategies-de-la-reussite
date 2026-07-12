@@ -533,7 +533,11 @@ body.modal-open { overflow: hidden; }
 .media-preview-item .preview-doc span{font-size:.75rem;color:var(--text-secondary);max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .media-preview-item .remove-media{position:absolute;top:4px;right:4px;background:rgba(0,0,0,0.7);border:0;color:#fff;width:22px;height:22px;border-radius:50%;cursor:pointer;font-size:.6rem;display:flex;align-items:center;justify-content:center;z-index:2;transition:var(--transition)}
 .media-preview-item .remove-media:hover{background:var(--estra-danger)}
-
+button:focus-visible {
+    outline: 1px solid  #fff;
+    outline-offset: 1px;
+    border-radius: 4px;
+}
 .post-card{
     background:0 0;width:100%;margin:0;border:0;transition:var(--transition);overflow:hidden;position:relative;z-index:1;
     animation: slideUpFade 0.6s cubic-bezier(0.16, 1, 0.3, 1) backwards;
@@ -543,21 +547,217 @@ body.modal-open { overflow: hidden; }
     100% { opacity: 1; transform: translateY(0); }
 }
 
-.post-separator{width:100%;height:3px;background:linear-gradient(var(--estra-cyan),transparent);margin:8px 0;border:0;opacity:0.5}
-.post-header{padding:14px 14px 0;display:flex;align-items:flex-start;gap:10px;position:relative}
-.post-avatar{width:44px;height:44px;border-radius:50%;object-fit:cover;cursor:pointer;border:2px solid var(--estra-cyan);flex-shrink:0}
-.post-author-info{flex:1}.post-author-name{font-weight:700;font-size:.9rem;cursor:pointer;display:inline-flex;align-items:center;gap:4px;color:var(--text-primary)}.post-author-name:hover{text-decoration:underline}
-.post-time{font-size:.65rem;color:var(--text-secondary);margin-top:4px;display:flex;align-items:center;gap:6px;}
-.post-menu-btn{background:0 0;font-size:1rem;font-weight:600;border:0;color:var(--text-secondary);padding:6px;border-radius:50%;cursor:pointer;transition:var(--transition);display:flex;align-items:center}.post-menu-btn:hover{color:var(--estra-cyan)}
-.post-content{padding:10px 14px}.post-text{font-size:.85rem;line-height:1.5;margin-bottom:6px;white-space:pre-wrap;word-break:break-word;max-height:6em;overflow:hidden;transition:max-height .3s ease;color:var(--text-primary)}.post-text.expanded{max-height:none}
-.see-more-btn{color:var(--text-secondary);font-size:.7rem;cursor:pointer;margin-bottom:10px;display:inline-block;font-weight:500}
-.post-media{position:relative;cursor:pointer;margin-top:6px;border-radius:12px;overflow:hidden}
-.post-media img{width:100%;max-height:400px;border-radius:12px;background:#1e293b;object-fit:contain;cursor:pointer}
-.post-images-grid{display:grid;gap:4px;margin-top:6px;border-radius:12px;overflow:hidden}.post-images-grid.col-2{grid-template-columns:1fr 1fr}.post-images-grid.col-3{grid-template-columns:1fr 1fr 1fr}.post-images-grid.col-4{grid-template-columns:1fr 1fr}.post-images-grid.col-5{grid-template-columns:1fr 1fr 1fr}
-.post-images-grid img{width:100%;height:100%;object-fit:cover;cursor:pointer;background:#1e293b;min-height:120px;max-height:300px}
-.more-images {position:relative; cursor:pointer;}
-.more-images img {width:100%; height:100%; object-fit:cover;}
-.more-images .overlay {position:absolute; inset:0; background:rgba(0,0,0,0.6); display:flex; align-items:center; justify-content:center; color:#fff; font-size:1.5rem; font-weight:700;}
+/* ================================================
+   STYLES DES PUBLICATIONS (MIS À JOUR)
+   ================================================ */
+
+.post-separator {
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(var(--estra-cyan), transparent);
+    margin: 8px 0;
+    border: 0;
+    opacity: 0.5;
+}
+.post-header {
+    padding: 14px 14px 0;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    position: relative;
+}
+.post-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    object-fit: cover;
+    cursor: pointer;
+    border: 2px solid var(--estra-cyan);
+    flex-shrink: 0;
+}
+.post-author-info {
+    flex: 1;
+}
+.post-author-name {
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    color: var(--text-primary);
+}
+.post-author-name:hover {
+    text-decoration: underline;
+}
+.post-time {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    margin-top: 4px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.post-menu-btn {
+    background: 0 0;
+    font-size: 1.4rem;
+    font-weight: 600;
+    border: 0;
+    color: var(--text-secondary);
+    padding: 3px 12px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+}
+.post-menu-btn:hover {
+    color: var(--estra-cyan);
+}
+.post-content {
+    padding: 10px 14px;
+}
+
+/* Wrapper pour l'effet de fondu */
+.post-text-wrapper {
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 4px;
+}
+.post-text-wrapper::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 50px;
+    background: linear-gradient(to bottom, transparent, var(--bg-card, #0f172a));
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+.post-text-wrapper.expanded::after {
+    opacity: 0;
+}
+
+/* Texte de la publication */
+.post-text {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    word-break: break-word;
+    max-height: 11em;          /* ~7-8 lignes avec line-height 1.6 */
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+    color: var(--text-primary);
+}
+.post-text.expanded {
+    max-height: none;
+}
+
+/* Bouton "Voir plus" / "Voir moins" - Style épuré */
+.see-more-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 0;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--estra-cyan, #38bdf8);
+    cursor: pointer;
+    transition: color 0.2s ease;
+    font-family: inherit;
+    background: transparent;
+    border: none;
+    margin: 2px 0 6px 0;
+}
+.see-more-btn i {
+    font-size: 0.7rem;
+    transition: transform 0.3s ease;
+}
+.see-more-btn:hover {
+    color: var(--text-primary, #e2e8f0);
+}
+.see-more-btn.less:hover i {
+    transform: rotate(180deg);
+}
+
+/* Mode clair */
+[data-theme="light"] .post-text-wrapper::after {
+    background: linear-gradient(to bottom, transparent, #ffffff);
+}
+[data-theme="light"] .see-more-btn {
+    color: #0284c7;
+}
+[data-theme="light"] .see-more-btn:hover {
+    color: #0f172a;
+}
+
+/* Médias */
+.post-media {
+    position: relative;
+    cursor: pointer;
+    margin-top: 6px;
+    border-radius: 12px;
+    overflow: hidden;
+}
+.post-media img {
+    width: 100%;
+    max-height: 400px;
+    border-radius: 12px;
+    background: #1e293b;
+    object-fit: contain;
+    cursor: pointer;
+}
+.post-images-grid {
+    display: grid;
+    gap: 4px;
+    margin-top: 6px;
+    border-radius: 12px;
+    overflow: hidden;
+}
+.post-images-grid.col-2 {
+    grid-template-columns: 1fr 1fr;
+}
+.post-images-grid.col-3 {
+    grid-template-columns: 1fr 1fr 1fr;
+}
+.post-images-grid.col-4 {
+    grid-template-columns: 1fr 1fr;
+}
+.post-images-grid.col-5 {
+    grid-template-columns: 1fr 1fr 1fr;
+}
+.post-images-grid img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    cursor: pointer;
+    background: #1e293b;
+    min-height: 120px;
+    max-height: 300px;
+}
+.more-images {
+    position: relative;
+    cursor: pointer;
+}
+.more-images img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.more-images .overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+
 
 .post-actions{display:flex;justify-content:space-around;padding:6px 14px 10px;border-top:1px solid rgba(51,65,85,.3);margin-top:6px}
 .post-action-btn{display:flex;align-items:center;justify-content:center;gap:6px;background:0 0;border:0;color:var(--text-secondary);font-size:.9rem;padding:8px;border-radius:50%;cursor:pointer;transition:var(--transition);width:38px;height:28px}.post-action-btn svg{width:18px;height:18px}.post-action-btn:hover{color:var(--estra-cyan)}.post-action-btn.saved{color:var(--estra-cyan)}
@@ -3004,13 +3204,17 @@ function renderPostCard(post) {
             ${mediaHTML}
         `;
     } else {
-        // Post normal
+        // Post normal avec wrapper et bouton "Voir plus" amélioré
         const hasLong = Math.ceil((post.content||'').length/40)>4 || (post.content||'').split('\n').length>4;
-        let seeMoreBtn = hasLong ? `<span class="see-more-btn" id="see-more-${post.id}" onclick="toggleReadMore(${post.id})" style="display:none">${t('see_more')}</span>` : '';
+        const seeMoreBtnHtml = hasLong ? `<span class="see-more-btn" id="see-more-${post.id}" onclick="toggleReadMore(${post.id})">Voir plus <i class="fas fa-chevron-down"></i></span>` : '';
+
+        const textWrapperClass = hasLong ? 'post-text-wrapper' : 'post-text-wrapper expanded';
 
         contentHTML = `
-            <div class="post-text" id="post-text-${post.id}">${parsePostContent(escapeHtml(post.content||''))}</div>
-            ${seeMoreBtn}
+            <div class="${textWrapperClass}">
+                <div class="post-text" id="post-text-${post.id}">${parsePostContent(escapeHtml(post.content||''))}</div>
+            </div>
+            ${seeMoreBtnHtml}
             ${mediaHTML}
         `;
     }
@@ -3053,7 +3257,6 @@ function renderPostCard(post) {
     </div>
     <hr class="post-separator">`;
 }
-
 // ============================================================
 // FONCTIONS AUXILIAIRES
 // ============================================================
@@ -3149,7 +3352,8 @@ function renderFriendRequestCard(request) {
             </div>
         </div>
     `;
-}function renderAllPosts() {
+}
+function renderAllPosts() {
     const isLoadMore = window.isLoadingMore || false;
     
     const blocked = getBlockedUsers ? getBlockedUsers() : JSON.parse(localStorage.getItem('estra_blocked_users') || '[]');
@@ -3295,11 +3499,14 @@ function renderFriendRequestCard(request) {
         }
     }
     
+    // ---------- MODIFICATION : Augmenter le seuil à 7 lignes pour "Voir plus" ----------
     setTimeout(() => {
         document.querySelectorAll('.post-text').forEach(td => {
             const pid = td.id.split('-')[2];
             const btn = document.getElementById('see-more-' + pid);
-            if (btn && (td.scrollHeight > td.clientHeight + 5 || td.innerText.split('\n').length > 4)) {
+            // Vérifie si le texte dépasse 7 lignes (approx)
+            // On utilise soit la hauteur, soit le nombre de retours à la ligne
+            if (btn && (td.scrollHeight > td.clientHeight + 5 || td.innerText.split('\n').length > 7)) {
                 btn.style.display = 'inline-block';
             }
         });
@@ -3462,7 +3669,25 @@ function setupInfiniteScroll() {
         infiniteScrollObserver.observe(trigger);
     }
 }
-function toggleReadMore(pid){const td=document.getElementById('post-text-'+pid);const btn=document.getElementById('see-more-'+pid);if(!td||!btn)return;if(td.classList.contains('expanded')){td.classList.remove('expanded');btn.textContent=t('see_more')}else{td.classList.add('expanded');btn.textContent=t('see_less')}}
+function toggleReadMore(pid) {
+    const td = document.getElementById('post-text-' + pid);
+    const btn = document.getElementById('see-more-' + pid);
+    if (!td || !btn) return;
+    
+    const wrapper = td.closest('.post-text-wrapper');
+    
+    if (td.classList.contains('expanded')) {
+        td.classList.remove('expanded');
+        if (wrapper) wrapper.classList.remove('expanded');
+        btn.innerHTML = 'Voir plus <i class="fas fa-chevron-down"></i>';
+        btn.classList.remove('less');
+    } else {
+        td.classList.add('expanded');
+        if (wrapper) wrapper.classList.add('expanded');
+        btn.innerHTML = 'Voir moins <i class="fas fa-chevron-up"></i>';
+        btn.classList.add('less');
+    }
+}
 function toggleCommentsSection(pid){const s=document.getElementById('comments-section-'+pid);if(s)s.classList.toggle('show')}
 function addComment(pid, type) {
     const input = document.getElementById('commentInput-' + pid);
