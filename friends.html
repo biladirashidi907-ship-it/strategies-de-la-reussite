@@ -175,6 +175,7 @@
         }
         .badge-suggestions { background: rgba(245,158,11,0.15); color: #b45309; }
         .badge-relations { background: rgba(5,150,105,0.15); color: #047857; }
+        .badge-pending { background: rgba(124,58,237,0.15); color: #6d28d9; }
         .tabs-separator {
             width: 2px;
             height: 28px;
@@ -234,6 +235,7 @@
         }
         .person-card.type-ami { border-left: 5px solid var(--cyan); }
         .person-card.type-binome { border-left: 5px solid var(--purple); }
+        .person-card.type-pending { border-left: 5px solid var(--warning); }
         .person-card:hover {
             transform: translateY(-2px);
             box-shadow: var(--shadow);
@@ -254,6 +256,7 @@
             cursor: pointer;
         }
         .person-card.type-binome .person-avatar { border-color: var(--purple); }
+        .person-card.type-pending .person-avatar { border-color: var(--warning); }
         .person-info { flex:1; min-width:0; }
         .person-name {
             font-weight: 700;
@@ -277,6 +280,7 @@
         }
         .person-tag.ami { background: rgba(2,132,199,0.12); color: var(--cyan); }
         .person-tag.binome { background: rgba(124,58,237,0.12); color: var(--purple); }
+        .person-tag.pending { background: rgba(245,158,11,0.12); color: var(--warning); }
         .online-dot {
             width: 10px;
             height: 10px;
@@ -327,6 +331,8 @@
         .btn-sm.primary:hover { background: #0369a1; transform: translateY(-1px); }
         .btn-sm.purple { background: var(--purple); color: #fff; box-shadow: 0 2px 8px rgba(124,58,237,0.3); }
         .btn-sm.purple:hover { background: #6d28d9; transform: translateY(-1px); }
+        .btn-sm.warning { background: var(--warning); color: #fff; box-shadow: 0 2px 8px rgba(217,119,6,0.3); }
+        .btn-sm.warning:hover { background: #b45309; transform: translateY(-1px); }
         .btn-sm.outline { background: transparent; color: var(--text-secondary); border: 1px solid var(--border); }
         .btn-sm.outline:hover { background: var(--bg); border-color: var(--text-secondary); }
         .btn-sm.danger-outline { background: transparent; color: var(--danger); border: 1px solid var(--danger); }
@@ -462,6 +468,10 @@
                 <button class="tab-btn" id="tabRelations" onclick="switchMainTab('relations')">
                     <i class="fas fa-user-check"></i> Mes Relations <span class="tab-badge badge-relations" id="relBadge">0</span>
                 </button>
+                <div class="tabs-separator"></div>
+                <button class="tab-btn" id="tabPending" onclick="switchMainTab('pending')">
+                    <i class="fas fa-clock"></i> Demandes <span class="tab-badge badge-pending" id="pendBadge">0</span>
+                </button>
             </div>
 
             <div class="sub-tabs" id="subTabsContainer" style="display:none;">
@@ -501,7 +511,7 @@
 const ESTRA_CHANNEL = new BroadcastChannel('estra_network');
 ESTRA_CHANNEL.onmessage = (e) => {
     const { type, data } = e.data;
-    if (type === 'friends_updated' || type === 'badges_updated' || type === 'profile_updated' || type === 'blocked_updated') {
+    if (type === 'friends_updated' || type === 'badges_updated' || type === 'profile_updated' || type === 'blocked_updated' || type === 'pending_updated') {
         loadAllData();
         renderCurrentList();
         updateSidebarStats();
@@ -657,6 +667,7 @@ function escapeHtml(str) { if (!str) return ''; const d = document.createElement
 // ============ DONNÉES AVEC INFOS COMPLÈTES ============
 let friends = [], binomes = [], suggestions = [];
 let sentFriendRequests = [], sentBinomeRequests = [];
+let pendingFriendRequests = [], pendingBinomeRequests = [];
 let hiddenSuggestions = [];
 let currentUser = { name: 'Utilisateur', username: 'user', avatar: 'https://ui-avatars.com/api/?background=0284c7&color=fff&name=User&size=80', domain: 'Informatique', level: 'L2' };
 
@@ -705,6 +716,11 @@ function loadAllData() {
 
     friends = JSON.parse(localStorage.getItem('estra_friends') || '[]');
     binomes = JSON.parse(localStorage.getItem('estra_binomes') || '[]');
+    sentFriendRequests = JSON.parse(localStorage.getItem('estra_sent_friend_requests') || '[]');
+    sentBinomeRequests = JSON.parse(localStorage.getItem('estra_sent_binome_requests') || '[]');
+    pendingFriendRequests = JSON.parse(localStorage.getItem('estra_pending_friend_requests') || '[]');
+    pendingBinomeRequests = JSON.parse(localStorage.getItem('estra_pending_binome_requests') || '[]');
+    hiddenSuggestions = JSON.parse(localStorage.getItem('estra_hidden_suggestions') || '[]');
     
     friends = enrichWithUserData(friends);
     binomes = enrichWithUserData(binomes);
@@ -735,11 +751,13 @@ function loadAllData() {
         badges: u.badges || [],
         blocked: u.blocked || false
     }));
+    // Exclure les suggestions avec demande envoyée (pour éviter les doublons dans l'onglet suggestions)
     const sentNames = [...sentFriendRequests.map(r => r.name), ...sentBinomeRequests.map(r => r.name)];
     suggestions = suggestions.filter(s => !sentNames.includes(s.name));
     
     document.getElementById('suggBadge').textContent = suggestions.length;
     document.getElementById('relBadge').textContent = friends.length + binomes.length;
+    document.getElementById('pendBadge').textContent = sentFriendRequests.length + sentBinomeRequests.length;
     updateSidebarStats();
     updateRightPanelStats();
     applyTranslations();
@@ -768,8 +786,8 @@ function renderCard(person, mode) {
     const verifiedIcon = person.verified ? ' <i class="fas fa-check-circle" style="color:#1DA1F2;font-size:0.7rem;"></i>' : '';
     let tagHtml = '';
     if (mode === 'relation') {
-        const tagLabel = type === 'binome' ? 'Binôme' : 'Suivi(e)';
-        const tagClass = type === 'binome' ? 'binome' : 'ami';
+        const tagLabel = type === 'binome' ? 'Binôme' : type === 'pending' ? 'Demande en attente' : 'Suivi(e)';
+        const tagClass = type === 'binome' ? 'binome' : type === 'pending' ? 'pending' : 'ami';
         tagHtml = `<span class="person-tag ${tagClass}">${tagLabel}</span>`;
     }
     const onlineDot = (person.online !== undefined) ? `<span class="online-dot ${person.online ? '' : 'offline'}" style="${person.online ? '' : 'background:#94a3b8;'}"></span>` : '';
@@ -808,6 +826,12 @@ function renderCard(person, mode) {
             }
             actionsHtml = inviteBtns + profileBtn;
         }
+    } else if (mode === 'pending') {
+        actionsHtml = `
+            <button class="btn-sm warning" onclick="acceptPendingRequest('${person.id}','${type}')"><i class="fas fa-check"></i> Accepter</button>
+            <button class="btn-sm danger-outline" onclick="declinePendingRequest('${person.id}','${type}')"><i class="fas fa-times"></i> Refuser</button>
+            ${profileBtn}
+        `;
     } else {
         const favClass = person.favorite ? 'active' : '';
         actionsHtml = `
@@ -856,12 +880,90 @@ function renderSuggestionsBySection(list) {
     return html || '<div class="empty-state"><i class="fas fa-lightbulb"></i><p>Aucune suggestion trouvée</p></div>';
 }
 
+function renderPendingList(list) {
+    if (list.length === 0) {
+        return '<div class="empty-state"><i class="fas fa-clock"></i><p>Aucune demande en attente</p></div>';
+    }
+    return list.map(p => renderCard(p, 'pending')).join('');
+}
+
 function getCurrentList() {
     const q = (document.getElementById('globalSearch')?.value || '').toLowerCase();
     if (currentMainTab === 'suggestions') {
         let filtered = suggestions;
         if (q) filtered = suggestions.filter(s => s.name.toLowerCase().includes(q) || (s.bio||'').toLowerCase().includes(q));
         return { mode: 'suggestions', list: filtered };
+    } else if (currentMainTab === 'pending') {
+        // Récupérer toutes les demandes envoyées (que j'ai envoyées) + les demandes reçues (qu'on m'a envoyées)
+        let allPending = [];
+        // Demandes que j'ai envoyées (en attente de réponse)
+        sentFriendRequests.forEach(r => {
+            allPending.push({
+                id: r.id || 'sf_' + Date.now(),
+                name: r.name,
+                username: r.username || r.name.toLowerCase().replace(/\s+/g, '_'),
+                avatar: r.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(r.name)}&background=0284c7&color=fff`,
+                bio: r.bio || '',
+                domain: r.domain || '',
+                level: r.level || '',
+                type: 'ami',
+                online: Math.random() > 0.5,
+                verified: false,
+                favorite: false,
+                since: 'Demande envoyée'
+            });
+        });
+        sentBinomeRequests.forEach(r => {
+            allPending.push({
+                id: r.id || 'sb_' + Date.now(),
+                name: r.name,
+                username: r.username || r.name.toLowerCase().replace(/\s+/g, '_'),
+                avatar: r.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(r.name)}&background=7c3aed&color=fff`,
+                bio: r.bio || '',
+                domain: r.domain || '',
+                level: r.level || '',
+                type: 'binome',
+                online: Math.random() > 0.5,
+                verified: false,
+                favorite: false,
+                since: 'Demande envoyée'
+            });
+        });
+        // Demandes reçues (que l'autre m'a envoyées) - à accepter/refuser
+        pendingFriendRequests.forEach(r => {
+            allPending.push({
+                id: r.id || 'pf_' + Date.now(),
+                name: r.fromName || r.name,
+                username: r.fromUsername || r.name.toLowerCase().replace(/\s+/g, '_'),
+                avatar: r.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(r.fromName||r.name)}&background=0284c7&color=fff`,
+                bio: r.bio || '',
+                domain: r.domain || '',
+                level: r.level || '',
+                type: 'pending',
+                online: Math.random() > 0.5,
+                verified: false,
+                favorite: false,
+                since: 'Demande reçue'
+            });
+        });
+        pendingBinomeRequests.forEach(r => {
+            allPending.push({
+                id: r.id || 'pb_' + Date.now(),
+                name: r.fromName || r.name,
+                username: r.fromUsername || r.name.toLowerCase().replace(/\s+/g, '_'),
+                avatar: r.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(r.fromName||r.name)}&background=7c3aed&color=fff`,
+                bio: r.bio || '',
+                domain: r.domain || '',
+                level: r.level || '',
+                type: 'pending',
+                online: Math.random() > 0.5,
+                verified: false,
+                favorite: false,
+                since: 'Demande reçue'
+            });
+        });
+        if (q) allPending = allPending.filter(p => p.name.toLowerCase().includes(q) || (p.bio||'').toLowerCase().includes(q));
+        return { mode: 'pending', list: allPending };
     } else {
         let all = [];
         if (currentSubTab === 'ami') all = [...friends];
@@ -877,6 +979,8 @@ function renderCurrentList() {
     const container = document.getElementById('dynamicList');
     if (mode === 'suggestions') {
         container.innerHTML = renderSuggestionsBySection(list);
+    } else if (mode === 'pending') {
+        container.innerHTML = renderPendingList(list);
     } else {
         if (list.length) {
             container.innerHTML = list.map(p => renderCard(p, 'relation')).join('');
@@ -891,6 +995,7 @@ function renderCurrentList() {
 function updateBadgesCounts() {
     document.getElementById('suggBadge').textContent = suggestions.length;
     document.getElementById('relBadge').textContent = friends.length + binomes.length;
+    document.getElementById('pendBadge').textContent = sentFriendRequests.length + sentBinomeRequests.length + pendingFriendRequests.length + pendingBinomeRequests.length;
     const amiCount = friends.length;
     const binomeCount = binomes.length;
     const subCounts = document.querySelectorAll('.sub-count');
@@ -904,6 +1009,7 @@ function switchMainTab(tab) {
     currentMainTab = tab;
     document.getElementById('tabSuggestions').classList.toggle('active', tab === 'suggestions');
     document.getElementById('tabRelations').classList.toggle('active', tab === 'relations');
+    document.getElementById('tabPending').classList.toggle('active', tab === 'pending');
     document.getElementById('subTabsContainer').style.display = tab === 'relations' ? 'flex' : 'none';
     document.getElementById('globalSearch').value = '';
     if (tab === 'relations') {
@@ -925,62 +1031,124 @@ function switchSubTab(sub, btn) {
 function sendRequest(personId, type) {
     const person = suggestions.find(s => s.id === personId);
     if (!person) return;
+    
+    // Vérifier si une demande existe déjà
     if (type === 'ami') {
-        sentFriendRequests.push({ id: personId, name: person.name });
-        const newFriend = {
-            id: 'f_' + Date.now(),
-            name: person.name,
-            username: person.username,
-            avatar: person.avatar,
-            bio: person.bio || '',
-            domain: person.domain || '',
-            level: person.level || '',
-            mutualFriends: person.mutualFriends || 0,
-            online: Math.random() > 0.5,
-            verified: person.verified || false,
-            favorite: false,
-            type: 'ami',
-            location: person.location || 'RDC',
-            joinDate: person.joinDate || '2025',
-            badges: person.badges || [],
-            blocked: false,
-            accountType: person.accountType || 'simple'
-        };
-        friends.push(newFriend);
-        const allUsers = getAllUsers();
-        const user = allUsers.find(u => u.id === person.id);
-        if (user) {
-            // Les badges sont déjà dans person
+        if (sentFriendRequests.some(r => r.id === personId)) {
+            showToast('Demande déjà envoyée');
+            return;
         }
+        sentFriendRequests.push({ id: personId, name: person.name, username: person.username, avatar: person.avatar, bio: person.bio, domain: person.domain, level: person.level });
     } else if (type === 'binome') {
-        sentBinomeRequests.push({ id: personId, name: person.name });
-        const newBinome = {
-            id: 'b_' + Date.now(),
-            name: person.name,
-            username: person.username,
-            avatar: person.avatar,
-            bio: person.bio || '',
-            domain: person.domain || '',
-            level: person.level || '',
-            commonCourses: 'Cours communs',
-            commonUniversity: 'Université',
-            commonPromotion: '2025',
-            online: Math.random() > 0.5,
-            favorite: false,
-            type: 'binome',
-            location: person.location || 'RDC',
-            joinDate: person.joinDate || '2025',
-            badges: person.badges || [],
-            blocked: false,
-            accountType: person.accountType || 'simple'
-        };
-        binomes.push(newBinome);
+        if (sentBinomeRequests.some(r => r.id === personId)) {
+            showToast('Demande déjà envoyée');
+            return;
+        }
+        sentBinomeRequests.push({ id: personId, name: person.name, username: person.username, avatar: person.avatar, bio: person.bio, domain: person.domain, level: person.level });
     }
+    
     hiddenSuggestions.push(personId);
     suggestions = suggestions.filter(s => s.id !== personId);
     saveData();
     renderCurrentList();
-    showToast(`✅ ${person.name} ajouté(e) comme ${type === 'ami' ? 'suivi' : 'binôme'}`);
+    showToast(`📨 Demande ${type === 'ami' ? 'd\'amitié' : 'de binôme'} envoyée à ${person.name}`);
+}
+
+function acceptPendingRequest(personId, type) {
+    // Simuler l'acceptation d'une demande reçue
+    let requestList = type === 'pending' || type === 'ami' ? pendingFriendRequests : pendingBinomeRequests;
+    const idx = requestList.findIndex(r => r.id === personId || r.fromUsername === personId || r.name === personId);
+    if (idx === -1) {
+        showToast('Demande introuvable');
+        return;
+    }
+    const request = requestList[idx];
+    const name = request.fromName || request.name;
+    const username = request.fromUsername || name.toLowerCase().replace(/\s+/g, '_');
+    const avatar = request.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=0284c7&color=fff`;
+    
+    // Ajouter aux amis/binômes
+    if (type === 'pending' || type === 'ami') {
+        const newFriend = {
+            id: 'f_' + Date.now(),
+            name: name,
+            username: username,
+            avatar: avatar,
+            bio: request.bio || '',
+            domain: request.domain || '',
+            level: request.level || '',
+            mutualFriends: 0,
+            online: true,
+            verified: false,
+            favorite: false,
+            type: 'ami',
+            location: 'RDC',
+            joinDate: '2025',
+            badges: [],
+            blocked: false,
+            accountType: 'simple'
+        };
+        friends.push(newFriend);
+        showToast(`✅ ${name} est maintenant votre ami !`);
+    } else if (type === 'binome') {
+        const newBinome = {
+            id: 'b_' + Date.now(),
+            name: name,
+            username: username,
+            avatar: avatar,
+            bio: request.bio || '',
+            domain: request.domain || '',
+            level: request.level || '',
+            commonCourses: 'Cours communs',
+            commonUniversity: 'Université',
+            commonPromotion: '2025',
+            online: true,
+            favorite: false,
+            type: 'binome',
+            location: 'RDC',
+            joinDate: '2025',
+            badges: [],
+            blocked: false,
+            accountType: 'simple'
+        };
+        binomes.push(newBinome);
+        showToast(`✅ ${name} est maintenant votre binôme !`);
+    }
+    
+    // Supprimer la demande
+    requestList.splice(idx, 1);
+    // Mettre à jour localStorage
+    if (type === 'pending' || type === 'ami') {
+        localStorage.setItem('estra_pending_friend_requests', JSON.stringify(pendingFriendRequests));
+    } else {
+        localStorage.setItem('estra_pending_binome_requests', JSON.stringify(pendingBinomeRequests));
+    }
+    
+    saveData();
+    renderCurrentList();
+    // Émettre pour synchroniser avec home.html
+    estraEmit('pending_updated', {});
+}
+
+function declinePendingRequest(personId, type) {
+    let requestList = type === 'pending' || type === 'ami' ? pendingFriendRequests : pendingBinomeRequests;
+    const idx = requestList.findIndex(r => r.id === personId || r.fromUsername === personId || r.name === personId);
+    if (idx === -1) {
+        showToast('Demande introuvable');
+        return;
+    }
+    const request = requestList[idx];
+    const name = request.fromName || request.name;
+    requestList.splice(idx, 1);
+    if (type === 'pending' || type === 'ami') {
+        localStorage.setItem('estra_pending_friend_requests', JSON.stringify(pendingFriendRequests));
+    } else {
+        localStorage.setItem('estra_pending_binome_requests', JSON.stringify(pendingBinomeRequests));
+    }
+    saveData();
+    renderCurrentList();
+    showToast(`❌ Demande de ${name} refusée`);
+    estraEmit('pending_updated', {});
 }
 
 function toggleFavorite(id, type) {
@@ -1023,6 +1191,8 @@ function saveData() {
     localStorage.setItem('estra_binomes', JSON.stringify(binomes));
     localStorage.setItem('estra_sent_friend_requests', JSON.stringify(sentFriendRequests));
     localStorage.setItem('estra_sent_binome_requests', JSON.stringify(sentBinomeRequests));
+    localStorage.setItem('estra_pending_friend_requests', JSON.stringify(pendingFriendRequests));
+    localStorage.setItem('estra_pending_binome_requests', JSON.stringify(pendingBinomeRequests));
     localStorage.setItem('estra_hidden_suggestions', JSON.stringify(hiddenSuggestions));
     syncAllUsersToDatabase();
     estraEmit('friends_updated', {});
@@ -1040,7 +1210,12 @@ function shareViaEmail() { window.location.href = 'mailto:?subject=Invitation ES
 function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); document.getElementById('sidebarOverlay').classList.toggle('active'); }
 function closeSidebar() { document.getElementById('sidebar').classList.remove('open'); document.getElementById('sidebarOverlay').classList.remove('active'); }
 function logout() { ESTRA.logout(); }
-function closeMenu() { /* simplifié */ }
+function closeMenu() {
+    const backdrop = document.getElementById('friendMenuBackdrop');
+    if (backdrop) backdrop.classList.remove('active');
+    const menu = document.querySelector('.friend-menu');
+    if (menu) menu.remove();
+}
 
 // ============ INITIALISATION ============
 document.addEventListener('DOMContentLoaded', () => {
@@ -1063,6 +1238,8 @@ window.renderCurrentList = renderCurrentList;
 window.switchMainTab = switchMainTab;
 window.switchSubTab = switchSubTab;
 window.sendRequest = sendRequest;
+window.acceptPendingRequest = acceptPendingRequest;
+window.declinePendingRequest = declinePendingRequest;
 window.toggleFavorite = toggleFavorite;
 window.removeRelation = removeRelation;
 window.viewProfile = viewProfile;
@@ -1082,6 +1259,7 @@ window.getAllBadges = getAllBadges;
 window.renderUserBadges = renderUserBadges;
 window.enrichWithUserData = enrichWithUserData;
 </script>
-<script src="data.js"></script>
+<script src="synjs"></script>
+<script src="dat.js"></script>
 </body>
 </html>
