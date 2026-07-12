@@ -13,7 +13,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <link rel="apple-touch-icon" href="https://ui-avatars.com/api/?background=38bdf8&color=fff&name=E&size=152">
     <style>
-        /* ============ STYLES EXISTANTS (inchangés) ============ */
+        /* ============ VARIABLES CSS ============ */
         :root, [data-theme="dark"] {
             --bg-primary: #0f172a; --bg-secondary: #1e293b; --bg-tertiary: #0f172a;
             --text-primary: #e2e8f0; --text-secondary: #94a3b8;
@@ -92,21 +92,49 @@
         .mentor-card { display: flex; align-items: flex-start; gap: 14px; padding: 16px 24px; border-bottom: 1px solid var(--border-color); cursor: pointer; transition: var(--transition); } .mentor-card:hover { background: var(--hover-bg); } .mentor-avatar { width: 56px; height: 56px; border-radius: 50%; object-fit: cover; border: 2px solid var(--cyan); flex-shrink: 0; } .mentor-info { flex: 1; min-width: 0; } .mentor-name { font-weight: 700; font-size: 0.95rem; display: flex; align-items: center; gap: 6px; } .badge-mentor { background: linear-gradient(135deg, #f59e0b, #ef4444); color: #fff; padding: 2px 8px; border-radius: 10px; font-size: 0.6rem; font-weight: 700; }
         .modal-fullscreen { position: fixed; inset: 0; background: var(--modal-full-bg); z-index: 3000; display: none; flex-direction: column; overflow-y: auto; transition: background-color 0.4s ease; } .modal-fullscreen.active { display: flex; } .modal-fullscreen-header { display: flex; align-items: center; justify-content: space-between; padding: 20px 24px; border-bottom: 1px solid var(--border-light); background: var(--navbar-bg); position: sticky; top: 0; z-index: 10; } .modal-fullscreen-header h3 { font-size: 1.3rem; display: flex; align-items: center; gap: 10px; color: var(--cyan); } .modal-fullscreen-body { flex: 1; padding: 24px; max-width: 600px; margin: 0 auto; width: 100%; } .modal-fullscreen-footer { display: flex; justify-content: flex-end; gap: 12px; padding: 16px 24px; border-top: 1px solid var(--border-light); background: var(--navbar-bg); position: sticky; bottom: 0; }
         .modal-overlay { position: fixed; inset: 0; background: var(--modal-overlay); backdrop-filter: blur(8px); z-index: 2000; display: none; align-items: center; justify-content: center; } .modal-overlay.active { display: flex; } .modal-content { background: var(--modal-bg); width: 90%; max-width: 550px; max-height: 90vh; overflow-y: auto; border-radius: 24px; padding: 24px; border: 1px solid var(--border-light); transition: background-color 0.4s ease; position: relative; } .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; } .modal-header h3 { font-size: 1.1rem; color: var(--cyan); } .modal-close { background: none; border: none; color: var(--text-secondary); font-size: 28px; cursor: pointer; }
-        .form-group { margin-bottom: 16px; } .form-group label { display: block; margin-bottom: 6px; font-weight: 500; font-size: 0.8rem; color: var(--text-primary); } .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 12px 16px; background: var(--input-bg); border: 1px solid var(--border-color); border-radius: 12px; color: var(--text-primary); outline: 0; font-size: 0.9rem; font-family: inherit; transition: background-color 0.4s ease, border-color 0.4s ease; } .form-group textarea { min-height: 80px; resize: vertical; } .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; } .checkbox-group { display: flex; flex-wrap: wrap; gap: 8px; } .checkbox-chip { padding: 6px 14px; background: var(--chip-bg); border: 1px solid var(--border-light); border-radius: 30px; color: var(--text-secondary); cursor: pointer; font-size: 0.75rem; transition: var(--transition); user-select: none; font-family: inherit; } .checkbox-chip.selected { background: var(--cyan); color: #0f172a; border-color: transparent; }
+        .form-group { margin-bottom: 16px; } .form-group label { display: block; margin-bottom: 6px; font-weight: 500; font-size: 0.8rem; color: var(--text-primary); } .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 12px 16px; background: var(--input-bg); border: 1px solid var(--border-color); border-radius: 12px; color: var(--text-primary); outline: 0; font-size: 0.9rem; font-family: inherit; transition: background-color 0.4s ease, border-color 0.4s ease; } .form-group textarea { min-height: 80px; resize: vertical; }
+        .form-group .char-counter { text-align: right; font-size: 0.7rem; color: var(--text-secondary); margin-top: 4px; font-weight: 500; }
+        .form-group .char-counter .limit-reached { color: var(--danger); }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .checkbox-group { display: flex; flex-wrap: wrap; gap: 8px; } .checkbox-chip { padding: 6px 14px; background: var(--chip-bg); border: 1px solid var(--border-light); border-radius: 30px; color: var(--text-secondary); cursor: pointer; font-size: 0.75rem; transition: var(--transition); user-select: none; font-family: inherit; } .checkbox-chip.selected { background: var(--cyan); color: #0f172a; border-color: transparent; }
         .empty-state { text-align: center; padding: 60px 20px; color: var(--text-secondary); }
         .bottom-nav { position: fixed; bottom: 0; width: 100%; height: 60px; background: var(--navbar-bg); backdrop-filter: blur(15px); border-top: 1px solid var(--border-color); display: flex; justify-content: space-around; align-items: center; z-index: 1000; } .bottom-nav-item { color: var(--text-secondary); padding: 8px; cursor: pointer; transition: var(--transition); position: relative; text-decoration: none; display: flex; align-items: center; } .bottom-nav-item svg { width: 22px; height: 22px; } .bottom-nav-item:hover, .bottom-nav-item.active { color: var(--cyan); } .badge-count { position: absolute; top: 0; right: -2px; background: var(--danger); color: #fff; font-size: 0.55rem; padding: 2px 5px; border-radius: 10px; font-weight: 700; min-width: 16px; text-align: center; display: none; }
-        .toast-custom { position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%); background: var(--toast-bg); color: #fff; padding: 10px 20px; z-index: 9999; font-size: 0.8rem; border-radius: 25px; border: 1px solid var(--cyan); white-space: nowrap; opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s ease; } .toast-custom.show { opacity: 1; visibility: visible; }
+        .toast-custom {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--toast-bg);
+            color: #fff;
+            padding: 12px 24px;
+            z-index: 9999;
+            font-size: 0.85rem;
+            border-radius: 12px;
+            border: 1px solid var(--cyan);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease;
+            transform: translateX(-50%) translateY(-20px);
+            max-width: 90%;
+            text-align: center;
+            font-weight: 500;
+        }
+        .toast-custom.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(0);
+        }
         .right-sidebar { display: none; }
         @media (max-width: 768px) { .form-row { grid-template-columns: 1fr; } }
-        @media(min-width: 768px) { body { padding-bottom: 0; padding-left: 240px; } .bottom-nav { display: none !important; } .sidebar { left: 0 !important; width: 240px; } .sidebar-overlay { display: none !important; } .menu-toggle { display: none; } .navbar { left: 240px; width: calc(100% - 240px); } .main-content { margin: 80px auto 20px; max-width: 680px; border-radius: 16px; box-shadow: var(--shadow); } .toast-custom { bottom: 30px; } .mentor-grid { grid-template-columns: repeat(3, 1fr); gap: 16px; } }
+        @media(min-width: 768px) { body { padding-bottom: 0; padding-left: 240px; } .bottom-nav { display: none !important; } .sidebar { left: 0 !important; width: 240px; } .sidebar-overlay { display: none !important; } .menu-toggle { display: none; } .navbar { left: 240px; width: calc(100% - 240px); } .main-content { margin: 80px auto 20px; max-width: 680px; border-radius: 16px; box-shadow: var(--shadow); } .toast-custom { top: 30px; } .mentor-grid { grid-template-columns: repeat(3, 1fr); gap: 16px; } }
         @media(min-width: 1100px) { body { padding-right: 320px; } .navbar { width: calc(100% - 560px); } .main-content { margin-left: auto; margin-right: auto; max-width: 900px; } .mentor-grid { grid-template-columns: repeat(4, 1fr); } .right-sidebar { display: flex; flex-direction: column; gap: 20px; position: fixed; top: 80px; right: 20px; width: 300px; height: calc(100vh - 100px); overflow-y: auto; padding: 0 5px 20px; scrollbar-width: none; } .right-sidebar::-webkit-scrollbar { display: none; } .widget { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 20px; } .widget h4 { margin-bottom: 15px; font-size: 0.95rem; color: var(--text-primary); font-weight: 700; display: flex; align-items: center; gap: 8px; } .right-footer { font-size: 0.75rem; text-align: center; color: var(--text-secondary); margin-top: auto; padding-top: 10px; } .right-footer a { color: var(--text-secondary); text-decoration: none; margin: 0 4px; } .right-footer a:hover { color: var(--cyan); } }
-        /* ============ ANTI-ZOOM & ANTI-SÉLECTION GLOBALE ============ */
         html { touch-action: manipulation; -ms-touch-action: manipulation; }
         body { -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; -webkit-touch-callout: none; -webkit-tap-highlight-color: transparent; }
         input, textarea, [contenteditable="true"] { -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important; }
         img { touch-action: manipulation; -webkit-user-drag: none; -moz-user-drag: none; user-select: none; }
         .image-viewer-full img, .full-image-view img { touch-action: manipulation !important; pointer-events: auto; }
-        /* ======= STYLES POUR LES BADGES UTILISATEUR (VERSION ADMIN) ======= */
         .badge-pill {
             display: inline-flex;
             align-items: center;
@@ -129,6 +157,136 @@
         }
         .badge-pill.icon-only i { font-size: 0.8rem; }
         .mentor-name-modern .badge-pill { margin: 0 2px; }
+        /* Style pour la bordure colorée des cartes */
+        .mentor-card-modern .card-border-top {
+            width: 100%;
+            height: 4px;
+            border-radius: 12px 12px 0 0;
+            margin-bottom: 12px;
+        }
+        /* Badges spécifiques */
+        .badge-premium {
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            color: #0f172a;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 0.6rem;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .badge-top-mentor {
+            background: linear-gradient(135deg, #a78bfa, #7c3aed);
+            color: #fff;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 0.6rem;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .badge-new {
+            background: #10b981;
+            color: #fff;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 0.6rem;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+        /* Tableau de bord mentor */
+        .mentor-dashboard-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin: 16px 0 20px;
+        }
+        .mentor-dashboard-stat {
+            background: var(--stat-bg);
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+        }
+        .mentor-dashboard-stat .stat-number {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--cyan);
+        }
+        .mentor-dashboard-stat .stat-label {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+        .mentor-dashboard-stat .stat-trend {
+            font-size: 0.7rem;
+            margin-top: 4px;
+            font-weight: 600;
+        }
+        .mentor-dashboard-stat .stat-trend.up { color: var(--success); }
+        .mentor-dashboard-stat .stat-trend.down { color: var(--danger); }
+
+        /* Liste des mentorés */
+        .mentee-list-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border-light);
+        }
+        .mentee-list-item:last-child { border-bottom: none; }
+        .mentee-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--cyan);
+        }
+        .mentee-info { flex: 1; }
+        .mentee-name { font-weight: 600; font-size: 0.85rem; }
+        .mentee-progress { display: flex; align-items: center; gap: 8px; font-size: 0.7rem; color: var(--text-secondary); }
+        .progress-bar {
+            width: 80px;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        .progress-bar .progress-fill {
+            height: 100%;
+            background: var(--cyan);
+            border-radius: 2px;
+            transition: width 0.5s ease;
+        }
+        /* Feedback */
+        .feedback-item {
+            background: var(--bg-primary);
+            padding: 10px 14px;
+            border-radius: 10px;
+            margin-bottom: 8px;
+            font-size: 0.8rem;
+            border-left: 3px solid var(--cyan);
+        }
+        .feedback-item .fb-author {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        .feedback-item .fb-text {
+            color: var(--text-secondary);
+            margin-top: 2px;
+        }
+        .feedback-item .fb-date {
+            font-size: 0.65rem;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+        @media (max-width: 768px) {
+            .mentor-dashboard-stats { grid-template-columns: repeat(2, 1fr); }
+        }
     </style>
 </head>
 <body>
@@ -143,7 +301,6 @@
         <a href="friends.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg> Amis</a>
         <a href="courses.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg> Cours</a>
         <a href="events.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/></svg> Événements</a>
-        <a href="groups.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> Groupes</a>
         <a href="mentorship.html" class="sidebar-link active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg> Mentorat</a>
         <a href="profile.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> Mon Profil</a>
         <hr style="margin:10px 0;border-color:var(--border-color);"><a href="settings.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg> Paramètres</a>
@@ -163,20 +320,19 @@
         </div>
     </div>
     <div class="tabs">
-        <button class="tab-btn active" onclick="switchTab('explore',this)">🔍 Explorer</button>
-        <button class="tab-btn" onclick="switchTab('myMentors',this)">👥 Mes Mentors</button>
-        <button class="tab-btn" onclick="switchTab('sessions',this)">📅 Sessions</button>
-        <button class="tab-btn" onclick="switchTab('requests',this)">📨 Demandes</button>
-        <button class="tab-btn" id="tabWorkspace" onclick="switchTab('workspace',this)" style="display:none;">📊 Espace Mentor</button>
+        <button class="tab-btn active" onclick="switchTab('explore',this)">Explorer</button>
+        <button class="tab-btn" onclick="switchTab('myMentors',this)">Mes Mentors</button>
+        <button class="tab-btn" onclick="switchTab('requests',this)">Demandes</button>
+        <button class="tab-btn" id="tabWorkspace" onclick="switchTab('workspace',this)" style="display:none;">Espace Mentor</button>
     </div>
-    <div class="search-bar"><input type="text" class="search-input" id="searchInput" placeholder="🔍 Rechercher un mentor..." oninput="performSearch()"></div>
+    <div class="search-bar"><input type="text" class="search-input" id="searchInput" placeholder="Rechercher un mentor..." oninput="performSearch()"></div>
     <div class="filter-chips" id="filterChips">
         <button class="filter-chip active" data-filter="all" onclick="filterMentors('all',this)">Tous</button>
-        <button class="filter-chip" data-filter="Informatique" onclick="filterMentors('Informatique',this)">💻 Info</button>
-        <button class="filter-chip" data-filter="Mathématiques" onclick="filterMentors('Mathématiques',this)">📐 Maths</button>
-        <button class="filter-chip" data-filter="Physique" onclick="filterMentors('Physique',this)">⚡ Physique</button>
-        <button class="filter-chip" data-filter="Médecine" onclick="filterMentors('Médecine',this)">🏥 Médecine</button>
-        <button class="filter-chip" data-filter="Business" onclick="filterMentors('Business',this)">💼 Business</button>
+        <button class="filter-chip" data-filter="Informatique" onclick="filterMentors('Informatique',this)">Info</button>
+        <button class="filter-chip" data-filter="Mathematiques" onclick="filterMentors('Mathematiques',this)">Maths</button>
+        <button class="filter-chip" data-filter="Physique" onclick="filterMentors('Physique',this)">Physique</button>
+        <button class="filter-chip" data-filter="Medecine" onclick="filterMentors('Medecine',this)">Medecine</button>
+        <button class="filter-chip" data-filter="Business" onclick="filterMentors('Business',this)">Business</button>
         <span style="margin-left:8px;display:flex;gap:4px;align-items:center;">
             <span style="font-size:0.7rem;color:var(--text-secondary);">Niveau:</span>
             <button class="filter-chip-level active" data-level="all" onclick="filterByLevel('all',this)">Tous</button>
@@ -185,14 +341,14 @@
             <button class="filter-chip-level" data-level="Doctorat" onclick="filterByLevel('Doctorat',this)">Doctorat</button>
             <button class="filter-chip-level" data-level="Professionnel" onclick="filterByLevel('Professionnel',this)">Pro</button>
         </span>
-        <button class="filter-chip" id="filterAvailable" data-filter="available" onclick="toggleAvailableFilter()" style="margin-left:auto;">✅ Disponibles</button>
+        <button class="filter-chip" id="filterAvailable" data-filter="available" onclick="toggleAvailableFilter()" style="margin-left:auto;">Disponibles</button>
     </div>
     <div id="contentContainer"></div>
 </main>
 
 <aside class="right-sidebar" id="rightSidebar">
-    <div class="widget info-widget"><h4>💡 Qu'est-ce qu'un Mentor ?</h4><p style="font-size:0.85rem;color:var(--text-secondary);line-height:1.5;">Un mentor est un guide bienveillant qui partage son expérience, ses compétences et ses conseils pour vous aider à atteindre vos objectifs.</p></div>
-    <div class="right-footer"><a href="about.html">À propos</a> · <a href="help.html">Aide</a> · <a href="terms.html">Conditions</a> · <a href="privacy.html">Confidentialité</a><div style="margin-top:8px;">© 2026 ESTRA LINK</div></div>
+    <div class="widget info-widget"><h4>Qu'est-ce qu'un Mentor ?</h4><p style="font-size:0.85rem;color:var(--text-secondary);line-height:1.5;">Un mentor est un guide bienveillant qui partage son experience, ses competences et ses conseils pour vous aider à atteindre vos objectifs.</p></div>
+    <div class="right-footer"><a href="about.html">A propos</a> · <a href="help.html">Aide</a> · <a href="terms.html">Conditions</a> · <a href="privacy.html">Confidentialite</a><div style="margin-top:8px;">© 2026 ESTRA LINK</div></div>
 </aside>
 
 <div class="bottom-nav">
@@ -203,20 +359,55 @@
     <a href="profile.html" class="bottom-nav-item"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></a>
 </div>
 
-<div class="modal-overlay" id="mentorDetailsModal"><div class="modal-content" style="max-width:450px;text-align:center;padding:30px 24px;border-radius:24px;"><button class="modal-close" style="position:absolute;top:15px;right:20px;" onclick="closeMentorDetails()">&times;</button><div id="mdlAvatarContainer" style="position:relative;display:inline-block;margin-bottom:15px;"><img id="mdlAvatar" src="" class="mentor-avatar-large" style="width:120px;height:120px;border-width:4px;"><div id="mdlStatus" class="mentor-status-badge" style="width:26px;height:26px;border-width:4px;bottom:8px;right:8px;"></div></div><h2 id="mdlName" style="font-size:1.4rem;color:var(--text-primary);margin-bottom:4px;">Nom</h2><div id="mdlTitle" style="color:var(--cyan);font-weight:600;font-size:0.95rem;margin-bottom:8px;">Titre</div><div id="mdlLocation" style="color:var(--text-secondary);font-size:0.85rem;margin-bottom:20px;"><i class="fas fa-map-marker-alt"></i> Localisation</div><div style="background:var(--bg-primary);border-radius:16px;padding:16px;margin-bottom:20px;text-align:left;font-size:0.9rem;"><div id="mdlBio" style="margin-bottom:12px;font-style:italic;">"Bio..."</div><div><strong>Domaines:</strong> <span id="mdlDomain"></span></div><div><strong>Niveau:</strong> <span id="mdlLevel"></span></div><div><strong>Expérience:</strong> <span id="mdlExp"></span> ans</div><div><strong>Compétences:</strong> <span id="mdlSkills"></span></div><div><strong>Note:</strong> <span id="mdlRating"></span></div></div><div class="form-row"><button class="btn-action-outline" id="mdlBtnLike" onclick="toggleLikeFromModal()"><i class="fas fa-thumbs-up"></i> <span id="mdlLikeText">J'aime</span></button><button class="btn-action-outline primary-action" onclick="openRequestFromModal()"><i class="fas fa-envelope"></i> Demander</button><button class="btn-action-outline primary-action" onclick="openSessionModal()"><i class="fas fa-calendar-plus"></i> Session</button></div></div></div>
+<div class="modal-overlay" id="mentorDetailsModal"><div class="modal-content" style="max-width:450px;text-align:center;padding:30px 24px;border-radius:24px;"><button class="modal-close" style="position:absolute;top:15px;right:20px;" onclick="closeMentorDetails()">&times;</button><div id="mdlAvatarContainer" style="position:relative;display:inline-block;margin-bottom:15px;"><img id="mdlAvatar" src="" class="mentor-avatar-large" style="width:120px;height:120px;border-width:4px;"><div id="mdlStatus" class="mentor-status-badge" style="width:26px;height:26px;border-width:4px;bottom:8px;right:8px;"></div></div><h2 id="mdlName" style="font-size:1.4rem;color:var(--text-primary);margin-bottom:4px;">Nom</h2><div id="mdlTitle" style="color:var(--cyan);font-weight:600;font-size:0.95rem;margin-bottom:8px;">Titre</div><div id="mdlLocation" style="color:var(--text-secondary);font-size:0.85rem;margin-bottom:20px;"><i class="fas fa-map-marker-alt"></i> Localisation</div><div style="background:var(--bg-primary);border-radius:16px;padding:16px;margin-bottom:20px;text-align:left;font-size:0.9rem;"><div id="mdlBio" style="margin-bottom:12px;font-style:italic;">"Bio..."</div><div><strong>Domaines:</strong> <span id="mdlDomain"></span></div><div><strong>Niveau:</strong> <span id="mdlLevel"></span></div><div><strong>Experience:</strong> <span id="mdlExp"></span> ans</div><div><strong>Competences:</strong> <span id="mdlSkills"></span></div><div><strong>Note:</strong> <span id="mdlRating"></span></div></div><div class="form-row"><button class="btn-action-outline" id="mdlBtnLike" onclick="toggleLikeFromModal()"><i class="fas fa-thumbs-up"></i> <span id="mdlLikeText">J'aime</span></button><button class="btn-action-outline primary-action" onclick="openRequestFromModal()"><i class="fas fa-envelope"></i> Demander</button><button class="btn-action-outline" style="color:var(--danger);border-color:var(--danger);" onclick="reportMentor(activeModalMentorId)"><i class="fas fa-flag"></i> Signaler</button></div></div></div>
 
-<div class="modal-fullscreen" id="becomeMentorModal"><div class="modal-fullscreen-header"><h3>🏆 Devenir Mentor</h3><button class="modal-close" onclick="closeBecomeMentorModal()">&times;</button></div><div class="modal-fullscreen-body"><div class="form-row"><div class="form-group" style="display:flex;flex-direction:column;align-items:center;justify-content:center;"><img id="previewMentorAvatar" src="https://ui-avatars.com/api/?background=38bdf8&color=fff&name=Moi" style="width:90px;height:90px;border-radius:50%;object-fit:cover;margin-bottom:10px;border:3px solid var(--cyan);"><label class="btn-sm btn-outline" style="cursor:pointer;font-size:0.75rem;"><i class="fas fa-camera"></i> Photo de profil<input type="file" id="mentorAvatarFile" accept="image/*" style="display:none;" onchange="previewAvatar(this)"></label></div><div class="form-group"><label>Titre professionnel *</label><input type="text" id="mentorTitle" placeholder="Ex: Ingénieur Logiciel Senior"><label style="margin-top:12px;">Localisation</label><input type="text" id="mentorLocation" placeholder="Ex: Lubumbashi, RDC" value="Lubumbashi"></div></div><div class="form-group"><label>Domaines d'expertise *</label><div class="checkbox-group" id="expertiseCheckboxes"></div></div><div class="form-row"><div class="form-group"><label>Niveau</label><select id="mentorLevel"><option value="Licence">Licence</option><option value="Master">Master</option><option value="Doctorat">Doctorat</option><option value="Professionnel">Professionnel</option></select></div><div class="form-group"><label>Années d'expérience *</label><input type="number" id="mentorExperience" min="1" max="50" placeholder="Ex: 5"></div></div><div class="form-group"><label>Compétences clés *</label><input type="text" id="mentorSkills" placeholder="Ex: IA, React, Leadership"></div><div class="form-group"><label>Université/Entreprise</label><input type="text" id="mentorInstitution" placeholder="Ex: UNILU, Google..."></div><div class="form-group"><label style="display:flex;justify-content:space-between;align-items:center;"><span>Bio *</span><button type="button" class="btn-sm btn-outline" onclick="generateBio()" style="padding:4px 10px;font-size:0.75rem;border-color:var(--purple);color:var(--purple);"><i class="fas fa-magic"></i> Générer</button></label><textarea id="mentorBio" rows="4" placeholder="Votre parcours..."></textarea></div></div><div class="modal-fullscreen-footer"><button class="btn-cancel" onclick="closeBecomeMentorModal()">Annuler</button><button class="btn-primary" style="width:auto;" onclick="registerAsMentor()">🚀 S'inscrire</button></div></div>
+<div class="modal-fullscreen" id="becomeMentorModal"><div class="modal-fullscreen-header"><h3>Devenir Mentor</h3><button class="modal-close" onclick="closeBecomeMentorModal()">&times;</button></div><div class="modal-fullscreen-body">
+    <div class="form-row">
+        <div class="form-group" style="display:flex;flex-direction:column;align-items:center;justify-content:center;">
+            <img id="previewMentorAvatar" src="https://ui-avatars.com/api/?background=38bdf8&color=fff&name=Moi" style="width:90px;height:90px;border-radius:50%;object-fit:cover;margin-bottom:10px;border:3px solid var(--cyan);">
+            <label class="btn-sm btn-outline" style="cursor:pointer;font-size:0.75rem;"><i class="fas fa-camera"></i> Photo de profil<input type="file" id="mentorAvatarFile" accept="image/*" style="display:none;" onchange="previewAvatar(this)"></label>
+        </div>
+        <div class="form-group">
+            <label>Titre professionnel *</label>
+            <input type="text" id="mentorTitle" placeholder="Ex: Ingenieur Logiciel Senior" oninput="updateCharCounter('mentorTitle', 50, 'titleCounter')">
+            <div class="char-counter"><span id="titleCounter">50</span> caractères restants</div>
+            <label style="margin-top:12px;">Localisation</label>
+            <input type="text" id="mentorLocation" placeholder="Ex: Lubumbashi, RDC" value="Lubumbashi">
+        </div>
+    </div>
+    <div class="form-group">
+        <label>Domaines d'expertise * (min 3, max 5)</label>
+        <div class="checkbox-group" id="expertiseCheckboxes"></div>
+        <div id="domainCounter" style="text-align:right;font-size:0.7rem;color:var(--text-secondary);margin-top:4px;">0 / 5 sélectionnés</div>
+    </div>
+    <div class="form-row">
+        <div class="form-group"><label>Niveau</label><select id="mentorLevel"><option value="Licence">Licence</option><option value="Master">Master</option><option value="Doctorat">Doctorat</option><option value="Professionnel">Professionnel</option></select></div>
+        <div class="form-group"><label>Annees d'experience *</label><input type="number" id="mentorExperience" min="1" max="50" placeholder="Ex: 5"></div>
+    </div>
+    <div class="form-group">
+        <label>Competences cles *</label>
+        <input type="text" id="mentorSkills" placeholder="Ex: IA, React, Leadership" oninput="updateCharCounter('mentorSkills', 100, 'skillsCounter')">
+        <div class="char-counter"><span id="skillsCounter">100</span> caractères restants</div>
+    </div>
+    <div class="form-group"><label>Universite/Entreprise</label><input type="text" id="mentorInstitution" placeholder="Ex: UNILU, Google..."></div>
+    <div class="form-group">
+        <label style="display:flex;justify-content:space-between;align-items:center;">
+            <span>Bio *</span>
+            <button type="button" class="btn-sm btn-outline" onclick="generateBio()" style="padding:4px 10px;font-size:0.75rem;border-color:var(--purple);color:var(--purple);"><i class="fas fa-magic"></i> Generer</button>
+        </label>
+        <textarea id="mentorBio" rows="4" placeholder="Votre parcours..." oninput="updateCharCounter('mentorBio', 300, 'bioCounter')"></textarea>
+        <div class="char-counter"><span id="bioCounter">300</span> caractères restants</div>
+    </div>
+    <div class="modal-fullscreen-footer"><button class="btn-cancel" onclick="closeBecomeMentorModal()">Annuler</button><button class="btn-primary" style="width:auto;" onclick="registerAsMentor()">S'inscrire</button></div>
+</div>
 
-<div class="modal-fullscreen" id="requestModal"><div class="modal-fullscreen-header"><h3>📨 Demander un mentorat</h3><button class="modal-close" onclick="closeRequestModal()">&times;</button></div><div class="modal-fullscreen-body"><div id="requestMentorInfo" style="margin-bottom:24px;background:var(--bg-primary);padding:16px;border-radius:16px;border:1px solid var(--border-color);"></div><div class="form-group"><label>Objectifs *</label><textarea id="requestObjectives" rows="4" placeholder="Ce que vous souhaitez apprendre..."></textarea></div></div><div class="modal-fullscreen-footer"><button class="btn-cancel" style="width:auto" onclick="closeRequestModal()">Annuler</button><button class="btn-primary" style="width:auto" onclick="sendMentorshipRequest()">Envoyer</button></div></div>
-
-<div class="modal-fullscreen" id="sessionModal"><div class="modal-fullscreen-header"><h3>📅 Proposer une session</h3><button class="modal-close" onclick="closeSessionModal()">&times;</button></div><div class="modal-fullscreen-body"><div id="sessionMentorInfo" style="margin-bottom:20px;background:var(--bg-primary);padding:16px;border-radius:16px;border:1px solid var(--border-color);"></div><div class="form-row"><div class="form-group"><label>Date *</label><input type="date" id="sessionDate"></div><div class="form-group"><label>Heure *</label><input type="time" id="sessionTime"></div></div><div class="form-row"><div class="form-group"><label>Durée (min)</label><input type="number" id="sessionDuration" value="60"></div><div class="form-group"><label>Format</label><select id="sessionFormat"><option value="Présentiel">Présentiel</option><option value="Visio">Visio</option></select></div></div><div class="form-group"><label>Message optionnel</label><textarea id="sessionMessage" rows="3" placeholder="Précisez le sujet..."></textarea></div></div><div class="modal-fullscreen-footer"><button class="btn-cancel" style="width:auto" onclick="closeSessionModal()">Annuler</button><button class="btn-primary" style="width:auto" onclick="sendSessionProposal()">Envoyer</button></div></div>
+<div class="modal-fullscreen" id="requestModal"><div class="modal-fullscreen-header"><h3>Demander un mentorat</h3><button class="modal-close" onclick="closeRequestModal()">&times;</button></div><div class="modal-fullscreen-body"><div id="requestMentorInfo" style="margin-bottom:24px;background:var(--bg-primary);padding:16px;border-radius:16px;border:1px solid var(--border-color);"></div><div class="form-group"><label>Objectifs *</label><textarea id="requestObjectives" rows="4" placeholder="Ce que vous souhaitez apprendre..." oninput="updateCharCounter('requestObjectives', 200, 'objCounter')"></textarea><div class="char-counter"><span id="objCounter">200</span> caractères restants</div></div></div><div class="modal-fullscreen-footer"><button class="btn-cancel" style="width:auto" onclick="closeRequestModal()">Annuler</button><button class="btn-primary" style="width:auto" onclick="sendMentorshipRequest()">Envoyer</button></div></div>
 
 <div id="toastMsg" class="toast-custom"></div>
 
 <script>
-// ============ CANAL DE COMMUNICATION TEMPS RÉEL ============
+// ============ CANAL DE COMMUNICATION ============
 const ESTRA_CHANNEL = new BroadcastChannel('estra_network');
-
 ESTRA_CHANNEL.onmessage = (e) => {
     const { type, data } = e.data;
     if (type === 'profile_updated') loadData();
@@ -225,79 +416,49 @@ ESTRA_CHANNEL.onmessage = (e) => {
     if (type === 'badges_updated') { loadData(); performSearch(); }
     if (type === 'new_mentor_request') {
         if (data && data.to === currentUser.name) {
-            showToast('🔔 Nouvelle demande de mentorat de ' + data.from);
+            showToast('Nouvelle demande de mentorat de ' + data.from);
             loadData();
         }
     }
     if (type === 'mentor_accepted') {
         if (data && (data.from === currentUser.name || data.to === currentUser.name)) {
             loadData();
-            showToast('✅ Demande de mentorat acceptée !');
-        }
-    }
-    if (type === 'new_session_proposal') {
-        if (data && data.to === currentUser.name) {
-            showToast('📅 Nouvelle proposition de session de ' + data.from);
-            loadData();
+            showToast('Demande de mentorat acceptee');
         }
     }
 };
+function estraEmit(type, data = {}) { ESTRA_CHANNEL.postMessage({ type, data, timestamp: Date.now() }); }
 
-function estraEmit(type, data = {}) {
-    ESTRA_CHANNEL.postMessage({ type, data, timestamp: Date.now() });
-}
-
-// ============ BADGES (VERSION ADMIN AVEC HIÉRARCHIE) ============
-function getAllBadges() {
-    return JSON.parse(localStorage.getItem('estra_badges') || '[]');
-}
-
+// ============ BADGES ============
+function getAllBadges() { return JSON.parse(localStorage.getItem('estra_badges') || '[]'); }
 function getUserBadges(username) {
     if (!username) return [];
     const users = JSON.parse(localStorage.getItem('estra_all_users') || '[]');
     const user = users.find(u => u.username === username || u.fullName === username);
     return user?.badges || [];
 }
-
 function renderUserBadges(badges) {
     if (!badges || badges.length === 0) return '';
     const allBadges = getAllBadges();
-    
-    // Hiérarchie des badges (un seul avec libellé)
     const badgesWithStyle = ['sponsor', 'partner', 'mentor', 'premium', 'teacher', 'recruiter'];
-    
-    // Séparer les badges avec libellé et sans libellé
-    const withLabel = [];
-    const withoutLabel = [];
-    
+    const withLabel = [], withoutLabel = [];
     badges.forEach(badgeId => {
         const b = allBadges.find(item => item.id === badgeId);
         if (!b) return;
-        if (badgesWithStyle.includes(b.id) && b.display !== 'icon') {
-            withLabel.push(b);
-        } else {
-            withoutLabel.push(b);
-        }
+        if (badgesWithStyle.includes(b.id) && b.display !== 'icon') withLabel.push(b);
+        else withoutLabel.push(b);
     });
-    
-    // Trier les badges avec libellé par priorité (sponsor > partner > mentor > premium > teacher > recruiter)
-    const priority = { sponsor: 1, partner: 2, mentor: 3, premium: 4, teacher: 5, recruiter: 6 };
-    withLabel.sort((a, b) => (priority[a.id] || 99) - (priority[b.id] || 99));
-    
-    // Garder UNIQUEMENT le badge avec la plus haute priorité (le premier)
+    const priority = { sponsor:1, partner:2, mentor:3, premium:4, teacher:5, recruiter:6 };
+    withLabel.sort((a,b) => (priority[a.id]||99) - (priority[b.id]||99));
     const mainBadge = withLabel.length > 0 ? withLabel[0] : null;
-    
     let html = '';
     if (mainBadge) {
         const style = `color:${mainBadge.color}; background:${mainBadge.color}20; border:1px solid ${mainBadge.color}40; padding:3px 10px; border-radius:15px; font-size:0.65rem; font-weight:700; display:inline-flex; align-items:center; gap:4px; margin:0 2px;`;
         html += `<span class="badge-pill" style="${style}"><i class="fas ${mainBadge.icon}"></i> ${mainBadge.name}</span>`;
     }
-    
-    // Ajouter les badges sans libellé (icônes seules)
     withoutLabel.forEach(b => {
         html += `<span class="badge-pill icon-only" style="color:${b.color}; font-size:0.8rem; margin:0 2px; display:inline-flex; align-items:center; gap:3px;" title="${b.desc || b.name}"><i class="fas ${b.icon}"></i></span>`;
     });
-    
     return html;
 }
 
@@ -310,16 +471,15 @@ function getAllUsers() {
             { id: 'marie_claire', username: 'marie_claire', fullName: 'Marie Claire', avatar: 'https://ui-avatars.com/api/?name=Marie&background=10b981&color=fff', accountType: 'teacher', domain: 'Informatique', level: 'M2', badges: [] },
             { id: 'david_mwamba', username: 'david_mwamba', fullName: 'David Mwamba', avatar: 'https://ui-avatars.com/api/?name=David&background=8b5cf6&color=fff', accountType: 'student', domain: 'Informatique', level: 'M1', badges: [] },
             { id: 'prof_kabengele', username: 'prof_kabengele', fullName: 'Pr. Kabengele', avatar: 'https://ui-avatars.com/api/?name=PrK&background=7c3aed&color=fff', accountType: 'professor', domain: 'Informatique', level: 'Doctorat', badges: [] },
-            { id: 'mr_muteba', username: 'mr_muteba', fullName: 'Mr. Muteba', avatar: 'https://ui-avatars.com/api/?name=MrM&background=d97706&color=fff', accountType: 'teacher', domain: 'Mathématiques', level: '4ème Humanité', badges: [] },
-            { id: 'alice_mwila', username: 'alice_mwila', fullName: 'Alice Mwila', avatar: 'https://ui-avatars.com/api/?name=Alice&background=059669&color=fff', accountType: 'highschool', domain: 'Biologie-Chimie', level: '3ème Humanité', badges: [] },
-            { id: 'sophie_mukendi', username: 'sophie_mukendi', fullName: 'Sophie Mukendi', avatar: 'https://ui-avatars.com/api/?name=Sophie&background=ec4899&color=fff', accountType: 'student', domain: 'Médecine', level: 'L3', badges: [] },
+            { id: 'mr_muteba', username: 'mr_muteba', fullName: 'Mr. Muteba', avatar: 'https://ui-avatars.com/api/?name=MrM&background=d97706&color=fff', accountType: 'teacher', domain: 'Mathematiques', level: '4eme Humanite', badges: [] },
+            { id: 'alice_mwila', username: 'alice_mwila', fullName: 'Alice Mwila', avatar: 'https://ui-avatars.com/api/?name=Alice&background=059669&color=fff', accountType: 'highschool', domain: 'Biologie-Chimie', level: '3eme Humanite', badges: [] },
+            { id: 'sophie_mukendi', username: 'sophie_mukendi', fullName: 'Sophie Mukendi', avatar: 'https://ui-avatars.com/api/?name=Sophie&background=ec4899&color=fff', accountType: 'student', domain: 'Medecine', level: 'L3', badges: [] },
             { id: 'admin_estra', username: 'admin_estra', fullName: 'Admin ESTRA', avatar: 'https://ui-avatars.com/api/?name=Admin&background=dc2626&color=fff', accountType: 'admin', domain: 'Administration', level: 'N/A', badges: ['verified','premium','partner'] }
         ];
         localStorage.setItem('estra_all_users', JSON.stringify(users));
     }
     return users;
 }
-
 function syncAllUsersToDatabase() {
     const users = JSON.parse(localStorage.getItem('estra_all_users') || '[]');
     let updated = false;
@@ -375,37 +535,64 @@ function syncAllUsersToDatabase() {
 const translations = {
     fr: {
         page_title: "ESTRA LINK | Mentorat",
-        toast_request_sent: "📨 Demande envoyée à",
-        toast_congrats_mentor: "🏆 Félicitations ! Vous êtes Mentor !",
-        toast_select_domain: "Sélectionnez un domaine",
-        toast_describe_bio: "Décrivez votre parcours",
-        toast_experience: "Indiquez vos années d'expérience",
+        toast_request_sent: "Demande envoyee a",
+        toast_congrats_mentor: "Felicitation ! Vous etes Mentor !",
+        toast_select_domain: "Selectionnez un domaine",
+        toast_describe_bio: "Decrivez votre parcours",
+        toast_experience: "Indiquez vos annees d'experience",
         toast_title_missing: "Indiquez votre titre professionnel",
-        toast_skills: "Ajoutez au moins une compétence clé",
-        toast_objectives: "Décrivez vos objectifs",
-        toast_already_pending: "Déjà en attente",
+        toast_skills: "Ajoutez au moins une competence cle",
+        toast_objectives: "Decrivez vos objectifs",
+        toast_already_pending: "Deja en attente",
         like_btn: "J'aime", see_more_info: "Voir infos",
-        no_mentors: "Aucun mentor trouvé",
+        no_mentors: "Aucun mentor trouve",
         no_mentors_my: "Aucun mentor",
         no_requests: "Aucune demande",
-        no_sessions: "Aucune session"
+        toast_domain_limit: "Vous devez selectionner au moins 3 domaines (max 5)",
+        toast_domain_min: "Minimum 3 domaines requis"
     }
 };
-
 let currentLang = localStorage.getItem('estra_language') || 'fr';
 function t(key){ return (translations[currentLang]&&translations[currentLang][key])||(translations['fr']&&translations['fr'][key])||key; }
 function applyTranslations(){ currentLang=localStorage.getItem('estra_language')||'fr'; document.querySelectorAll('[data-i18n]').forEach(el=>{ el.textContent=t(el.getAttribute('data-i18n'))||el.textContent; }); document.title=t('page_title'); }
 
 // ============ VARIABLES ============
 let currentUser={name:'Rashidi',avatar:'https://ui-avatars.com/api/?background=1d9bf0&color=fff&name=Rashidi&size=40',username:'rashidi'};
-let mentors=[],mentorshipRequests=[],sessions=[],currentTab='explore',currentFilter='all',currentLevel='all',selectedMentorId=null,toastTimeout=null;
+let mentors=[],mentorshipRequests=[],currentTab='explore',currentFilter='all',currentLevel='all',selectedMentorId=null,toastTimeout=null;
 let uploadedAvatarUrl=null,activeModalMentorId=null;
 let showAvailableOnly = false;
-const domains=['Informatique','Mathématiques','Physique','Médecine','Business','Droit','Économie','Langues','Art','Sport'];
+const domains = [
+    'Informatique','Mathematiques','Physique','Medecine','Business',
+    'Droit','Economie','Langues','Art','Sport',
+    'Gestion','Finance','Biologie','Chimie','Lettres',
+    'Philosophie','Genie Civil','Architecture','Design'
+];
+const domainColors = {
+    'Informatique': '#38bdf8',
+    'Mathematiques': '#f59e0b',
+    'Physique': '#a78bfa',
+    'Medecine': '#10b981',
+    'Business': '#f472b6',
+    'Droit': '#dc2626',
+    'Economie': '#22d3ee',
+    'Langues': '#8b5cf6',
+    'Art': '#ec4899',
+    'Sport': '#34d399',
+    'Gestion': '#f97316',
+    'Finance': '#f97316',
+    'Biologie': '#10b981',
+    'Chimie': '#10b981',
+    'Lettres': '#8b5cf6',
+    'Philosophie': '#8b5cf6',
+    'Genie Civil': '#f59e0b',
+    'Architecture': '#f59e0b',
+    'Design': '#ec4899'
+};
 
 function $(id){return document.getElementById(id)}
 function checkOnlineStatus(){const b=$('offlineBanner');if(b)b.style.display=navigator.onLine?'none':'block'}
 
+// ============ NOTIFICATIONS ============
 function updateAllBadges(){
     const notifs=JSON.parse(localStorage.getItem('estra_notifications')||'[]');
     const unreadNotifs=notifs.filter(n=>!n.read).length;
@@ -414,7 +601,6 @@ function updateAllBadges(){
     let unreadMsgs=0; Object.values(msgs).forEach(arr=>{if(Array.isArray(arr))unreadMsgs+=arr.filter(m=>m.sender==='them'&&m.status!=='read').length});
     const mb=$('msgBadge'); if(mb){mb.style.display=unreadMsgs>0?'block':'none';mb.textContent=unreadMsgs>99?'99+':unreadMsgs;}
 }
-
 function sendNotification(type, title, message, metadata = {}) {
     const notif = {
         id: Date.now(),
@@ -435,8 +621,32 @@ function sendNotification(type, title, message, metadata = {}) {
     updateAllBadges();
 }
 
-function showToast(msg,isError=false){const te=$('toastMsg');if(!te)return;if(toastTimeout)clearTimeout(toastTimeout);te.textContent=msg;te.style.borderColor=isError?'var(--danger)':'var(--cyan)';te.classList.remove('show');void te.offsetWidth;te.classList.add('show');toastTimeout=setTimeout(()=>te.classList.remove('show'),3000)}
+// ============ TOAST (EN HAUT) ============
+function showToast(msg,isError=false){
+    const te=$('toastMsg');
+    if(!te)return;
+    if(toastTimeout)clearTimeout(toastTimeout);
+    te.textContent=msg;
+    te.style.borderColor=isError?'var(--danger)':'var(--cyan)';
+    te.classList.remove('show');
+    void te.offsetWidth;
+    te.classList.add('show');
+    toastTimeout=setTimeout(()=>te.classList.remove('show'),4000);
+}
 function escapeHtml(s){if(!s)return'';const d=document.createElement('div');d.textContent=s;return d.innerHTML}
+
+// ============ COMPTEURS DE CARACTÈRES ============
+function updateCharCounter(inputId, maxLength, counterId) {
+    const input = document.getElementById(inputId);
+    const counter = document.getElementById(counterId);
+    if (!input || !counter) return;
+    const remaining = maxLength - input.value.length;
+    counter.textContent = remaining;
+    if (remaining < 0) {
+        input.value = input.value.substring(0, maxLength);
+        counter.textContent = 0;
+    }
+}
 
 // ============ NAVIGATION PROFIL ============
 const allPeopleSuggestions = [
@@ -451,16 +661,18 @@ const allPeopleSuggestions = [
 ];
 
 function viewOwnProfile() { window.location.href = 'profile.html'; }
-
 function viewProfile(nameOrUsername) {
     if (!nameOrUsername) return;
-    const person = allPeopleSuggestions.find(p => p.name === nameOrUsername || p.username === nameOrUsername);
-    if (person && person.username) {
-        window.location.href = 'profile.html?user=' + encodeURIComponent(person.username);
-    } else {
-        const fallback = nameOrUsername.toLowerCase().replace(/\s+/g, '_').replace(/[^a-z0-9_]/g, '');
-        window.location.href = 'profile.html?user=' + encodeURIComponent(fallback);
+    const profile = JSON.parse(localStorage.getItem('estra_profile') || '{}');
+    const myName = profile.fullName || '';
+    const myUsername = profile.username || '';
+    if (nameOrUsername === myName || nameOrUsername === myUsername || nameOrUsername === '@' + myUsername) {
+        window.location.href = 'profile.html';
+        return;
     }
+    const person = allPeopleSuggestions.find(p => p.name === nameOrUsername || p.username === nameOrUsername);
+    if (person && person.username) window.location.href = 'profile.html?user=' + encodeURIComponent(person.username);
+    else window.location.href = 'profile.html?user=' + encodeURIComponent(nameOrUsername.toLowerCase().replace(/\s+/g, '_').replace(/[^a-z0-9_]/g, ''));
 }
 
 // ============ SYNC MENTORS VERS AMIS ============
@@ -475,23 +687,29 @@ function syncMentorsToFriends(){
                 updated=true;
             }
         });
-        if(updated){
-            localStorage.setItem('estra_friends',JSON.stringify(friends));
-            estraEmit('friends_updated', {});
-        }
+        if(updated){ localStorage.setItem('estra_friends',JSON.stringify(friends)); estraEmit('friends_updated', {}); }
     }
 }
 
+// ============ SIDEBAR STATS ============
+function updateSidebarStats(){
+    const profile = JSON.parse(localStorage.getItem('estra_profile') || '{}');
+    const posts = JSON.parse(localStorage.getItem('estra_posts') || '[]');
+    const friends = JSON.parse(localStorage.getItem('estra_friends') || '[]');
+    const mentors = JSON.parse(localStorage.getItem('estra_mentors') || '[]');
+    const username = profile.username || currentUser.username;
+    const myPosts = posts.filter(p => p.authorUsername === username || p.author === profile.fullName || p.author === currentUser.name);
+    document.getElementById('sidebarPosts').textContent = myPosts.length;
+    document.getElementById('sidebarFriends').textContent = friends.length;
+    document.getElementById('sidebarGroups').textContent = mentors.length;
+    const avatar = profile.avatar || currentUser.avatar;
+    const name = profile.fullName || currentUser.name;
+    document.getElementById('sidebarAvatar').src = avatar;
+    document.getElementById('navAvatar').src = avatar;
+    document.getElementById('sidebarName').textContent = name;
+}
 function updateSidebar(){
-    const sn=$('sidebarName'),sa=$('sidebarAvatar'),na=$('navAvatar');
-    if(sn)sn.textContent=currentUser.name;
-    if(sa)sa.src=currentUser.avatar;
-    if(na)na.src=currentUser.avatar;
-    
-    const friendsList = JSON.parse(localStorage.getItem('estra_friends') || '[]');
-    const mentorsList = JSON.parse(localStorage.getItem('estra_mentors') || '[]');
-    document.getElementById('sidebarFriends').textContent = friendsList.length;
-    document.getElementById('sidebarGroups').textContent = mentorsList.length;
+    updateSidebarStats();
 }
 
 function checkMentorStatus(){
@@ -501,6 +719,7 @@ function checkMentorStatus(){
     if($('tabWorkspace'))$('tabWorkspace').style.display=isMentor?'block':'none';
 }
 
+// ============ LOAD DATA ============
 function loadData(){
     const sp=localStorage.getItem('estra_profile');
     if(sp){try{const p=JSON.parse(sp);currentUser.name=p.fullName||currentUser.name;currentUser.avatar=p.avatar||currentUser.avatar;currentUser.username=p.username||currentUser.username;}catch(e){}}
@@ -508,29 +727,27 @@ function loadData(){
     mentors=JSON.parse(localStorage.getItem('estra_mentors')||'[]');
     if(!mentors.length){
         mentors=[
-            {id:1,name:'Patricia Tenga',username:'patricia_tenga',avatar:'https://ui-avatars.com/api/?background=10b981&color=fff&name=Patricia&size=150',domains:['Business','Informatique'],level:'Professionnel',experience:8,skills:['Marketing','Stratégie'],institution:'ABC inc',title:'Stratège web',bio:'Passionnée du marketing numérique.',rating:4.9,likes:12,likedByMe:false,location:'Montréal, CA',available:true,createdAt:Date.now()-172800000},
-            {id:2,name:'Olivier Zhang',username:'olivier_zhang',avatar:'https://ui-avatars.com/api/?background=f59e0b&color=fff&name=Olivier&size=150',domains:['Informatique'],level:'Professionnel',experience:10,skills:['UI/UX','Figma'],institution:'Zenith',title:'Designer web',bio:"Créateur d'interfaces visuelles.",rating:4.8,likes:5,likedByMe:true,location:'Lubumbashi, RDC',available:true,createdAt:Date.now()-86400000},
-            {id:3,name:'David Mwamba',username:'david_mwamba',avatar:'https://ui-avatars.com/api/?background=8b5cf6&color=fff&name=David&size=150',domains:['Informatique','Mathématiques'],level:'Doctorat',experience:4,skills:['Python','ML','Data'],institution:'UNIKIN',title:'Data Scientist',bio:'Chercheur en IA.',rating:4.6,likes:2,likedByMe:false,location:'Kinshasa, RDC',available:true,createdAt:Date.now()-259200000}
+            {id:1,name:'Patricia Tenga',username:'patricia_tenga',avatar:'https://ui-avatars.com/api/?background=10b981&color=fff&name=Patricia&size=150',domains:['Business','Informatique'],level:'Professionnel',experience:8,skills:['Marketing','Strategie'],institution:'ABC inc',title:'Strateg web',bio:'Passionnee du marketing numerique.',rating:4.9,likes:12,likedByMe:false,location:'Montreal, CA',available:true,createdAt:Date.now()-172800000,totalMentees:0,totalSessions:0,recommended:95,price:25},
+            {id:2,name:'Olivier Zhang',username:'olivier_zhang',avatar:'https://ui-avatars.com/api/?background=f59e0b&color=fff&name=Olivier&size=150',domains:['Informatique'],level:'Professionnel',experience:10,skills:['UI/UX','Figma'],institution:'Zenith',title:'Designer web',bio:"Createur d'interfaces visuelles.",rating:4.8,likes:5,likedByMe:true,location:'Lubumbashi, RDC',available:true,createdAt:Date.now()-86400000,totalMentees:0,totalSessions:0,recommended:90,price:0},
+            {id:3,name:'David Mwamba',username:'david_mwamba',avatar:'https://ui-avatars.com/api/?background=8b5cf6&color=fff&name=David&size=150',domains:['Informatique','Mathematiques'],level:'Doctorat',experience:4,skills:['Python','ML','Data'],institution:'UNIKIN',title:'Data Scientist',bio:'Chercheur en IA.',rating:4.6,likes:2,likedByMe:false,location:'Kinshasa, RDC',available:true,createdAt:Date.now()-259200000,totalMentees:0,totalSessions:0,recommended:85,price:0}
         ];
         localStorage.setItem('estra_mentors',JSON.stringify(mentors));
     }
     mentorshipRequests=JSON.parse(localStorage.getItem('estra_mentorship_requests')||'[]');
-    sessions=JSON.parse(localStorage.getItem('estra_mentorship_sessions')||'[]');
     document.documentElement.setAttribute('data-theme','light');
-    applyTranslations();updateSidebar();checkMentorStatus();syncMentorsToFriends();renderContent();updateAllBadges();
+    applyTranslations();updateSidebarStats();checkMentorStatus();syncMentorsToFriends();renderContent();updateAllBadges();
     syncAllUsersToDatabase();
 }
-
 function saveData(){
     localStorage.setItem('estra_mentors',JSON.stringify(mentors));
     localStorage.setItem('estra_mentorship_requests',JSON.stringify(mentorshipRequests));
-    localStorage.setItem('estra_mentorship_sessions',JSON.stringify(sessions));
     syncMentorsToFriends();
     syncAllUsersToDatabase();
     estraEmit('mentors_updated', { mentorName: currentUser.name });
     estraEmit('badges_updated', {});
 }
 
+// ============ NAVIGATION ============
 function switchTab(tab,btn){currentTab=tab;document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');performSearch()}
 function filterMentors(f,btn){currentFilter=f;document.querySelectorAll('#filterChips .filter-chip').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');performSearch()}
 function filterByLevel(level,btn){currentLevel=level;document.querySelectorAll('.filter-chip-level').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');performSearch()}
@@ -540,46 +757,127 @@ function renderStars(rating){
     const full=Math.floor(rating);
     const half=rating%1>=0.5?1:0;
     const empty=5-full-half;
-    return '<span class="mentor-rating-stars">'+
-        '★'.repeat(full)+
-        (half?'½':'')+
-        '☆'.repeat(empty)+
-        ` ${rating.toFixed(1)}</span>`;
+    return '<span class="mentor-rating-stars">'+'★'.repeat(full)+(half?'½':'')+'☆'.repeat(empty)+` ${rating.toFixed(1)}</span>`;
 }
 
-function renderMentorCardModern(m,index=0){
-    const likes=m.likes||0;const isLiked=m.likedByMe?'liked':'';
-    const badgeVerified=m.rating>=4.5?'<i class="fas fa-check-circle badge-verified"></i>':'';
-    const delay=index*0.05;
+function getDomainColor(domain) {
+    return domainColors[domain] || '#38bdf8';
+}
+
+// ============ RENDU DES CARTES MENTOR (avec isOwn) ============
+function renderMentorCardModern(m, index = 0, isOwn = false) {
+    const likes = m.likes || 0;
+    const isLiked = m.likedByMe ? 'liked' : '';
+    const badgeVerified = m.rating >= 4.5 ? '<i class="fas fa-check-circle badge-verified"></i>' : '';
+    const delay = index * 0.05;
     const statusClass = m.available ? 'online' : 'offline';
     const ratingHtml = renderStars(m.rating || 0);
-    // ✅ Récupérer les badges de l'utilisateur depuis la base utilisateurs
     const allUsers = getAllUsers();
     const user = allUsers.find(u => u.fullName === m.name || u.username === m.username);
     const userBadges = user && user.badges ? user.badges : [];
     const badgesHtml = renderUserBadges(userBadges);
-    return `<div class="mentor-card-modern" style="animation-delay:${delay}s;">
-        <div class="mentor-avatar-container"><img src="${m.avatar}" class="mentor-avatar-large" onclick="event.stopPropagation();viewProfile('${escapeHtml(m.name)}')" style="cursor:pointer;"><div class="mentor-status-badge ${statusClass}"></div></div>
+
+    // Badges dynamiques
+    let extraBadges = '';
+    if (m.totalMentees && m.totalMentees >= 5) {
+        extraBadges += `<span class="badge-top-mentor"><i class="fas fa-star"></i> Top Mentor</span>`;
+    }
+    if (m.price && m.price > 0) {
+        extraBadges += `<span class="badge-premium"><i class="fas fa-crown"></i> Premium</span>`;
+    }
+    if (m.createdAt && Date.now() - m.createdAt < 7 * 86400000) {
+        extraBadges += `<span class="badge-new"><i class="fas fa-bolt"></i> Nouveau</span>`;
+    }
+    if (isOwn) {
+        extraBadges += `<span class="badge-pill" style="background:var(--success);color:#fff;border-color:var(--success);"><i class="fas fa-user-check"></i> C'est vous !</span>`;
+    }
+
+    // Statistiques
+    const statsHtml = `
+        <div style="display:flex;gap:12px;justify-content:center;margin:6px 0 10px;font-size:0.7rem;color:var(--text-secondary);">
+            ${m.totalMentees !== undefined ? `<span><i class="fas fa-users"></i> ${m.totalMentees}</span>` : ''}
+            ${m.totalSessions !== undefined ? `<span><i class="fas fa-calendar-check"></i> ${m.totalSessions}</span>` : ''}
+            ${m.recommended ? `<span><i class="fas fa-thumbs-up"></i> ${m.recommended}%</span>` : ''}
+        </div>
+    `;
+
+    // Prix
+    const priceHtml = m.price && m.price > 0 ? `<div style="font-size:0.8rem;font-weight:700;color:var(--cyan);margin-bottom:6px;">💰 ${m.price} €/session</div>` : '';
+
+    // Actions
+    let actionsHtml = '';
+    if (!isOwn) {
+        actionsHtml = `
+            <button class="btn-action-outline ${isLiked}" onclick="toggleLike(${m.id}, this, event)" style="cursor:pointer;">
+                <i class="fas fa-thumbs-up"></i> <span class="like-count">${t('like_btn')} (${likes})</span>
+            </button>
+            <button class="btn-action-outline primary-action" onclick="openMentorDetails(${m.id})" style="cursor:pointer;">${t('see_more_info')}</button>
+            ${m.available ? `<button class="btn-action-outline primary-action" onclick="showToast('RDV avec ${m.name} (simulation)')" style="cursor:pointer;background:var(--cyan);color:#0f172a;border-color:var(--cyan);">
+                <i class="fas fa-calendar-plus"></i> Prendre RDV
+            </button>` : ''}
+            <button class="btn-action-outline" style="color:var(--danger);border-color:var(--danger);" onclick="event.stopPropagation();reportMentor(${m.id})">
+                <i class="fas fa-flag"></i> Signaler
+            </button>
+        `;
+    } else {
+        actionsHtml = `
+            <button class="btn-action-outline primary-action" onclick="openMentorDetails(${m.id})" style="cursor:pointer;">${t('see_more_info')}</button>
+            <button class="btn-action-outline" style="border-color:var(--cyan);color:var(--cyan);" onclick="showToast('Fonctionnalité de modification à venir')">
+                <i class="fas fa-pen"></i> Modifier
+            </button>
+        `;
+    }
+
+    // Bordure colorée
+    const borderColor = m.domains && m.domains.length > 0 ? getDomainColor(m.domains[0]) : 'var(--cyan)';
+
+    // Domaines (max 3)
+    let domainDisplay = '';
+    if (m.domains && m.domains.length > 0) {
+        const displayed = m.domains.slice(0, 3);
+        const remaining = m.domains.length - 3;
+        domainDisplay = displayed.map(d => `<span class="expertise-tag">${escapeHtml(d)}</span>`).join('');
+        if (remaining > 0) domainDisplay += `<span class="expertise-tag">+${remaining}</span>`;
+    }
+
+    return `<div class="mentor-card-modern" style="animation-delay:${delay}s; border-top: 3px solid ${borderColor};">
+        <div class="mentor-avatar-container">
+            <img src="${m.avatar}" class="mentor-avatar-large" onclick="event.stopPropagation();viewProfile('${escapeHtml(m.name)}')" style="cursor:pointer;">
+            <div class="mentor-status-badge ${statusClass}"></div>
+        </div>
         <div class="mentor-name-modern">
             <span onclick="event.stopPropagation();viewProfile('${escapeHtml(m.name)}')" style="cursor:pointer;">${escapeHtml(m.name)}</span>
             ${badgeVerified}
             ${badgesHtml}
+            ${extraBadges}
             <button onclick="event.stopPropagation();openMentorDetails(${m.id})" style="background:none;border:none;color:var(--cyan);cursor:pointer;font-size:0.7rem;margin-left:4px;"><i class="fas fa-info-circle"></i></button>
         </div>
-        <div class="mentor-title-modern">${escapeHtml(m.title||'Mentor')}</div>
+        <div class="mentor-title-modern">${escapeHtml(m.title || 'Mentor')}</div>
         <div class="mentor-expertise">
-            <span class="expertise-tag" style="border-color:var(--purple);color:var(--purple);"><i class="fas fa-graduation-cap"></i> ${escapeHtml(m.level||'Professionnel')}</span>
-            ${m.domains.slice(0,2).map(d=>`<span class="expertise-tag">${escapeHtml(d)}</span>`).join('')}
-            ${m.domains.length>2?`<span class="expertise-tag">+${m.domains.length-2}</span>`:''}
+            <span class="expertise-tag" style="border-color:var(--purple);color:var(--purple);"><i class="fas fa-graduation-cap"></i> ${escapeHtml(m.level || 'Professionnel')}</span>
+            ${domainDisplay}
         </div>
+        ${priceHtml}
+        ${statsHtml}
         <div style="margin-bottom:8px;">${ratingHtml}</div>
         <div class="mentor-actions-grid">
-            <button class="btn-action-outline ${isLiked}" onclick="toggleLike(${m.id},this,event)" style="cursor:pointer;"><i class="fas fa-thumbs-up"></i> <span class="like-count">${t('like_btn')} (${likes})</span></button>
-            <button class="btn-action-outline primary-action" onclick="openMentorDetails(${m.id})" style="cursor:pointer;">${t('see_more_info')}</button>
+            ${actionsHtml}
         </div>
     </div>`;
 }
 
+function reportMentor(mentorId) {
+    const mentor = mentors.find(m => m.id === mentorId);
+    if (!mentor) return;
+    // Redirection vers report.html (via reports.js)
+    if (typeof window.openReport === 'function') {
+        window.openReport('mentor', mentorId, mentor.name);
+    } else {
+        window.location.href = 'report.html?type=mentor&id=' + mentorId + '&name=' + encodeURIComponent(mentor.name);
+    }
+}
+
+// ============ RECHERCHE ET AFFICHAGE ============
 function performSearch(){
     const search=($('searchInput')?.value||'').toLowerCase().trim(),c=$('contentContainer');if(!c)return;
     if(currentTab==='explore'){
@@ -589,29 +887,93 @@ function performSearch(){
         if(currentLevel!=='all')f=f.filter(m=>m.level===currentLevel);
         if(search)f=f.filter(m=>m.name.toLowerCase().includes(search)||m.domains.some(d=>d.toLowerCase().includes(search))||(m.title||'').toLowerCase().includes(search));
         if(!f.length){c.innerHTML=`<div class="empty-state"><i class="fas fa-search" style="font-size:3rem;margin-bottom:16px"></i><h3>${t('no_mentors')}</h3></div>`;return}
-        c.innerHTML=`<div class="mentor-grid">${f.map((m,i)=>renderMentorCardModern(m,i)).join('')}</div>`;
+        c.innerHTML=`<div class="mentor-grid">${f.map((m,i)=>renderMentorCardModern(m,i,false)).join('')}</div>`;
     }else if(currentTab==='workspace'){
         const myMentorProfile=mentors.find(m=>m.name===currentUser.name);
-        if(!myMentorProfile){c.innerHTML=`<div class="empty-state">Vous n'êtes pas encore mentor.</div>`;return}
+        if(!myMentorProfile){c.innerHTML=`<div class="empty-state">Vous n'etes pas encore mentor.</div>`;return}
         const myReqs=mentorshipRequests.filter(r=>r.mentorId===myMentorProfile.id);
         const pendingReqs=myReqs.filter(r=>r.status==='pending');
         const acceptedReqs=myReqs.filter(r=>r.status==='accepted');
-        c.innerHTML=`<div style="padding:24px;">
+        const totalMentees = myMentorProfile.totalMentees || 0;
+        const totalSessions = myMentorProfile.totalSessions || 0;
+        const satisfaction = myMentorProfile.recommended || 0;
+
+        // Simuler des données de mentorés (pour la démo)
+        const mentees = [
+            { name: 'Jean Kabengele', avatar: 'https://ui-avatars.com/api/?name=Jean&background=38bdf8&color=fff', progress: 75, lastSession: '2026-07-10' },
+            { name: 'Sophie Mukendi', avatar: 'https://ui-avatars.com/api/?name=Sophie&background=ec4899&color=fff', progress: 50, lastSession: '2026-07-08' },
+            { name: 'David Mwamba', avatar: 'https://ui-avatars.com/api/?name=David&background=8b5cf6&color=fff', progress: 90, lastSession: '2026-07-05' }
+        ];
+
+        // Feedback simulés
+        const feedbacks = [
+            { author: 'Jean Kabengele', text: 'Un mentor exceptionnel ! Ses conseils m\'ont permis de progresser rapidement.', date: '2026-07-10' },
+            { author: 'Sophie Mukendi', text: 'Très à l\'écoute et pédagogue. Je recommande vivement !', date: '2026-07-08' }
+        ];
+
+        c.innerHTML = `
+        <div style="padding:24px;">
             <h4 style="margin-bottom:12px;color:var(--text-primary);"><i class="fas fa-eye" style="color:var(--cyan)"></i> Votre Profil Public</h4>
-            <div style="pointer-events:none;opacity:0.9;margin-bottom:24px;width:100%;">${renderMentorCardModern(myMentorProfile,0)}</div>
-            <h4 style="margin-bottom:12px;color:var(--text-primary);"><i class="fas fa-chart-pie" style="color:var(--cyan)"></i> Statistiques</h4>
-            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;">
-                <div style="background:var(--stat-bg);border:1px solid var(--border-light);border-radius:12px;padding:14px;text-align:center;"><div style="font-size:1.5rem;font-weight:700;color:var(--cyan);">${myMentorProfile.totalMentees||0}</div><div style="font-size:0.7rem;color:var(--text-secondary);">Mentorés</div></div>
-                <div style="background:var(--stat-bg);border:1px solid #10b981;border-radius:12px;padding:14px;text-align:center;"><div style="font-size:1.5rem;font-weight:700;color:#10b981;">${myMentorProfile.likes||0}</div><div style="font-size:0.7rem;color:var(--text-secondary);">J'aime</div></div>
-                <div style="background:var(--stat-bg);border:1px solid #f59e0b;border-radius:12px;padding:14px;text-align:center;"><div style="font-size:1.5rem;font-weight:700;color:#f59e0b;">${pendingReqs.length}</div><div style="font-size:0.7rem;color:var(--text-secondary);">En attente</div></div>
+            <div style="margin-bottom:24px;width:100%;">${renderMentorCardModern(myMentorProfile, 0, true)}</div>
+
+            <h4 style="margin-bottom:16px;color:var(--text-primary);"><i class="fas fa-chart-pie" style="color:var(--cyan)"></i> Tableau de bord</h4>
+            <div class="mentor-dashboard-stats">
+                <div class="mentor-dashboard-stat">
+                    <div class="stat-number">${totalMentees}</div>
+                    <div class="stat-label">Mentorés</div>
+                    <div class="stat-trend up">+${totalMentees > 0 ? Math.floor(totalMentees/3) : 0} ce mois</div>
+                </div>
+                <div class="mentor-dashboard-stat">
+                    <div class="stat-number">${totalSessions}</div>
+                    <div class="stat-label">Sessions</div>
+                    <div class="stat-trend up">+${totalSessions > 0 ? Math.floor(totalSessions/4) : 0} ce mois</div>
+                </div>
+                <div class="mentor-dashboard-stat">
+                    <div class="stat-number">${pendingReqs.length}</div>
+                    <div class="stat-label">Demandes en attente</div>
+                    <div class="stat-trend ${pendingReqs.length > 0 ? 'up' : 'down'}">${pendingReqs.length > 0 ? 'Nouvelles demandes' : 'Aucune en attente'}</div>
+                </div>
+                <div class="mentor-dashboard-stat">
+                    <div class="stat-number">${satisfaction}%</div>
+                    <div class="stat-label">Satisfaction</div>
+                    <div class="stat-trend up">${satisfaction >= 80 ? 'Excellent' : 'Bon'}</div>
+                </div>
             </div>
+
+            <h4 style="margin-top:24px;color:var(--text-primary);"><i class="fas fa-users" style="color:var(--cyan)"></i> Vos mentorés récents</h4>
+            ${mentees.map(m => `
+                <div class="mentee-list-item">
+                    <img src="${m.avatar}" class="mentee-avatar">
+                    <div class="mentee-info">
+                        <div class="mentee-name">${m.name}</div>
+                        <div class="mentee-progress">
+                            Progression
+                            <div class="progress-bar"><div class="progress-fill" style="width:${m.progress}%;"></div></div>
+                            ${m.progress}%
+                        </div>
+                    </div>
+                    <div style="font-size:0.7rem;color:var(--text-secondary);">Dernière session: ${m.lastSession}</div>
+                </div>
+            `).join('')}
+
+            <h4 style="margin-top:24px;color:var(--text-primary);"><i class="fas fa-comment" style="color:var(--cyan)"></i> Feedback récent</h4>
+            ${feedbacks.map(f => `
+                <div class="feedback-item">
+                    <div class="fb-author">${f.author}</div>
+                    <div class="fb-text">"${f.text}"</div>
+                    <div class="fb-date">${f.date}</div>
+                </div>
+            `).join('')}
+
             <h4 style="margin-top:24px;color:var(--text-primary);"><i class="fas fa-inbox" style="color:var(--cyan)"></i> Demandes reçues</h4>
-            ${pendingReqs.length ? pendingReqs.map(r=>`<div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border-light);">
-                <img src="${r.avatar||'https://ui-avatars.com/api/?background=38bdf8&color=fff&name='+r.from}" style="width:40px;height:40px;border-radius:50%;object-fit:cover;">
-                <div style="flex:1;"><strong>${r.from}</strong> a demandé du mentorat</div>
-                <button class="btn-accept" onclick="acceptMentorRequest('${r.id}')">Accepter</button>
-                <button class="btn-decline" onclick="declineMentorRequest('${r.id}')">Refuser</button>
-            </div>`).join('') : `<p style="color:var(--text-secondary);">Aucune demande en attente.</p>`}
+            ${pendingReqs.length ? pendingReqs.map(r => `
+                <div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border-light);">
+                    <img src="${r.avatar||'https://ui-avatars.com/api/?background=38bdf8&color=fff&name='+r.from}" style="width:40px;height:40px;border-radius:50%;object-fit:cover;">
+                    <div style="flex:1;"><strong>${r.from}</strong> a demandé du mentorat</div>
+                    <button class="btn-accept" onclick="acceptMentorRequest('${r.id}')">Accepter</button>
+                    <button class="btn-decline" onclick="declineMentorRequest('${r.id}')">Refuser</button>
+                </div>
+            `).join('') : `<p style="color:var(--text-secondary);">Aucune demande en attente.</p>`}
         </div>`;
     }else if(currentTab==='myMentors'){
         let f=mentorshipRequests.filter(r=>r.from===currentUser.name&&r.status==='accepted');
@@ -622,29 +984,26 @@ function performSearch(){
         const received = mentorshipRequests.filter(r=>r.mentorId && mentors.find(m=>m.id===r.mentorId) && r.to===currentUser.name);
         let html = '';
         if(received.length){
-            html += `<h4 style="padding:12px 24px 0;color:var(--text-primary);">📩 Demandes reçues</h4>`;
+            html += `<h4 style="padding:12px 24px 0;color:var(--text-primary);">Demandes reçues</h4>`;
             html += received.map(r=>{
                 const m=mentors.find(x=>x.id===r.mentorId);
-                return `<div class="mentor-card" style="cursor:default;"><img src="${m?m.avatar:''}" class="mentor-avatar"><div class="mentor-info"><div class="mentor-name">${m?escapeHtml(m.name):'Mentor'} ${m ? renderUserBadges(m.badges||[]) : ''}</div><div style="font-size:0.85rem;">Objectifs: ${escapeHtml(r.objectives||'')}</div><div style="font-size:0.7rem;color:var(--text-secondary);">${r.status==='pending'?'⏳ En attente':r.status==='accepted'?'✅ Acceptée':'❌ Refusée'}</div></div>${r.status==='pending'?`<div><button class="btn-accept" onclick="acceptMentorRequest('${r.id}')">Accepter</button><button class="btn-decline" onclick="declineMentorRequest('${r.id}')">Refuser</button></div>`:''}</div>`;
+                return `<div class="mentor-card" style="cursor:default;"><img src="${m?m.avatar:''}" class="mentor-avatar"><div class="mentor-info"><div class="mentor-name">${m?escapeHtml(m.name):'Mentor'} ${m ? renderUserBadges(m.badges||[]) : ''}</div><div style="font-size:0.85rem;">Objectifs: ${escapeHtml(r.objectives||'')}</div><div style="font-size:0.7rem;color:var(--text-secondary);">${r.status==='pending'?'En attente':r.status==='accepted'?'Acceptée':'Refusée'}</div></div>${r.status==='pending'?`<div><button class="btn-accept" onclick="acceptMentorRequest('${r.id}')">Accepter</button><button class="btn-decline" onclick="declineMentorRequest('${r.id}')">Refuser</button></div>`:''}</div>`;
             }).join('');
         }
         if(sent.length){
-            html += `<h4 style="padding:12px 24px 0;color:var(--text-primary);">📤 Demandes envoyées</h4>`;
+            html += `<h4 style="padding:12px 24px 0;color:var(--text-primary);">Demandes envoyées</h4>`;
             html += sent.map(r=>{
                 const m=mentors.find(x=>x.id===r.mentorId);
-                return `<div class="mentor-card" style="cursor:default;"><img src="${m?m.avatar:''}" class="mentor-avatar"><div class="mentor-info"><div class="mentor-name">${m?escapeHtml(m.name):'Mentor'} ${m ? renderUserBadges(m.badges||[]) : ''}</div><div style="font-size:0.85rem;">Objectifs: ${escapeHtml(r.objectives||'')}</div><div style="font-size:0.7rem;color:var(--text-secondary);">${r.status==='pending'?'⏳ En attente':r.status==='accepted'?'✅ Acceptée':'❌ Refusée'}</div></div></div>`;
+                return `<div class="mentor-card" style="cursor:default;"><img src="${m?m.avatar:''}" class="mentor-avatar"><div class="mentor-info"><div class="mentor-name">${m?escapeHtml(m.name):'Mentor'} ${m ? renderUserBadges(m.badges||[]) : ''}</div><div style="font-size:0.85rem;">Objectifs: ${escapeHtml(r.objectives||'')}</div><div style="font-size:0.7rem;color:var(--text-secondary);">${r.status==='pending'?'En attente':r.status==='accepted'?'Acceptée':'Refusée'}</div></div></div>`;
             }).join('');
         }
         if(!html) html = `<div class="empty-state"><h3>${t('no_requests')}</h3></div>`;
         c.innerHTML = html;
-    }else if(currentTab==='sessions'){
-        const mySessions=sessions.filter(s=>s.from===currentUser.name||s.mentorId===mentors.find(m=>m.name===currentUser.name)?.id);
-        c.innerHTML=mySessions.length?mySessions.map(s=>`<div class="mentor-card"><div><i class="fas fa-calendar-check" style="color:var(--cyan);font-size:2rem;"></i></div><div class="mentor-info"><div class="mentor-name">${escapeHtml(s.mentorName||'')}</div><div style="font-size:0.8rem;">${s.date} à ${s.time} (${s.duration}min) - ${s.format}</div><div style="font-size:0.7rem;color:var(--text-secondary);">${s.message||''}</div></div></div>`).join(''):`<div class="empty-state"><h3>${t('no_sessions')}</h3></div>`;
     }
 }
-
 function renderContent(){performSearch()}
 
+// ============ LIKES ============
 function toggleLike(id,btnElement,event){
     if(event)event.stopPropagation();
     const m=mentors.find(x=>x.id===id);
@@ -653,26 +1012,25 @@ function toggleLike(id,btnElement,event){
             if(m.likedByMe){btnElement.classList.add('liked');}else{btnElement.classList.remove('liked');}
             if(countSpan)countSpan.textContent=`${t('like_btn')} (${m.likes})`;}else{performSearch();}}
 }
-
 function toggleLikeFromModal(){if(activeModalMentorId){toggleLike(activeModalMentorId,null,null);const m=mentors.find(x=>x.id===activeModalMentorId);const btn=$('mdlBtnLike');const textSpan=$('mdlLikeText');if(m.likedByMe){btn.classList.add('liked');}else{btn.classList.remove('liked');}textSpan.textContent=`${t('like_btn')} (${m.likes})`;}}
 
+// ============ DETAILS MENTOR ============
 function openMentorDetails(id){const m=mentors.find(x=>x.id===id);if(!m){showToast('Mentor non trouvé',true);return;}activeModalMentorId=id;$('mdlAvatar').src=m.avatar;$('mdlName').innerHTML=`${escapeHtml(m.name)} ${m.rating>=4.5?'<i class="fas fa-check-circle badge-verified"></i>':''}`;$('mdlTitle').textContent=`${escapeHtml(m.title||'Mentor')} @ ${escapeHtml(m.institution||'')}`;$('mdlLocation').innerHTML=`<i class="fas fa-map-marker-alt"></i> ${escapeHtml(m.location||'En ligne')}`;$('mdlBio').textContent=`"${escapeHtml(m.bio||'')}"`;$('mdlDomain').innerHTML=(m.domains||[]).map(d=>`<span class="expertise-tag">${escapeHtml(d)}</span>`).join('');$('mdlLevel').textContent=m.level||'Professionnel';$('mdlExp').textContent=m.experience||0;$('mdlSkills').innerHTML=(m.skills||[]).map(s=>`<span class="expertise-tag">${escapeHtml(s)}</span>`).join('');$('mdlRating').innerHTML=renderStars(m.rating||0);const btnLike=$('mdlBtnLike');const textSpan=$('mdlLikeText');textSpan.textContent=`${t('like_btn')} (${m.likes||0})`;if(m.likedByMe)btnLike.classList.add('liked');else btnLike.classList.remove('liked');$('mentorDetailsModal').classList.add('active');}
 function closeMentorDetails(){$('mentorDetailsModal').classList.remove('active');activeModalMentorId=null;}
 function openRequestFromModal(){if(activeModalMentorId){const id=activeModalMentorId;closeMentorDetails();openRequestModal(id);}}
-
 function openRequestModal(id){selectedMentorId=id;const m=mentors.find(x=>x.id===id);if(!m){showToast('Mentor non trouvé',true);return;}const info=$('requestMentorInfo');const loc=escapeHtml(m.location||'Lubumbashi');if(info){info.innerHTML=`<div style="display:flex;align-items:center;gap:15px;margin-bottom:15px;"><img src="${m.avatar}" style="width:60px;height:60px;border-radius:50%;border:2px solid var(--cyan);object-fit:cover;"><div style="text-align:left;"><strong style="font-size:1.1rem;color:var(--cyan);">${escapeHtml(m.name)}</strong><div style="font-size:0.8rem;color:var(--text-secondary);"><i class="fas fa-map-marker-alt"></i> ${loc}</div></div></div><div style="border-radius:12px;overflow:hidden;border:1px solid var(--border-color);height:150px;position:relative;"><iframe width="100%" height="100%" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?q=${encodeURIComponent(loc)}&t=&z=13&ie=UTF8&iwloc=&output=embed"></iframe></div>`;}$('requestModal').classList.add('active');}
-function closeRequestModal(){$('requestModal').classList.remove('active');selectedMentorId=null;}
+function closeRequestModal() { $('requestModal').classList.remove('active'); selectedMentorId = null; }
 
 function sendMentorshipRequest(){
-    if(!selectedMentorId)return;const o=$('requestObjectives')?.value.trim();if(!o){showToast(t('toast_objectives'));return}
+    if(!selectedMentorId)return;const o=$('requestObjectives')?.value.trim();if(!o){showToast(t('toast_objectives'),true);return}
     const m=mentors.find(x=>x.id===selectedMentorId);if(!m)return;
-    if(mentorshipRequests.find(r=>r.mentorId===selectedMentorId&&r.from===currentUser.name&&r.status==='pending')){showToast(t('toast_already_pending'));return}
+    if(mentorshipRequests.find(r=>r.mentorId===selectedMentorId&&r.from===currentUser.name&&r.status==='pending')){showToast(t('toast_already_pending'),true);return}
     const reqId='mr_'+Date.now();
     mentorshipRequests.push({id:reqId,mentorId:selectedMentorId,from:currentUser.name,to:m.name,objectives:o,status:'pending',createdAt:Date.now(),avatar:currentUser.avatar});
     saveData();closeRequestModal();performSearch();
-    sendNotification('mentor_request', 'Nouvelle demande de mentorat', `Demande de mentorat envoyée à ${m.name}`, {to:m.name, user:currentUser.name, userAvatar:currentUser.avatar});
+    sendNotification('mentor_request', 'Nouvelle demande de mentorat', 'Demande de mentorat envoyée à ' + m.name, {to:m.name, user:currentUser.name, userAvatar:currentUser.avatar});
     estraEmit('new_mentor_request', {from:currentUser.name,to:m.name,avatar:currentUser.avatar,domain:m.domains?m.domains[0]:''});
-    showToast(`${t('toast_request_sent')} ${m.name}`);
+    showToast(t('toast_request_sent') + ' ' + m.name);
 }
 
 function acceptMentorRequest(reqId){
@@ -688,7 +1046,6 @@ function acceptMentorRequest(reqId){
             estraEmit('friends_updated', {});
         }
         mentor.totalMentees=(mentor.totalMentees||0)+1;
-        // ✅ Ajouter le badge mentor à l'utilisateur dans all_users
         const allUsers = getAllUsers();
         const user = allUsers.find(u => u.fullName === mentor.name || u.username === mentor.username);
         if (user) {
@@ -702,80 +1059,78 @@ function acceptMentorRequest(reqId){
         }
     }
     saveData();
-    sendNotification('mentor_accepted', 'Demande acceptée', `Votre demande de mentorat avec ${req.from} a été acceptée`, {to:req.from, user:currentUser.name, userAvatar:currentUser.avatar});
+    sendNotification('mentor_accepted', 'Demande acceptée', 'Votre demande de mentorat avec ' + req.from + ' a été acceptée', {to:req.from, user:currentUser.name, userAvatar:currentUser.avatar});
     estraEmit('mentor_accepted', {from:currentUser.name,to:req.from});
-    showToast(`✅ Demande acceptée avec ${req.from}`);
+    showToast('Demande acceptée avec ' + req.from);
     performSearch();
 }
-
 function declineMentorRequest(reqId){
     const req=mentorshipRequests.find(r=>r.id===reqId);
     if(!req)return;
     req.status='declined';
     saveData();
-    showToast(`❌ Demande refusée`);
+    showToast('Demande refusée');
     performSearch();
 }
 
-// ============ SESSIONS ============
-function openSessionModal(){
-    if(!activeModalMentorId){showToast('Aucun mentor sélectionné',true);return;}
-    const m=mentors.find(x=>x.id===activeModalMentorId);
-    if(!m){showToast('Mentor non trouvé',true);return;}
-    const info=$('sessionMentorInfo');
-    if(info) info.innerHTML=`<div style="display:flex;align-items:center;gap:12px;"><img src="${m.avatar}" style="width:50px;height:50px;border-radius:50%;"><div><strong>${escapeHtml(m.name)}</strong> - ${escapeHtml(m.title||'Mentor')}</div></div>`;
-    const tomorrow=new Date(); tomorrow.setDate(tomorrow.getDate()+1);
-    const dateInput=$('sessionDate');
-    if(dateInput) dateInput.value=tomorrow.toISOString().split('T')[0];
-    const timeInput=$('sessionTime');
-    if(timeInput) timeInput.value='10:00';
-    closeMentorDetails();
-    $('sessionModal').classList.add('active');
+// ============ DEVENIR MENTOR ============
+function openBecomeMentorModal(){
+    const e=$('expertiseCheckboxes');
+    if(e) e.innerHTML = domains.map(d =>
+        `<button class="checkbox-chip" onclick="toggleDomainSelection(this, '${d}')">${d}</button>`
+    ).join('');
+    selectedDomains = [];
+    updateDomainCounter();
+    document.getElementById('titleCounter').textContent = 50;
+    document.getElementById('skillsCounter').textContent = 100;
+    document.getElementById('bioCounter').textContent = 300;
+    $('becomeMentorModal').classList.add('active');
 }
-function closeSessionModal(){$('sessionModal').classList.remove('active');}
-function sendSessionProposal(){
-    if(!activeModalMentorId){showToast('Erreur',true);return;}
-    const m=mentors.find(x=>x.id===activeModalMentorId);
-    if(!m)return;
-    const date=$('sessionDate')?.value;
-    const time=$('sessionTime')?.value;
-    const duration=parseInt($('sessionDuration')?.value)||60;
-    const format=$('sessionFormat')?.value||'Visio';
-    const message=$('sessionMessage')?.value.trim()||'';
-    if(!date||!time){showToast('Date et heure requises',true);return;}
-    sessions.push({
-        id:'s_'+Date.now(),
-        mentorId:m.id,
-        mentorName:m.name,
-        from:currentUser.name,
-        date,time,duration,format,message,
-        status:'pending',
-        createdAt:Date.now()
-    });
-    saveData();
-    closeSessionModal();
-    sendNotification('session_proposal', 'Proposition de session', `Session proposée avec ${m.name} le ${date} à ${time}`, {to:m.name,user:currentUser.name,userAvatar:currentUser.avatar});
-    estraEmit('new_session_proposal', {from:currentUser.name,to:m.name,date,time});
-    showToast(`📅 Session proposée à ${m.name}`);
-    performSearch();
-}
-
-function openBecomeMentorModal(){const e=$('expertiseCheckboxes');if(e)e.innerHTML=domains.map(d=>`<button class="checkbox-chip" onclick="this.classList.toggle('selected')">${d}</button>`).join('');$('becomeMentorModal').classList.add('active');}
 function closeBecomeMentorModal(){$('becomeMentorModal').classList.remove('active');uploadedAvatarUrl=null;}
 function previewAvatar(input){if(input.files&&input.files[0]){const reader=new FileReader();reader.onload=function(e){$('previewMentorAvatar').src=e.target.result;uploadedAvatarUrl=e.target.result;};reader.readAsDataURL(input.files[0]);}}
-function generateBio(){const title=$('mentorTitle').value.trim()||'Professionnel';const exp=$('mentorExperience').value||'plusieurs';const skills=$('mentorSkills').value.trim()||'divers domaines';$('mentorBio').value=`En tant que ${title} avec ${exp} années d'expérience, j'ai développé une expertise en ${skills}. Je suis là pour vous conseiller.`;showToast("Bio générée !");}
+function generateBio(){const title=$('mentorTitle').value.trim()||'Professionnel';const exp=$('mentorExperience').value||'plusieurs';const skills=$('mentorSkills').value.trim()||'divers domaines';$('mentorBio').value='En tant que '+title+' avec '+exp+' années d\'expérience, j\'ai développé une expertise en '+skills+'. Je suis là pour vous conseiller.';updateCharCounter('mentorBio',300,'bioCounter');showToast("Bio générée !");}
+
+let selectedDomains = [];
+function toggleDomainSelection(btn, domain) {
+    if (btn.classList.contains('selected')) {
+        btn.classList.remove('selected');
+        selectedDomains = selectedDomains.filter(d => d !== domain);
+    } else {
+        if (selectedDomains.length >= 5) {
+            showToast('Vous ne pouvez pas sélectionner plus de 5 domaines', true);
+            return;
+        }
+        btn.classList.add('selected');
+        selectedDomains.push(domain);
+    }
+    updateDomainCounter();
+}
+function updateDomainCounter() {
+    const counter = document.getElementById('domainCounter');
+    if (counter) {
+        counter.textContent = selectedDomains.length + ' / 5 sélectionnés';
+        counter.style.color = selectedDomains.length >= 3 ? 'var(--success)' : 'var(--danger)';
+    }
+}
 
 function registerAsMentor(){
-    const sd=[...document.querySelectorAll('#expertiseCheckboxes .checkbox-chip.selected')].map(b=>b.textContent.trim());
-    const title=$('mentorTitle')?.value.trim();const loc=$('mentorLocation')?.value.trim();
-    const exp=parseInt($('mentorExperience')?.value)||0;const skillsRaw=$('mentorSkills')?.value.trim();
-    const b=$('mentorBio')?.value.trim();const l=$('mentorLevel')?.value;const i=$('mentorInstitution')?.value.trim();
-    const finalAvatar=uploadedAvatarUrl||currentUser.avatar;
+    const sd = selectedDomains;
+    const title = $('mentorTitle')?.value.trim();
+    const loc = $('mentorLocation')?.value.trim();
+    const exp = parseInt($('mentorExperience')?.value) || 0;
+    const skillsRaw = $('mentorSkills')?.value.trim();
+    const b = $('mentorBio')?.value.trim();
+    const l = $('mentorLevel')?.value;
+    const i = $('mentorInstitution')?.value.trim();
+    const finalAvatar = uploadedAvatarUrl || currentUser.avatar;
+
     if(!title){showToast(t('toast_title_missing'),true);return}
-    if(!sd.length){showToast(t('toast_select_domain'),true);return}
+    if(sd.length < 3){showToast(t('toast_domain_min'),true);return}
+    if(sd.length > 5){showToast(t('toast_domain_limit'),true);return}
     if(!exp){showToast(t('toast_experience'),true);return}
     if(!skillsRaw){showToast(t('toast_skills'),true);return}
     if(!b){showToast(t('toast_describe_bio'),true);return}
+
     const newMentor = {
         id:Date.now(),
         name:currentUser.name,
@@ -795,17 +1150,16 @@ function registerAsMentor(){
         totalSessions:0,
         totalMentees:0,
         available:true,
-        createdAt:Date.now()
+        createdAt:Date.now(),
+        price:0,
+        recommended:100
     };
     mentors.push(newMentor);
-    // ✅ Mettre à jour le profil utilisateur avec le badge mentor
     const allUsers = getAllUsers();
     const user = allUsers.find(u => u.username === currentUser.username);
     if (user) {
         if (!user.badges) user.badges = [];
-        if (!user.badges.includes('mentor')) {
-            user.badges.push('mentor');
-        }
+        if (!user.badges.includes('mentor')) user.badges.push('mentor');
         user.accountType = 'mentor';
         localStorage.setItem('estra_all_users', JSON.stringify(allUsers));
         estraEmit('profile_updated', {});
@@ -817,26 +1171,26 @@ function registerAsMentor(){
     estraEmit('friends_updated', {});
     showToast(t('toast_congrats_mentor'));
 }
-
 function openChat(id){const m=mentors.find(x=>x.id===id);if(m){window.location.href='messages.html?friend='+encodeURIComponent(m.name);}}
 
 function toggleSidebar(){const s=$('sidebar'),o=$('sidebarOverlay');if(s)s.classList.toggle('open');if(o)o.classList.toggle('active');}
 function closeSidebar(){const s=$('sidebar'),o=$('sidebarOverlay');if(s)s.classList.remove('open');if(o)o.classList.remove('active');}
-function logout(){localStorage.clear();window.location.href='login.html';}
+function logout() {
+    localStorage.removeItem('estra_logged_in');
+    window.location.href = 'login.html';
+}
 
 document.addEventListener('DOMContentLoaded',()=>{
     loadData();
     const so=$('sidebarOverlay');if(so)so.addEventListener('click',closeSidebar);
     const rm=$('requestModal');if(rm)rm.addEventListener('click',e=>{if(e.target===rm)closeRequestModal();});
     const dm=$('mentorDetailsModal');if(dm)dm.addEventListener('click',e=>{if(e.target===dm)closeMentorDetails();});
-    const sm=$('sessionModal');if(sm)sm.addEventListener('click',e=>{if(e.target===sm)closeSessionModal();});
     window.addEventListener('storage',(e)=>{if(e.key&&e.key.startsWith('estra_'))loadData();});
-    window.addEventListener('online',()=>{checkOnlineStatus();showToast('🟢 Connexion rétablie');});
-    window.addEventListener('offline',()=>{checkOnlineStatus();showToast('🔴 Mode hors-ligne');});
+    window.addEventListener('online',()=>{checkOnlineStatus();showToast('Connexion rétablie');});
+    window.addEventListener('offline',()=>{checkOnlineStatus();showToast('Mode hors-ligne');});
     setInterval(updateAllBadges,5000);
 });
 
-// Exports globaux
 window.viewOwnProfile = viewOwnProfile;
 window.viewProfile = viewProfile;
 window.openMentorDetails = openMentorDetails;
@@ -879,18 +1233,20 @@ window.getAllUsers = getAllUsers;
 window.applyTranslations = applyTranslations;
 window.acceptMentorRequest = acceptMentorRequest;
 window.declineMentorRequest = declineMentorRequest;
-window.openSessionModal = openSessionModal;
-window.closeSessionModal = closeSessionModal;
-window.sendSessionProposal = sendSessionProposal;
 window.renderUserBadges = renderUserBadges;
 window.getAllBadges = getAllBadges;
 window.syncAllUsersToDatabase = syncAllUsersToDatabase;
+window.reportMentor = reportMentor;
+window.toggleDomainSelection = toggleDomainSelection;
+window.updateCharCounter = updateCharCounter;
 </script>
+
+<!-- ============ LIEN VERS REPORTS.JS ============ -->
+<script src="reports.js"></script>
 <script src="i18n.js"></script>
 <script src="pwa-init.js"></script>
 <script src="antizome.js"></script>
 <script src="security.js"></script>
 <script src="security-advenced.js"></script>
-<script src="data.js"></script>
 </body>
 </html>
