@@ -407,7 +407,7 @@ img {
             <div class="profile-stats">
                 <div><strong id="sidebarPosts">0</strong><span data-i18n="posts">Posts</span></div>
                 <div><strong id="sidebarFriends">0</strong><span data-i18n="friends_label">Amis</span></div>
-                <div><strong id="sidebarGroups">0</strong><span data-i18n="groups_label">Groupes</span></div>
+                <!-- Groupe retiré -->
             </div>
         </div>
         <nav class="sidebar-nav">
@@ -416,7 +416,6 @@ img {
             <a href="friends.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg> <span data-i18n="friends_label">Amis</span></a>
             <a href="courses.html" class="sidebar-link active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg> <span data-i18n="courses">Cours</span></a>
             <a href="events.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> <span data-i18n="events">Événements</span></a>
-            <a href="groups.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> <span data-i18n="groups_label">Groupes</span></a>
             <a href="mentorship.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg> <span >Mentorat</span></a>
             <a href="profile.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> <span data-i18n="my_profile">Mon Profil</span></a>
             <hr style="margin:10px 0;border-color:var(--estra-border);">
@@ -628,8 +627,8 @@ img {
             <p style="margin-bottom: 20px; color: var(--text-secondary);">Pour accéder à l'intégralité de ce document premium et télécharger le fichier sécurisé, veuillez effectuer le paiement.</p>
             <h2 style="color: var(--estra-warning); font-size: 2rem; margin-bottom: 20px;" id="payAmountDisplay">0 $</h2>
             <div class="form-group" style="text-align: left;">
-                <label>Entrez votre numéro (Airtel / M-Pesa / Orange) *</label>
-                <input type="text" id="userPhonePayment" placeholder="Ex: 099xxxxxxx">
+                <label>Entrez votre numéro Airtel Money </label>
+                <input type="text" id="userPhonePayment" placeholder="Ex: 09xxxxxxxx">
             </div>
             <p style="font-size: 0.75rem; color: var(--text-secondary); margin-bottom: 20px; text-align: left;">Les fonds seront transférés sur le compte de l'auteur : <strong id="authorPhoneDisplay"></strong></p>
             <div class="modal-actions" style="justify-content: center;">
@@ -765,12 +764,11 @@ function getUserByNameOrUsername(nameOrUsername) {
     return users.find(u => u.fullName === nameOrUsername || u.username === nameOrUsername) || null;
 }
 
-// ✅ NOUVEAU : Affichage différencié des badges
+// ✅ Affichage différencié des badges
 function renderUserBadges(badges) {
     if (!badges || badges.length === 0) return '';
     const allBadges = getAllBadges();
     
-    // Liste des badges qui doivent avoir un libellé + fond + bordure
     const badgesWithStyle = ['sponsor', 'premium', 'mentor', 'teacher', 'recruiter'];
     
     return badges.map(badgeId => {
@@ -778,13 +776,10 @@ function renderUserBadges(badges) {
         if (!b) return '';
         
         const hasStyle = badgesWithStyle.includes(b.id);
-        const showLabel = hasStyle ? ` ${b.name}` : '';
         
         if (hasStyle) {
-            // Badge avec fond + bordure (Premium, Sponsor, Mentor, etc.)
             return `<span class="badge-pill" style="background:${b.color}20; color:${b.color}; border:1px solid ${b.color}40; padding:3px 10px; border-radius:15px; font-size:0.65rem; font-weight:700; display:inline-flex; align-items:center; gap:4px; margin:0 2px;" title="${b.desc || b.name}"><i class="fas ${b.icon}"></i> ${b.name}</span>`;
         } else {
-            // Badge sans fond ni bordure (Vérifié, Contributeur, etc.)
             return `<span class="badge-pill icon-only" style="color:${b.color}; font-size:0.7rem; font-weight:600; margin:0 2px; display:inline-flex; align-items:center; gap:3px;" title="${b.desc || b.name}"><i class="fas ${b.icon}"></i></span>`;
         }
     }).join('');
@@ -809,12 +804,11 @@ function updateBadges() {
 }
 
 function loadData() {
-    const savedTheme = 'light'; // Force le thème clair
+    const savedTheme = 'light';
     document.documentElement.setAttribute('data-theme', savedTheme);
     applyTranslations();
     initEcoMode();
     
-    // --- LECTURE DU PROFIL GLOBAL POUR ASSOCIER L'ÉTUDIANT ---
     const sp = localStorage.getItem('estra_profile'); 
     if (sp) { 
         try { 
@@ -871,15 +865,12 @@ function updateSidebar() {
     
     const posts = JSON.parse(localStorage.getItem('estra_posts') || '[]');
     const friends = JSON.parse(localStorage.getItem('estra_friends') || '[]');
-    const userGroups = JSON.parse(localStorage.getItem('estra_userGroups') || '[]');
     
     const sidebarPosts = document.getElementById('sidebarPosts');
     const sidebarFriends = document.getElementById('sidebarFriends');
-    const sidebarGroups = document.getElementById('sidebarGroups');
     
-    if(sidebarPosts) sidebarPosts.textContent = posts.filter(p => p.author === currentUser.name).length || 4;
+    if(sidebarPosts) sidebarPosts.textContent = posts.filter(p => p.author === currentUser.name || p.authorUsername === currentUser.username).length || 4;
     if(sidebarFriends) sidebarFriends.textContent = friends.length || 3;
-    if(sidebarGroups) sidebarGroups.textContent = userGroups.length || 2;
 }
 
 function escapeHtml(t) { if (!t) return ''; const d = document.createElement('div'); d.textContent = t; return d.innerHTML; }
@@ -911,7 +902,6 @@ function renderCourses() {
         if(c.role === 'Établissement' || c.role === 'Entreprise') { roleClass = 'role-badge role-inst'; roleIcon = '<i class="fas fa-building"></i>'; }
         if(c.role === 'Ministère') { roleClass = 'role-badge role-min'; roleIcon = '<i class="fas fa-check-circle"></i>'; }
 
-        // --- RÉCUPÉRATION DES BADGES DE L'AUTEUR (AJOUT) ---
         const authorUser = getUserByNameOrUsername(c.author);
         const authorBadges = authorUser ? renderUserBadges(authorUser.badges || []) : '';
 
@@ -1018,13 +1008,11 @@ function openCourseModal() {
     document.getElementById('courseModal').classList.add('active'); 
     document.body.classList.add('modal-open');
     
-    // --- AUTO-REMPLISSAGE INTELLIGENT DEPUIS LE PROFIL ---
     if(currentUser.accountType === 'student') {
         document.getElementById('authorRole').value = 'Étudiant';
         if(currentUser.university) document.getElementById('courseInstitution').value = currentUser.university;
         if(currentUser.domain) document.getElementById('courseFiliere').value = currentUser.domain;
         
-        // Sélectionner automatiquement le bon niveau (L1, L2, etc.)
         if(currentUser.promotion) {
             const levelSelect = document.getElementById('courseLevel');
             for(let i=0; i < levelSelect.options.length; i++) {
@@ -1116,7 +1104,6 @@ function publishCourse() {
         return; 
     }
 
-    // ✅ 1. CRÉER LE COURS
     const nc = { 
         id: Date.now(), 
         title, 
@@ -1140,7 +1127,6 @@ function publishCourse() {
         timestamp: Date.now() 
     };
     
-    // ✅ 2. SAUVEGARDER DANS LES COURS
     courses.unshift(nc); 
     saveCourses(); 
     renderCourses(); 
@@ -1148,17 +1134,14 @@ function publishCourse() {
     showToast(`✅ Fichier sécurisé et publié avec succès.`);
     addNotification('course_published', t('notif_course_published'), `Document "${title}" publié avec succès`, { courseId: nc.id });
     
-    // ✅ 3. CRÉER UN POST DANS LE FIL D'ACTUALITÉ (SYNC AVEC HOME)
     createPostFromCourse(nc);
     
-    // ✅ 4. NOTIFIER LES AUTRES PAGES
     localStorage.setItem('estra_course_published', JSON.stringify({
         course: nc,
         timestamp: Date.now()
     }));
     localStorage.setItem('estra_course_trigger', Date.now().toString());
     
-    // ✅ 5. AJOUTER DANS LES ÉVÉNEMENTS (POUR LE PROFIL)
     const events = JSON.parse(localStorage.getItem('estra_events') || '[]');
     const newEvent = {
         id: Date.now() + 2,
@@ -1178,7 +1161,6 @@ function publishCourse() {
     events.unshift(newEvent);
     localStorage.setItem('estra_events', JSON.stringify(events));
     
-    // ✅ 6. RÉINITIALISER LE FORMULAIRE
     document.getElementById('courseTitle').value = '';
     document.getElementById('courseDescription').value = '';
     document.getElementById('courseToc').value = '';
@@ -1193,7 +1175,6 @@ function publishCourse() {
 function createPostFromCourse(course) {
     const posts = JSON.parse(localStorage.getItem('estra_posts') || '[]');
     
-    // ✅ Vérifier si le post existe déjà (éviter les doublons)
     const exists = posts.some(p => p.courseData && p.courseData.id === course.id);
     if (exists) return;
     
@@ -1229,7 +1210,6 @@ function createPostFromCourse(course) {
     posts.unshift(newPost);
     localStorage.setItem('estra_posts', JSON.stringify(posts));
     
-    // ✅ Notification pour les autres onglets
     localStorage.setItem('estra_course_trigger', Date.now().toString());
 }
 
@@ -1238,7 +1218,12 @@ function openPaymentModal(id) {
     if (!c) return;
     currentPaymentCourseId = id;
     document.getElementById('payAmountDisplay').textContent = `${c.price} $`;
-    document.getElementById('authorPhoneDisplay').textContent = c.paymentNumber || "Numéro sécurisé du créateur";
+    
+    // Masquage du numéro : seuls les 4 derniers chiffres sont visibles
+    const phone = c.paymentNumber || "";
+    const masked = phone.length >= 1 ? '*********' + phone.slice(-1) : (phone || "Numéro sécurisé du créateur");
+    document.getElementById('authorPhoneDisplay').textContent = masked;
+    
     document.getElementById('paymentModal').classList.add('active');
     document.body.classList.add('modal-open');
 }
@@ -1259,7 +1244,7 @@ function processPayment() {
         localStorage.setItem('estra_purchased_courses', JSON.stringify(purchasedCourses));
         closePaymentModal();
         renderCourses();
-        showToast("✅ Achat validé ! Clé de déchiffrement reçue.");
+        showToast(" Achat validé ! Clé de déchiffrement reçue.");
         
         const c = courses.find(x => x.id === currentPaymentCourseId);
         if (c) addNotification('course_purchased', t('notif_course_purchased'), `Document "${c.title}" acheté`, { courseId: currentPaymentCourseId });
@@ -1299,7 +1284,6 @@ function reportCourse(id) {
 function reportPost(postId) {
     closeAllSheets();
     
-    // Vérifier si la fonction de signalement existe
     if (typeof openReportModal === 'function') {
         openReportModal(postId);
     } else if (typeof window.reportContent === 'function') {
@@ -1385,7 +1369,6 @@ function closeCourseDetailModal() {
 function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); document.getElementById('sidebarOverlay').classList.toggle('active'); }
 function closeSidebar() { document.getElementById('sidebar').classList.remove('open'); document.getElementById('sidebarOverlay').classList.remove('active'); }
 function logout() { localStorage.clear(); window.location.href = 'login.html'; }
-// 🆕 Base de données des utilisateurs pour les liens de profil
 const allPeopleSuggestions = [
     {name:"Rashidi", username:"rashidi", avatar:"https://ui-avatars.com/api/?name=Rashidi&background=38bdf8&color=fff"},
     {name:"Marie Claire", username:"marie_claire", avatar:"https://ui-avatars.com/api/?name=Marie&background=10b981&color=fff"},
@@ -1428,7 +1411,6 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('online', () => { checkOnlineStatus(); showToast('🟢 Connexion rétablie'); });
     window.addEventListener('offline', () => { checkOnlineStatus(); showToast('🔴 Mode hors-ligne'); });
     
-    // Communication inter-pages
     window.addEventListener('storage', (e) => {
     if (e.key === 'estra_notification_trigger') { updateBadges(); }
     if (e.key === 'estra_theme' && e.newValue) { document.documentElement.setAttribute('data-theme', e.newValue); }
@@ -1436,7 +1418,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (e.key === 'estra_profile') { loadData(); }
     if (e.key === 'estra_conversations') { updateBadges(); }
     
-    // Synchronisation nom
     if (e.key === 'estra_name_updated') {
         try {
             const data = JSON.parse(e.newValue || '{}');
@@ -1449,7 +1430,6 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (err) {}
     }
     
-    // Synchronisation avatar
     if (e.key === 'estra_avatar_updated') {
         try {
             const data = JSON.parse(e.newValue || '{}');
@@ -1462,14 +1442,12 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (err) {}
     }
     
-    // Synchronisation badges (AJOUT)
     if (e.key === 'estra_all_users' || e.key === 'estra_badges') {
         if (typeof renderCourses === 'function') renderCourses();
         if (typeof renderAllPosts === 'function') renderAllPosts();
         if (typeof updateSidebar === 'function') updateSidebar();
     }
     
-    // Nouveau post depuis courses.html
     if (e.key === 'estra_post_trigger') {
         if (typeof posts !== 'undefined') {
             posts = JSON.parse(localStorage.getItem('estra_posts') || '[]');
@@ -1518,10 +1496,8 @@ window.getAllUsers = getAllUsers;
 window.getAllBadges = getAllBadges;
 </script>
 <script src="reports.js"></script>
-<script src="sync.js"></script>
 <script src="antizome.js"></script>
 <script src="security.js"></script>
 <script src="security-advenced.js"></script>
-<script src="data.js"></script>
 </body>
 </html>
