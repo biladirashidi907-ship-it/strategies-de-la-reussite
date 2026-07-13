@@ -431,7 +431,7 @@
         <div class="profile-section">
             <div style="position:relative;display:inline-block"><img src="" class="profile-img-sidebar" id="sidebarAvatar" alt="Avatar"><div class="online-indicator"></div></div>
             <h3 style="margin:0;font-size:1.05rem;color:var(--text);" id="sidebarName">Utilisateur</h3>
-            <div class="profile-stats"><div><strong id="sidebarPosts">0</strong><span>Posts</span></div><div><strong id="sidebarFriends">0</strong><span>Amis</span></div><div><strong id="sidebarGroups">0</strong><span>Groupes</span></div></div>
+            <div class="profile-stats"><div><strong id="sidebarPosts">0</strong><span>Posts</span></div><div><strong id="sidebarFriends">0</strong><span>Amis</span></div><div><strong id="sidebarGroups">0</strong><span>Binômes</span></div></div>
         </div>
         <nav class="sidebar-nav">
             <a href="home.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg> Accueil</a>
@@ -439,7 +439,7 @@
             <a href="friends.html" class="sidebar-link active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg> Amis & Binômes</a>
             <a href="courses.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg> Cours</a>
             <a href="events.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/></svg> Événements</a>
-            <a href="groups.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> Groupes</a>
+            <a href="mentorship.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg> Mentorat</a>
             <a href="profile.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> Mon Profil</a>
             <hr style="margin:10px 0;border-color:rgba(0,0,0,0.1);">
             <button class="sidebar-link logout-link" onclick="logout()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg> Déconnexion</button>
@@ -501,7 +501,7 @@
         <a href="home.html" class="bottom-nav-item"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></a>
         <a href="notifications.html" class="bottom-nav-item" style="position:relative;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg><span class="badge-count" id="notifBadge" style="display:none;">0</span></a>
         <a href="messages.html" class="bottom-nav-item" style="position:relative"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg><span class="badge-count" id="msgBadge" style="display:none">0</span></a>
-        <a href="groups.html" class="bottom-nav-item"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></a>
+        <a href="courses.html" class="bottom-nav-item"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></a>
         <a href="profile.html" class="bottom-nav-item"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></a>
     </div>
     <div id="toastMsg" class="toast-custom"></div>
@@ -558,7 +558,6 @@ function renderUserBadges(badges) {
     // Hiérarchie des badges (un seul avec libellé)
     const badgesWithStyle = ['sponsor', 'partner', 'mentor', 'premium', 'teacher', 'recruiter'];
     
-    // Séparer les badges avec libellé et sans libellé
     const withLabel = [];
     const withoutLabel = [];
     
@@ -572,11 +571,9 @@ function renderUserBadges(badges) {
         }
     });
     
-    // Trier les badges avec libellé par priorité (sponsor > partner > mentor > premium > teacher > recruiter)
     const priority = { sponsor: 1, partner: 2, mentor: 3, premium: 4, teacher: 5, recruiter: 6 };
     withLabel.sort((a, b) => (priority[a.id] || 99) - (priority[b.id] || 99));
     
-    // Garder UNIQUEMENT le badge avec la plus haute priorité (le premier)
     const mainBadge = withLabel.length > 0 ? withLabel[0] : null;
     
     let html = '';
@@ -585,7 +582,6 @@ function renderUserBadges(badges) {
         html += `<span class="badge-pill" style="${style}"><i class="fas ${mainBadge.icon}"></i> ${mainBadge.name}</span>`;
     }
     
-    // Ajouter les badges sans libellé (icônes seules)
     withoutLabel.forEach(b => {
         html += `<span class="badge-pill icon-only" style="color:${b.color}; font-size:0.8rem; margin:0 2px; display:inline-flex; align-items:center; gap:3px;" title="${b.desc || b.name}"><i class="fas ${b.icon}"></i></span>`;
     });
@@ -751,7 +747,6 @@ function loadAllData() {
         badges: u.badges || [],
         blocked: u.blocked || false
     }));
-    // Exclure les suggestions avec demande envoyée (pour éviter les doublons dans l'onglet suggestions)
     const sentNames = [...sentFriendRequests.map(r => r.name), ...sentBinomeRequests.map(r => r.name)];
     suggestions = suggestions.filter(s => !sentNames.includes(s.name));
     
@@ -764,18 +759,23 @@ function loadAllData() {
 }
 
 function updateSidebarStats() {
+    const profile = ESTRA.getProfile();
+    const posts = JSON.parse(localStorage.getItem('estra_posts') || '[]');
+    const username = profile.username || currentUser.username;
+    const myPosts = posts.filter(p => p.authorUsername === username || p.author === profile.fullName || p.author === currentUser.name);
+    document.getElementById('sidebarPosts').textContent = myPosts.length;
     document.getElementById('sidebarFriends').textContent = friends.length;
     document.getElementById('sidebarGroups').textContent = binomes.length;
     document.getElementById('sidebarAvatar').src = currentUser.avatar;
     document.getElementById('navAvatar').src = currentUser.avatar;
     document.getElementById('sidebarName').textContent = currentUser.name;
 }
+
 function updateRightPanelStats() {
     document.getElementById('ballTotalFriends').textContent = friends.length;
     document.getElementById('ballBinomes').textContent = binomes.length;
     document.getElementById('ballMentors').textContent = 0;
 }
-function updateBadges() {}
 
 // ============ FONCTIONS DE RENDU ============
 let currentMainTab = 'suggestions';
@@ -792,7 +792,6 @@ function renderCard(person, mode) {
     }
     const onlineDot = (person.online !== undefined) ? `<span class="online-dot ${person.online ? '' : 'offline'}" style="${person.online ? '' : 'background:#94a3b8;'}"></span>` : '';
 
-    // Badges utilisateur (version admin avec hiérarchie)
     const badgesHtml = renderUserBadges(person.badges || []);
 
     const blockedHtml = person.blocked ? `<span class="blocked-indicator"><i class="fas fa-ban"></i> Bloqué</span>` : '';
@@ -894,9 +893,7 @@ function getCurrentList() {
         if (q) filtered = suggestions.filter(s => s.name.toLowerCase().includes(q) || (s.bio||'').toLowerCase().includes(q));
         return { mode: 'suggestions', list: filtered };
     } else if (currentMainTab === 'pending') {
-        // Récupérer toutes les demandes envoyées (que j'ai envoyées) + les demandes reçues (qu'on m'a envoyées)
         let allPending = [];
-        // Demandes que j'ai envoyées (en attente de réponse)
         sentFriendRequests.forEach(r => {
             allPending.push({
                 id: r.id || 'sf_' + Date.now(),
@@ -929,7 +926,6 @@ function getCurrentList() {
                 since: 'Demande envoyée'
             });
         });
-        // Demandes reçues (que l'autre m'a envoyées) - à accepter/refuser
         pendingFriendRequests.forEach(r => {
             allPending.push({
                 id: r.id || 'pf_' + Date.now(),
@@ -1032,7 +1028,6 @@ function sendRequest(personId, type) {
     const person = suggestions.find(s => s.id === personId);
     if (!person) return;
     
-    // Vérifier si une demande existe déjà
     if (type === 'ami') {
         if (sentFriendRequests.some(r => r.id === personId)) {
             showToast('Demande déjà envoyée');
@@ -1055,7 +1050,6 @@ function sendRequest(personId, type) {
 }
 
 function acceptPendingRequest(personId, type) {
-    // Simuler l'acceptation d'une demande reçue
     let requestList = type === 'pending' || type === 'ami' ? pendingFriendRequests : pendingBinomeRequests;
     const idx = requestList.findIndex(r => r.id === personId || r.fromUsername === personId || r.name === personId);
     if (idx === -1) {
@@ -1067,7 +1061,6 @@ function acceptPendingRequest(personId, type) {
     const username = request.fromUsername || name.toLowerCase().replace(/\s+/g, '_');
     const avatar = request.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=0284c7&color=fff`;
     
-    // Ajouter aux amis/binômes
     if (type === 'pending' || type === 'ami') {
         const newFriend = {
             id: 'f_' + Date.now(),
@@ -1115,9 +1108,7 @@ function acceptPendingRequest(personId, type) {
         showToast(`✅ ${name} est maintenant votre binôme !`);
     }
     
-    // Supprimer la demande
     requestList.splice(idx, 1);
-    // Mettre à jour localStorage
     if (type === 'pending' || type === 'ami') {
         localStorage.setItem('estra_pending_friend_requests', JSON.stringify(pendingFriendRequests));
     } else {
@@ -1126,7 +1117,6 @@ function acceptPendingRequest(personId, type) {
     
     saveData();
     renderCurrentList();
-    // Émettre pour synchroniser avec home.html
     estraEmit('pending_updated', {});
 }
 
@@ -1259,7 +1249,5 @@ window.getAllBadges = getAllBadges;
 window.renderUserBadges = renderUserBadges;
 window.enrichWithUserData = enrichWithUserData;
 </script>
-<script src="synjs"></script>
-<script src="dat.js"></script>
 </body>
 </html>
