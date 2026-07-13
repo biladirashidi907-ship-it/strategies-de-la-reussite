@@ -5,11 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
     <title data-i18n="page_title">ESTRA LINK | Événements</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    
-    <!-- LEAFLET CSS (Pour la carte interactive de création) -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-
-    <!-- PWA -->
     <link rel="manifest" href="/manifest.json">
     <meta name="theme-color" content="#38bdf8">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -50,7 +46,6 @@
             --estra-border: rgba(0,0,0,0.08);
         }
 
-        /* ============ SIDEBAR & NAVBAR ============ */
         [data-theme="light"] .sidebar { background: #ffffff; border-right: 1px solid rgba(0,0,0,0.1); }
         [data-theme="light"] .sidebar .profile-section { border-bottom-color: rgba(0,0,0,0.1); }
         [data-theme="light"] .sidebar .sidebar-link { color: #475569; }
@@ -59,9 +54,6 @@
         [data-theme="light"] .sidebar h3 { color: #0f172a !important; }
         [data-theme="light"] .navbar { background: rgba(255,255,255,0.9); border-bottom-color: rgba(0,0,0,0.1); }
         [data-theme="light"] .main-content { background: #f8fafc; border-color: rgba(0,0,0,0.08); }
-
-
-
 
         *{margin:0;padding:0;box-sizing:border-box}
     body{
@@ -76,8 +68,6 @@
 
     .offline-banner{position:fixed;top:0;left:0;right:0;background:#f59e0b;color:#000;text-align:center;padding:6px;z-index:9999;font-size:0.8rem;font-weight:600;display:none}
 
-    /* SIDEBAR (Original Restauration Complète) */
-    /* ============ ANTI-ZOOM & ANTI-SÉLECTION GLOBALE ============ */
 html {
     touch-action: manipulation;
     -ms-touch-action: manipulation;
@@ -92,7 +82,6 @@ body {
     -webkit-tap-highlight-color: transparent;
 }
 
-/* Réactiver la sélection uniquement dans les champs de saisie */
 input, textarea, [contenteditable="true"] {
     -webkit-user-select: text !important;
     -moz-user-select: text !important;
@@ -100,7 +89,6 @@ input, textarea, [contenteditable="true"] {
     user-select: text !important;
 }
 
-/* Désactiver le zoom sur les images */
 img {
     touch-action: manipulation;
     -webkit-user-drag: none;
@@ -108,7 +96,6 @@ img {
     user-select: none;
 }
 
-/* Empêcher l'agrandissement dans le viewer d'image */
 .image-viewer-full img,
 .full-image-view img {
     touch-action: manipulation !important;
@@ -129,13 +116,9 @@ img {
     .sidebar-link:hover,.sidebar-link.active{background:var(--active-bg);color:var(--cyan);transform:translateX(5px);border-right:2px solid var(--cyan)}
     .sidebar-link.logout-link{color:var(--danger)}.sidebar-link.logout-link:hover{background:rgba(239,68,68,0.1);color:var(--danger);border-right-color:var(--danger)}
 
-    /* NAVBAR */
     .navbar{padding:10px 15px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border-color);background:var(--navbar-bg);backdrop-filter:blur(12px);position:sticky;top:0;z-index:100;transition:background-color 0.4s ease,border-color 0.4s ease}
     .nav-left,.nav-right{display:flex;align-items:center;gap:12px}
     .navbar-brand{font-weight:800;color:coral;letter-spacing:1.5px;font-size:1.1rem;text-decoration:none}
-
-
-
 
         .menu-toggle{background:0 0;border:0;cursor:pointer;padding:8px;display:flex;align-items:center;color:var(--text-secondary);transition:var(--transition)}
         .menu-toggle:hover{color:var(--estra-cyan)}
@@ -143,7 +126,6 @@ img {
 
         .main-content { max-width: 1100px; margin: 0 auto; padding: 0 16px; min-height:calc(100vh - 60px); }
         
-        /* ============ PAGE HEADER ============ */
         .page-header {
             display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;
             margin: 16px 0; padding: 28px 24px;
@@ -156,7 +138,28 @@ img {
         .create-btn { background: rgba(255,255,255,0.2); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.4); padding: 12px 24px; border-radius: 30px; color: #fff; cursor: pointer; font-weight: 700; display: flex; align-items: center; gap: 8px; transition: var(--transition); font-family: inherit; font-size: .9rem; z-index: 1; }
         .create-btn:hover { background: #fff; color: var(--estra-cyan); transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.15); }
 
-        /* ============ FILTERS & VIEW TOGGLE ============ */
+        /* ===== NOUVEAU BOUTON STATS & BOOST ===== */
+        .stats-btn {
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.3);
+            padding: 12px 20px;
+            border-radius: 30px;
+            color: #fff;
+            cursor: pointer;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: var(--transition);
+            font-family: inherit;
+            font-size: .9rem;
+            z-index: 1;
+            display: none; /* caché par défaut */
+        }
+        .stats-btn.visible { display: flex; }
+        .stats-btn:hover { background: #fff; color: var(--estra-cyan); transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.15); }
+
         .events-filters { display:flex; gap:12px; padding: 0 0 20px 0; overflow-x:auto; margin-top: 8px; scrollbar-width: none; }
         .events-filters::-webkit-scrollbar { display: none; }
         .filter-chip { padding:10px 24px; background:var(--estra-card-bg); border:1px solid var(--estra-border); border-radius:30px; color:var(--text-secondary); cursor:pointer; font-size:.85rem; font-weight:600; transition:var(--transition); white-space:nowrap; flex-shrink:0; }
@@ -170,7 +173,6 @@ img {
         [data-theme="light"] .view-btn { background: #fff; border-color: rgba(0,0,0,0.1); color: #475569; }
         [data-theme="light"] .view-btn.active { background: #0f172a; color: #fff; }
 
-        /* ============ EVENT CARD ============ */
         .list-view { display: grid; grid-template-columns: 1fr; gap: 24px; }
         @media(min-width: 768px) { .list-view { grid-template-columns: repeat(2, 1fr); } }
 
@@ -204,13 +206,178 @@ img {
         .btn-save-floating { position: absolute; bottom: 20px; right: 20px; z-index: 10; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); backdrop-filter: blur(10px); width: 44px; height: 44px; border-radius: 14px; display: flex; align-items: center; justify-content: center; color: #fff; cursor: pointer; transition: var(--transition); font-size: 1.1rem; }
         .btn-save-floating.saved { background: var(--estra-gold); border-color: var(--estra-gold); color: #000; }
 
-        /* ============ MODAL CREATION (SLIDING) ============ */
         .modal-backdrop-desk { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); backdrop-filter:blur(4px); z-index:1999; opacity:0; visibility:hidden; transition:var(--transition); }
         .modal-backdrop-desk.active { opacity:1; visibility:visible; }
         
         .modal-fullscreen { position:fixed; inset:0; background:var(--estra-bg-dark); z-index:2000; overflow-y:auto; opacity:0; visibility:hidden; transition:var(--transition); display:flex; flex-direction:column; }
         .modal-fullscreen.active { opacity:1; visibility:visible; }
         [data-theme="light"] .modal-fullscreen { background: #ffffff; }
+
+        /* ===== STATS MODALE ===== */
+        .stats-modal {
+            position:fixed; inset:0; background:var(--estra-bg-dark); z-index:2100; overflow:hidden;
+            opacity:0; visibility:hidden; transition:var(--transition);
+            display:flex; flex-direction:column;
+        }
+        .stats-modal.active { opacity:1; visibility:visible; }
+        [data-theme="light"] .stats-modal { background: #f8fafc; }
+
+        .stats-modal .modal-header {
+            display:flex; align-items:center; justify-content:space-between;
+            padding:16px 24px; border-bottom:1px solid var(--estra-border);
+            background:var(--estra-bg-dark); flex-shrink:0;
+            position:sticky; top:0; z-index:10;
+        }
+        [data-theme="light"] .stats-modal .modal-header { background: #f8fafc; }
+        .stats-modal .modal-header h3 {
+            font-size:1.2rem; font-weight:800; color:var(--text-primary);
+            display:flex; align-items:center; gap:10px; margin:0;
+        }
+        .stats-modal .modal-close {
+            background:none; border:none; font-size:1.8rem; color:var(--text-secondary);
+            cursor:pointer; padding:8px; border-radius:50%; line-height:1;
+            transition:var(--transition);
+        }
+        .stats-modal .modal-close:hover { color:var(--estra-danger); }
+
+        .stats-body {
+            flex:1; display:flex; overflow:hidden;
+            flex-direction:column; min-height:0;
+        }
+        @media(min-width: 768px) {
+            .stats-body { flex-direction:row; }
+        }
+
+        .stats-list {
+            flex:0 0 100%;
+            padding:16px 20px;
+            overflow-y:auto;
+            border-right:1px solid var(--estra-border);
+            background:var(--estra-card-bg);
+        }
+        [data-theme="light"] .stats-list { background:#fff; }
+        @media(min-width: 768px) {
+            .stats-list { flex:0 0 340px; }
+        }
+
+        .stats-list .stats-event-item {
+            display:flex; align-items:center; gap:12px;
+            padding:14px 16px; border-radius:14px;
+            cursor:pointer; transition:var(--transition);
+            border:1px solid transparent; margin-bottom:10px;
+            background:var(--estra-bg-dark);
+        }
+        [data-theme="light"] .stats-list .stats-event-item { background:#f1f5f9; }
+        .stats-list .stats-event-item:hover { background:rgba(56,189,248,0.06); border-color:var(--estra-cyan); }
+        .stats-list .stats-event-item.active { background:rgba(56,189,248,0.12); border-color:var(--estra-cyan); }
+        .stats-event-thumb {
+            width:50px; height:50px; border-radius:12px; object-fit:cover; flex-shrink:0;
+            background:#e2e8f0;
+        }
+        .stats-event-info { flex:1; min-width:0; }
+        .stats-event-info .title { font-weight:700; font-size:0.95rem; color:var(--text-primary); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+        .stats-event-info .meta { font-size:0.75rem; color:var(--text-secondary); display:flex; gap:12px; flex-wrap:wrap; margin-top:2px; }
+        .stats-event-info .meta span { display:flex; align-items:center; gap:4px; }
+        .stats-event-badge {
+            font-size:0.65rem; font-weight:700; padding:4px 10px; border-radius:12px;
+            background:var(--estra-cyan); color:#fff; white-space:nowrap;
+        }
+        .stats-event-badge.passed { background:#94a3b8; }
+        .stats-event-badge.boosted { background:var(--estra-gold); color:#000; }
+
+        .stats-detail {
+            flex:1; padding:20px 24px; overflow-y:auto;
+            background:var(--estra-bg-dark);
+            display:flex; flex-direction:column;
+        }
+        [data-theme="light"] .stats-detail { background:#f8fafc; }
+
+        .stats-detail .empty-state {
+            text-align:center; color:var(--text-secondary); padding:60px 20px;
+            display:flex; flex-direction:column; align-items:center; gap:16px;
+        }
+        .stats-detail .empty-state i { font-size:3rem; opacity:0.4; }
+        .stats-detail .detail-title { font-size:1.5rem; font-weight:800; color:var(--text-primary); margin-bottom:4px; }
+        .stats-detail .detail-sub { color:var(--text-secondary); font-size:0.9rem; margin-bottom:16px; display:flex; gap:16px; flex-wrap:wrap; }
+
+        .stats-grid {
+            display:grid; grid-template-columns:repeat(auto-fill,minmax(140px,1fr)); gap:12px;
+            margin:16px 0 20px;
+        }
+        .stats-grid .stat-card {
+            background:var(--estra-card-bg); border-radius:16px; padding:16px;
+            text-align:center; border:1px solid var(--estra-border);
+        }
+        [data-theme="light"] .stats-grid .stat-card { background:#fff; }
+        .stats-grid .stat-card .number { font-size:1.6rem; font-weight:800; color:var(--text-primary); }
+        .stats-grid .stat-card .label { font-size:0.75rem; color:var(--text-secondary); margin-top:4px; }
+
+        .boost-section {
+            background:var(--estra-card-bg); border-radius:16px; padding:20px;
+            border:1px solid var(--estra-border); margin-top:auto;
+        }
+        [data-theme="light"] .boost-section { background:#fff; }
+        .boost-section .boost-title { font-weight:700; font-size:1rem; margin-bottom:8px; display:flex; align-items:center; gap:8px; }
+        .boost-options { display:flex; gap:12px; flex-wrap:wrap; margin:12px 0; }
+        .boost-option {
+            flex:1; min-width:100px; background:var(--estra-bg-dark); border-radius:12px;
+            padding:14px 12px; text-align:center; border:2px solid transparent;
+            cursor:pointer; transition:var(--transition);
+        }
+        [data-theme="light"] .boost-option { background:#f1f5f9; }
+        .boost-option:hover { border-color:var(--estra-cyan); }
+        .boost-option.selected { border-color:var(--estra-cyan); background:rgba(56,189,248,0.06); }
+        .boost-option .duration { font-weight:800; font-size:1.1rem; }
+        .boost-option .price { font-size:0.9rem; color:var(--text-secondary); }
+        .boost-option .desc { font-size:0.7rem; color:var(--text-secondary); margin-top:4px; }
+        .boost-btn {
+            background:var(--estra-cyan); border:none; padding:12px 24px; border-radius:30px;
+            color:#0f172a; font-weight:700; cursor:pointer; font-family:inherit;
+            box-shadow:0 4px 15px rgba(56,189,248,0.3); transition:var(--transition);
+            display:inline-flex; align-items:center; gap:8px;
+        }
+        .boost-btn:hover { transform:scale(1.02); }
+        .boost-btn:disabled { opacity:0.5; cursor:not-allowed; transform:none; }
+
+        .boost-badge-active {
+            display:inline-flex; align-items:center; gap:6px;
+            background:var(--estra-gold); color:#000; padding:6px 14px;
+            border-radius:20px; font-weight:700; font-size:0.85rem;
+        }
+        .boost-badge-active i { font-size:1rem; }
+
+        .modal-header .header-actions {
+            display:flex; align-items:center; gap:12px;
+        }
+
+        .toast-custom {
+            position:fixed; bottom:100px; left:50%; transform:translateX(-50%);
+            background:#0f172a; color:#fff; padding:14px 28px; border-radius:30px;
+            font-weight:600; font-size:0.9rem; box-shadow:0 10px 30px rgba(0,0,0,0.3);
+            z-index:9999; opacity:0; transition:opacity 0.4s ease; pointer-events:none;
+            max-width:90vw; text-align:center;
+        }
+        .toast-custom.show { opacity:1; }
+
+        .modal-header .modal-header h3 {
+            margin:0;
+        }
+        .modal-header .header-actions {
+            display:flex; align-items:center; gap:12px;
+        }
+        .modal-header .header-actions .modal-close {
+            font-size:1.8rem; color:var(--text-secondary);
+            cursor:pointer; padding:8px; border-radius:50%; line-height:1;
+            transition:var(--transition); background:none; border:none;
+        }
+        .modal-header .header-actions .modal-close:hover { color:var(--estra-danger); }
+
+        .stats-detail .detail-image {
+            width:100%; max-height:180px; object-fit:cover; border-radius:16px;
+            margin-bottom:12px;
+        }
+
+        /* ===== FIN STATS ===== */
 
         .modal-header { display:flex; align-items:center; justify-content:space-between; padding:16px 20px; border-bottom:1px solid var(--estra-border); position:sticky; top:0; background:var(--estra-bg-dark); z-index:10; }
         [data-theme="light"] .modal-header { background: #ffffff; }
@@ -238,10 +405,8 @@ img {
         .image-preview{margin-top:12px;position:relative}.image-preview img{width:100%;max-height:200px;object-fit:cover;border-radius:14px}
         .remove-image-btn{position:absolute;top:8px;right:8px;background:rgba(239,68,68,.9);color:#fff;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;border:0;}
         
-        /* Map Styles Leaflet Overrides */
         .leaflet-container { font-family: inherit; z-index: 1; }
 
-        /* ============ MODAL DETAIL (3E COLONNE ORIGINAL) ============ */
         .modal-overlay { position:fixed; inset:0; background:rgba(15,23,42,.8); backdrop-filter:blur(10px); z-index:200; display:none; align-items:center; justify-content:center; padding:20px; }
         .modal-overlay.active { display:flex; }
         .modal-content { background:var(--estra-card-bg); width:100%; max-width:550px; max-height:90vh; overflow-y:auto; border-radius:24px; border:1px solid var(--estra-border); box-shadow: 0 20px 40px rgba(0,0,0,0.3); position:relative; }
@@ -280,7 +445,6 @@ img {
         .ticket-barcode-img { height: 40px; width: 80%; background: repeating-linear-gradient(90deg, var(--text-primary) 0, var(--text-primary) 2px, transparent 2px, transparent 4px, var(--text-primary) 4px, var(--text-primary) 5px, transparent 5px, transparent 8px); margin: 0 auto 8px; }
         [data-theme="light"] .ticket-barcode-img { background: repeating-linear-gradient(90deg, #0f172a 0, #0f172a 2px, transparent 2px, transparent 4px, #0f172a 4px, #0f172a 5px, transparent 5px, transparent 8px); }
 
-        /* ============ VIP TICKET MODAL ============ */
         .vip-ticket-modal { position:fixed; inset:0; background:rgba(0,0,0,0.9); z-index:3000; display:none; align-items:center; justify-content:center; padding:20px; flex-direction: column; backdrop-filter: blur(10px); }
         .vip-ticket-modal.active { display:flex; animation: fadeIn 0.3s ease; }
         @keyframes fadeIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
@@ -295,7 +459,6 @@ img {
         .vip-btn { flex: 1; padding: 14px; border-radius: 16px; border: none; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 0.95rem; }
         .vip-btn-primary { background: #fff; color: #000; } .vip-btn-secondary { background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.3); }
 
-        /* ============ CALENDAR ============ */
         .calendar-view{padding:0 16px 20px;display:none}.calendar-view.active{display:block}
         .calendar-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px; background: var(--estra-card-bg); padding: 12px 20px; border-radius: 16px; border: 1px solid var(--estra-border);}
         .calendar-month{font-size:1.2rem;font-weight:700}
@@ -307,25 +470,18 @@ img {
         .calendar-day-number{font-size:1rem;font-weight:600}
         .event-dot{position:absolute;bottom:6px;width:6px;height:6px;background:#0f172a;border-radius:50%}
 
-
-
-        /* =====================================================================
-           RESPONSIVE DESKTOP (Mappé sur 3 colonnes)
-           ===================================================================== */
-        .detail-sidebar { display: none; } /* Caché sur mobile */
+        .detail-sidebar { display: none; }
 
         @media (min-width: 1280px) {
             .menu-toggle { display: none; }
             
-            /* 2. Contenu Principal */
             .main-content { 
                 margin-left: 260px; 
-                margin-right: 610px; /* Laisse de la place pour la 3e colonne */
+                margin-right: 610px;
                 max-width: none; 
             }
             .list-view { grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
             
-            /* 3. Colonne de Détails (Fixe à droite) */
             .detail-sidebar {
                 display: flex; flex-direction: column; justify-content: flex-start; align-items: center;
                 position: fixed; top: 0; right: 50px; width: 480px; height: 100vh;
@@ -335,7 +491,6 @@ img {
             }
             [data-theme="light"] .detail-sidebar { background: #f8fafc; }
             
-            /* 4. Comportement du Modal Détail dans la 3e colonne */
             .modal-overlay#eventDetailModal {
                 position: fixed; top: 60px; right: 80px; left: auto; bottom: auto;
                 width: 420px; height: calc(100vh - 60px);
@@ -351,7 +506,6 @@ img {
             }
             #eventDetailContent { border-radius: 0 !important; border: none !important; box-shadow: none !important; min-height: 100%; }
             
-            /* 5. Comportement du Modal Création (Sliding Panel) */
             .modal-backdrop-desk { display:block; z-index:1900; }
             .modal-fullscreen#createEventModal { 
                 left: auto; right: 0; width: 500px; z-index:2000;
@@ -361,18 +515,23 @@ img {
             }
             .modal-fullscreen#createEventModal.active { transform: translateX(0); }
         }
+
+        .char-counter { text-align: right; font-size: 0.7rem; color: var(--text-secondary); margin-top: 4px; font-weight: 500; }
+        .char-counter .limit-reached { color: var(--danger); }
     </style>
 </head>
 <body>
 <div class="offline-banner" id="offlineBanner"> <span data-i18n="offline_mode">Mode hors-ligne</span></div>
 <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
 
-<!-- 1. SIDEBAR -->
 <aside class="sidebar" id="sidebar">
     <div class="profile-section">
         <div style="position:relative;display:inline-block"><img src="" class="profile-img-sidebar" id="sidebarAvatar" alt="Avatar"><div class="online-indicator" id="userOnlineIndicator"></div></div>
         <h3 style="margin:0;font-size:1.05rem;color:var(--text-primary)" id="sidebarName">Rashidi</h3>
-        <div class="profile-stats"><div><strong id="sidebarPosts">0</strong><span data-i18n="posts">Posts</span></div><div><strong id="sidebarFriends">0</strong><span data-i18n="friends_label">Amis</span></div><div><strong id="sidebarGroups">0</strong><span data-i18n="groups_label">Groupes</span></div></div>
+        <div class="profile-stats">
+            <div><strong id="sidebarPosts">0</strong><span data-i18n="posts">Posts</span></div>
+            <div><strong id="sidebarFriends">0</strong><span data-i18n="friends_label">Amis</span></div>
+        </div>
     </div>
     <nav class="sidebar-nav">
         <a href="home.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg> <span data-i18n="home">Accueil</span></a>
@@ -380,7 +539,6 @@ img {
         <a href="friends.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg> <span data-i18n="friends_label">Amis</span></a>
         <a href="courses.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg> <span data-i18n="courses">Cours</span></a>
         <a href="events.html" class="sidebar-link active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> <span data-i18n="events">Événements</span></a>
-        <a href="groups.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> <span data-i18n="groups_label">Groupes</span></a>
         <a href="mentorship.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg> <span data-i18n="Mentorat">Mentorat</span></a>
         <a href="profile.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> <span data-i18n="my_profile">Mon Profil</span></a>
         <hr style="margin:10px 0;border-color:var(--estra-border)">
@@ -390,23 +548,26 @@ img {
     </nav>
 </aside>
 
-<!-- NAVBAR -->
 <nav class="navbar">
     <div class="nav-left">
         <button class="menu-toggle" onclick="toggleSidebar()" aria-label="Menu"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="7" x2="16" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="12" y2="17"/><circle cx="18" cy="17" r="2"/></svg></button>
         <a href="home.html" class="navbar-brand">ESTRA LINK</a>
     </div>
     <div class="nav-right">
-
         <img src="" class="avatar-nav" id="navAvatar" onclick="window.location.href='profile.html'" alt="Avatar">
     </div>
 </nav>
 
-<!-- 2. MAIN CONTENT -->
 <main class="main-content">
     <div class="page-header">
         <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> <span data-i18n="events">Événements</span></h2>
-        <button class="create-btn" onclick="openCreateEventModal()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> <span data-i18n="create_event">Créer</span></button>
+        <div style="display:flex; gap:10px; flex-wrap:wrap; z-index:1;">
+            <button class="create-btn" onclick="openCreateEventModal()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> <span data-i18n="create_event">Créer</span></button>
+            <!-- NOUVEAU BOUTON STATISTIQUES & BOOST -->
+            <button class="stats-btn" id="statsBtn" onclick="openStatsModal()">
+                <i class="fas fa-chart-line"></i> Statistiques & Boost
+            </button>
+        </div>
     </div>
     
     <div class="events-filters" id="eventsFilters"></div>
@@ -428,7 +589,6 @@ img {
     </div>
 </main>
 
-<!-- 3. DETAIL SIDEBAR (Placeholder pour Desktop - 3e colonne fixe) -->
 <aside class="detail-sidebar">
     <div class="empty-state">
         <i class="fas fa-calendar-check pulsing-icon" style="font-size: 3.5rem; opacity: 0.6; margin-bottom: 20px;"></i>
@@ -437,28 +597,27 @@ img {
     </div>
 </aside>
 
-<!-- 5. BOTTOM NAV / VERTICAL NAV -->
 <div class="bottom-nav">
     <a href="home.html" class="bottom-nav-item" title="Accueil"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></a>
-
     <a href="notifications.html" class="bottom-nav-item" title="Notifications" style="position:relative"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg><span class="badge-count" id="notifBadge" style="display:none;">0</span></a>
     <a href="messages.html" class="bottom-nav-item" style="position:relative"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg><span class="badge-count" id="msgBadge" style="display:none">0</span></a>
     <a href="courses.html" class="bottom-nav-item" style="position:relative"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg><span class="badge-count" id="msgBadge" style="display:none">0</span></a>
-
     <a href="profile.html" class="bottom-nav-item" title="Profil"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></a>
 </div>
 
-<!-- BACKDROP POUR DESKTOP (MODAL CREATION) -->
 <div class="modal-backdrop-desk" id="desktopModalBackdrop" onclick="closeCreateEventModal()"></div>
 
-<!-- MODAL CRÉER (Sliding Panel sur Desktop / Plein écran Mobile) -->
 <div class="modal-fullscreen" id="createEventModal">
     <div class="modal-header">
         <h3><i class="fas fa-calendar-plus" style="color:var(--estra-cyan)"></i> <span data-i18n="create_event">Créer un événement</span></h3>
         <button class="modal-close" onclick="closeCreateEventModal()">&times;</button>
     </div>
     <div class="modal-body">
-        <div class="form-group"><label data-i18n="form_title">Titre *</label><input type="text" id="eventTitle" data-i18n-placeholder="placeholder_title" placeholder="Ex: Conférence Tech 2026"></div>
+        <div class="form-group">
+            <label data-i18n="form_title">Titre *</label>
+            <input type="text" id="eventTitle" data-i18n-placeholder="placeholder_title" placeholder="Ex: Conférence Tech 2026" maxlength="100" oninput="updateCharCounter('eventTitle', 100, 'titleCounter')">
+            <div class="char-counter"><span id="titleCounter">100</span> caractères restants</div>
+        </div>
         
         <div class="form-group">
             <label>Type de Carte / Thème *</label>
@@ -487,18 +646,22 @@ img {
         </div>
         <div class="form-group">
             <label>Adresse exacte *</label>
-            <input type="text" id="eventAddress" placeholder="Ex: 15, Avenue des Chutes, Hôtel X">
+            <input type="text" id="eventAddress" placeholder="Ex: 15, Avenue des Chutes, Hôtel X" maxlength="200" oninput="updateCharCounter('eventAddress', 200, 'addressCounter')">
+            <div class="char-counter"><span id="addressCounter">200</span> caractères restants</div>
         </div>
         
         <div class="form-group">
             <label style="display:flex; align-items:center; gap:6px;">
                 <i class="fas fa-map-marked-alt" style="color:var(--estra-cyan)"></i> Position GPS (Pointez sur la carte)
             </label>
-            <!-- CONTENEUR CARTE -->
             <div id="eventCreateMap" style="height:200px; width:100%; border-radius:14px; margin-top:5px; border:1px solid var(--estra-border); z-index:1;"></div>
         </div>
         
-        <div class="form-group"><label data-i18n="form_description">Description *</label><textarea id="eventDescription" data-i18n-placeholder="placeholder_description" placeholder="Décrivez l'événement..."></textarea></div>
+        <div class="form-group">
+            <label data-i18n="form_description">Description *</label>
+            <textarea id="eventDescription" data-i18n-placeholder="placeholder_description" placeholder="Décrivez l'événement..." maxlength="500" oninput="updateCharCounter('eventDescription', 500, 'descCounter')"></textarea>
+            <div class="char-counter"><span id="descCounter">500</span> caractères restants</div>
+        </div>
         
         <div class="form-group">
             <label data-i18n="form_image">Image / Bannière</label>
@@ -515,16 +678,37 @@ img {
     </div>
 </div>
 
-<!-- MODAL DETAIL EVENT (Mappée sur la 3e Colonne Originale) -->
+<!-- ========== NOUVELLE MODALE STATISTIQUES & BOOST ========== -->
+<div class="stats-modal" id="statsModal">
+    <div class="modal-header">
+        <h3><i class="fas fa-chart-line" style="color:var(--estra-cyan)"></i> Statistiques & Boost</h3>
+        <div class="header-actions">
+            <button class="modal-close" onclick="closeStatsModal()">&times;</button>
+        </div>
+    </div>
+    <div class="stats-body" id="statsBody">
+        <!-- Colonne gauche : liste des événements -->
+        <div class="stats-list" id="statsList">
+            <!-- Rempli par JS -->
+        </div>
+        <!-- Colonne droite : détails et boost -->
+        <div class="stats-detail" id="statsDetail">
+            <div class="empty-state">
+                <i class="fas fa-calendar-plus"></i>
+                <p>Sélectionnez un événement pour voir ses statistiques détaillées et le booster.</p>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ========== FIN STATS ========== -->
+
 <div class="modal-overlay" id="eventDetailModal">
     <div class="modal-content" style="padding:0; overflow: hidden; background: transparent; border: none; box-shadow: none;">
         <div id="eventDetailContent" style="background: var(--estra-card-bg); border-radius: 24px; border: 1px solid var(--estra-border); box-shadow: 0 20px 40px rgba(0,0,0,0.3); overflow: hidden; position: relative;">
-            <!-- Contenu injecté via JavaScript -->
         </div>
     </div>
 </div>
 
-<!-- VIP TICKET MODAL DYNAMIQUE -->
 <div class="vip-ticket-modal" id="vipTicketModal">
     <div class="vip-ticket-card" id="vipTicketCard">
         <div class="vip-ticket-header" id="vipTicketHeader">
@@ -546,7 +730,6 @@ img {
 
 <div id="toastMsg" class="toast-custom"></div>
 
-<!-- LEAFLET JS -->
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 <script>
@@ -567,7 +750,7 @@ const themes = {
 // ============ TRADUCTIONS MULTILINGUES COMPLÈTES ============
 const translations = {
     fr: {
-        page_title: "ESTRA LINK | Événements", offline_mode: "Mode hors-ligne", posts: "Posts", friends_label: "Amis", groups_label: "Groupes",
+        page_title: "ESTRA LINK | Événements", offline_mode: "Mode hors-ligne", posts: "Posts", friends_label: "Amis",
         home: "Accueil", saved: "Enregistrés", courses: "Cours", jobs: "Emplois", events: "Événements",
         my_profile: "Mon Profil", settings: "Paramètres", logout: "Déconnexion",
         create_event: "Créer un événement", filter_all: "Tous", filter_conference: "Conférences",
@@ -591,10 +774,33 @@ const translations = {
         notif_event_going: "✅ Participation à un événement",
         notif_event_saved: "🔖 Événement enregistré",
         months: ["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"],
-        weekdays: ["Lun","Mar","Mer","Jeu","Ven","Sam","Dim"]
+        weekdays: ["Lun","Mar","Mer","Jeu","Ven","Sam","Dim"],
+        stats_boost_title: "Statistiques & Boost",
+        stats_no_event: "Aucun événement créé",
+        stats_select_hint: "Sélectionnez un événement",
+        boost_active: "Boost actif",
+        boost_days_left: "jours restants",
+        boost_activate: "🚀 Booster cet événement",
+        boost_basic: "Basic",
+        boost_advanced: "Avancé",
+        boost_vip: "VIP",
+        boost_duration_days: "jours",
+        boost_price: "$",
+        boost_pay: "Payer et Booster",
+        boost_confirm: "Confirmer le Boost",
+        boost_success: "✅ Événement boosté avec succès !",
+        boost_already_active: "Cet événement est déjà boosté.",
+        views: "vues",
+        interested: "intéressés",
+        bookings: "réservations",
+        revenue: "revenus",
+        status: "Statut",
+        ongoing: "En cours",
+        passed: "Passé",
+        boosted: "Boosté"
     },
     en: {
-        page_title: "ESTRA LINK | Events", offline_mode: "Offline Mode", posts: "Posts", friends_label: "Friends", groups_label: "Groups",
+        page_title: "ESTRA LINK | Events", offline_mode: "Offline Mode", posts: "Posts", friends_label: "Friends",
         home: "Home", saved: "Saved", courses: "Courses", jobs: "Jobs", events: "Events",
         my_profile: "My Profile", settings: "Settings", logout: "Logout",
         create_event: "Create Event", filter_all: "All", filter_conference: "Conferences",
@@ -618,10 +824,33 @@ const translations = {
         notif_event_going: "✅ Attendance to an event",
         notif_event_saved: "🔖 Event saved",
         months: ["January","February","March","April","May","June","July","August","September","October","November","December"],
-        weekdays: ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"]
+        weekdays: ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"],
+        stats_boost_title: "Statistics & Boost",
+        stats_no_event: "No events created",
+        stats_select_hint: "Select an event",
+        boost_active: "Boost active",
+        boost_days_left: "days left",
+        boost_activate: "🚀 Boost this event",
+        boost_basic: "Basic",
+        boost_advanced: "Advanced",
+        boost_vip: "VIP",
+        boost_duration_days: "days",
+        boost_price: "$",
+        boost_pay: "Pay & Boost",
+        boost_confirm: "Confirm Boost",
+        boost_success: "✅ Event boosted successfully!",
+        boost_already_active: "This event is already boosted.",
+        views: "views",
+        interested: "interested",
+        bookings: "bookings",
+        revenue: "revenue",
+        status: "Status",
+        ongoing: "Ongoing",
+        passed: "Passed",
+        boosted: "Boosted"
     },
     sw: {
-        page_title: "ESTRA LINK | Matukio", offline_mode: "Hali ya nje ya mtandao", posts: "Machapisho", friends_label: "Marafiki", groups_label: "Vikundi",
+        page_title: "ESTRA LINK | Matukio", offline_mode: "Hali ya nje ya mtandao", posts: "Machapisho", friends_label: "Marafiki",
         home: "Nyumbani", saved: "Yaliyohifadhiwa", courses: "Kozi", jobs: "Kazi", events: "Matukio",
         my_profile: "Wasifu Wangu", settings: "Mipangilio", logout: "Kutoka",
         create_event: "Unda Tukio", filter_all: "Yote", filter_conference: "Mikutano",
@@ -645,10 +874,33 @@ const translations = {
         notif_event_going: "✅ Hudhurio kwenye tukio",
         notif_event_saved: "🔖 Tukio limehifadhiwa",
         months: ["Januari","Februari","Machi","Aprili","Mei","Juni","Julai","Agosti","Septemba","Oktoba","Novemba","Desemba"],
-        weekdays: ["J2","J3","J4","J5","J6","J7","J1"]
+        weekdays: ["J2","J3","J4","J5","J6","J7","J1"],
+        stats_boost_title: "Takwimu & Kuongeza",
+        stats_no_event: "Hakuna matukio yaliyoundwa",
+        stats_select_hint: "Chagua tukio",
+        boost_active: "Kuongeza kumeanzishwa",
+        boost_days_left: "siku zilizobaki",
+        boost_activate: "🚀 Kuongeza tukio hili",
+        boost_basic: "Msingi",
+        boost_advanced: "Iliyoendelea",
+        boost_vip: "VIP",
+        boost_duration_days: "siku",
+        boost_price: "$",
+        boost_pay: "Lipa na Kuongeza",
+        boost_confirm: "Thibitisha Kuongeza",
+        boost_success: "✅ Tukio limeongezwa kwa mafanikio!",
+        boost_already_active: "Tukio hili tayari limeongezwa.",
+        views: "maoni",
+        interested: "wanavutiwa",
+        bookings: "uhifadhi",
+        revenue: "mapato",
+        status: "Hali",
+        ongoing: "Inaendelea",
+        passed: "Imepita",
+        boosted: "Imeongezwa"
     },
     ln: {
-        page_title: "ESTRA LINK | Makámá", offline_mode: "Mode hors-connexion", posts: "Masolo", friends_label: "Baníngá", groups_label: "Mampingá",
+        page_title: "ESTRA LINK | Makámá", offline_mode: "Mode hors-connexion", posts: "Masolo", friends_label: "Baníngá",
         home: "Ebandeli", saved: "Ebabómí", courses: "Mateya", jobs: "Misálá", events: "Makámá",
         my_profile: "Profil na ngáí", settings: "Paramɛ́tɛ", logout: "Kobíma",
         create_event: "Kokela likámá", filter_all: "Nyɔ́nsɔ", filter_conference: "Ba conférence",
@@ -672,19 +924,42 @@ const translations = {
         notif_event_going: "✅ Participation na likámá",
         notif_event_saved: "🔖 Likámá ebómámí",
         months: ["Sánzá ya yambo","Sánzá ya míbalé","Sánzá ya mísáto","Sánzá ya mínei","Sánzá ya mítáno","Sánzá ya motóbá","Sánzá ya nsambo","Sánzá ya mwambe","Sánzá ya libwa","Sánzá ya zómi","Sánzá ya zómi na mɔ̌kɔ́","Sánzá ya zómi na míbalé"],
-        weekdays: ["L1","L2","L3","L4","L5","L6","L7"]
+        weekdays: ["L1","L2","L3","L4","L5","L6","L7"],
+        stats_boost_title: "Statistiques & Boost",
+        stats_no_event: "Likámá moko te",
+        stats_select_hint: "Sélectionnez un événement",
+        boost_active: "Boost actif",
+        boost_days_left: "jours restants",
+        boost_activate: "🚀 Booster cet événement",
+        boost_basic: "Basic",
+        boost_advanced: "Avancé",
+        boost_vip: "VIP",
+        boost_duration_days: "jours",
+        boost_price: "$",
+        boost_pay: "Payer et Booster",
+        boost_confirm: "Confirmer le Boost",
+        boost_success: "✅ Événement boosté avec succès !",
+        boost_already_active: "Cet événement est déjà boosté.",
+        views: "vues",
+        interested: "intéressés",
+        bookings: "réservations",
+        revenue: "revenus",
+        status: "Statut",
+        ongoing: "En cours",
+        passed: "Passé",
+        boosted: "Boosté"
     }
 };
 
 let currentLang = localStorage.getItem('estra_language') || 'fr';
 
-function t(key) {
+const t = (key) => {
     if (translations[currentLang] && translations[currentLang][key]) return translations[currentLang][key];
     if (translations['fr'] && translations['fr'][key]) return translations['fr'][key];
     return key;
-}
+};
 
-function applyTranslations() {
+const applyTranslations = () => {
     currentLang = localStorage.getItem('estra_language') || 'fr';
     document.querySelectorAll('[data-i18n]').forEach(el => {
         const key = el.getAttribute('data-i18n');
@@ -703,10 +978,21 @@ function applyTranslations() {
         el.placeholder = t(key);
     });
     document.title = t('page_title');
-}
+};
 
-// ============ SYSTÈME DE NOTIFICATIONS EN TEMPS RÉEL ============
-function addNotification(type, title, message, metadata = {}) {
+const updateCharCounter = (inputId, maxLength, counterId) => {
+    const input = document.getElementById(inputId);
+    const counter = document.getElementById(counterId);
+    if (!input || !counter) return;
+    const remaining = maxLength - input.value.length;
+    counter.textContent = remaining;
+    if (remaining < 0) {
+        input.value = input.value.substring(0, maxLength);
+        counter.textContent = 0;
+    }
+};
+
+const addNotification = (type, title, message, metadata = {}) => {
     const notifications = JSON.parse(localStorage.getItem('estra_notifications') || '[]');
     const newNotif = {
         id: Date.now(),
@@ -720,108 +1006,114 @@ function addNotification(type, title, message, metadata = {}) {
     notifications.unshift(newNotif);
     if (notifications.length > 50) notifications.length = 50;
     localStorage.setItem('estra_notifications', JSON.stringify(notifications));
-    
-    // Mettre à jour les badges sur toutes les pages
     updateBadges();
-    
-    // Déclencher un événement personnalisé pour la synchronisation entre pages
     window.dispatchEvent(new CustomEvent('estra_notification_updated', { 
         detail: { notifications: notifications, newNotification: newNotif }
     }));
-    
-    // Émettre un événement storage pour les autres onglets
     localStorage.setItem('estra_notification_trigger', Date.now().toString());
-    
     return newNotif;
-}
+};
 
-// ============ MODE ECO DATA ============
 let ecoMode = localStorage.getItem('estra_eco_mode') === 'true';
-function initEcoMode() {
+const initEcoMode = () => {
     const btn = document.getElementById('ecoBtn');
     if (btn) {
         document.body.classList.toggle('eco-mode-active', ecoMode);
         if (ecoMode) btn.classList.add('active');
     }
-}
-function toggleEcoMode() {
+};
+const toggleEcoMode = () => {
     ecoMode = !ecoMode;
     localStorage.setItem('estra_eco_mode', ecoMode);
     initEcoMode();
     showToast(ecoMode ? "Mode Éco Activé" : "Mode Éco Désactivé");
-}
+};
 
-// ============ FONCTIONS POUR LES BADGES (AJOUT) ============
-function getAllUsers() {
-    return JSON.parse(localStorage.getItem('estra_all_users') || '[]');
-}
-
-function getAllBadges() {
-    return JSON.parse(localStorage.getItem('estra_badges') || '[]');
-}
-
-function getUserByNameOrUsername(nameOrUsername) {
+const getAllUsers = () => JSON.parse(localStorage.getItem('estra_all_users') || '[]');
+const getAllBadges = () => JSON.parse(localStorage.getItem('estra_badges') || '[]');
+const getUserByNameOrUsername = (nameOrUsername) => {
     const users = getAllUsers();
     return users.find(u => u.fullName === nameOrUsername || u.username === nameOrUsername) || null;
-}
-
-// ✅ NOUVEAU : Affichage différencié des badges
-function renderUserBadges(badges) {
+};
+const renderUserBadges = (badges) => {
     if (!badges || badges.length === 0) return '';
     const allBadges = getAllBadges();
-    
-    // Liste des badges qui doivent avoir un libellé + fond + bordure
     const badgesWithStyle = ['sponsor', 'premium', 'mentor', 'teacher', 'recruiter'];
-    
     return badges.map(badgeId => {
         const b = allBadges.find(b => b.id === badgeId);
         if (!b) return '';
-        
         const hasStyle = badgesWithStyle.includes(b.id);
-        const showLabel = hasStyle ? ` ${b.name}` : '';
-        
         if (hasStyle) {
-            // Badge avec fond + bordure (Premium, Sponsor, Mentor, etc.)
             return `<span class="badge-pill" style="background:${b.color}20; color:${b.color}; border:1px solid ${b.color}40; padding:3px 10px; border-radius:15px; font-size:0.65rem; font-weight:700; display:inline-flex; align-items:center; gap:4px; margin:0 2px;" title="${b.desc || b.name}"><i class="fas ${b.icon}"></i> ${b.name}</span>`;
         } else {
-            // Badge sans fond ni bordure (Vérifié, Contributeur, etc.)
             return `<span class="badge-pill icon-only" style="color:${b.color}; font-size:0.7rem; font-weight:600; margin:0 2px; display:inline-flex; align-items:center; gap:3px;" title="${b.desc || b.name}"><i class="fas ${b.icon}"></i></span>`;
         }
     }).join('');
-}
-// ============================================================
+};
 
-// ============ DONNÉES GLOBALES ============
-var currentUser={name:'Rashidi',avatar:'https://ui-avatars.com/api/?background=38bdf8&color=fff&name=Rashidi&size=40'};
-var events=[],savedEventsIds=[],userInterests={},currentFilter='all',currentView='list';
-var currentMonth=new Date().getMonth(),currentYear=new Date().getFullYear();
-var toastTimeout=null,currentEventImageData=null;
-var months=["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"];
-var weekdays=["Lun","Mar","Mer","Jeu","Ven","Sam","Dim"];
+let currentUser = {name:'Rashidi',avatar:'https://ui-avatars.com/api/?background=38bdf8&color=fff&name=Rashidi&size=40'};
+let events = [], savedEventsIds = [], userInterests = {}, currentFilter = 'all', currentView = 'list';
+let currentMonth = new Date().getMonth(), currentYear = new Date().getFullYear();
+let toastTimeout = null, currentEventImageData = null;
+const months = ["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"];
+const weekdays = ["Lun","Mar","Mer","Jeu","Ven","Sam","Dim"];
 
-// MAP GLOBALS
-var createMap = null;
-var createMarker = null;
-var currentLatLng = null;
+let createMap = null;
+let createMarker = null;
+let currentLatLng = null;
 
 if (!window.estraEvents) window.estraEvents = [];
 
-function checkOnlineStatus(){var b=document.getElementById('offlineBanner');if(b)b.style.display=navigator.onLine?'none':'block'}
-function escapeHtml(txt){if(!txt)return'';var d=document.createElement('div');d.textContent=txt;return d.innerHTML}
-function showToast(msg){var tEl=document.getElementById('toastMsg');if(!tEl)return;if(toastTimeout)clearTimeout(toastTimeout);tEl.textContent=msg;tEl.classList.remove('show');void tEl.offsetWidth;tEl.classList.add('show');toastTimeout=setTimeout(function(){tEl.classList.remove('show')},3000)}
-function formatDate(ds){if(!ds)return'';var d=new Date(ds);return d.toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'})}
-function getDayMonth(ds){if(!ds)return{day:'?',month:'???'};var d=new Date(ds);return{day:d.getDate(),month:d.toLocaleDateString('fr-FR',{month:'short'})}}
-function isEventPassed(ds){if(!ds)return false;var t=new Date();t.setHours(0,0,0,0);return new Date(ds)<t}
+const checkOnlineStatus = () => {
+    const b = document.getElementById('offlineBanner');
+    if(b) b.style.display = navigator.onLine ? 'none' : 'block';
+};
 
-function getThemeLabel(cat) {
+const escapeHtml = (txt) => {
+    if(!txt) return '';
+    const d = document.createElement('div');
+    d.textContent = txt;
+    return d.innerHTML;
+};
+
+const showToast = (msg) => {
+    const tEl = document.getElementById('toastMsg');
+    if(!tEl) return;
+    if(toastTimeout) clearTimeout(toastTimeout);
+    tEl.textContent = msg;
+    tEl.classList.remove('show');
+    void tEl.offsetWidth;
+    tEl.classList.add('show');
+    toastTimeout = setTimeout(() => tEl.classList.remove('show'), 3000);
+};
+
+const formatDate = (ds) => {
+    if(!ds) return '';
+    const d = new Date(ds);
+    return d.toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'});
+};
+
+const getDayMonth = (ds) => {
+    if(!ds) return {day:'?',month:'???'};
+    const d = new Date(ds);
+    return {day:d.getDate(),month:d.toLocaleDateString('fr-FR',{month:'short'})};
+};
+
+const isEventPassed = (ds) => {
+    if(!ds) return false;
+    const t = new Date();
+    t.setHours(0,0,0,0);
+    return new Date(ds) < t;
+};
+
+const getThemeLabel = (cat) => {
     const th = themes[cat];
     if (!th) return cat;
     const langKey = 'label_' + currentLang;
     return th[langKey] || th.label || cat;
-}
+};
 
-function updateBadges() {
-    // Badge de notifications
+const updateBadges = () => {
     const notifs = JSON.parse(localStorage.getItem('estra_notifications') || '[]');
     const unreadNotifs = notifs.filter(n => !n.read).length;
     const notifBadge = document.getElementById('notifBadge');
@@ -829,8 +1121,6 @@ function updateBadges() {
         notifBadge.style.display = unreadNotifs > 0 ? 'block' : 'none';
         if (unreadNotifs > 0) notifBadge.textContent = unreadNotifs > 99 ? '99+' : unreadNotifs;
     }
-    
-    // Badge de messages
     const msgBadge = document.getElementById('msgBadge');
     if (msgBadge) {
         const conversations = JSON.parse(localStorage.getItem('estra_conversations') || '[]');
@@ -838,91 +1128,448 @@ function updateBadges() {
         msgBadge.style.display = totalUnread > 0 ? 'block' : 'none';
         if (totalUnread > 0) msgBadge.textContent = totalUnread > 99 ? '99+' : totalUnread;
     }
-}
+};
 
-function updateSidebar() {
-    const profile = JSON.parse(localStorage.getItem('estra_profile') || '{}');
-    currentUser.name = profile.fullName || 'Rashidi';
-    currentUser.avatar = profile.avatar || `https://ui-avatars.com/api/?name=${currentUser.name}&background=38bdf8&color=fff`;
+const updateSidebar = () => {
+    if (typeof window.getCurrentUser === 'function') {
+        const cu = window.getCurrentUser();
+        if (cu.username) {
+            currentUser.name = cu.name || currentUser.name;
+            currentUser.avatar = cu.avatar || currentUser.avatar;
+        }
+    } else {
+        const profile = JSON.parse(localStorage.getItem('estra_profile') || '{}');
+        currentUser.name = profile.fullName || 'Rashidi';
+        currentUser.avatar = profile.avatar || `https://ui-avatars.com/api/?name=${currentUser.name}&background=38bdf8&color=fff`;
+    }
     
-    const sidebarName = document.getElementById('sidebarName');
-    const sidebarAvatar = document.getElementById('sidebarAvatar');
-    const navAvatar = document.getElementById('navAvatar');
-    
-    if (sidebarName) sidebarName.textContent = currentUser.name;
-    if (sidebarAvatar) sidebarAvatar.src = currentUser.avatar;
-    if (navAvatar) navAvatar.src = currentUser.avatar;
+    document.getElementById('sidebarName').textContent = currentUser.name;
+    document.getElementById('sidebarAvatar').src = currentUser.avatar;
+    document.getElementById('navAvatar').src = currentUser.avatar;
     
     const posts = JSON.parse(localStorage.getItem('estra_posts') || '[]');
     const friends = JSON.parse(localStorage.getItem('estra_friends') || '[]');
-    const userGroups = JSON.parse(localStorage.getItem('estra_userGroups') || '[]');
     
-    const sidebarPosts = document.getElementById('sidebarPosts');
-    const sidebarFriends = document.getElementById('sidebarFriends');
-    const sidebarGroups = document.getElementById('sidebarGroups');
-    
-    if (sidebarPosts) sidebarPosts.textContent = posts.filter(p => p.author === currentUser.name).length;
-    if (sidebarFriends) sidebarFriends.textContent = friends.length;
-    if (sidebarGroups) sidebarGroups.textContent = userGroups.length;
-}
+    document.getElementById('sidebarPosts').textContent = posts.filter(p => p.author === currentUser.name).length;
+    document.getElementById('sidebarFriends').textContent = friends.length;
+};
 
-function renderFilters() {
+const renderFilters = () => {
     let fHtml = `<button class="filter-chip ${currentFilter==='all'?'active':''}" onclick="filterEvents('all',this)">${t('filter_all')}</button>`;
-    for(let key in themes) {
+    for(const key in themes) {
         const label = getThemeLabel(key);
         fHtml += `<button class="filter-chip ${currentFilter===key?'active':''}" onclick="filterEvents('${key}',this)">${label}</button>`;
     }
     document.getElementById('eventsFilters').innerHTML = fHtml;
-}
+};
 
-function loadData(){
-    var savedTheme = 'light'; // Force le thème clair
+const loadData = () => {
+    const savedTheme = 'light';
     document.documentElement.setAttribute('data-theme', savedTheme);
     applyTranslations();
     renderFilters();
     updateSidebar();
     
-    events = window.estraEvents || [];
-    if(!events.length){
+    events = JSON.parse(localStorage.getItem('estra_events') || '[]');
+    if (!events.length) {
         events = [
     { id: 201, title: "Scale or Crash : The Truth", category: "corporate", date: "2026-05-25", time: "14:00", location: "Hôtel Karavia, Kamalondo, Lubumbashi", lat: -11.666, lng: 27.464, description: "Microservices look perfect in diagrams. Discover the hidden chaos behind infinite scalability.", image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=800", organizer: "Pr. Kabengele", organizerUsername: "prof_kabengele", organizerAvatar: "https://ui-avatars.com/api/?name=PrK&background=7c3aed&color=fff", interested: 364, going: 45, createdAt: Date.now() - 86400000 },
     { id: 202, title: "ESTRA Business Gala", category: "vip", date: "2026-06-10", time: "19:00", location: "Pullman, Gombe, Kinshasa", lat: -4.303, lng: 15.286, description: "Une soirée exclusive réservée à l'élite entrepreneuriale. Réseautage et dîner de gala.", image: "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&q=80&w=800", organizer: "Marie Claire", organizerUsername: "marie_claire", organizerAvatar: "https://ui-avatars.com/api/?name=Marie&background=10b981&color=fff", interested: 120, going: 50, createdAt: Date.now() - 172800000 }
 ];
-        window.estraEvents = events;
+        saveEvents();
     }
     
-    savedEventsIds=JSON.parse(localStorage.getItem('estra_saved_events')||'[]');
-    userInterests=JSON.parse(localStorage.getItem('estra_event_interests')||'{}');
-}
+    savedEventsIds = JSON.parse(localStorage.getItem('estra_saved_events')||'[]');
+    userInterests = JSON.parse(localStorage.getItem('estra_event_interests')||'{}');
 
-function saveEvents(){ window.estraEvents = events; localStorage.setItem('estra_events',JSON.stringify(events)); }
+    // Mettre à jour la visibilité du bouton Stats
+    updateStatsButtonVisibility();
+};
 
-function handleEventImageSelect(event){var file=event.target.files[0];if(!file)return;if(file.size>10*1024*1024){showToast(t('toast_image_too_large'));return}var reader=new FileReader();reader.onload=function(e){currentEventImageData=e.target.result;var p=document.getElementById('eventImagePreview');var u=document.getElementById('imageUploadArea');if(p)p.innerHTML='<div class="image-preview"><img src="'+currentEventImageData+'" alt="Aperçu"><button class="remove-image-btn" onclick="removeEventImage()"><i class="fas fa-times"></i></button></div>';if(u)u.style.display='none'};reader.readAsDataURL(file)}
-function removeEventImage(){currentEventImageData=null;var p=document.getElementById('eventImagePreview');var u=document.getElementById('imageUploadArea');if(p)p.innerHTML='';if(u)u.style.display='block';var i=document.getElementById('eventImageInput');if(i)i.value=''}
+const saveEvents = () => { 
+    window.estraEvents = events; 
+    localStorage.setItem('estra_events',JSON.stringify(events)); 
+    // Mettre à jour la visibilité du bouton Stats après sauvegarde
+    updateStatsButtonVisibility();
+};
 
-function renderEvents(){
-    var container=document.getElementById('listView'); if(!container)return;
-    var filtered=currentFilter==='all'?events.slice():events.filter(function(e){return e.category===currentFilter});
-    filtered.sort(function(a,b){return new Date(a.date)-new Date(b.date)});
-    if(!filtered.length){container.innerHTML='<div class="empty-state" style="text-align:center;padding:40px;"><i class="fas fa-calendar-times" style="font-size:3rem;opacity:0.5;margin-bottom:16px;"></i><h3>'+t('no_events')+'</h3><p>'+t('no_events_desc')+'</p></div>';return}
+const handleEventImageSelect = (event) => {
+    const file = event.target.files[0];
+    if(!file) return;
+    if(file.size>10*1024*1024){showToast(t('toast_image_too_large'));return}
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        currentEventImageData = e.target.result;
+        const p = document.getElementById('eventImagePreview');
+        const u = document.getElementById('imageUploadArea');
+        if(p) p.innerHTML = `<div class="image-preview"><img src="${currentEventImageData}" alt="Aperçu"><button class="remove-image-btn" onclick="removeEventImage()"><i class="fas fa-times"></i></button></div>`;
+        if(u) u.style.display = 'none';
+    };
+    reader.readAsDataURL(file);
+};
+
+const removeEventImage = () => {
+    currentEventImageData = null;
+    const p = document.getElementById('eventImagePreview');
+    const u = document.getElementById('imageUploadArea');
+    if(p) p.innerHTML = '';
+    if(u) u.style.display = 'block';
+    const i = document.getElementById('eventImageInput');
+    if(i) i.value = '';
+};
+
+// ==================== STATISTIQUES & BOOST ====================
+
+// Obtenir la liste des événements créés par l'utilisateur connecté
+const getMyEvents = () => {
+    const username = localStorage.getItem('estra_current_username') || currentUser.name.toLowerCase().replace(/\s+/g, '_');
+    return events.filter(e => e.organizerUsername === username || e.organizer === currentUser.name);
+};
+
+// Récupérer les boosts depuis localStorage
+const getBoosts = () => JSON.parse(localStorage.getItem('estra_boosts') || '{}');
+
+// Sauvegarder les boosts
+const saveBoosts = (boosts) => {
+    localStorage.setItem('estra_boosts', JSON.stringify(boosts));
+};
+
+// Vérifier si un événement est boosté et actif
+const isEventBoosted = (eventId) => {
+    const boosts = getBoosts();
+    const boost = boosts[eventId];
+    if (!boost) return false;
+    const now = Date.now();
+    return now < boost.expiry;
+};
+
+// Obtenir les jours restants d'un boost
+const getBoostDaysLeft = (eventId) => {
+    const boosts = getBoosts();
+    const boost = boosts[eventId];
+    if (!boost) return 0;
+    const now = Date.now();
+    if (now >= boost.expiry) return 0;
+    return Math.ceil((boost.expiry - now) / (1000 * 60 * 60 * 24));
+};
+
+// Mettre à jour la visibilité du bouton Stats
+const updateStatsButtonVisibility = () => {
+    const btn = document.getElementById('statsBtn');
+    if (!btn) return;
+    const myEvents = getMyEvents();
+    if (myEvents.length > 0) {
+        btn.classList.add('visible');
+    } else {
+        btn.classList.remove('visible');
+    }
+};
+
+// Ouvrir la modale Stats
+const openStatsModal = () => {
+    const modal = document.getElementById('statsModal');
+    if (modal) modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+    renderStatsList();
+    // Par défaut, sélectionner le premier événement
+    const myEvents = getMyEvents();
+    if (myEvents.length > 0) {
+        renderStatsDetail(myEvents[0].id);
+    } else {
+        const detail = document.getElementById('statsDetail');
+        if (detail) {
+            detail.innerHTML = `<div class="empty-state"><i class="fas fa-calendar-times"></i><p>${t('stats_no_event')}</p></div>`;
+        }
+    }
+};
+
+// Fermer la modale Stats
+const closeStatsModal = () => {
+    const modal = document.getElementById('statsModal');
+    if (modal) modal.classList.remove('active');
+    document.body.style.overflow = '';
+};
+
+// Rendre la liste des événements dans la colonne gauche
+const renderStatsList = () => {
+    const container = document.getElementById('statsList');
+    if (!container) return;
+    const myEvents = getMyEvents();
+    if (myEvents.length === 0) {
+        container.innerHTML = `<div style="padding:20px;text-align:center;color:var(--text-secondary);">${t('stats_no_event')}</div>`;
+        return;
+    }
+    // Trier par date (du plus récent au plus ancien)
+    const sorted = myEvents.slice().sort((a,b) => new Date(b.date) - new Date(a.date));
+    let html = '';
+    sorted.forEach(e => {
+        const boosted = isEventBoosted(e.id);
+        const passed = isEventPassed(e.date);
+        const statusClass = passed ? 'passed' : (boosted ? 'boosted' : '');
+        const statusLabel = passed ? t('event_passed') : (boosted ? t('boosted') : t('ongoing'));
+        const thumb = e.image || 'https://picsum.photos/50/50?random=' + e.id;
+        html += `
+            <div class="stats-event-item" data-event-id="${e.id}" onclick="selectStatsEvent(${e.id})">
+                <img src="${thumb}" class="stats-event-thumb" alt="${escapeHtml(e.title)}">
+                <div class="stats-event-info">
+                    <div class="title">${escapeHtml(e.title)}</div>
+                    <div class="meta">
+                        <span><i class="fas fa-calendar-alt"></i> ${formatDate(e.date)}</span>
+                        <span><i class="fas fa-eye"></i> ${e.views || 0}</span>
+                    </div>
+                </div>
+                <span class="stats-event-badge ${statusClass}">${statusLabel}</span>
+            </div>
+        `;
+    });
+    container.innerHTML = html;
+    // Mettre en surbrillance l'élément sélectionné
+    const activeId = document.querySelector('.stats-detail')?.dataset?.eventId;
+    if (activeId) {
+        const items = container.querySelectorAll('.stats-event-item');
+        items.forEach(el => {
+            if (el.dataset.eventId == activeId) el.classList.add('active');
+        });
+    } else if (sorted.length > 0) {
+        // Sélectionner le premier par défaut
+        const first = container.querySelector('.stats-event-item');
+        if (first) first.classList.add('active');
+    }
+};
+
+// Sélectionner un événement dans la liste
+const selectStatsEvent = (eventId) => {
+    // Mettre à jour la classe active
+    const items = document.querySelectorAll('.stats-event-item');
+    items.forEach(el => el.classList.remove('active'));
+    const target = document.querySelector(`.stats-event-item[data-event-id="${eventId}"]`);
+    if (target) target.classList.add('active');
+    renderStatsDetail(eventId);
+};
+
+// Rendre les détails d'un événement (colonne droite)
+const renderStatsDetail = (eventId) => {
+    const container = document.getElementById('statsDetail');
+    if (!container) return;
+    const e = events.find(ev => ev.id === eventId);
+    if (!e) {
+        container.innerHTML = `<div class="empty-state"><i class="fas fa-exclamation-circle"></i><p>Événement introuvable</p></div>`;
+        return;
+    }
+    container.dataset.eventId = eventId;
+    const boosted = isEventBoosted(e.id);
+    const passed = isEventPassed(e.date);
+    const daysLeft = getBoostDaysLeft(e.id);
+    const th = themes[e.category] || themes.conference;
+    const views = e.views || Math.floor(Math.random() * 200) + 50;
+    const interested = e.interested || 0;
+    const bookings = e.going || 0;
+    const revenue = (bookings * 5) + Math.floor(Math.random() * 100); // simulation
+
+    // Simuler un graphique d'évolution (7 jours) - en texte pour l'exemple
+    let chartBars = '';
+    for (let i = 6; i >= 0; i--) {
+        const val = Math.floor(Math.random() * 30) + 5;
+        const pct = (val / 35) * 100;
+        chartBars += `<div style="display:flex;flex-direction:column;align-items:center;flex:1;">
+            <div style="width:100%;background:var(--estra-cyan);border-radius:4px 4px 0 0;height:${pct}px;min-height:8px;max-height:100px;transition:height 0.3s;"></div>
+            <div style="font-size:0.6rem;color:var(--text-secondary);margin-top:4px;">J-${i}</div>
+        </div>`;
+    }
+
+    let boostHtml = '';
+    if (passed) {
+        boostHtml = `<div style="padding:8px 0;color:var(--text-secondary);"><i class="fas fa-hourglass-end"></i> ${t('event_passed')}</div>`;
+    } else if (boosted) {
+        boostHtml = `
+            <div class="boost-badge-active"><i class="fas fa-rocket"></i> ${t('boost_active')} (${daysLeft} ${t('boost_days_left')})</div>
+        `;
+    } else {
+        boostHtml = `
+            <div style="margin-top:12px;">
+                <button class="boost-btn" onclick="showBoostOptions(${e.id})"><i class="fas fa-rocket"></i> ${t('boost_activate')}</button>
+            </div>
+        `;
+    }
+
+    container.innerHTML = `
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px;">
+            <i class="fas fa-calendar-check" style="font-size:1.5rem;color:${th.color};"></i>
+            <div class="detail-title">${escapeHtml(e.title)}</div>
+        </div>
+        <div class="detail-sub">
+            <span><i class="fas fa-calendar-alt"></i> ${formatDate(e.date)}</span>
+            <span><i class="fas fa-clock"></i> ${e.time || 'TBA'}</span>
+            <span><i class="fas fa-map-marker-alt"></i> ${escapeHtml(e.location || '')}</span>
+        </div>
+        ${e.image ? `<img src="${e.image}" class="detail-image" alt="${escapeHtml(e.title)}">` : ''}
+        
+        <div class="stats-grid">
+            <div class="stat-card"><div class="number">${views}</div><div class="label">${t('views')}</div></div>
+            <div class="stat-card"><div class="number">${interested}</div><div class="label">${t('interested')}</div></div>
+            <div class="stat-card"><div class="number">${bookings}</div><div class="label">${t('bookings')}</div></div>
+            <div class="stat-card"><div class="number">${revenue}$</div><div class="label">${t('revenue')}</div></div>
+        </div>
+
+        <div style="margin-bottom:16px;">
+            <div style="font-weight:600;font-size:0.9rem;margin-bottom:8px;">📈 Évolution (7 derniers jours)</div>
+            <div style="display:flex;gap:6px;align-items:flex-end;height:80px;padding:4px 0;border-bottom:1px solid var(--estra-border);">
+                ${chartBars}
+            </div>
+        </div>
+
+        <div class="boost-section">
+            <div class="boost-title"><i class="fas fa-rocket" style="color:var(--estra-cyan);"></i> Boost</div>
+            ${boostHtml}
+            <div id="boostOptionsContainer" style="margin-top:12px;"></div>
+        </div>
+    `;
+};
+
+// Afficher les options de boost (sélection durée)
+const showBoostOptions = (eventId) => {
+    const container = document.getElementById('boostOptionsContainer');
+    if (!container) return;
+    const e = events.find(ev => ev.id === eventId);
+    if (!e) return;
+    if (isEventBoosted(eventId)) {
+        container.innerHTML = `<div style="color:var(--estra-warning);"><i class="fas fa-check-circle"></i> ${t('boost_already_active')}</div>`;
+        return;
+    }
+    // Options de boost
+    const options = [
+        { id: 'basic', label: t('boost_basic'), duration: 3, price: 3 },
+        { id: 'advanced', label: t('boost_advanced'), duration: 7, price: 6 },
+        { id: 'vip', label: t('boost_vip'), duration: 14, price: 10 }
+    ];
+    let html = `<div style="font-size:0.85rem;font-weight:500;margin-bottom:8px;">Choisissez la durée :</div><div class="boost-options">`;
+    options.forEach((opt, idx) => {
+        const selected = idx === 0 ? 'selected' : '';
+        html += `
+            <div class="boost-option ${selected}" data-option-id="${opt.id}" onclick="selectBoostOption('${opt.id}', ${eventId})">
+                <div class="duration">${opt.duration} ${t('boost_duration_days')}</div>
+                <div class="price">${t('boost_price')}${opt.price}</div>
+                <div class="desc">${opt.label}</div>
+            </div>
+        `;
+    });
+    html += `</div>
+        <div style="margin-top:12px;display:flex;gap:12px;flex-wrap:wrap;">
+            <button class="boost-btn" id="boostConfirmBtn" onclick="confirmBoost(${eventId})"><i class="fas fa-credit-card"></i> ${t('boost_pay')}</button>
+            <button class="btn-cancel" onclick="cancelBoostOptions()">${t('cancel')}</button>
+        </div>
+        <div id="boostSummary" style="margin-top:12px;font-size:0.9rem;color:var(--text-secondary);"></div>
+    `;
+    container.innerHTML = html;
+    // Sélectionner la première option par défaut
+    selectBoostOption('basic', eventId);
+};
+
+let selectedBoostOption = null;
+let selectedBoostEventId = null;
+
+const selectBoostOption = (optionId, eventId) => {
+    selectedBoostOption = optionId;
+    selectedBoostEventId = eventId;
+    const options = {
+        basic: { duration: 3, price: 3, label: t('boost_basic') },
+        advanced: { duration: 7, price: 6, label: t('boost_advanced') },
+        vip: { duration: 14, price: 10, label: t('boost_vip') }
+    };
+    const opt = options[optionId];
+    if (!opt) return;
+    // Mettre à jour la sélection visuelle
+    const allOpts = document.querySelectorAll('.boost-option');
+    allOpts.forEach(el => el.classList.remove('selected'));
+    const target = document.querySelector(`.boost-option[data-option-id="${optionId}"]`);
+    if (target) target.classList.add('selected');
+    // Afficher le récapitulatif
+    const summary = document.getElementById('boostSummary');
+    if (summary) {
+        summary.innerHTML = `📋 ${opt.label} · ${opt.duration} ${t('boost_duration_days')} · ${t('boost_price')}${opt.price}`;
+    }
+};
+
+const cancelBoostOptions = () => {
+    const container = document.getElementById('boostOptionsContainer');
+    if (container) container.innerHTML = '';
+    selectedBoostOption = null;
+    selectedBoostEventId = null;
+};
+
+const confirmBoost = (eventId) => {
+    if (!selectedBoostOption) {
+        showToast("Veuillez sélectionner une durée.");
+        return;
+    }
+    const options = {
+        basic: { duration: 3, price: 3, label: t('boost_basic') },
+        advanced: { duration: 7, price: 6, label: t('boost_advanced') },
+        vip: { duration: 14, price: 10, label: t('boost_vip') }
+    };
+    const opt = options[selectedBoostOption];
+    if (!opt) return;
+    // Simuler un paiement Mobile Money (dans une vraie app, intégrer un service)
+    if (!confirm(`Confirmer le boost "${opt.label}" pour ${opt.duration} jours au prix de ${opt.price}$ ?`)) {
+        return;
+    }
+    // Activer le boost
+    const boosts = getBoosts();
+    const expiry = Date.now() + (opt.duration * 24 * 60 * 60 * 1000);
+    boosts[eventId] = {
+        start: Date.now(),
+        expiry: expiry,
+        duration: opt.duration,
+        price: opt.price,
+        type: selectedBoostOption
+    };
+    saveBoosts(boosts);
+    showToast(t('boost_success'));
+    // Ajouter une notification
+    const e = events.find(ev => ev.id === eventId);
+    if (e) {
+        addNotification('boost', '🚀 Boost activé', `L'événement "${e.title}" est boosté pour ${opt.duration} jours.`, { eventId });
+    }
+    // Réafficher les détails
+    renderStatsDetail(eventId);
+    // Mettre à jour la liste (badge)
+    renderStatsList();
+    // Rafraîchir l'affichage principal
+    renderEvents();
+    // Vider les options
+    cancelBoostOptions();
+};
+
+// ==================== FIN STATS ====================
+
+const renderEvents = () => {
+    const container = document.getElementById('listView');
+    if(!container) return;
+    let filtered = currentFilter==='all' ? events.slice() : events.filter(e => e.category===currentFilter);
+    filtered.sort((a,b) => new Date(a.date) - new Date(b.date));
+    if(!filtered.length){
+        container.innerHTML = `<div class="empty-state" style="text-align:center;padding:40px;"><i class="fas fa-calendar-times" style="font-size:3rem;opacity:0.5;margin-bottom:16px;"></i><h3>${t('no_events')}</h3><p>${t('no_events_desc')}</p></div>`;
+        return;
+    }
     
-    container.innerHTML=filtered.map(function(e){
-        var dm=getDayMonth(e.date);
-        var th = themes[e.category] || themes.conference;
-        var themeLabel = getThemeLabel(e.category);
-        var savedClass = savedEventsIds.indexOf(e.id)!==-1 ? 'saved' : '';
-        var heartIcon = userInterests[e.id]==='interested' ? 'fas fa-heart' : 'far fa-heart';
-        var isGoing = userInterests[e.id]==='going';
+    container.innerHTML = filtered.map(e => {
+        const dm = getDayMonth(e.date);
+        const th = themes[e.category] || themes.conference;
+        const themeLabel = getThemeLabel(e.category);
+        const savedClass = savedEventsIds.includes(e.id) ? 'saved' : '';
+        const heartIcon = userInterests[e.id]==='interested' ? 'fas fa-heart' : 'far fa-heart';
+        const isGoing = userInterests[e.id]==='going';
+        const boosted = isEventBoosted(e.id);
+        const boostIcon = boosted ? '🚀' : '';
 
-        // --- RÉCUPÉRATION DES BADGES DE L'ORGANISATEUR (AJOUT) ---
-        var orgUser = getUserByNameOrUsername(e.organizerUsername || e.organizer);
-        var orgBadges = orgUser ? renderUserBadges(orgUser.badges || []) : '';
+        const orgUser = getUserByNameOrUsername(e.organizerUsername || e.organizer);
+        const orgBadges = orgUser ? renderUserBadges(orgUser.badges || []) : '';
 
         return `
         <div class="event-card" style="--theme-color: ${th.color}; --theme-bg: ${th.bg};">
             <div class="event-image" style="background-image:url('${e.image||'https://picsum.photos/600/300?random='+e.id}')">
                 <div class="event-image-overlay" onclick="openEventDetail(${e.id})"><span><i class="fas fa-eye"></i> Voir le détail</span></div>
-                <span class="event-price-badge" style="background:var(--theme-color); color:#fff; border:none;">${themeLabel}</span>
+                <span class="event-price-badge" style="background:var(--theme-color); color:#fff; border:none;">${themeLabel} ${boostIcon}</span>
                 <div class="event-date-badge">
                     <div class="event-date-day">${dm.day}</div>
                     <div class="event-date-month">${dm.month}</div>
@@ -953,164 +1600,164 @@ function renderEvents(){
             <button class="btn-save-floating ${savedClass}" onclick="saveEvent(${e.id})" title="Enregistrer"><i class="fas fa-bookmark"></i></button>
         </div>`;
     }).join('');
-}
+};
 
-function filterEvents(f,btn){currentFilter=f;document.querySelectorAll('.filter-chip').forEach(function(b){b.classList.remove('active')});if(btn)btn.classList.add('active');renderEvents();renderCalendar()}
-function toggleView(v){currentView=v;var lv=document.getElementById('listView');var cv=document.getElementById('calendarView');if(lv)lv.style.display=v==='list'?'grid':'none';if(cv)cv.classList.toggle('active',v==='calendar');document.querySelectorAll('.view-btn').forEach(function(b,i){b.classList.toggle('active',(i===0&&v==='list')||(i===1&&v==='calendar'))});if(v==='calendar')renderCalendar()}
-function renderCalendar(){
-    var fd=new Date(currentYear,currentMonth,1),ld=new Date(currentYear,currentMonth+1,0);
-    var sd=fd.getDay();var dim=ld.getDate();
-    var cm=document.getElementById('currentMonth');if(cm)cm.textContent=t('months')[currentMonth]+' '+currentYear;
-    var gh=weekdays.map(function(w){return'<div class="calendar-weekday">'+w+'</div>'}).join('');
-    var asd=sd===0?6:sd-1;
-    for(var i=0;i<asd;i++)gh+='<div class="calendar-day" style="visibility:hidden"></div>';
-    for(var d=1;d<=dim;d++){var ds=currentYear+'-'+String(currentMonth+1).padStart(2,'0')+'-'+String(d).padStart(2,'0');var he=events.some(function(e){return e.date===ds});gh+='<div class="calendar-day '+(he?'has-event':'')+'" onclick="showDayEvents(\''+ds+'\')"><div class="calendar-day-number">'+d+'</div>'+(he?'<div class="event-dot"></div>':'')+'</div>'}
-    var cg=document.getElementById('calendarGrid');if(cg)cg.innerHTML=gh
-}
-function prevMonth(){if(currentMonth===0){currentMonth=11;currentYear--}else currentMonth--;renderCalendar()}
-function nextMonth(){if(currentMonth===11){currentMonth=0;currentYear++}else currentMonth++;renderCalendar()}
-function showDayEvents(ds){var de=events.filter(function(e){return e.date===ds});if(!de.length){showToast(formatDate(ds)+' - '+t('no_events'));return}var allBtn=document.querySelector('.filter-chip[data-filter="all"]');if(allBtn)filterEvents('all',allBtn);toggleView('list');showToast(de.length+' événement(s) le '+formatDate(ds))}
+const filterEvents = (f,btn) => {
+    currentFilter = f;
+    document.querySelectorAll('.filter-chip').forEach(b => b.classList.remove('active'));
+    if(btn) btn.classList.add('active');
+    renderEvents();
+    renderCalendar();
+};
 
-/* ==================== GESTION CARTE CREATION ==================== */
-function initCreateMap() {
-    var mapEl = document.getElementById('eventCreateMap');
-    if(!mapEl) return;
-    
-    if(createMap) {
-        createMap.invalidateSize();
-        return;
+const toggleView = (v) => {
+    currentView = v;
+    const lv = document.getElementById('listView');
+    const cv = document.getElementById('calendarView');
+    if(lv) lv.style.display = v==='list' ? 'grid' : 'none';
+    if(cv) cv.classList.toggle('active', v==='calendar');
+    document.querySelectorAll('.view-btn').forEach((b,i) => {
+        b.classList.toggle('active', (i===0&&v==='list')||(i===1&&v==='calendar'));
+    });
+    if(v==='calendar') renderCalendar();
+};
+
+const renderCalendar = () => {
+    const fd = new Date(currentYear,currentMonth,1), ld = new Date(currentYear,currentMonth+1,0);
+    const sd = fd.getDay();
+    const dim = ld.getDate();
+    const cm = document.getElementById('currentMonth');
+    if(cm) cm.textContent = t('months')[currentMonth] + ' ' + currentYear;
+    let gh = weekdays.map(w => `<div class="calendar-weekday">${w}</div>`).join('');
+    const asd = sd===0 ? 6 : sd-1;
+    for(let i=0; i<asd; i++) gh += '<div class="calendar-day" style="visibility:hidden"></div>';
+    for(let d=1; d<=dim; d++){
+        const ds = `${currentYear}-${String(currentMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+        const he = events.some(e => e.date===ds);
+        gh += `<div class="calendar-day ${he?'has-event':''}" onclick="showDayEvents('${ds}')"><div class="calendar-day-number">${d}</div>${he?'<div class="event-dot"></div>':''}</div>`;
     }
-    createMap = L.map('eventCreateMap').setView([-11.66089, 27.47938], 13);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 19, attribution: '© OSM'
-    }).addTo(createMap);
+    const cg = document.getElementById('calendarGrid');
+    if(cg) cg.innerHTML = gh;
+};
 
-    createMap.on('click', function(e) {
+const prevMonth = () => {
+    if(currentMonth===0){ currentMonth=11; currentYear--; }
+    else currentMonth--;
+    renderCalendar();
+};
+
+const nextMonth = () => {
+    if(currentMonth===11){ currentMonth=0; currentYear++; }
+    else currentMonth++;
+    renderCalendar();
+};
+
+const showDayEvents = (ds) => {
+    const de = events.filter(e => e.date===ds);
+    if(!de.length){ showToast(`${formatDate(ds)} - ${t('no_events')}`); return; }
+    const allBtn = document.querySelector('.filter-chip[data-filter="all"]');
+    if(allBtn) filterEvents('all',allBtn);
+    toggleView('list');
+    showToast(`${de.length} événement(s) le ${formatDate(ds)}`);
+};
+
+const initCreateMap = () => {
+    const mapEl = document.getElementById('eventCreateMap');
+    if(!mapEl) return;
+    if(createMap) { createMap.invalidateSize(); return; }
+    createMap = L.map('eventCreateMap').setView([-11.66089, 27.47938], 13);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '© OSM' }).addTo(createMap);
+    createMap.on('click', (e) => {
         if(createMarker) createMap.removeLayer(createMarker);
         createMarker = L.marker(e.latlng).addTo(createMap);
         currentLatLng = e.latlng;
-        
         fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${e.latlng.lat}&lon=${e.latlng.lng}`)
         .then(res => res.json())
         .then(data => {
             if(data && data.address) {
-                var city = data.address.city || data.address.town || data.address.village || '';
-                var commune = data.address.suburb || data.address.neighbourhood || data.address.county || '';
-                var road = data.address.road || '';
-                var house = data.address.house_number || '';
-                var addr = (house + ' ' + road).trim();
-                
+                const city = data.address.city || data.address.town || data.address.village || '';
+                const commune = data.address.suburb || data.address.neighbourhood || data.address.county || '';
+                const road = data.address.road || '';
+                const house = data.address.house_number || '';
+                const addr = `${house} ${road}`.trim();
                 if(city) document.getElementById('eventCity').value = city;
                 if(commune) document.getElementById('eventCommune').value = commune;
                 if(addr) document.getElementById('eventAddress').value = addr;
             }
         }).catch(err => console.log('Erreur geocoding', err));
     });
-}
+};
 
-function openCreateEventModal(){
-    var m=document.getElementById('createEventModal');
-    var bd=document.getElementById('desktopModalBackdrop');
-    if(m)m.classList.add('active');
-    if(bd)bd.classList.add('active');
+const openCreateEventModal = () => {
+    const m = document.getElementById('createEventModal');
+    const bd = document.getElementById('desktopModalBackdrop');
+    if(m) m.classList.add('active');
+    if(bd) bd.classList.add('active');
     document.body.style.overflow = 'hidden';
-    
-    currentEventImageData=null; currentLatLng=null;
+    currentEventImageData = null;
+    currentLatLng = null;
     if(createMarker && createMap) createMap.removeLayer(createMarker);
-    var p=document.getElementById('eventImagePreview');
-    var u=document.getElementById('imageUploadArea');
-    if(p)p.innerHTML='';if(u)u.style.display='block';
-    
+    const p = document.getElementById('eventImagePreview');
+    const u = document.getElementById('imageUploadArea');
+    if(p) p.innerHTML = '';
+    if(u) u.style.display = 'block';
     setTimeout(initCreateMap, 350);
-}
+};
 
-function closeCreateEventModal(){
-    var m=document.getElementById('createEventModal');
-    if(m)m.classList.remove('active');
-    var bd=document.getElementById('desktopModalBackdrop');
+const closeCreateEventModal = () => {
+    const m = document.getElementById('createEventModal');
+    if(m) m.classList.remove('active');
+    const bd = document.getElementById('desktopModalBackdrop');
     if(bd) bd.classList.remove('active');
     document.body.style.overflow = '';
-    ['eventTitle','eventDate','eventTime','eventCity','eventCommune','eventAddress','eventDescription'].forEach(function(id){var el=document.getElementById(id);if(el)el.value=''});
-}
+    ['eventTitle','eventDate','eventTime','eventCity','eventCommune','eventAddress','eventDescription'].forEach(id => {
+        const el = document.getElementById(id);
+        if(el) el.value = '';
+    });
+};
 
-function createEvent() {
-    var ti = document.getElementById('eventTitle').value.trim(),
-        c = document.getElementById('eventCategory').value;
-    var d = document.getElementById('eventDate').value,
-        tm = document.getElementById('eventTime').value;
-    var city = document.getElementById('eventCity').value.trim();
-    var commune = document.getElementById('eventCommune').value.trim();
-    var addr = document.getElementById('eventAddress').value.trim();
-    var desc = document.getElementById('eventDescription').value.trim();
+const createEvent = () => {
+    const ti = document.getElementById('eventTitle').value.trim();
+    const c = document.getElementById('eventCategory').value;
+    const d = document.getElementById('eventDate').value;
+    const tm = document.getElementById('eventTime').value;
+    let city = document.getElementById('eventCity').value.trim();
+    let commune = document.getElementById('eventCommune').value.trim();
+    let addr = document.getElementById('eventAddress').value.trim();
+    const desc = document.getElementById('eventDescription').value.trim();
     
-    // 🆕 Validation plus souple : si la carte n'a pas été cliquée, permettre la saisie manuelle
-    if (!ti || !d || !desc) {
-        showToast(t('toast_fields_required'));
-        return;
-    }
-    
-    // 🆕 Si pas de ville saisie, mettre une valeur par défaut
+    if (!ti || !d || !desc) { showToast(t('toast_fields_required')); return; }
     if (!city) city = "Lubumbashi";
     if (!commune) commune = "";
     if (!addr) addr = city;
-    
-    var fullLoc = addr;
+    let fullLoc = addr;
     if (commune) fullLoc += ", " + commune;
     fullLoc += ", " + city;
     
-    var ne = {
-        id: Date.now(),
-        title: ti,
-        category: c || 'conference',
-        date: d,
-        time: tm || '12:00',
-        location: fullLoc,
-        lat: currentLatLng ? currentLatLng.lat : null,
-        lng: currentLatLng ? currentLatLng.lng : null,
-        description: desc,
-        image: currentEventImageData || null,
-        organizer: currentUser.name,
-        organizerAvatar: currentUser.avatar,
+    const ne = {
+        id: Date.now(), title: ti, category: c || 'conference', date: d, time: tm || '12:00',
+        location: fullLoc, lat: currentLatLng ? currentLatLng.lat : null, lng: currentLatLng ? currentLatLng.lng : null,
+        description: desc, image: currentEventImageData || null,
+        organizer: currentUser.name, organizerAvatar: currentUser.avatar,
         organizerUsername: localStorage.getItem('estra_current_username') || currentUser.name.toLowerCase().replace(/\s+/g, '_'),
-        interested: 0,
-        going: 0,
-        createdAt: Date.now()
+        interested: 0, going: 0, createdAt: Date.now(),
+        views: 0 // ajout pour stats
     };
     
-    // ✅ 1. SAUVEGARDER DANS LES ÉVÉNEMENTS
-    events.unshift(ne);
-    saveEvents();
-    renderEvents();
-    renderCalendar();
-    closeCreateEventModal();
+    events.unshift(ne); saveEvents(); renderEvents(); renderCalendar(); closeCreateEventModal();
     showToast(t('toast_event_created'));
-    
-    // ✅ 2. CRÉER UN POST DANS LE FIL D'ACTUALITÉ
     createPostFromEvent(ne);
-    
-    // ✅ 3. NOTIFIER LES AUTRES PAGES
-    localStorage.setItem('estra_event_published', JSON.stringify({
-        event: ne,
-        timestamp: Date.now()
-    }));
+    localStorage.setItem('estra_event_published', JSON.stringify({ event: ne, timestamp: Date.now() }));
     localStorage.setItem('estra_event_trigger', Date.now().toString());
-    
     addNotification('event_created', t('notif_event_created'), `L'événement "${ti}" a été créé avec succès`, { eventId: ne.id });
-}
+    // Mettre à jour le bouton Stats
+    updateStatsButtonVisibility();
+};
 
-// ✅ FONCTION : Créer un post à partir d'un événement
-function createPostFromEvent(event) {
+const createPostFromEvent = (event) => {
     const posts = JSON.parse(localStorage.getItem('estra_posts') || '[]');
-    
-    // Vérifier si le post existe déjà
     const exists = posts.some(p => p.eventData && p.eventData.id === event.id);
     if (exists) return;
-    
-    const th = themes[event.category] || themes.conference;
-    const dateObj = new Date(event.date);
-    const day = dateObj.getDate();
-    const month = dateObj.toLocaleDateString('fr-FR', { month: 'short' }).toUpperCase();
-    
     const newPost = {
         id: Date.now() + 1,
         author: event.organizer || 'Utilisateur',
@@ -1118,44 +1765,25 @@ function createPostFromEvent(event) {
         authorAvatar: event.organizerAvatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(event.organizer || 'User')}&background=38bdf8&color=fff`,
         content: `📅 ${event.title}\n${event.description || ''}`,
         isEvent: true,
-        eventData: {
-            id: event.id,
-            title: event.title,
-            date: event.date,
-            time: event.time || 'TBA',
-            location: event.location,
-            description: event.description || '',
-            category: event.category || 'conference',
-            image: event.image || null
-        },
-        images: event.image ? [event.image] : [],
-        image: event.image || null,
-        likes: 0,
-        liked: false,
-        saved: false,
-        comments: [],
-        timestamp: Date.now()
+        eventData: { id: event.id, title: event.title, date: event.date, time: event.time || 'TBA', location: event.location, description: event.description || '', category: event.category || 'conference', image: event.image || null },
+        images: event.image ? [event.image] : [], image: event.image || null,
+        likes: 0, liked: false, saved: false, comments: [], timestamp: Date.now()
     };
-    
     posts.unshift(newPost);
     localStorage.setItem('estra_posts', JSON.stringify(posts));
-    
-    console.log('✅ Événement publié dans le fil d\'actualité:', event.title);
-}
-/* ==================== OUVERTURE DETAIL (Original 3e Colonne) ==================== */
-function openEventDetail(id){
-    var e=events.find(function(x){return x.id===id});if(!e)return;
-    var dc=document.getElementById('eventDetailContent');if(!dc)return;
-    
-    var interestBtn = userInterests[e.id]==='interested' ? '✓ Intéressé' : '❤️ Intéressé';
-    var goingBtn = userInterests[e.id]==='going' ? '✓ Participe' : '✅ Obtenir Billet';
-    var th = themes[e.category] || themes.conference;
-    var themeLabel = getThemeLabel(e.category);
+};
 
-    // --- RÉCUPÉRATION DES BADGES DE L'ORGANISATEUR (AJOUT) ---
-    var orgUser = getUserByNameOrUsername(e.organizerUsername || e.organizer);
-    var orgBadges = orgUser ? renderUserBadges(orgUser.badges || []) : '';
-    
+const openEventDetail = (id) => {
+    const e = events.find(x => x.id===id);
+    if(!e) return;
+    const dc = document.getElementById('eventDetailContent');
+    if(!dc) return;
+    const interestBtn = userInterests[e.id]==='interested' ? '✓ Intéressé' : '❤️ Intéressé';
+    const goingBtn = userInterests[e.id]==='going' ? '✓ Participe' : '✅ Obtenir Billet';
+    const th = themes[e.category] || themes.conference;
+    const orgUser = getUserByNameOrUsername(e.organizerUsername || e.organizer);
+    const orgBadges = orgUser ? renderUserBadges(orgUser.badges || []) : '';
+    const mapLink = e.lat && e.lng ? `https://www.openstreetmap.org/?mlat=${e.lat}&mlon=${e.lng}` : `https://www.openstreetmap.org/search?query=${encodeURIComponent(e.location)}`;
     dc.innerHTML = `
         <div class="event-detail-header">
             <button class="event-detail-close" onclick="closeEventDetailModal()"><i class="fas fa-arrow-left"></i></button>
@@ -1168,118 +1796,148 @@ function openEventDetail(id){
                 <span class="org-name" style="color:${th.color}">${escapeHtml(e.organizer||t('organizer_label'))}</span>
                 ${orgBadges}
             </div>
-            
             <div class="event-details-row"><div class="event-details-icon" style="color:${th.color}"><i class="fas fa-calendar-alt"></i></div><span>${formatDate(e.date)} à ${e.time||''}</span></div>
-            
             <div class="location-box" style="display:flex; justify-content:space-between; align-items:center; background:rgba(0,0,0,0.2); padding:16px; border-radius:16px; margin-bottom:20px;">
                 <div style="font-size:0.9rem; color:var(--text-secondary); max-width:65%;">
                     <i class="fas fa-map-marker-alt" style="color:${th.color}"></i> 
                     <span>${escapeHtml(e.location||'')}</span>
                 </div>
-                ${e.lat && e.lng ? `<a href="https://maps.google.com/?q=${e.lat},${e.lng}" target="_blank" style="background:rgba(56,189,248,0.1); color:var(--estra-cyan); padding:8px 16px; border-radius:20px; text-decoration:none; font-size:0.85rem; font-weight:700;"><i class="fas fa-map-marked-alt"></i> Voir la carte</a>` : ''}
+                <a href="${mapLink}" target="_blank" style="background:rgba(56,189,248,0.1); color:var(--estra-cyan); padding:8px 16px; border-radius:20px; text-decoration:none; font-size:0.85rem; font-weight:700;"><i class="fas fa-map-marked-alt"></i> Voir la carte</a>
             </div>
-
             <h4 style="margin-bottom:8px; font-size:1rem;">À propos</h4>
             <div class="event-description">${escapeHtml(e.description||'')}</div>
-            
             <div class="ticket-divider"></div>
             <div class="event-stats">
                 <span><i class="fas fa-heart" style="color:var(--estra-danger)"></i> ${e.interested||0} ${t('interested_label')}</span>
                 <span><i class="fas fa-check-circle" style="color:var(--estra-success)"></i> ${e.going||0} ${t('participants_label')}</span>
             </div>
-            
             ${!isEventPassed(e.date) ? `
             <div class="event-actions">
                 <button class="event-btn btn-interested" onclick="setInterest(${e.id},'interested');">${interestBtn}</button>
                 <button class="event-btn btn-going" onclick="setInterest(${e.id},'going');">${goingBtn}</button>
                 <button class="event-btn btn-share" onclick="shareEventNatif(${e.id})" title="Partager"><i class="fas fa-share-nodes"></i></button>
             </div>` : ''}
-            
             <div class="ticket-barcode">
                 <div class="ticket-barcode-img"></div>
                 <div style="font-size: 0.65rem; font-family: monospace; letter-spacing: 2px;">ESTRA-${e.id}-TKT</div>
             </div>
         </div>
     `;
-    
-    var m=document.getElementById('eventDetailModal');
-    if(m)m.classList.add('active');
+    const m = document.getElementById('eventDetailModal');
+    if(m) m.classList.add('active');
     if (window.innerWidth < 1280) document.body.style.overflow = 'hidden';
-}
+};
 
-function closeEventDetailModal(){
-    var m=document.getElementById('eventDetailModal');
-    if(m)m.classList.remove('active');
+const closeEventDetailModal = () => {
+    const m = document.getElementById('eventDetailModal');
+    if(m) m.classList.remove('active');
     document.body.style.overflow = '';
-}
+};
 
-function setInterest(eid,s){
-    var e=events.find(function(x){return x.id===eid});if(!e)return;
-    var cs=userInterests[eid];
-    
+const setInterest = (eid,s) => {
+    const e = events.find(x => x.id===eid);
+    if(!e) return;
+    const cs = userInterests[eid];
     if(cs===s){
         delete userInterests[eid];
-        if(s==='interested')e.interested=Math.max(0,(e.interested||0)-1);
-        else e.going=Math.max(0,(e.going||0)-1);
+        if(s==='interested') e.interested = Math.max(0,(e.interested||0)-1);
+        else e.going = Math.max(0,(e.going||0)-1);
         showToast(t('toast_removed'));
-    }else{
-        if(cs==='interested')e.interested=Math.max(0,(e.interested||0)-1);
-        if(cs==='going')e.going=Math.max(0,(e.going||0)-1);
-        userInterests[eid]=s;
-        if(s==='interested'){
-            e.interested=(e.interested||0)+1;
-            showToast(t('toast_interested'));
-            addNotification('event_interested', t('notif_event_interested'), `Vous êtes intéressé(e) par "${e.title}"`, { eventId: eid });
-        } else {
-            e.going=(e.going||0)+1;
-            showToast(t('toast_going'));
-            addNotification('event_going', t('notif_event_going'), `Vous participez à "${e.title}"`, { eventId: eid });
-        }
-        
+    } else {
+        if(cs==='interested') e.interested = Math.max(0,(e.interested||0)-1);
+        if(cs==='going') e.going = Math.max(0,(e.going||0)-1);
+        userInterests[eid] = s;
+        if(s==='interested'){ e.interested=(e.interested||0)+1; showToast(t('toast_interested')); addNotification('event_interested', t('notif_event_interested'), `Vous êtes intéressé(e) par "${e.title}"`, { eventId: eid }); }
+        else { e.going=(e.going||0)+1; showToast(t('toast_going')); addNotification('event_going', t('notif_event_going'), `Vous participez à "${e.title}"`, { eventId: eid }); }
         if(s==='going'){
-            var th = themes[e.category] || themes.conference;
-            var vipModal = document.getElementById('vipTicketModal');
+            const th = themes[e.category] || themes.conference;
+            const vipModal = document.getElementById('vipTicketModal');
             document.getElementById('vipTicketHeader').style.background = `linear-gradient(135deg, ${th.color}, #111)`;
             document.getElementById('vipTicketBody').style.background = th.bg;
             document.getElementById('vipTicketCat').textContent = "PASS : " + getThemeLabel(e.category).toUpperCase();
-            var vipTitle = document.getElementById('vipEventTitle'); if(vipTitle) { vipTitle.textContent = e.title; vipTitle.style.color = th.color; }
-            var vipUser = document.getElementById('vipUserName'); if(vipUser) vipUser.textContent = currentUser.name;
-            var qrData = encodeURIComponent(`ESTRA|ID:${e.id}|USER:${currentUser.name}`);
-            var vipQr = document.getElementById('vipQrCode'); if(vipQr) vipQr.src = `https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=${qrData}&color=${th.bg.replace('#','')}&bgcolor=ffffff`;
+            const vipTitle = document.getElementById('vipEventTitle');
+            if(vipTitle) { vipTitle.textContent = e.title; vipTitle.style.color = th.color; }
+            const vipUser = document.getElementById('vipUserName');
+            if(vipUser) vipUser.textContent = currentUser.name;
+            const qrData = encodeURIComponent(`ESTRA|ID:${e.id}|USER:${currentUser.name}`);
+            const vipQr = document.getElementById('vipQrCode');
+            if(vipQr) vipQr.src = `https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=${qrData}&color=${th.bg.replace('#','')}&bgcolor=ffffff`;
             if(vipModal) { vipModal.classList.add('active'); document.body.style.overflow = 'hidden'; }
         }
     }
-    localStorage.setItem('estra_event_interests',JSON.stringify(userInterests));saveEvents();renderEvents();
-    
+    localStorage.setItem('estra_event_interests',JSON.stringify(userInterests));
+    saveEvents();
+    renderEvents();
     if(document.getElementById('eventDetailModal').classList.contains('active')) openEventDetail(eid);
-}
+};
 
-function saveEvent(id){
-    if(savedEventsIds.indexOf(id)!==-1){
-        savedEventsIds=savedEventsIds.filter(function(x){return x!==id});
+const saveEvent = (id) => {
+    if(savedEventsIds.includes(id)){
+        savedEventsIds = savedEventsIds.filter(x => x!==id);
         showToast(t('toast_removed'));
     } else {
         savedEventsIds.push(id);
         showToast(t('toast_saved'));
-        const e = events.find(function(x){return x.id===id});
+        const e = events.find(x => x.id===id);
         if (e) addNotification('event_saved', t('notif_event_saved'), `Événement "${e.title}" enregistré`, { eventId: id });
     }
-    localStorage.setItem('estra_saved_events',JSON.stringify(savedEventsIds));renderEvents();
-}
+    localStorage.setItem('estra_saved_events',JSON.stringify(savedEventsIds));
+    renderEvents();
+};
 
-function closeVipTicket(){ var m = document.getElementById('vipTicketModal'); if(m) { m.classList.remove('active'); document.body.style.overflow = ''; } }
-function captureTicket(){ showToast("📸 Capturez pour votre Story !"); setTimeout(function(){ closeVipTicket(); }, 3000); }
-function shareEventNatif(id){
-    var e=events.find(function(x){return x.id===id});if(!e)return;
-    var shareText = "Salut ! 👋 Je participe à \""+e.title+"\" le "+formatDate(e.date)+"\n📍 "+e.location;
-    if (navigator.share) { navigator.share({ title: e.title, text: shareText, url: window.location.href }).catch(function(){}); } 
-    else { window.open("https://wa.me/?text="+encodeURIComponent(shareText), '_blank'); }
-}
+const closeVipTicket = () => {
+    const m = document.getElementById('vipTicketModal');
+    if(m) { m.classList.remove('active'); document.body.style.overflow = ''; }
+};
 
-function toggleSidebar(){var s=document.getElementById('sidebar');var o=document.getElementById('sidebarOverlay');if(s)s.classList.toggle('open');if(o)o.classList.toggle('active'); document.body.style.overflow = s.classList.contains('open') ? 'hidden' : '';}
-function closeSidebar(){var s=document.getElementById('sidebar');var o=document.getElementById('sidebarOverlay');if(s)s.classList.remove('open');if(o)o.classList.remove('active'); document.body.style.overflow = '';}
-function logout(){localStorage.clear();window.location.href='login.html'}
-// 🆕 Base de données des utilisateurs pour les liens de profil
+const captureTicket = () => {
+    showToast("📸 Capturez pour votre Story !");
+    setTimeout(() => closeVipTicket(), 3000);
+};
+
+const shareEventNatif = (id) => {
+    const e = events.find(x => x.id===id);
+    if(!e) return;
+    const shareText = `Salut ! 👋 Je participe à "${e.title}" le ${formatDate(e.date)}\n📍 ${e.location}`;
+    if (navigator.share) {
+        navigator.share({ title: e.title, text: shareText, url: window.location.href }).catch(() => {});
+    } else {
+        window.open(`https://wa.me/?text=${encodeURIComponent(shareText)}`, '_blank');
+    }
+};
+
+const toggleSidebar = () => {
+    const s = document.getElementById('sidebar');
+    const o = document.getElementById('sidebarOverlay');
+    if(s) s.classList.toggle('open');
+    if(o) o.classList.toggle('active');
+    document.body.style.overflow = s.classList.contains('open') ? 'hidden' : '';
+};
+
+const closeSidebar = () => {
+    const s = document.getElementById('sidebar');
+    const o = document.getElementById('sidebarOverlay');
+    if(s) s.classList.remove('open');
+    if(o) o.classList.remove('active');
+    document.body.style.overflow = '';
+};
+
+const logout = () => {
+    if (typeof window.triggerLogout === 'function') {
+        window.triggerLogout('Déconnexion réussie');
+    } else {
+        sessionStorage.setItem('logout_triggered', 'true');
+        sessionStorage.setItem('session_expired_reason', 'Déconnexion réussie');
+        localStorage.removeItem('estra_token');
+        localStorage.removeItem('estra_logged_in');
+        localStorage.removeItem('estra_current_user');
+        localStorage.removeItem('estra_profile');
+        localStorage.removeItem('estra_session_active');
+        localStorage.removeItem('estra_last_activity');
+        window.location.href = 'session-expired.html';
+    }
+};
+
 const allPeopleSuggestions = [
     {name:"Rashidi", username:"rashidi", role:"Étudiant", avatar:"https://ui-avatars.com/api/?name=Rashidi&background=38bdf8&color=fff"},
     {name:"Marie Claire", username:"marie_claire", role:"Enseignante", avatar:"https://ui-avatars.com/api/?name=Marie&background=10b981&color=fff"},
@@ -1291,119 +1949,126 @@ const allPeopleSuggestions = [
     {name:"Admin ESTRA", username:"admin_estra", role:"Administrateur", avatar:"https://ui-avatars.com/api/?name=Admin&background=dc2626&color=fff"}
 ];
 
-function viewProfile(nameOrUsername) {
+const viewProfile = (nameOrUsername) => {
     if (!nameOrUsername) return;
-    const person = allPeopleSuggestions.find(p => 
-        p.name === nameOrUsername || p.username === nameOrUsername
-    );
+    const profile = JSON.parse(localStorage.getItem('estra_profile') || '{}');
+    const myName = profile.fullName || '';
+    const myUsername = profile.username || '';
+    if (nameOrUsername === myName || nameOrUsername === myUsername || nameOrUsername === '@' + myUsername) {
+        window.location.href = 'profile.html';
+        return;
+    }
+    const person = allPeopleSuggestions.find(p => p.name === nameOrUsername || p.username === nameOrUsername);
     if (person && person.username) {
         window.location.href = 'profile.html?user=' + encodeURIComponent(person.username);
     } else {
-        const fallback = nameOrUsername.toLowerCase().replace(/\s+/g, '_');
+        const fallback = nameOrUsername.toLowerCase().replace(/\s+/g, '_').replace(/^@/, '');
         window.location.href = 'profile.html?user=' + encodeURIComponent(fallback);
     }
-}
-document.addEventListener('DOMContentLoaded',function(){
+};
+
+document.addEventListener('DOMContentLoaded', () => {
     loadData();
     initEcoMode();
-    renderEvents();renderCalendar();
+    renderEvents();
+    renderCalendar();
     updateBadges();
     
-    var lv=document.getElementById('listView');if(lv)lv.style.display='grid';
-    var cv=document.getElementById('calendarView');if(cv)cv.classList.remove('active');
-    
-    var so=document.getElementById('sidebarOverlay');if(so)so.addEventListener('click',closeSidebar);
-    
-    var edm=document.getElementById('eventDetailModal');
-    if(edm)edm.addEventListener('click',function(e){if(e.target===edm)closeEventDetailModal()});
+    const lv = document.getElementById('listView');
+    if(lv) lv.style.display = 'grid';
+    const cv = document.getElementById('calendarView');
+    if(cv) cv.classList.remove('active');
+    const so = document.getElementById('sidebarOverlay');
+    if(so) so.addEventListener('click', closeSidebar);
+    const edm = document.getElementById('eventDetailModal');
+    if(edm) edm.addEventListener('click', (e) => { if(e.target===edm) closeEventDetailModal(); });
 
-    window.addEventListener('online',function(){var b=document.getElementById('offlineBanner');if(b)b.style.display='none';showToast(t('toast_online'))});
-    window.addEventListener('offline',function(){var b=document.getElementById('offlineBanner');if(b)b.style.display='block';showToast(t('toast_offline'))});
+    window.addEventListener('online', () => {
+        const b = document.getElementById('offlineBanner');
+        if(b) b.style.display = 'none';
+        showToast(t('toast_online'));
+    });
+    window.addEventListener('offline', () => {
+        const b = document.getElementById('offlineBanner');
+        if(b) b.style.display = 'block';
+        showToast(t('toast_offline'));
+    });
     
-    // Synchronisation inter-pages
-    window.addEventListener('storage', function(e) {
-        if (e.key === 'estra_notification_trigger') {
-            updateBadges();
-        }
-        if (e.key === 'estra_theme' && e.newValue) {
-            document.documentElement.setAttribute('data-theme', e.newValue);
-        }
-        if (e.key === 'estra_language' && e.newValue) {
-            currentLang = e.newValue;
-            applyTranslations();
-            renderFilters();
-            renderEvents();
-            renderCalendar();
-        }
-        if (e.key === 'estra_events') {
-            events = JSON.parse(e.newValue || '[]');
-            window.estraEvents = events;
-            renderEvents();
-            renderCalendar();
-        }
-        if (['estra_profile','estra_posts','estra_friends','estra_userGroups'].includes(e.key)) {
-            updateSidebar();
-        }
-        if (e.key === 'estra_conversations') {
-            updateBadges();
-        }
-        // 🆕 Synchronisation avatar
+    window.addEventListener('storage', (e) => {
+        if (e.key === 'estra_notification_trigger') updateBadges();
+        if (e.key === 'estra_theme' && e.newValue) document.documentElement.setAttribute('data-theme', e.newValue);
+        if (e.key === 'estra_language' && e.newValue) { currentLang = e.newValue; applyTranslations(); renderFilters(); renderEvents(); renderCalendar(); }
+        if (e.key === 'estra_events') { events = JSON.parse(e.newValue || '[]'); window.estraEvents = events; renderEvents(); renderCalendar(); updateStatsButtonVisibility(); }
+        if (['estra_profile','estra_posts','estra_friends'].includes(e.key)) updateSidebar();
+        if (e.key === 'estra_conversations') updateBadges();
         if (e.key === 'estra_avatar_updated') {
             try {
                 const data = JSON.parse(e.newValue || '{}');
                 if (data.username && data.avatar) {
-                    events.forEach(ev => {
-                        if (ev.organizer === data.username || ev.organizer === data.fullName) {
-                            ev.organizerAvatar = data.avatar;
-                        }
-                    });
-                    saveEvents();
-                    renderEvents();
-                    updateSidebar();
+                    events.forEach(ev => { if (ev.organizer === data.username || ev.organizer === data.fullName) ev.organizerAvatar = data.avatar; });
+                    saveEvents(); renderEvents(); updateSidebar();
                 }
             } catch(err) {}
         }
-        // 🆕 Synchronisation badges
-        if (e.key === 'estra_all_users' || e.key === 'estra_badges') {
-            renderEvents();
-            if (typeof renderAllPosts === 'function') renderAllPosts();
-            if (typeof updateSidebar === 'function') updateSidebar();
-        }
+        if (e.key === 'estra_all_users' || e.key === 'estra_badges') { renderEvents(); if (typeof renderAllPosts === 'function') renderAllPosts(); if (typeof updateSidebar === 'function') updateSidebar(); }
     });
     
-    window.addEventListener('estra_notification_updated', function(e) {
-        updateBadges();
-    });
-    
+    window.addEventListener('estra_notification_updated', (e) => { updateBadges(); });
     setInterval(updateBadges, 3000);
 });
-// Juste après ta fonction createEvent, ajoute :
+
 window.createNewEvent = createEvent;
-window.filterEvents=filterEvents;window.toggleView=toggleView;
-window.openCreateEventModal=openCreateEventModal;window.closeCreateEventModal=closeCreateEventModal;
-window.createEvent=createEvent;window.openEventDetail=openEventDetail;
-window.closeEventDetailModal=closeEventDetailModal;window.setInterest=setInterest;
-window.saveEvent=saveEvent;window.shareEventNatif=shareEventNatif;
-window.prevMonth=prevMonth;window.nextMonth=nextMonth;
-window.showDayEvents=showDayEvents;window.toggleSidebar=toggleSidebar;
-window.closeSidebar=closeSidebar;window.logout=logout;window.showToast=showToast;
-window.handleEventImageSelect=handleEventImageSelect;window.removeEventImage=removeEventImage;
-window.closeVipTicket=closeVipTicket;window.captureTicket=captureTicket;
-window.addNotification=addNotification;window.updateBadges=updateBadges;
-window.t = t; window.applyTranslations = applyTranslations;
-window.translations = translations; window.currentLang = currentLang;
+window.filterEvents = filterEvents;
+window.toggleView = toggleView;
+window.openCreateEventModal = openCreateEventModal;
+window.closeCreateEventModal = closeCreateEventModal;
+window.createEvent = createEvent;
+window.openEventDetail = openEventDetail;
+window.closeEventDetailModal = closeEventDetailModal;
+window.setInterest = setInterest;
+window.saveEvent = saveEvent;
+window.shareEventNatif = shareEventNatif;
+window.prevMonth = prevMonth;
+window.nextMonth = nextMonth;
+window.showDayEvents = showDayEvents;
+window.toggleSidebar = toggleSidebar;
+window.closeSidebar = closeSidebar;
+window.logout = logout;
+window.showToast = showToast;
+window.handleEventImageSelect = handleEventImageSelect;
+window.removeEventImage = removeEventImage;
+window.closeVipTicket = closeVipTicket;
+window.captureTicket = captureTicket;
+window.addNotification = addNotification;
+window.updateBadges = updateBadges;
+window.t = t;
+window.applyTranslations = applyTranslations;
+window.translations = translations;
+window.currentLang = currentLang;
 window.toggleEcoMode = toggleEcoMode;
 window.viewProfile = viewProfile;
 window.renderUserBadges = renderUserBadges;
 window.getUserByNameOrUsername = getUserByNameOrUsername;
 window.getAllUsers = getAllUsers;
 window.getAllBadges = getAllBadges;
+window.updateCharCounter = updateCharCounter;
+// Exposer les fonctions Stats
+window.openStatsModal = openStatsModal;
+window.closeStatsModal = closeStatsModal;
+window.selectStatsEvent = selectStatsEvent;
+window.renderStatsList = renderStatsList;
+window.renderStatsDetail = renderStatsDetail;
+window.showBoostOptions = showBoostOptions;
+window.selectBoostOption = selectBoostOption;
+window.confirmBoost = confirmBoost;
+window.cancelBoostOptions = cancelBoostOptions;
+window.isEventBoosted = isEventBoosted;
+window.getBoostDaysLeft = getBoostDaysLeft;
 </script>
 <script src="i18n.js"></script>
 <script src="pwa-init.js"></script>
 <script src="antizome.js"></script>
 <script src="security.js"></script>
 <script src="security-advenced.js"></script>
-<script src="data.js"></script>
 </body>
 </html>
